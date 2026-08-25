@@ -34,9 +34,8 @@ export default async function GamesPage({
           Games of the week
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-zinc-400">
-          This week&apos;s high school football games ranked by home plus away talent
-          scores. If this week is empty, FridayRadar rolls forward to the next week
-          with mapped MaxPreps games.
+          This week&apos;s Matchup slate ranked by home plus away Scout talent.
+          Unmapped opponents count as 0. One-sided talent stays on the board.
         </p>
       </div>
       <SourceBanner sources={dataset.meta.sources} />

@@ -137,12 +137,32 @@ export function badgeStars(composite: number | null): number {
   return Math.max(0, Math.min(5, Math.round(composite)));
 }
 
+/**
+ * Official Scout composite: average of available stars from
+ * 247sports_composite, on3_rivals (else on3_industry, never both), ESPN.
+ */
+export function officialStars(ratings: Rating[]): number | null {
+  const best: Partial<Record<RatingSource, number>> = {};
+  for (const r of ratings) {
+    if (r.stars == null || Number.isNaN(r.stars) || r.stars <= 0) continue;
+    const prev = best[r.source];
+    if (prev == null || r.stars > prev) best[r.source] = r.stars;
+  }
+  const vals: number[] = [];
+  if (best["247sports_composite"] != null) vals.push(best["247sports_composite"]);
+  if (best.on3_rivals != null) vals.push(best.on3_rivals);
+  else if (best.on3_industry != null) vals.push(best.on3_industry);
+  if (best.espn != null) vals.push(best.espn);
+  if (!vals.length) return null;
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
 export function compositeStarsForPlayer(
   playerId: string,
   ratings: Rating[],
 ): number | null {
   const mine = ratings.filter((r) => r.player_id === playerId);
-  return averageStars(mine.map((r) => r.stars));
+  return officialStars(mine);
 }
 
 export function ratingsBySource(playerId: string, ratings: Rating[]): Partial<Record<RatingSource, Rating>> {
@@ -183,7 +203,7 @@ export function rankSchools(
     if (player.class_year < MIN_CLASS_YEAR) continue;
     const bucket = bySchool.get(player.high_school_id);
     if (!bucket) continue;
-    const stars = averageStars((ratingsByPlayer.get(player.id) ?? []).map((r) => r.stars));
+    const stars = officialStars(ratingsByPlayer.get(player.id) ?? []);
     const badge = badgeStars(stars);
     bucket.count += 1;
     bucket.talent += playerPoints(stars);
@@ -195,17 +215,23 @@ export function rankSchools(
   const rows: SchoolRankingRow[] = schools
     .map((school) => {
       const stats = bySchool.get(school.id)!;
+      const talentScore =
+        school.talentScore != null
+          ? school.talentScore
+          : Math.round(stats.talent * 10) / 10;
+      const recruitCount = school.recruitCount != null ? school.recruitCount : stats.count;
       return {
         rank: 0,
         school,
-        recruitCount: stats.count,
-        stars5: stats.stars5,
-        stars4: stats.stars4,
-        stars3: stats.stars3,
-        talentScore: Math.round(stats.talent * 10) / 10,
+        recruitCount,
+        stars5: school.stars5 != null ? school.stars5 : stats.stars5,
+        stars4: school.stars4 != null ? school.stars4 : stats.stars4,
+        stars3: school.stars3 != null ? school.stars3 : stats.stars3,
+        talentScore,
       };
     })
-    .filter((row) => row.recruitCount > 0);
+    .filter((row) => row.recruitCount > 0 || row.talentScore > 0)
+    .filter((row) => row.school.mapped !== false);
 
   rows.sort((a, b) => {
     if (sort === "count") {

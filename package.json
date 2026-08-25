@@ -8,6 +8,8 @@
     "start": "next start --port 43123",
     "lint": "eslint",
     "ingest": "python3 scripts/ingest.py",
+    "import:site": "npx tsx scripts/import-site-data.ts",
+    "seed:import": "python3 scripts/build-seed-import.py && npx tsx scripts/import-site-data.ts",
     "ingest:espn": "npx tsx scripts/ingest-espn.ts",
     "ingest:247": "npx tsx scripts/ingest-247.ts",
     "ingest:on3": "npx tsx scripts/ingest-on3.ts",

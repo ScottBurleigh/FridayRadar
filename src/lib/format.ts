@@ -1,5 +1,10 @@
 export function formatTalent(n: number): string {
-  return n.toLocaleString("en-US", { maximumFractionDigits: 1, minimumFractionDigits: n % 1 ? 1 : 0 });
+  const rounded = Math.round(n * 100) / 100;
+  const decimals = Number.isInteger(rounded) ? 0 : String(rounded).split(".")[1]?.length ?? 0;
+  return rounded.toLocaleString("en-US", {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: decimals > 0 ? Math.min(2, decimals) : 0,
+  });
 }
 
 export function formatKickoff(iso: string | null, tba: boolean): string {

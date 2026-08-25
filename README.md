@@ -6,8 +6,8 @@ FridayRadar ranks **U.S. high school football programs** by the recruiting talen
 
 ```bash
 npm install
-npm run ingest    # optional if data/fridayradar.json is already present
-npm run dev       # http://127.0.0.1:43123
+npx tsx scripts/import-site-data.ts   # compiles site-data/ or data/import/ → data/fridayradar.json
+npm run dev                           # http://127.0.0.1:43123
 ```
 
 Requires Node 22+ and Python 3. The compiled dataset ships in `data/fridayradar.json`, so the app comes up without a live scrape.
@@ -16,7 +16,7 @@ Requires Node 22+ and Python 3. The compiled dataset ships in `data/fridayradar.
 
 - **Rankings (home)** — programs sorted by talent score (default) or recruit count. Filters: US state, zip code (≈25-mile haversine). Click a row for the school drill-down.
 - **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank, profile link when known).
-- **Games of the week** — this week's (or the next upcoming week's) MaxPreps games ranked by combined home + away talent. Same state and zip filters. Offseason shows an honest empty state.
+- **Games of the week** — Matchup MaxPreps slate for **2026-08-26 through 2026-08-29**, ranked by combined home + away Scout talent. Unmapped opponents count as 0; one-sided games stay on the board. Same state and zip filters.
 
 ## Ranking math
 
@@ -30,7 +30,7 @@ Eligible: `class_year >= 2027`. Never 2026 or earlier.
 - ESPN HS object: `highSchool.properName` + address (not `schools[].team`).
 - On3: HS token + slug state (`buford-ga`). Hometown city can lag after transfers — Brewster is Buford, GA, not Cedar Hill, TX.
 
-**Player composite stars** = average of available source star ratings.
+**Player composite stars** = average of available stars from `247sports_composite`, `on3_rivals` (else `on3_industry`, never both), and ESPN.
 
 **Player points** (interpolate non-integers; 4.5 is halfway between 85 and 98):
 
@@ -43,7 +43,7 @@ Eligible: `class_year >= 2027`. Never 2026 or earlier.
 | 1 | 40 |
 | listed / unranked | 25 |
 
-**School talent score** = sum of player points on the 2027+ roster.
+**School talent score** = Scout precomputed sum of 2027+ player points (`School.talentScore`). Rankings prefer that field so the board matches Scout before every rating row is imported. If it is missing, FridayRadar sums imported 2027+ player points.
 
 **Star badge counts** on the rankings table = composite stars rounded to the nearest star.
 
@@ -51,16 +51,17 @@ ESPN 300 star images are mapped from grade: 90+=5, 80–89=4, then 70–79=3, 60
 
 ## Refresh data
 
+Canonical v1 is **Scout + Matchup on disk**, not a live 247 scrape (Load More 406s). Drop the Builder dump in `site-data/` (or `data/import/`) and compile:
+
 ```bash
-npm run ingest:espn      # ESPN recruiting API, classes 2027–2029
-npm run ingest:247       # 247Sports Composite HTML (Load More pages)
-npm run ingest:on3       # On3/Rivals OWN SSR list
-npm run ingest:maxpreps  # MaxPreps school-home coords + football wall schedules
-# or everything:
-npm run ingest
+npm run import:site
 ```
 
-`scripts/ingest.py` merges raw files, matches MaxPreps, writes `data/fridayradar.json` and `data/zip-centroids.json`.
+See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games.json`, and how frozen 2027/2028 ingest players nest on school rows.
+
+Do **not** re-run `npm run ingest:247`. A seed of the top Scout schools and the Matchup week slate ships in `data/import/` so production is not stuck on a page-1 247 board. Full dump: 1,554 schools / 2,986 players.
+
+School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 
 ## Source URLs
 
@@ -76,9 +77,9 @@ If a source blocks (247Sports Load More has returned HTTP 406 from this environm
 
 Stored in `data/fridayradar.json`:
 
-- **School** — `id` (MaxPreps `schoolId` GUID when matched), `name`, `name_normalized`, `aliases`, `mascot`, `city`, `state`, `zip`, `address`, `lat`, `lng`, `type`, `maxpreps {schoolId, canonicalUrl, formattedName}`, `ids_247.high_school_id`
-- **Player** — `id`, `full_name`, `class_year`, `position`, `height`, `weight`, `hometown_city`, `hometown_state`, `high_school_id`, `college_commit`, `source_ids {247sports_player_id, on3_rivals_id, espn_id}`
+- **School** — `id` (slug, e.g. `fl-bradenton-img-academy`), `name`, `name_normalized`, `aliases`, `mascot`, `city`, `state`, `zip`, `address`, `lat`, `lng`, `type`, `maxpreps {schoolId, canonicalUrl, formattedName}`, `ids_247.high_school_id`, optional Scout `talentScore` / `recruitCount`, `mapped`
+- **Player** — `id`, `full_name`, `class_year`, `position`, `height`, `weight`, `hometown_city`, `hometown_state`, `high_school_id` (school slug), `college_commit`, `source_ids {247sports_player_id, on3_rivals_id, espn_id}`
 - **Rating** — `player_id`, `source` (`247sports` | `247sports_composite` | `on3_rivals` | `on3_industry` | `espn`), `class_year`, `as_of`, `national_rank`, `position_rank`, `state_rank`, `stars`, `rating`, `position`, `high_school_name_raw`, `profile_url`
-- **Game** — `id` (contestId), `season`, `kickoff`, `home_school_id`, `away_school_id`, `home_score`, `away_score`, `is_gow`, `game_url`
+- **Game** — `id` (MaxPreps contestId), `season`, `kickoff`, `home_school_id`, `away_school_id` (slugs; unmapped sides use a placeholder school), `home_score`, `away_score`, `is_gow`, `game_url`
 
 Zip filter: input zip → centroid in `data/zip-centroids.json` → haversine ≤ 25 miles against MaxPreps coords, or the school's own zip centroid when MaxPreps did not match.

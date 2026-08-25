@@ -9,6 +9,18 @@ import {
 } from "@/components/ui/table";
 import type { RankedGame } from "@/lib/data";
 import { formatKickoff, formatTalent } from "@/lib/format";
+import type { School } from "@/lib/types";
+
+function SchoolName({ school, mapped }: { school: School; mapped: boolean }) {
+  if (!mapped) {
+    return <span className="text-zinc-300">{school.name}</span>;
+  }
+  return (
+    <Link href={`/schools/${school.id}`} className="text-zinc-100 hover:text-amber-300">
+      {school.name}
+    </Link>
+  );
+}
 
 export function GamesTable({ rows }: { rows: RankedGame[] }) {
   if (!rows.length) {
@@ -37,13 +49,9 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
                   {formatKickoff(row.game.kickoff, row.game.is_time_tba)}
                 </TableCell>
                 <TableCell className="font-sans">
-                  <Link href={`/schools/${row.away.id}`} className="text-zinc-100 hover:text-amber-300">
-                    {row.away.name}
-                  </Link>
+                  <SchoolName school={row.away} mapped={row.awayMapped} />
                   <span className="px-2 text-zinc-600">@</span>
-                  <Link href={`/schools/${row.home.id}`} className="text-zinc-100 hover:text-amber-300">
-                    {row.home.name}
-                  </Link>
+                  <SchoolName school={row.home} mapped={row.homeMapped} />
                 </TableCell>
                 <TableCell className="text-right text-zinc-300">
                   {row.awayRecruits} / {formatTalent(row.awayTalent)}
@@ -75,13 +83,9 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
               </span>
             </div>
             <p className="mt-2 text-zinc-100">
-              <Link href={`/schools/${row.away.id}`} className="hover:text-amber-300">
-                {row.away.name}
-              </Link>
+              <SchoolName school={row.away} mapped={row.awayMapped} />
               <span className="px-2 text-zinc-600">@</span>
-              <Link href={`/schools/${row.home.id}`} className="hover:text-amber-300">
-                {row.home.name}
-              </Link>
+              <SchoolName school={row.home} mapped={row.homeMapped} />
             </p>
             <p className="mt-1 text-sm text-zinc-500">
               {row.game.city || row.home.city}, {row.game.state || row.home.state}

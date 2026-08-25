@@ -1,0 +1,9 @@
+{
+  "schools": 25,
+  "players": 166,
+  "class_2027": 82,
+  "class_2028": 57,
+  "canonical_schools": 1554,
+  "canonical_players": 2986,
+  "note": "SEED: top Scout schools + Matchup week games until the full 1,554/2,986 dump is imported. Recruits are frozen ingest rows, not invented."
+}

@@ -9,6 +9,7 @@ export type MaxPrepsRef = {
   schoolId: string;
   canonicalUrl: string;
   formattedName: string | null;
+  footballUrl?: string | null;
 };
 
 export type School = {
@@ -26,6 +27,14 @@ export type School = {
   type: string | null;
   maxpreps: MaxPrepsRef | null;
   ids_247: { high_school_id: string | null };
+  /** Scout precomputed 2027+ talent. Rankings prefer this over summing imported rows. */
+  talentScore?: number | null;
+  recruitCount?: number | null;
+  stars5?: number | null;
+  stars4?: number | null;
+  stars3?: number | null;
+  /** false = Matchup opponent with no Scout roster (one-sided talent). */
+  mapped?: boolean;
 };
 
 export type Player = {
@@ -91,6 +100,7 @@ export type DatasetMeta = {
   min_class_year: number;
   sources: SourceStatus[];
   notes: string[];
+  matchup_week?: { start: string; end: string };
 };
 
 export type FridayRadarDataset = {

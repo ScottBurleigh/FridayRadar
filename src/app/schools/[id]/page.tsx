@@ -3,13 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { RecruitList } from "@/components/recruit-list";
 import { loadDataset, playersAtSchool } from "@/lib/data";
-import { formatLocation } from "@/lib/format";
-import {
-  averageStars,
-  badgeStars,
-  playerPoints,
-  ratingsBySource,
-} from "@/lib/ranking";
+import { formatLocation, formatTalent } from "@/lib/format";
+import { officialStars, badgeStars, playerPoints, ratingsBySource } from "@/lib/ranking";
 import type { RatedPlayer } from "@/lib/types";
 
 export async function generateMetadata({
@@ -35,7 +30,7 @@ export default async function SchoolPage({
   const rawPlayers = playersAtSchool(dataset, school.id);
   const players: RatedPlayer[] = rawPlayers.map((p) => {
     const mine = dataset.ratings.filter((r) => r.player_id === p.id);
-    const composite = averageStars(mine.map((r) => r.stars));
+    const composite = officialStars(mine);
     return {
       ...p,
       compositeStars: composite,
@@ -46,7 +41,11 @@ export default async function SchoolPage({
   });
   players.sort((a, b) => b.points - a.points || a.full_name.localeCompare(b.full_name));
 
-  const talent = players.reduce((s, p) => s + p.points, 0);
+  const talent =
+    school.talentScore != null
+      ? school.talentScore
+      : players.reduce((s, p) => s + p.points, 0);
+  const recruitCount = school.recruitCount != null ? school.recruitCount : players.length;
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
@@ -70,11 +69,11 @@ export default async function SchoolPage({
       <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
           <dt className="text-xs uppercase tracking-wide text-zinc-500">2027+ recruits</dt>
-          <dd className="mt-1 font-mono text-xl text-zinc-50">{players.length}</dd>
+          <dd className="mt-1 font-mono text-xl text-zinc-50">{recruitCount}</dd>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
           <dt className="text-xs uppercase tracking-wide text-zinc-500">Talent score</dt>
-          <dd className="mt-1 font-mono text-xl text-amber-200">{talent.toFixed(1)}</dd>
+          <dd className="mt-1 font-mono text-xl text-amber-200">{formatTalent(talent)}</dd>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
           <dt className="text-xs uppercase tracking-wide text-zinc-500">Zip</dt>

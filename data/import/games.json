@@ -1,0 +1,306 @@
+{
+  "week_start": "2026-08-26",
+  "week_end": "2026-08-29",
+  "games": [
+    {
+      "contest_id": "2c7f797f-6730-4bc5-a5a6-9e8a0f7578cb",
+      "maxpreps_game_url": "https://www.maxpreps.com/inter-state/football/game/cornerstone-christian-san-antonio-tx-vs-img-academy-bradenton-fl/8-29-2026/?c=2c7f797f-6730-4bc5-a5a6-9e8a0f7578cb",
+      "kickoff_local": "2026-08-29T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": "0d4488fa-a03d-47c9-b874-f78523a2e76a",
+        "site_id": "tx-san-antonio-cornerstone-christian",
+        "name": "Cornerstone Christian",
+        "city": "San Antonio",
+        "state": "TX",
+        "zip": null,
+        "talent_score": 155,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": "7bdc339f-7cbf-4728-b0c8-ed898929cf68",
+        "site_id": "fl-bradenton-img-academy",
+        "name": "IMG Academy",
+        "city": "Bradenton",
+        "state": "FL",
+        "zip": "34210",
+        "talent_score": 2263.49,
+        "mapped": true
+      },
+      "combined_talent": 2418.49,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "0812d6d2-cfbd-4414-9acf-ef827a7dcce2",
+      "maxpreps_game_url": "https://www.maxpreps.com/inter-state/football/game/mater-dei-santa-ana-ca-vs-orem-ut/8-29-2026/?c=0812d6d2-cfbd-4414-9acf-ef827a7dcce2",
+      "kickoff_local": "2026-08-29T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": "2b6b45d3-4465-4750-ba48-a273b674e37c",
+        "site_id": "ca-santa-ana-mater-dei",
+        "name": "Mater Dei",
+        "city": "Santa Ana",
+        "state": "CA",
+        "zip": "92707",
+        "talent_score": 1072.5,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": "6e96854a-3ca4-44bb-a6b0-899cf84dfa3d",
+        "site_id": "ut-orem-orem",
+        "name": "Orem",
+        "city": "Orem",
+        "state": "UT",
+        "zip": "84057",
+        "talent_score": 626.5,
+        "mapped": true
+      },
+      "combined_talent": 1699,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "63dc5024-3f38-4074-8dfb-69e4b76f0e6e",
+      "maxpreps_game_url": "https://www.maxpreps.com/inter-state/football/game/roman-catholic-philadelphia-pa-vs-st-john-bosco-bellflower-ca/8-28-2026/?c=63dc5024-3f38-4074-8dfb-69e4b76f0e6e",
+      "kickoff_local": "2026-08-28T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": "cfedd35b-8252-4b69-948f-3a2318cdce69",
+        "site_id": "pa-philadelphia-roman-catholic",
+        "name": "Roman Catholic",
+        "city": "Philadelphia",
+        "state": "PA",
+        "zip": "19107",
+        "talent_score": 280,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": "229cf8e5-737c-418e-8f4e-f3ac3d566af4",
+        "site_id": "ca-bellflower-st-john-bosco",
+        "name": "St. John Bosco",
+        "city": "Bellflower",
+        "state": "CA",
+        "zip": "90706",
+        "talent_score": 1165,
+        "mapped": true
+      },
+      "combined_talent": 1445,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "6be37393-f001-47f2-8ece-2493d6449f51",
+      "maxpreps_game_url": "https://www.maxpreps.com/inter-state/football/game/deland-fl-vs-st-frances-academy-baltimore-md/8-28-2026/?c=6be37393-f001-47f2-8ece-2493d6449f51",
+      "kickoff_local": "2026-08-28T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": "c1783fb0-c965-42a0-abe3-41fbe7641303",
+        "site_id": "md-baltimore-st-frances-academy",
+        "name": "St. Frances Academy",
+        "city": "Baltimore",
+        "state": "MD",
+        "zip": "21202",
+        "talent_score": 1359.84,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": "a56cc5ad-8455-4ed9-8ecf-4eaa17076fe4",
+        "site_id": null,
+        "name": "DeLand",
+        "city": "DeLand",
+        "state": "FL",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": false
+      },
+      "combined_talent": 1359,
+      "mapped_sides": 1,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "7a10d443-387c-4437-b97c-0b85afe2484a",
+      "maxpreps_game_url": "https://www.maxpreps.com/al/football/game/clay-chalkville-pinson-vs-thompson-alabaster/8-27-2026/?c=7a10d443-387c-4437-b97c-0b85afe2484a",
+      "kickoff_local": "2026-08-27T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": "d10ba1be-e353-4009-bd7b-99311091eeb0",
+        "site_id": "al-pinson-clay-chalkville",
+        "name": "Clay-Chalkville",
+        "city": "Pinson",
+        "state": "AL",
+        "zip": "35126",
+        "talent_score": 295,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": "fd85c43e-1a06-49c8-a805-b2c8fe9588ed",
+        "site_id": "al-alabaster-thompson",
+        "name": "Thompson",
+        "city": "Alabaster",
+        "state": "AL",
+        "zip": "35007",
+        "talent_score": 970,
+        "mapped": true
+      },
+      "combined_talent": 1265,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "d8398537-8e3f-41f6-91ef-caa6013687b6",
+      "maxpreps_game_url": "https://www.maxpreps.com/tx/football/game/allen-vs-duncanville-panthers-and-pantherettes/8-28-2026/?c=d8398537-8e3f-41f6-91ef-caa6013687b6",
+      "kickoff_local": "2026-08-28T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": "556cde7f-6469-4bd0-934c-fe78b5949f68",
+        "site_id": "tx-duncanville-duncanville",
+        "name": "Duncanville",
+        "city": "Duncanville",
+        "state": "TX",
+        "zip": "75116",
+        "talent_score": 0,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": "0bad373d-33a2-45b6-b1d4-6c55e876344c",
+        "site_id": "tx-allen-allen",
+        "name": "Allen",
+        "city": "Allen",
+        "state": "TX",
+        "zip": "75002",
+        "talent_score": 0,
+        "mapped": true
+      },
+      "combined_talent": 0,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "d5ff7e61-ff87-48ff-a6cd-98aa06558cf9",
+      "maxpreps_game_url": "https://www.maxpreps.com/inter-state/football/game/bishop-gorman-las-vegas-nv-vs-columbus-miami-fl/8-29-2026/?c=d5ff7e61-ff87-48ff-a6cd-98aa06558cf9",
+      "kickoff_local": "2026-08-29T14:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": "03c125d3-5255-4e5d-8991-5e543fe741d2",
+        "site_id": "nv-las-vegas-bishop-gorman",
+        "name": "Bishop Gorman",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89148",
+        "talent_score": 0,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": null,
+        "site_id": "fl-miami-columbus",
+        "name": "Columbus",
+        "city": "Miami",
+        "state": "FL",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": true
+      },
+      "combined_talent": 0,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "297a92d7-acdd-4f08-87a7-218b4bff4098",
+      "maxpreps_game_url": "https://www.maxpreps.com/inter-state/football/game/desoto-tx-vs-st-thomas-aquinas-fort-lauderdale-fl/8-29-2026/?c=297a92d7-acdd-4f08-87a7-218b4bff4098",
+      "kickoff_local": "2026-08-29T18:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": null,
+        "site_id": "tx-desoto-desoto",
+        "name": "DeSoto",
+        "city": "DeSoto",
+        "state": "TX",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": null,
+        "site_id": "fl-fort-lauderdale-st-thomas-aquinas",
+        "name": "St. Thomas Aquinas",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": true
+      },
+      "combined_talent": 0,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "3c9521b0-574e-4ded-8952-34d8ce982012",
+      "maxpreps_game_url": "https://www.maxpreps.com/ga/football/game/brookwood-snellville-vs-mill-creek-hoschton/8-28-2026/?c=3c9521b0-574e-4ded-8952-34d8ce982012",
+      "kickoff_local": "2026-08-28T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": null,
+        "site_id": "ga-hoschton-mill-creek",
+        "name": "Mill Creek",
+        "city": "Hoschton",
+        "state": "GA",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": null,
+        "site_id": "ga-snellville-brookwood",
+        "name": "Brookwood",
+        "city": "Snellville",
+        "state": "GA",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": true
+      },
+      "combined_talent": 0,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    },
+    {
+      "contest_id": "ea93fb09-e414-4b17-b942-53370b0cee26",
+      "maxpreps_game_url": "https://www.maxpreps.com/inter-state/football/game/inglewood-ca-vs-westlake-austin-tx/8-28-2026/?c=ea93fb09-e414-4b17-b942-53370b0cee26",
+      "kickoff_local": "2026-08-28T19:00:00",
+      "is_neutral": false,
+      "away": {
+        "maxpreps_id": null,
+        "site_id": "ca-inglewood-inglewood",
+        "name": "Inglewood",
+        "city": "Inglewood",
+        "state": "CA",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": true
+      },
+      "home": {
+        "maxpreps_id": null,
+        "site_id": "tx-austin-westlake",
+        "name": "Westlake",
+        "city": "Austin",
+        "state": "TX",
+        "zip": null,
+        "talent_score": 0,
+        "mapped": true
+      },
+      "combined_talent": 0,
+      "mapped_sides": 2,
+      "home_score": null,
+      "away_score": null
+    }
+  ]
+}

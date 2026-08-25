@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-import type { FridayRadarDataset, Game, Player, Rating, School } from "./types";
+import type { FridayRadarDataset, Player, Rating, School } from "./types";
 import { rankSchools } from "./ranking";
 import { schoolWithinZipRadius } from "./geo";
 
@@ -68,15 +68,33 @@ export type RankedGame = {
   awayRecruits: number;
   combined: number;
   rank: number;
+  homeMapped: boolean;
+  awayMapped: boolean;
 };
 
-function isRealOpponentSchool(school: School | undefined): school is School {
-  if (!school?.id || !school.name) return false;
-  const n = school.name.trim();
-  if (!n) return false;
-  if (/varsity opponent/i.test(n)) return false;
-  if (/^(unknown|tba|tbd|n\/a|na|opponent)$/i.test(n)) return false;
-  return true;
+const DEFAULT_MATCHUP_WEEK = { start: "2026-08-26", end: "2026-08-29" };
+
+function kickoffDate(iso: string | null): string | null {
+  if (!iso) return null;
+  return iso.slice(0, 10);
+}
+
+function isPlaceholderName(name: string | undefined): boolean {
+  if (!name?.trim()) return true;
+  const n = name.trim();
+  if (/varsity opponent/i.test(n)) return true;
+  return /^(unknown|tba|tbd|n\/a|na|opponent)$/i.test(n);
+}
+
+function schoolTalent(school: School | undefined, talentById: Map<string, { talentScore: number; recruitCount: number }>) {
+  if (!school || school.mapped === false) {
+    return { talent: 0, recruits: 0 };
+  }
+  if (school.talentScore != null) {
+    return { talent: school.talentScore, recruits: school.recruitCount ?? 0 };
+  }
+  const row = talentById.get(school.id);
+  return { talent: row?.talentScore ?? 0, recruits: row?.recruitCount ?? 0 };
 }
 
 export function gamesOfTheWeek(
@@ -87,9 +105,8 @@ export function gamesOfTheWeek(
   const talentById = new Map(rankings.map((r) => [r.school.id, r]));
   const schools = schoolMap(dataset);
 
-  const now = opts.now ?? new Date();
-  const thisMonday = mondayOf(now);
-  const thisSunday = addDays(thisMonday, 7);
+  const week = dataset.meta.matchup_week ?? DEFAULT_MATCHUP_WEEK;
+  const weekStart = new Date(`${week.start}T00:00:00.000Z`);
 
   const matchesFilter = (school: School | undefined) => {
     if (!school) return false;
@@ -101,66 +118,75 @@ export function gamesOfTheWeek(
   const usable = dataset.games.filter((g) => {
     const home = schools.get(g.home_school_id);
     const away = schools.get(g.away_school_id);
-    if (!isRealOpponentSchool(home) || !isRealOpponentSchool(away)) return false;
-    if (home.id === away.id) return false;
+    if (isPlaceholderName(home?.name) || isPlaceholderName(away?.name)) return false;
+    if (!home && !away) return false;
+    const day = kickoffDate(g.kickoff);
+    if (!day || day < week.start || day > week.end) return false;
     if (opts.state || opts.zip) {
       return matchesFilter(home) || matchesFilter(away);
     }
     return true;
   });
 
-  const inRange = (start: Date, end: Date) =>
-    usable.filter((g) => {
-      if (!g.kickoff) return false;
-      const t = new Date(g.kickoff).getTime();
-      return t >= start.getTime() && t < end.getTime();
-    });
-
-  let weekStart = thisMonday;
-  let weekGames = inRange(thisMonday, thisSunday);
-
-  if (weekGames.length === 0) {
-    const future = usable
-      .filter((g) => g.kickoff && new Date(g.kickoff).getTime() >= thisMonday.getTime())
-      .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    if (future.length) {
-      weekStart = mondayOf(new Date(future[0].kickoff!));
-      weekGames = inRange(weekStart, addDays(weekStart, 7));
-    } else {
-      return {
-        weekStart: null,
-        weekLabel: "Offseason",
-        games: [],
-        emptyReason: usable.length
-          ? "No upcoming games in the loaded MaxPreps schedules."
-          : "No high school games are loaded. Football season may be over, or MaxPreps schedule pages were unreachable during ingest.",
-      };
-    }
+  if (usable.length === 0) {
+    return {
+      weekStart,
+      weekLabel: `${week.start} – ${week.end}`,
+      games: [],
+      emptyReason: dataset.games.length
+        ? "No games in the Matchup week slate match these filters."
+        : "The Matchup MaxPreps week slate is not loaded.",
+    };
   }
 
-  const ranked: RankedGame[] = weekGames
+  const placeholder = (id: string): School => ({
+    id,
+    name: "Unmapped opponent",
+    name_normalized: "unmapped opponent",
+    aliases: [],
+    mascot: null,
+    city: "",
+    state: "",
+    zip: null,
+    address: null,
+    lat: null,
+    lng: null,
+    type: "unmapped",
+    maxpreps: null,
+    ids_247: { high_school_id: null },
+    talentScore: 0,
+    recruitCount: 0,
+    mapped: false,
+  });
+
+  const ranked: RankedGame[] = usable
     .map((game) => {
-      const home = schools.get(game.home_school_id)!;
-      const away = schools.get(game.away_school_id)!;
-      const homeRow = talentById.get(home.id);
-      const awayRow = talentById.get(away.id);
-      const homeTalent = homeRow?.talentScore ?? 0;
-      const awayTalent = awayRow?.talentScore ?? 0;
+      const home = schools.get(game.home_school_id) ?? placeholder(game.home_school_id);
+      const away = schools.get(game.away_school_id) ?? placeholder(game.away_school_id);
+      const homeStats = schoolTalent(home, talentById);
+      const awayStats = schoolTalent(away, talentById);
+      const combined = Math.round((homeStats.talent + awayStats.talent) * 100) / 100;
       return {
         game,
         home,
         away,
-        homeTalent,
-        awayTalent,
-        homeRecruits: homeRow?.recruitCount ?? 0,
-        awayRecruits: awayRow?.recruitCount ?? 0,
-        combined: Math.round((homeTalent + awayTalent) * 10) / 10,
+        homeTalent: homeStats.talent,
+        awayTalent: awayStats.talent,
+        homeRecruits: homeStats.recruits,
+        awayRecruits: awayStats.recruits,
+        combined,
         rank: 0,
+        homeMapped: home.mapped !== false,
+        awayMapped: away.mapped !== false,
       };
     })
     .sort((a, b) => b.combined - a.combined || a.home.name.localeCompare(b.home.name))
     .map((row, i) => ({ ...row, rank: i + 1 }));
 
-  const label = `${weekStart.toISOString().slice(0, 10)} – ${addDays(weekStart, 6).toISOString().slice(0, 10)}`;
-  return { weekStart, weekLabel: label, games: ranked, emptyReason: null };
+  return {
+    weekStart,
+    weekLabel: `${week.start} – ${week.end}`,
+    games: ranked,
+    emptyReason: null,
+  };
 }
