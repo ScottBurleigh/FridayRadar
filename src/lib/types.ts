@@ -70,6 +70,14 @@ export type Rating = {
   profile_url: string | null;
 };
 
+export type GameVenue = {
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  name: string | null;
+  source: "home_school" | "contest_location" | null;
+};
+
 export type Game = {
   id: string;
   season: string;
@@ -88,6 +96,8 @@ export type Game = {
   zip: string | null;
   lat: number | null;
   lng: number | null;
+  venue?: GameVenue | null;
+  two_sided_talent?: number | null;
   is_time_tba: boolean;
   /** 0 = home, 1 = away, 2 = neutral site. */
   home_away_type: 0 | 1 | 2;

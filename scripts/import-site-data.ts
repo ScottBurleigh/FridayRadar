@@ -6,8 +6,8 @@
  *   1) site-data/{schools,schools.summary,games-top213}.json
  *   2) data/import/{schools,schools.summary,games-top213}.json
  *
- * v1 /games is site-data/games-top213.json only (213 games, week
- * 2026-08-26..29, 140 both-sides / 73 partial). Never load games.json.
+ * v1 /games is site-data/games-top213.json only (two-sided week
+ * 2026-08-26..29, ranked by geometric mean). Never load games.json.
  *
  * Nested school.recruits become Player + Rating rows. Do not invent names.
  * Unmapped Matchup opponents become placeholder schools (mapped: false) so
@@ -21,6 +21,7 @@ import { padZip } from "../src/lib/geo";
 import type {
   FridayRadarDataset,
   Game,
+  GameVenue,
   Player,
   Rating,
   RatingSource,
@@ -122,6 +123,8 @@ type SiteVenue = {
   zip?: string | number | null;
   lat?: number | null;
   lng?: number | null;
+  name?: string | null;
+  source?: "home_school" | "contest_location" | string | null;
 };
 
 type SiteGame = {
@@ -132,6 +135,7 @@ type SiteGame = {
   home: SiteSide;
   away: SiteSide;
   combined_talent?: number;
+  two_sided_talent?: number | null;
   mapped_sides?: number;
   home_score?: number | null;
   away_score?: number | null;
@@ -148,6 +152,7 @@ type SiteGame = {
 type SiteGamesFile = {
   week_start?: string;
   week_end?: string;
+  rank_by?: string;
   games: SiteGame[];
 };
 
@@ -175,31 +180,32 @@ function findGamesPath(dir: string): string {
   return p;
 }
 
+function twoSidedTalent(g: SiteGame): number {
+  if (g.two_sided_talent != null && g.two_sided_talent > 0) return g.two_sided_talent;
+  const h = g.home?.talent_score ?? 0;
+  const a = g.away?.talent_score ?? 0;
+  if (h <= 0 || a <= 0) return 0;
+  return Math.round(Math.sqrt(h * a) * 100) / 100;
+}
+
 function v1Games(games: SiteGame[]): SiteGame[] {
   const cleaned = games.filter(
     (g) => !isPlaceholderName(g.home?.name) && !isPlaceholderName(g.away?.name),
   );
-  const byTalent = (a: SiteGame, b: SiteGame) => {
-    const dt = (b.combined_talent ?? 0) - (a.combined_talent ?? 0);
+  const both = cleaned.filter((g) => {
+    const homeOk = g.home?.mapped !== false && Boolean(g.home?.site_id);
+    const awayOk = g.away?.mapped !== false && Boolean(g.away?.site_id);
+    const mapped = g.mapped_sides == null ? homeOk && awayOk : g.mapped_sides === 2;
+    return mapped && twoSidedTalent(g) > 0;
+  });
+  both.sort((a, b) => {
+    const dt = twoSidedTalent(b) - twoSidedTalent(a);
     if (dt !== 0) return dt;
+    const dc = (b.combined_talent ?? 0) - (a.combined_talent ?? 0);
+    if (dc !== 0) return dc;
     return (a.home?.name || "").localeCompare(b.home?.name || "");
-  };
-  if (cleaned.length <= 213) {
-    return [...cleaned].sort(byTalent);
-  }
-  const both = cleaned.filter((g) => g.mapped_sides === 2).sort(byTalent);
-  const partial = cleaned.filter((g) => g.mapped_sides === 1).sort(byTalent);
-  const picked = [...both.slice(0, 140), ...partial.slice(0, 73)];
-  const have = new Set(picked.map((g) => g.contest_id));
-  if (picked.length < 213) {
-    for (const g of [...cleaned].sort(byTalent)) {
-      if (have.has(g.contest_id)) continue;
-      picked.push(g);
-      have.add(g.contest_id);
-      if (picked.length >= 213) break;
-    }
-  }
-  return picked.sort(byTalent).slice(0, 213);
+  });
+  return both;
 }
 
 async function readJson<T>(path: string): Promise<T> {
@@ -280,15 +286,40 @@ function resolveVenue(
   zip: string | null;
   lat: number | null;
   lng: number | null;
+  name: string | null;
+  source: GameVenue["source"];
 } {
+  const fromFile = g.venue;
+  if (fromFile && (blank(fromFile.city) || blank(fromFile.state) || fromFile.zip)) {
+    const state = blank(fromFile.state)?.toUpperCase() || null;
+    const source =
+      fromFile.source === "contest_location" || fromFile.source === "home_school"
+        ? fromFile.source
+        : g.is_neutral
+          ? "contest_location"
+          : "home_school";
+    return {
+      city: blank(fromFile.city),
+      state,
+      zip: padZip(fromFile.zip),
+      lat: fromFile.lat ?? (source === "home_school" ? homeSchool?.lat ?? null : null),
+      lng: fromFile.lng ?? (source === "home_school" ? homeSchool?.lng ?? null : null),
+      name: blank(fromFile.name),
+      source,
+    };
+  }
   const contest = contestVenue(g);
+  if (g.is_neutral) {
+    return {
+      ...contest,
+      name: blank(fromFile?.name),
+      source: contest.state || contest.zip || contest.city ? "contest_location" : null,
+    };
+  }
   const hasContest =
     Boolean(contest.state) ||
     Boolean(contest.zip) ||
     (contest.lat != null && contest.lng != null);
-  if (g.is_neutral) {
-    return contest;
-  }
   if (hasContest) {
     return {
       city: contest.city || blank(homeSchool?.city) || blank(g.home.city),
@@ -300,6 +331,8 @@ function resolveVenue(
       zip: contest.zip || homeSchool?.zip || padZip(g.home.zip),
       lat: contest.lat ?? homeSchool?.lat ?? null,
       lng: contest.lng ?? homeSchool?.lng ?? null,
+      name: blank(fromFile?.name) || blank(homeSchool?.name) || blank(g.home.name),
+      source: "home_school",
     };
   }
   return {
@@ -308,6 +341,8 @@ function resolveVenue(
     zip: homeSchool?.zip || padZip(g.home.zip),
     lat: homeSchool?.lat ?? null,
     lng: homeSchool?.lng ?? null,
+    name: blank(homeSchool?.name) || blank(g.home.name),
+    source: "home_school",
   };
 }
 
@@ -468,6 +503,14 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       zip: venue.zip,
       lat: venue.lat,
       lng: venue.lng,
+      venue: {
+        city: venue.city,
+        state: venue.state,
+        zip: venue.zip,
+        name: venue.name,
+        source: venue.source,
+      },
+      two_sided_talent: twoSidedTalent(g) || null,
       is_time_tba: Boolean(g.is_time_tba),
       home_away_type: g.is_neutral ? 2 : 0,
     });
@@ -489,7 +532,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       id: "matchup",
       label: "Matchup MaxPreps week slate",
       status: "live",
-      detail: `Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} from games-top213.json (${games.length} games). Ranked by 2 × min(home, away talent); one-sided games omitted. Venue state/zip, not either school. Never games.json.`,
+      detail: `Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} from games-top213.json (${games.length} two-sided games). Ranked by geometric mean of home/away talent; combined talent is display only. Venue state/zip, not either school. Never games.json.`,
       counts: { games: games.length },
     },
   ];
@@ -504,7 +547,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
         "High schools are ranked, not colleges.",
         "School talentScore is the Scout precomputed sum of 2027+ player points.",
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
-        "Matchup week is 2026-08-26 through 2026-08-29. /games ranks two-sided talent as 2 × min(home, away); combined talent is display + tie-break. Filters use the game venue.",
+        "Matchup week is 2026-08-26 through 2026-08-29. /games ranks two-sided talent as √(home × away); combined talent is display + tie-break. Filters use the game venue.",
         String(summary.note ?? "Canonical v1: 1,554 schools / 2,986 players when the full Scout dump is imported."),
       ],
       matchup_week: {

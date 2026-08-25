@@ -160,11 +160,13 @@ export function gamesOfTheWeek(
   const weekStart = new Date(`${week.start}T00:00:00.000Z`);
 
   const matchesVenue = (game: Game) => {
+    const venueState = game.venue?.state || game.state;
+    const venueZip = game.venue?.zip || game.zip;
     if (opts.state) {
-      if (!game.state || game.state !== opts.state.toUpperCase()) return false;
+      if (!venueState || venueState !== opts.state.toUpperCase()) return false;
     }
     if (opts.zip) {
-      if (!venueWithinZipRadius(game, opts.zip)) return false;
+      if (!venueWithinZipRadius({ ...game, zip: venueZip ?? game.zip }, opts.zip)) return false;
     }
     return true;
   };
@@ -220,6 +222,10 @@ export function gamesOfTheWeek(
       const homeMapped = home.mapped !== false;
       const awayMapped = away.mapped !== false;
       const combined = Math.round((homeStats.talent + awayStats.talent) * 100) / 100;
+      const competitive =
+        game.two_sided_talent != null && game.two_sided_talent > 0
+          ? game.two_sided_talent
+          : competitiveTalent(homeStats.talent, awayStats.talent);
       return {
         game,
         home,
@@ -229,7 +235,7 @@ export function gamesOfTheWeek(
         homeRecruits: homeStats.recruits,
         awayRecruits: awayStats.recruits,
         combined,
-        competitive: competitiveTalent(homeStats.talent, awayStats.talent),
+        competitive,
         rank: 0,
         homeMapped,
         awayMapped,

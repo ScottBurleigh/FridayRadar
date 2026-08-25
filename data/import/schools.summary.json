@@ -7,10 +7,11 @@
   "with_zip": 1044,
   "week_games_unfiltered": 5996,
   "week_both_sides": 213,
-  "v1_games": 213,
-  "v1_both_sides": 140,
-  "v1_partial": 73,
+  "v1_games": 265,
+  "v1_both_sides": 265,
+  "v1_partial": 0,
   "canonical_schools": 1554,
   "canonical_players": 2986,
-  "note": "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. v1 /games is games-top213.json (213 games, 140 both-sides / 73 partial) for 2026-08-26..2026-08-29. Never load games.json. Unknown opponents dropped. One-sided talent kept."
+  "note": "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. v1 /games is games-top213.json (265 two-sided games, 0 partial) for 2026-08-26..2026-08-29 ranked by geometric mean of home/away talent. Never load games.json.",
+  "rank_by": "two_sided_talent"
 }

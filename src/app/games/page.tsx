@@ -34,7 +34,7 @@ export default async function GamesPage({
           Games of the week
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-zinc-400">
-          Ranked by 2 × min(home, away Scout talent); combined talent is shown on each row and breaks ties. Games missing talent on either side are omitted. State and zip filters follow the game venue, not either school&apos;s home state.
+          Ranked by geometric mean of home and away Scout talent (√(home × away)); combined talent is shown on each row and breaks ties. Games missing talent on either side are omitted. State and zip filters follow the game venue, not either school&apos;s home state.
         </p>
       </div>
       <SourceBanner sources={dataset.meta.sources} />

@@ -17,7 +17,7 @@ Requires Node 22+ and Python 3. The compiled dataset ships in `data/fridayradar.
 
 - **Rankings (home)** — programs sorted by talent score (default) or recruit count. Filters: US state, zip code (≈25-mile haversine). Click a row for the school drill-down.
 - **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank, profile link when known).
-- **Games of the week** — Matchup MaxPreps slate for **2026-08-26 through 2026-08-29**, ranked by **2 × min(home, away Scout talent)**. Combined talent is still shown on each row and is the tie-break. Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state.
+- **Games of the week** — Matchup MaxPreps slate for **2026-08-26 through 2026-08-29**, ranked by **geometric mean** of home and away Scout talent (`√(home × away)`). Combined talent is still shown on each row and is the tie-break. Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state.
 
 ## Ranking math
 
@@ -48,7 +48,7 @@ Eligible: `class_year >= 2027`. Never 2026 or earlier.
 
 **Star badge counts** on the rankings table = composite stars rounded to the nearest star.
 
-**Games of the week rank** = `2 × min(home talent, away talent)`. Combined talent (home + away) is shown on each row and used only as a tie-break. Games with missing talent on either side are omitted so a superteam vs a cupcake cannot sit above two real programs. State/zip filters use the venue (home campus for home games; contest site for neutrals).
+**Games of the week rank** = geometric mean `√(home talent × away talent)`. Combined talent (home + away) is shown on each row and used only as a tie-break. Games with missing talent on either side are omitted so a superteam vs a cupcake cannot sit above two loaded programs. State/zip filters use the venue (home campus for home games; contest site for neutrals).
 
 ESPN 300 star images are mapped from grade: 90+=5, 80–89=4, then 70–79=3, 60–69=2, 50–59=1.
 
@@ -66,11 +66,11 @@ Or rebuild from the frozen ingest already in this repo (never re-pages 247):
 npm run compile:scout
 ```
 
-v1 `/games` reads **`site-data/games-top213.json` only** — 213 games for 2026-08-26..29 (140 both-sides, 73 partial). The default board shows the 140 two-sided games. Do **not** load `games.json` (the unfiltered week file is 837 games).
+v1 `/games` reads **`site-data/games-top213.json` only** — two-sided Matchup games for 2026-08-26..29 (`rank_by: two_sided_talent`). Do **not** load `games.json`.
 
 See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games-top213.json`, and how frozen 2027/2028 ingest players nest on school rows.
 
-Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (213 games; default list is the 140 two-sided matchups).
+Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (two-sided games only, ranked by geometric mean).
 
 School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 
@@ -91,8 +91,8 @@ Stored in `data/fridayradar.json`:
 - **School** — `id` (slug, e.g. `fl-bradenton-img-academy`), `name`, `name_normalized`, `aliases`, `mascot`, `city`, `state`, `zip`, `address`, `lat`, `lng`, `type`, `maxpreps {schoolId, canonicalUrl, formattedName}`, `ids_247.high_school_id`, optional Scout `talentScore` / `recruitCount`, `mapped`
 - **Player** — `id`, `full_name`, `class_year`, `position`, `height`, `weight`, `hometown_city`, `hometown_state`, `high_school_id` (school slug), `college_commit`, `source_ids {247sports_player_id, on3_rivals_id, espn_id}`
 - **Rating** — `player_id`, `source` (`247sports` | `247sports_composite` | `on3_rivals` | `on3_industry` | `espn`), `class_year`, `as_of`, `national_rank`, `position_rank`, `state_rank`, `stars`, `rating`, `position`, `high_school_name_raw`, `profile_url`
-- **Game** — `id` (MaxPreps contestId), `season`, `kickoff`, `home_school_id`, `away_school_id` (slugs; unmapped sides use a placeholder school), `home_score`, `away_score`, `is_gow`, `game_url`, venue `city` / `state` / `zip` / `lat` / `lng`, `home_away_type` (0 home, 2 neutral)
+- **Game** — `id` (MaxPreps contestId), `season`, `kickoff`, `home_school_id`, `away_school_id`, `home_score`, `away_score`, `is_gow`, `game_url`, venue `city` / `state` / `zip` / `lat` / `lng` plus `venue {city,state,zip,name,source}`, `two_sided_talent`, `home_away_type` (0 home, 2 neutral)
 
-**Games rank key:** `2 × min(home talent, away talent)`. Combined (home + away) is the displayed number and the tie-break. A loaded roster vs a cupcake (Cornerstone Christian @ IMG) falls behind two mid/high-talent programs that are actually a fight.
+**Games rank key:** geometric mean `√(home talent × away talent)`. Combined (home + away) is the displayed number and the tie-break. Cornerstone Christian @ IMG stays on the board with combined 2418.49 but ranks below two loaded programs (Mater Dei @ Orem, Sierra Canyon @ Chaminade-Madonna).
 
 Zip filter: input zip → centroid in `data/zip-centroids.json` → haversine ≤ 25 miles. Rankings measure distance to the **school**. `/games` measures distance to the **venue** only. Missing venue state/coords leaves the game unmatched for that filter — it is not treated as both teams’ states.

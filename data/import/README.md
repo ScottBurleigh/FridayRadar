@@ -31,11 +31,11 @@ Rollup the importer prints in `meta.sources`. Canonical v1: **1,554 schools / 2,
 
 ### `games-top213.json` (v1 `/games`)
 
-Matchup week **2026-08-26 through 2026-08-29**. This is the only games file the importer loads: **213 games, 140 both-sides, 73 partial**. The live unfiltered week dump is 837 games (196 both-sides); v1 does **not** load `games.json`.
+Matchup week **2026-08-26 through 2026-08-29**. This is the only games file the importer loads: **two-sided games only** (`rank_by: two_sided_talent`). Do **not** load `games.json`.
 
-Unknown / empty / Varsity Opponent names are dropped. The importer still stores one-sided rows (St. Frances @ DeLand); `/games` omits them from the default ranked list because they lack talent on both sides. File order is still combined talent (Cornerstone Christian @ IMG 2418.49 on disk); the live board ranks by **2 × min(home, away)**.
+Unknown / empty / Varsity Opponent names are dropped. St. Frances @ DeLand is not in this slice (DeLand is unmapped). Rank key is **√(home × away)**; combined talent is still on each row (Cornerstone Christian @ IMG 2418.49).
 
-Venue: home games use the home school’s city/state/zip/coords (or a MaxPreps contest location if present). Neutral sites (`is_neutral` / `homeAwayType` 2) use contest/site location only — never either roster’s home state. Missing venue state is unmatched for the state filter.
+Venue: `venue {city,state,zip,name,source}`. Home games use the home school (`source: home_school`). Neutral sites use contest/site location only. Mater Dei @ Orem is Utah / 84097, not California. Missing venue state is unmatched for the state filter.
 
 `Game.id` = `contest_id`. If a side is unmapped (`mapped: false`, no `site_id`), the importer keeps the game and inserts a placeholder school.
 
