@@ -30,6 +30,8 @@ WEEK_END = "2026-08-29"
 WEEK_DATES = ("2026-08-26", "2026-08-27", "2026-08-28", "2026-08-29")
 DATE_SLUGS = ("8-26-2026", "8-27-2026", "8-28-2026", "8-29-2026")
 TOP_GAMES = 213
+V1_BOTH_SIDES = 140
+V1_PARTIAL = 73
 TARGET_SCHOOLS = 1554
 TARGET_PLAYERS = 2986
 EXTRA_2027 = 42
@@ -1387,17 +1389,32 @@ def build_games(schools: dict) -> list[dict]:
     # v1 slate is games that touch the Scout board. Unmapped-vs-unmapped (e.g.
     # IMG Academy Junior National) must not inherit varsity IMG talent.
     ranked = [r for r in rows if r["mapped_sides"] >= 1]
-    top = ranked[:TOP_GAMES]
-    # Ensure showcase contests survive the slice if they were parsed.
+    ranked.sort(key=lambda r: (-(r["combined_talent"] or 0), r["home"]["name"], r["away"]["name"]))
+    both_rows = [r for r in ranked if r["mapped_sides"] == 2]
+    part_rows = [r for r in ranked if r["mapped_sides"] == 1]
+    top = both_rows[:V1_BOTH_SIDES] + part_rows[:V1_PARTIAL]
     have_top = {r["contest_id"] for r in top}
+    if len(top) < TOP_GAMES:
+        for r in ranked:
+            if r["contest_id"] in have_top:
+                continue
+            top.append(r)
+            have_top.add(r["contest_id"])
+            if len(top) >= TOP_GAMES:
+                break
+    # Ensure showcase contests survive the slice if they were parsed.
     for cid in SHOWCASE_CONTESTS:
         if cid in have_top:
             continue
         hit = uniq.get(cid)
-        if hit:
+        if hit and hit.get("mapped_sides", 0) >= 1:
             top.append(hit)
+            have_top.add(cid)
     top.sort(key=lambda r: (-(r["combined_talent"] or 0), r["home"]["name"], r["away"]["name"]))
     top = top[:TOP_GAMES]
+    n_both = sum(1 for r in top if r["mapped_sides"] == 2)
+    n_part = sum(1 for r in top if r["mapped_sides"] == 1)
+    print(f"v1 games-top213 {len(top)} both-sides {n_both} partial {n_part}")
     if top:
         a, h = top[0]["away"]["name"], top[0]["home"]["name"]
         print(f"top game {a} @ {h} {top[0]['combined_talent']}")
@@ -1470,9 +1487,9 @@ def write_outputs(school_rows, games, summary):
         (dest / "schools.json").write_text(payload_schools)
         (dest / "schools.summary.json").write_text(payload_summary)
         (dest / "games-top213.json").write_text(payload_games)
-        # Do not ship the 837-game file. Mirror the v1 slice as games.json so
-        # older importer paths still load 213 rather than a leftover seed.
-        (dest / "games.json").write_text(payload_games)
+        leftover = dest / "games.json"
+        if leftover.exists():
+            leftover.unlink()
     print("wrote", SITE, "and", IMPORT, "schools", len(school_rows), "games", len(games))
 
 
@@ -1495,12 +1512,15 @@ def main():
         "week_games_unfiltered": week_n,
         "week_both_sides": both,
         "v1_games": len(games),
+        "v1_both_sides": sum(1 for g in games if g.get("mapped_sides") == 2),
+        "v1_partial": sum(1 for g in games if g.get("mapped_sides") == 1),
         "canonical_schools": TARGET_SCHOOLS,
         "canonical_players": TARGET_PLAYERS,
         "note": (
             "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. "
-            f"v1 games are the top {TOP_GAMES} by combined_talent for {WEEK_START}..{WEEK_END}. "
-            "Unknown opponents dropped. One-sided talent kept."
+            f"v1 /games is games-top213.json ({TOP_GAMES} games, "
+            f"{V1_BOTH_SIDES} both-sides / {V1_PARTIAL} partial) for {WEEK_START}..{WEEK_END}. "
+            "Never load games.json. Unknown opponents dropped. One-sided talent kept."
         ),
     }
     write_outputs(school_rows, games, summary)

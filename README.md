@@ -64,11 +64,11 @@ Or rebuild from the frozen ingest already in this repo (never re-pages 247):
 npm run compile:scout
 ```
 
-v1 `/games` reads **`games-top213.json`** (top 213 by combined Scout talent for 2026-08-26..29). Do not load a full 837-game `games.json` as the site slate; the importer slices anything longer down to 213.
+v1 `/games` reads **`site-data/games-top213.json` only** — 213 games for 2026-08-26..29 (140 both-sides, 73 partial). Do **not** load `games.json` (the unfiltered week file is 837 games).
 
 See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games-top213.json`, and how frozen 2027/2028 ingest players nest on school rows.
 
-Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is the top **213** Matchup-week games by combined talent.
+Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (213 games, 140 both-sides, 73 partial).
 
 School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 
