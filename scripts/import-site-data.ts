@@ -34,6 +34,35 @@ import type {
 
 const ROOT = join(import.meta.dirname, "..");
 
+/** Matchup collapsed GUID / St. vs Saint / city-alias ids onto these keys. */
+const CANONICAL_SCHOOL_ID: Record<string, string> = {
+  "fl-fort-lauderdale-st-thomas-aquinas": "fl-fort-lauderdale-saint-thomas-aquinas",
+  "fl-na-carol-city-high-school": "fl-opa-locka-miami-carol-city",
+  "fl-na-chaminade-madonna-college-preparatory-school": "fl-hollywood-chaminade-madonna",
+  "ca-na-linda-esperanza-marquez-high-school": "ca-huntington-park-marquez",
+  "ma-na-saint-john-s-prep": "ma-danvers-st-john-s-prep",
+  "va-na-benedictine-college-prep": "va-richmond-benedictine",
+  "nv-na-mater-academy-east-las-vegas": "nv-las-vegas-mater-academy-east",
+  "al-na-mcgill-toolen-catholic-high-school": "al-mobile-mcgill-toolen",
+  "mi-na-saint-mary-s-preparatory-school": "mi-orchard-lake-orchard-lake-st-mary-s",
+  "tx-na-the-woodlands-college-park-high-school": "tx-the-woodlands-college-park",
+  "eur-na-nfl-academy": "en-london-nfl-academy",
+  "tx-arlington-summit-high-school": "tx-arlington-mansfield-summit",
+  "oh-warren-warren-g-harding-high-school": "oh-warren-harding",
+  "tx-southlake-carroll-high-school": "tx-southlake-southlake-carroll",
+  "fl-fort-lauderdale-american-heritage": "fl-plantation-american-heritage",
+  "fl-windemere-first-academy": "fl-orlando-the-first-academy",
+  "nj-ramsey-don-bosco-high-school": "nj-ramsey-don-bosco-prep",
+  "al-montgomery-the-montgomery-academy": "al-montgomery-montgomery-academy",
+  "tx-houston-c-e-king-high-school": "tx-houston-c-e-king",
+  "ga-grayson-grayson": "ga-loganville-grayson",
+};
+
+function canonicalSchoolId(id: string | undefined | null): string {
+  if (!id) return "";
+  return CANONICAL_SCHOOL_ID[id] || id;
+}
+
 const RATING_SOURCES = new Set<RatingSource>([
   "247sports",
   "247sports_composite",
@@ -516,15 +545,19 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
   const asOf = new Date().toISOString().slice(0, 10);
 
   for (const row of siteSchools) {
+    const cid = canonicalSchoolId(row.id);
     const city = row.city || "";
     const state = (row.state || "").toUpperCase();
     const zip = padZip(row.zip5 ?? row.zip ?? row.maxpreps?.zip);
     const mp = row.maxpreps;
     const school: School = {
-      id: row.id,
+      id: cid,
       name: row.name,
       name_normalized: normalizeSchoolName(row.name),
-      aliases: row.aliases ?? [],
+      aliases: [
+        ...(row.aliases ?? []),
+        ...(row.id !== cid ? [row.id] : []),
+      ],
       mascot: mp?.mascot ?? null,
       city,
       state,
@@ -600,8 +633,8 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     if (isPlaceholderName(g.home.name) || isPlaceholderName(g.away.name)) continue;
     const homeMapped = g.home.mapped !== false && Boolean(g.home.site_id);
     const awayMapped = g.away.mapped !== false && Boolean(g.away.site_id);
-    const homeId = homeMapped ? String(g.home.site_id) : unmappedId(g.home);
-    const awayId = awayMapped ? String(g.away.site_id) : unmappedId(g.away);
+    const homeId = canonicalSchoolId(homeMapped ? String(g.home.site_id) : unmappedId(g.home));
+    const awayId = canonicalSchoolId(awayMapped ? String(g.away.site_id) : unmappedId(g.away));
     ensureSchool(schools, homeId, g.home, homeMapped);
     ensureSchool(schools, awayId, g.away, awayMapped);
     const venue = resolveVenue(g, schools.get(homeId));
@@ -635,10 +668,13 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
 
   const schedules: Record<string, SchoolSchedule> = {};
   for (const [id, row] of Object.entries(siteSchedules)) {
-    const mapped = mapSchedule(id, row);
+    const cid = canonicalSchoolId(row.school_id || id);
+    const mapped = mapSchedule(cid, row);
     if (!mapped.games.length) continue;
-    schedules[id] = mapped;
-    const school = schools.get(id);
+    if (schedules[cid] && (schedules[cid].games?.length || 0) >= mapped.games.length) continue;
+    mapped.schoolId = cid;
+    schedules[cid] = mapped;
+    const school = schools.get(cid);
     if (school?.maxpreps?.schoolId && mapped.scheduleUrl && !school.maxpreps.scheduleUrl) {
       school.maxpreps.scheduleUrl = mapped.scheduleUrl;
     }

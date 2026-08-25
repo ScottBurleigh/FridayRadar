@@ -353,6 +353,31 @@ MATCHUP_SCHEDULE_URLS = {
         "https://www.maxpreps.com/ny/henrietta/rush-henrietta-royal-comets/football/schedule/"
     ),
     "ne-omaha-skutt-catholic": "https://www.maxpreps.com/ne/omaha/skutt-catholic-skyhawks/football/schedule/",
+    "ga-loganville-grayson": "https://www.maxpreps.com/ga/loganville/grayson-rams/football/schedule/",
+}
+
+# Matchup collapsed GUID / city=alias / St. vs Saint duplicates onto these ids.
+CANONICAL_SCHOOL_IDS = {
+    "fl-fort-lauderdale-st-thomas-aquinas": "fl-fort-lauderdale-saint-thomas-aquinas",
+    "fl-na-carol-city-high-school": "fl-opa-locka-miami-carol-city",
+    "fl-na-chaminade-madonna-college-preparatory-school": "fl-hollywood-chaminade-madonna",
+    "ca-na-linda-esperanza-marquez-high-school": "ca-huntington-park-marquez",
+    "ma-na-saint-john-s-prep": "ma-danvers-st-john-s-prep",
+    "va-na-benedictine-college-prep": "va-richmond-benedictine",
+    "nv-na-mater-academy-east-las-vegas": "nv-las-vegas-mater-academy-east",
+    "al-na-mcgill-toolen-catholic-high-school": "al-mobile-mcgill-toolen",
+    "mi-na-saint-mary-s-preparatory-school": "mi-orchard-lake-orchard-lake-st-mary-s",
+    "tx-na-the-woodlands-college-park-high-school": "tx-the-woodlands-college-park",
+    "eur-na-nfl-academy": "en-london-nfl-academy",
+    "tx-arlington-summit-high-school": "tx-arlington-mansfield-summit",
+    "oh-warren-warren-g-harding-high-school": "oh-warren-harding",
+    "tx-southlake-carroll-high-school": "tx-southlake-southlake-carroll",
+    "fl-fort-lauderdale-american-heritage": "fl-plantation-american-heritage",
+    "fl-windemere-first-academy": "fl-orlando-the-first-academy",
+    "nj-ramsey-don-bosco-high-school": "nj-ramsey-don-bosco-prep",
+    "al-montgomery-the-montgomery-academy": "al-montgomery-montgomery-academy",
+    "tx-houston-c-e-king-high-school": "tx-houston-c-e-king",
+    "ga-grayson-grayson": "ga-loganville-grayson",
 }
 
 # Duplicates, wrong MaxPreps ids, or no 26-27 varsity slate. Do not attach
@@ -361,7 +386,6 @@ MATCHUP_SCHEDULE_URLS = {
 SKIP_SCHEDULE_IDS = {
     "fl-fort-lauderdale-american-heritage",
     "fl-windemere-first-academy",
-    "ga-loganville-grayson",
     "tx-na-central-high-school",
     "nj-pennington-pennington-school",
     "ny-buffalo-st-joseph-school",
@@ -369,6 +393,7 @@ SKIP_SCHEDULE_IDS = {
     "tx-arlington-summit-high-school",
     "oh-warren-warren-g-harding-high-school",
     "tx-southlake-carroll-high-school",
+    *CANONICAL_SCHOOL_IDS.keys(),
 }
 
 NAME_STRIP = re.compile(
@@ -724,6 +749,99 @@ def fetch_schedule(
     return [], None
 
 
+def canonical_school_id(sid: str | None) -> str:
+    if not sid:
+        return ""
+    return CANONICAL_SCHOOL_IDS.get(sid, sid)
+
+
+def collapse_canonical_ids(schools: list[dict], schedules: dict[str, dict]) -> None:
+    """Point GUID / alias ids at the canonical school_id. Rename when the
+    target id is not already a school row (St. Thomas → Saint Thomas).
+    Do not invent zips. Do not drop the 1,554-school talent board.
+    """
+    by_id = {s["id"]: s for s in schools}
+    renamed = 0
+    for s in schools:
+        dest = CANONICAL_SCHOOL_IDS.get(s["id"])
+        if not dest or dest in by_id:
+            continue
+        old = s["id"]
+        s["id"] = dest
+        aliases = list(s.get("aliases") or [])
+        if old not in aliases:
+            aliases.append(old)
+        s["aliases"] = aliases
+        renamed += 1
+        by_id[dest] = s
+        by_id.pop(old, None)
+    # Copy MaxPreps onto the canonical row so opponent matching hits talent.
+    for src_id, dest_id in CANONICAL_SCHOOL_IDS.items():
+        src, dest = by_id.get(src_id), by_id.get(dest_id)
+        if not src or not dest or src is dest:
+            continue
+        if src.get("maxpreps") and not dest.get("maxpreps"):
+            dest["maxpreps"] = src["maxpreps"]
+        src["maxpreps"] = None
+    merged = {}
+    dropped = 0
+    for key, row in schedules.items():
+        dest = canonical_school_id(row.get("school_id") or key)
+        dest = canonical_school_id(dest)
+        row = dict(row)
+        row["school_id"] = dest
+        for g in row.get("games") or []:
+            opp = dict(g.get("opponent") or {})
+            sid = canonical_school_id(opp.get("site_id"))
+            if sid:
+                opp["site_id"] = sid
+            g["opponent"] = opp
+        if dest in merged:
+            dropped += 1
+            if len(row.get("games") or []) > len(merged[dest].get("games") or []):
+                merged[dest] = row
+            continue
+        merged[dest] = row
+    schedules.clear()
+    schedules.update(merged)
+    print(f"canonical collapse renamed {renamed} schools, schedules now {len(schedules)} (dropped {dropped} alias rows)")
+
+    games_path = SITE / "games-top213.json"
+    if not games_path.exists():
+        return
+    payload = json.loads(games_path.read_text())
+    games = payload.get("games") or []
+    n_side = 0
+    for game in games:
+        for side in ("home", "away"):
+            rec = game.get(side) or {}
+            dest = canonical_school_id(rec.get("site_id"))
+            if not dest or dest == rec.get("site_id"):
+                continue
+            rec["site_id"] = dest
+            canon = by_id.get(dest)
+            if canon:
+                rec["name"] = canon.get("name") or rec.get("name")
+                if canon.get("city"):
+                    rec["city"] = canon["city"]
+                if canon.get("zip") and not rec.get("zip"):
+                    rec["zip"] = canon["zip"]
+                if canon.get("talent_score"):
+                    rec["talent_score"] = canon["talent_score"]
+            n_side += 1
+        ht = float(game.get("home", {}).get("talent_score") or 0)
+        at = float(game.get("away", {}).get("talent_score") or 0)
+        if ht > 0 and at > 0:
+            game["combined_talent"] = round(ht + at, 2)
+            game["two_sided_talent"] = round((ht * at) ** 0.5, 2)
+    payload["games"] = games
+    raw = json.dumps(payload)
+    for dest in (SITE, IMPORT):
+        dest.mkdir(parents=True, exist_ok=True)
+        (dest / "games-top213.json").write_text(raw)
+    print(f"canonical collapse remapped {n_side} game sides")
+
+
 def opp_norm_name(name: str) -> str:
     """Strip parentheticals and 'School of Sport Sciences'. Do not strip
     'Performance Academy' — The St. James Performance Academy is not The St. James.
@@ -738,6 +856,8 @@ def opponent_indexes(schools: list[dict]) -> tuple[dict, dict]:
     by_mp: dict[str, dict] = {}
     by_st_nn: dict[tuple[str, str], list[dict]] = {}
     for s in schools:
+        if s["id"] in CANONICAL_SCHOOL_IDS:
+            continue
         mp = (s.get("maxpreps") or {}).get("schoolId")
         if mp:
             by_mp[mp.lower()] = s
@@ -1162,6 +1282,7 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
     """Recompute 0–100 strength + SOS from on-disk schedules. Optionally fill gaps."""
     schools = json.loads((SITE / "schools.json").read_text())
     schedules = json.loads((SITE / "schedules.json").read_text())
+    collapse_canonical_ids(schools, schedules)
     fill_published_week_zips(schools)
     if fill_missing:
         fill_missing_schedules(schools, schedules)
