@@ -24,19 +24,33 @@ export function ratingsForPlayer(dataset: FridayRadarDataset, playerId: string):
   return dataset.ratings.filter((r) => r.player_id === playerId);
 }
 
+export function maxprepsFootballSeason(dataset: FridayRadarDataset): string {
+  for (const game of dataset.games) {
+    if (game.season) return game.season;
+  }
+  return "26-27";
+}
+
+/** MaxPreps football schedule for the season already on the dataset. Omits the link with no schoolId/url. */
 export function maxprepsScheduleUrl(
   mp: School["maxpreps"] | null | undefined,
+  season = "26-27",
 ): string | null {
   if (!mp?.schoolId) return null;
-  if (mp.scheduleUrl) return mp.scheduleUrl;
-  if (mp.footballUrl) {
-    const base = mp.footballUrl.endsWith("/") ? mp.footballUrl : `${mp.footballUrl}/`;
-    return `${base}schedule/`;
-  }
+  const stored = mp.scheduleUrl?.trim();
+  if (stored && /\/football\/\d{2}-\d{2}\/schedule\/?$/i.test(stored)) return stored;
   const canonical = mp.canonicalUrl?.trim();
-  if (!canonical) return null;
-  const base = canonical.endsWith("/") ? canonical : `${canonical}/`;
-  return `${base}football/schedule/`;
+  if (canonical) {
+    const base = canonical.endsWith("/") ? canonical : `${canonical}/`;
+    return `${base}football/${season}/schedule/`;
+  }
+  const football = mp.footballUrl?.trim();
+  if (football) {
+    const base = football.endsWith("/") ? football : `${football}/`;
+    const withSeason = base.replace(/\/football\/?$/i, `/football/${season}/`);
+    return `${withSeason}schedule/`.replace(/\/\/schedule/, "/schedule");
+  }
+  return stored || null;
 }
 
 function profileUrlForPlayer(

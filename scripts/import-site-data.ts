@@ -133,6 +133,7 @@ type SiteGame = {
   home_score?: number | null;
   away_score?: number | null;
   is_time_tba?: boolean;
+  season?: string;
   /** MaxPreps contest / site location when present. */
   venue?: SiteVenue | null;
   location_city?: string | null;
@@ -205,18 +206,43 @@ async function readJson<T>(path: string): Promise<T> {
   return JSON.parse(await readFile(path, "utf8")) as T;
 }
 
+function footballSeasonFromGames(file: SiteGamesFile): string {
+  const fromGame = file.games.find((g) => g.season)?.season?.trim();
+  if (fromGame) return fromGame;
+  const year = file.week_start?.slice(2, 4);
+  if (year && /^\d{2}$/.test(year)) {
+    return `${year}-${String(Number(year) + 1).padStart(2, "0")}`;
+  }
+  return "26-27";
+}
+
 function joinUrl(base: string, suffix: string): string {
   const b = base.endsWith("/") ? base : `${base}/`;
   return `${b}${suffix.replace(/^\//, "")}`;
 }
 
-function siteMaxPreps(mp: SiteSchool["maxpreps"]): School["maxpreps"] {
+function siteMaxPreps(mp: SiteSchool["maxpreps"], season: string): School["maxpreps"] {
   if (!mp?.schoolId) return null;
   const canonical = (mp.canonicalUrl || "").trim();
+  if (!canonical && !(mp.footballUrl || "").trim() && !(mp.scheduleUrl || "").trim()) {
+    return {
+      schoolId: mp.schoolId,
+      canonicalUrl: "",
+      formattedName: mp.formattedName ?? null,
+      footballUrl: null,
+      scheduleUrl: null,
+    };
+  }
   const football =
     (mp.footballUrl || "").trim() || (canonical ? joinUrl(canonical, "football/") : "");
-  const schedule =
-    (mp.scheduleUrl || "").trim() || (football ? joinUrl(football, "schedule/") : "");
+  const stored = (mp.scheduleUrl || "").trim();
+  const schedule = /\/football\/\d{2}-\d{2}\/schedule\/?$/i.test(stored)
+    ? stored
+    : canonical
+      ? joinUrl(canonical, `football/${season}/schedule/`)
+      : football
+        ? joinUrl(football.replace(/\/football\/?$/i, `/football/${season}/`), "schedule/")
+        : stored || null;
   return {
     schoolId: mp.schoolId,
     canonicalUrl: canonical,
@@ -397,6 +423,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
   const siteSchools = Array.isArray(schoolRaw) ? schoolRaw : schoolRaw.schools;
   const gamesFile = await readJson<SiteGamesFile>(gamesPath);
   gamesFile.games = v1Games(gamesFile.games || []);
+  const footballSeason = footballSeasonFromGames(gamesFile);
   const summary = existsSync(summaryPath)
     ? await readJson<Record<string, unknown>>(summaryPath)
     : {};
@@ -424,7 +451,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       lat: row.lat ?? null,
       lng: row.lng ?? null,
       type: row.type ?? null,
-      maxpreps: siteMaxPreps(mp),
+      maxpreps: siteMaxPreps(mp, footballSeason),
       ids_247: { high_school_id: row.ids_247?.high_school_id ?? null },
       talentScore: row.talent_score ?? null,
       recruitCount: row.recruit_count ?? null,
@@ -486,7 +513,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     const venue = resolveVenue(g, schools.get(homeId));
     games.push({
       id: g.contest_id,
-      season: "26-27",
+      season: g.season || footballSeason,
       kickoff: g.kickoff_local ?? null,
       home_school_id: homeId,
       away_school_id: awayId,
