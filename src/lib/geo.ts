@@ -62,3 +62,29 @@ export function schoolWithinZipRadius(school: School, zip: string, miles = ZIP_R
   if (!origin || !dest) return false;
   return haversineMiles(origin.lat, origin.lng, dest.lat, dest.lng) <= miles;
 }
+
+export type VenueLike = {
+  lat?: number | null;
+  lng?: number | null;
+  zip?: string | null;
+};
+
+/** Coords for the game venue only — never both schools. */
+export function venueCoords(venue: VenueLike): { lat: number; lng: number } | null {
+  if (venue.lat != null && venue.lng != null) {
+    return { lat: venue.lat, lng: venue.lng };
+  }
+  if (venue.zip) return coordsForZip(venue.zip);
+  return null;
+}
+
+export function venueWithinZipRadius(
+  venue: VenueLike,
+  zip: string,
+  miles = ZIP_RADIUS_MILES,
+): boolean {
+  const origin = coordsForZip(zip);
+  const dest = venueCoords(venue);
+  if (!origin || !dest) return false;
+  return haversineMiles(origin.lat, origin.lng, dest.lat, dest.lng) <= miles;
+}

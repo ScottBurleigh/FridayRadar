@@ -80,9 +80,16 @@ export type Game = {
   away_score: number | null;
   is_gow: boolean;
   game_url: string | null;
+  /** Venue city (where the game is played), not either roster's school. */
   city: string | null;
+  /** Venue state. Missing ⇒ unmatched for the state filter. */
   state: string | null;
+  /** Venue zip. Used with lat/lng for the ~25-mile radius filter. */
+  zip: string | null;
+  lat: number | null;
+  lng: number | null;
   is_time_tba: boolean;
+  /** 0 = home, 1 = away, 2 = neutral site. */
   home_away_type: 0 | 1 | 2;
 };
 

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import type { RankedGame } from "@/lib/data";
 import { formatKickoff, formatTalent } from "@/lib/format";
-import type { School } from "@/lib/types";
+import type { Game, School } from "@/lib/types";
 
 function SchoolName({ school, mapped }: { school: School; mapped: boolean }) {
   if (!mapped) {
@@ -20,6 +20,15 @@ function SchoolName({ school, mapped }: { school: School; mapped: boolean }) {
       {school.name}
     </Link>
   );
+}
+
+function venueLabel(game: Game): string {
+  const city = game.city?.trim();
+  const state = game.state?.trim();
+  if (city && state) return `${city}, ${state}`;
+  if (state) return state;
+  if (city) return city;
+  return "—";
 }
 
 export function GamesTable({ rows }: { rows: RankedGame[] }) {
@@ -63,7 +72,7 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
                   {formatTalent(row.combined)}
                 </TableCell>
                 <TableCell className="font-sans text-zinc-400">
-                  {row.game.city || row.home.city}, {row.game.state || row.home.state}
+                  {venueLabel(row.game)}
                 </TableCell>
               </TableRow>
             ))}
@@ -88,7 +97,7 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
               <SchoolName school={row.home} mapped={row.homeMapped} />
             </p>
             <p className="mt-1 text-sm text-zinc-500">
-              {row.game.city || row.home.city}, {row.game.state || row.home.state}
+              {venueLabel(row.game)}
             </p>
             <p className="mt-2 font-mono text-xs text-zinc-400">
               Away {row.awayRecruits}/{formatTalent(row.awayTalent)} · Home {row.homeRecruits}/

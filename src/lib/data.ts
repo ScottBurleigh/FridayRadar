@@ -2,8 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
 import type { FridayRadarDataset, Game, Player, Rating, School } from "./types";
-import { rankSchools } from "./ranking";
-import { schoolWithinZipRadius } from "./geo";
+import { competitiveTalent, rankSchools } from "./ranking";
+import { schoolWithinZipRadius, venueWithinZipRadius } from "./geo";
 
 export const loadDataset = cache((): FridayRadarDataset => {
   const path = join(process.cwd(), "data", "fridayradar.json");
@@ -67,6 +67,7 @@ export type RankedGame = {
   homeRecruits: number;
   awayRecruits: number;
   combined: number;
+  competitive: number;
   rank: number;
   homeMapped: boolean;
   awayMapped: boolean;
@@ -108,10 +109,13 @@ export function gamesOfTheWeek(
   const week = dataset.meta.matchup_week ?? DEFAULT_MATCHUP_WEEK;
   const weekStart = new Date(`${week.start}T00:00:00.000Z`);
 
-  const matchesFilter = (school: School | undefined) => {
-    if (!school) return false;
-    if (opts.state && school.state !== opts.state.toUpperCase()) return false;
-    if (opts.zip && !schoolWithinZipRadius(school, opts.zip)) return false;
+  const matchesVenue = (game: Game) => {
+    if (opts.state) {
+      if (!game.state || game.state !== opts.state.toUpperCase()) return false;
+    }
+    if (opts.zip) {
+      if (!venueWithinZipRadius(game, opts.zip)) return false;
+    }
     return true;
   };
 
@@ -122,9 +126,7 @@ export function gamesOfTheWeek(
     if (!home && !away) return false;
     const day = kickoffDate(g.kickoff);
     if (!day || day < week.start || day > week.end) return false;
-    if (opts.state || opts.zip) {
-      return matchesFilter(home) || matchesFilter(away);
-    }
+    if (opts.state || opts.zip) return matchesVenue(g);
     return true;
   });
 
@@ -134,7 +136,7 @@ export function gamesOfTheWeek(
       weekLabel: `${week.start} – ${week.end}`,
       games: [],
       emptyReason: dataset.games.length
-        ? "No games in the Matchup week slate match these filters."
+        ? "No two-sided games in the Matchup week slate match these venue filters."
         : "The Matchup MaxPreps week slate is not loaded.",
     };
   }
@@ -165,6 +167,8 @@ export function gamesOfTheWeek(
       const away = schools.get(game.away_school_id) ?? placeholder(game.away_school_id);
       const homeStats = schoolTalent(home, talentById);
       const awayStats = schoolTalent(away, talentById);
+      const homeMapped = home.mapped !== false;
+      const awayMapped = away.mapped !== false;
       const combined = Math.round((homeStats.talent + awayStats.talent) * 100) / 100;
       return {
         game,
@@ -175,18 +179,28 @@ export function gamesOfTheWeek(
         homeRecruits: homeStats.recruits,
         awayRecruits: awayStats.recruits,
         combined,
+        competitive: competitiveTalent(homeStats.talent, awayStats.talent),
         rank: 0,
-        homeMapped: home.mapped !== false,
-        awayMapped: away.mapped !== false,
+        homeMapped,
+        awayMapped,
       };
     })
-    .sort((a, b) => b.combined - a.combined || a.home.name.localeCompare(b.home.name))
+    .filter((row) => row.homeMapped && row.awayMapped && row.competitive > 0)
+    .sort(
+      (a, b) =>
+        b.competitive - a.competitive ||
+        b.combined - a.combined ||
+        a.home.name.localeCompare(b.home.name) ||
+        a.away.name.localeCompare(b.away.name),
+    )
     .map((row, i) => ({ ...row, rank: i + 1 }));
 
   return {
     weekStart,
     weekLabel: `${week.start} – ${week.end}`,
     games: ranked,
-    emptyReason: null,
+    emptyReason: ranked.length
+      ? null
+      : "No two-sided games in the Matchup week slate match these venue filters.",
   };
 }

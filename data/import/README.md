@@ -33,7 +33,9 @@ Rollup the importer prints in `meta.sources`. Canonical v1: **1,554 schools / 2,
 
 Matchup week **2026-08-26 through 2026-08-29**. This is the only games file the importer loads: **213 games, 140 both-sides, 73 partial**. The live unfiltered week dump is 837 games (196 both-sides); v1 does **not** load `games.json`.
 
-Unknown / empty / Varsity Opponent names are dropped. One-sided talent stays (St. Frances @ DeLand). Top of the file: Cornerstone Christian @ IMG 2418.49.
+Unknown / empty / Varsity Opponent names are dropped. The importer still stores one-sided rows (St. Frances @ DeLand); `/games` omits them from the default ranked list because they lack talent on both sides. File order is still combined talent (Cornerstone Christian @ IMG 2418.49 on disk); the live board ranks by **2 × min(home, away)**.
+
+Venue: home games use the home school’s city/state/zip/coords (or a MaxPreps contest location if present). Neutral sites (`is_neutral` / `homeAwayType` 2) use contest/site location only — never either roster’s home state. Missing venue state is unmatched for the state filter.
 
 `Game.id` = `contest_id`. If a side is unmapped (`mapped: false`, no `site_id`), the importer keeps the game and inserts a placeholder school.
 

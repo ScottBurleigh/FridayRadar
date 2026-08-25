@@ -9,18 +9,22 @@ export function FilterBar({
   zip,
   sort,
   showSort = true,
+  stateLabel = "State",
+  zipLabel = "Zip (≈25 miles)",
 }: {
   action: string;
   state?: string;
   zip?: string;
   sort?: string;
   showSort?: boolean;
+  stateLabel?: string;
+  zipLabel?: string;
 }) {
   return (
     <form action={action} method="get" className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:flex-row sm:flex-wrap sm:items-end">
       <div className="min-w-40 flex-1">
         <Label htmlFor="state" className="text-xs uppercase tracking-wide text-zinc-500">
-          State
+          {stateLabel}
         </Label>
         <select
           id="state"
@@ -38,7 +42,7 @@ export function FilterBar({
       </div>
       <div className="min-w-36 flex-1">
         <Label htmlFor="zip" className="text-xs uppercase tracking-wide text-zinc-500">
-          Zip (≈25 miles)
+          {zipLabel}
         </Label>
         <Input
           id="zip"

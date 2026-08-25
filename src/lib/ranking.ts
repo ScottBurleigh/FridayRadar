@@ -254,3 +254,19 @@ export function dedupeKey(
 ): string {
   return `${classYear}|${normalizeName(fullName)}|${positionFamily(position)}`;
 }
+
+/**
+ * Games-of-the-week rank key. Combined talent (home + away) is the display
+ * field and the tie-break only.
+ *
+ * 2 × min(home, away) ranks two programs that both have real 2027+ talent
+ * above a superteam vs a cupcake, even when the mismatch has a higher sum.
+ * Geometric mean sqrt(home × away) still left Cornerstone Christian @ IMG
+ * near the top; 2 × min drops that row behind real two-sided fights.
+ *
+ * Returns 0 when either side is missing talent (unmapped, Unknown, or 0).
+ */
+export function competitiveTalent(homeTalent: number, awayTalent: number): number {
+  if (!(homeTalent > 0) || !(awayTalent > 0)) return 0;
+  return 2 * Math.min(homeTalent, awayTalent);
+}
