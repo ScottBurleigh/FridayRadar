@@ -122,27 +122,40 @@ def side_payload(sch, name, city, state, mp_id) -> dict:
     }
 
 
-def venue_for(home_side: dict, home_sch, is_neutral: bool, location, centroids) -> dict:
-    if is_neutral:
-        loc = location or {}
-        return {
-            "city": loc.get("city") or None,
-            "state": (loc.get("state") or "").upper() or None,
-            "zip": loc.get("zip") or None,
-            "name": loc.get("name") or None,
-            "source": "contest_location" if (loc.get("state") or loc.get("zip") or loc.get("city")) else None,
-        }
+def home_venue(home_side: dict, home_sch, centroids) -> dict:
     zipc = None
+    lat = lng = None
     if home_sch:
-        zipc = zip_for_coords(home_sch.get("lat"), home_sch.get("lng"), centroids) or home_sch.get("zip")
+        lat = home_sch.get("lat")
+        lng = home_sch.get("lng")
+        zipc = zip_for_coords(lat, lng, centroids) or home_sch.get("zip")
     zipc = zipc or home_side.get("zip")
     return {
         "city": (home_sch or {}).get("city") or home_side.get("city") or None,
         "state": ((home_sch or {}).get("state") or home_side.get("state") or "").upper() or None,
         "zip": zipc,
+        "lat": lat,
+        "lng": lng,
         "name": (home_sch or {}).get("name") or home_side.get("name") or None,
         "source": "home_school",
     }
+
+
+def venue_for(home_side: dict, home_sch, is_neutral: bool, location, centroids) -> dict:
+    """Contest/play-at location when MaxPreps has one; otherwise the HOME school only."""
+    loc = location or {}
+    has_site = bool(loc.get("city") or loc.get("state") or loc.get("zip") or loc.get("name"))
+    if is_neutral and has_site:
+        return {
+            "city": loc.get("city") or None,
+            "state": (loc.get("state") or "").upper() or None,
+            "zip": loc.get("zip") or None,
+            "lat": loc.get("lat"),
+            "lng": loc.get("lng"),
+            "name": loc.get("name") or None,
+            "source": "contest_location",
+        }
+    return home_venue(home_side, home_sch, centroids)
 
 
 def rebuild() -> list[dict]:

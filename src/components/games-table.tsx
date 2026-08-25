@@ -25,9 +25,11 @@ function SchoolName({ school, mapped }: { school: School; mapped: boolean }) {
 function venueLabel(game: Game): string {
   const city = (game.venue?.city || game.city)?.trim();
   const state = (game.venue?.state || game.state)?.trim();
-  if (city && state) return `${city}, ${state}`;
-  if (state) return state;
-  if (city) return city;
+  const zip = (game.venue?.zip || game.zip)?.trim();
+  const loc = [city, state].filter(Boolean).join(", ");
+  if (loc && zip) return `${loc} ${zip}`;
+  if (loc) return loc;
+  if (zip) return zip;
   return "—";
 }
 

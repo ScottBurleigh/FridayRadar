@@ -39,14 +39,6 @@ const RATING_SOURCES = new Set<RatingSource>([
   "espn",
 ]);
 
-const ZIP_NULL = [
-  { name: /american heritage/i, city: /fort lauderdale/i, state: "FL" },
-  { name: /american leadership|ala\b/i, city: /queen creek/i, state: "AZ" },
-  { name: /lexington christian/i, state: "KY" },
-  { name: /notre dame/i, city: /sherman oaks/i, state: "CA" },
-  { name: /roosevelt/i, city: /san antonio/i, state: "TX" },
-];
-
 type SiteRating = {
   source?: string;
   stars?: number | null;
@@ -101,6 +93,7 @@ type SiteSchool = {
     zip?: string | number | null;
     mascot?: string | null;
     footballUrl?: string | null;
+    scheduleUrl?: string | null;
     formattedName?: string | null;
   } | null;
   recruits?: SiteRecruit[];
@@ -212,14 +205,25 @@ async function readJson<T>(path: string): Promise<T> {
   return JSON.parse(await readFile(path, "utf8")) as T;
 }
 
-function forceZipNull(name: string, city: string, state: string): boolean {
-  const st = state.toUpperCase();
-  return ZIP_NULL.some(
-    (rule) =>
-      rule.state === st &&
-      rule.name.test(name) &&
-      (!rule.city || rule.city.test(city)),
-  );
+function joinUrl(base: string, suffix: string): string {
+  const b = base.endsWith("/") ? base : `${base}/`;
+  return `${b}${suffix.replace(/^\//, "")}`;
+}
+
+function siteMaxPreps(mp: SiteSchool["maxpreps"]): School["maxpreps"] {
+  if (!mp?.schoolId) return null;
+  const canonical = (mp.canonicalUrl || "").trim();
+  const football =
+    (mp.footballUrl || "").trim() || (canonical ? joinUrl(canonical, "football/") : "");
+  const schedule =
+    (mp.scheduleUrl || "").trim() || (football ? joinUrl(football, "schedule/") : "");
+  return {
+    schoolId: mp.schoolId,
+    canonicalUrl: canonical,
+    formattedName: mp.formattedName ?? null,
+    footballUrl: football || null,
+    scheduleUrl: schedule || null,
+  };
 }
 
 function asSource(raw: string | undefined): RatingSource | null {
@@ -276,7 +280,30 @@ function contestVenue(g: SiteGame): {
   return { city, state, zip, lat, lng };
 }
 
-/** Where the game is played. Neutral sites never fall back to either roster. */
+function homeVenue(
+  g: SiteGame,
+  homeSchool: School | undefined,
+): {
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  lat: number | null;
+  lng: number | null;
+  name: string | null;
+  source: GameVenue["source"];
+} {
+  return {
+    city: blank(homeSchool?.city) || blank(g.home.city),
+    state: blank(homeSchool?.state)?.toUpperCase() || blank(g.home.state)?.toUpperCase() || null,
+    zip: homeSchool?.zip || padZip(g.home.zip),
+    lat: homeSchool?.lat ?? null,
+    lng: homeSchool?.lng ?? null,
+    name: blank(homeSchool?.name) || blank(g.home.name),
+    source: "home_school",
+  };
+}
+
+/** Contest/play-at location when MaxPreps has one; otherwise HOME school only (never away). */
 function resolveVenue(
   g: SiteGame,
   homeSchool: School | undefined,
@@ -289,59 +316,36 @@ function resolveVenue(
   name: string | null;
   source: GameVenue["source"];
 } {
+  const home = homeVenue(g, homeSchool);
   const fromFile = g.venue;
-  if (fromFile && (blank(fromFile.city) || blank(fromFile.state) || fromFile.zip)) {
-    const state = blank(fromFile.state)?.toUpperCase() || null;
-    const source =
-      fromFile.source === "contest_location" || fromFile.source === "home_school"
-        ? fromFile.source
-        : g.is_neutral
-          ? "contest_location"
-          : "home_school";
+  const contest = contestVenue(g);
+  const contestHasSite = Boolean(contest.city || contest.state || contest.zip || (contest.lat != null && contest.lng != null));
+
+  if (fromFile?.source === "contest_location" && (blank(fromFile.city) || blank(fromFile.state) || fromFile.zip)) {
     return {
       city: blank(fromFile.city),
-      state,
+      state: blank(fromFile.state)?.toUpperCase() || null,
       zip: padZip(fromFile.zip),
-      lat: fromFile.lat ?? (source === "home_school" ? homeSchool?.lat ?? null : null),
-      lng: fromFile.lng ?? (source === "home_school" ? homeSchool?.lng ?? null : null),
+      lat: fromFile.lat ?? null,
+      lng: fromFile.lng ?? null,
       name: blank(fromFile.name),
-      source,
+      source: "contest_location",
     };
   }
-  const contest = contestVenue(g);
-  if (g.is_neutral) {
+  if (g.is_neutral && contestHasSite) {
     return {
       ...contest,
       name: blank(fromFile?.name),
-      source: contest.state || contest.zip || contest.city ? "contest_location" : null,
-    };
-  }
-  const hasContest =
-    Boolean(contest.state) ||
-    Boolean(contest.zip) ||
-    (contest.lat != null && contest.lng != null);
-  if (hasContest) {
-    return {
-      city: contest.city || blank(homeSchool?.city) || blank(g.home.city),
-      state:
-        contest.state ||
-        blank(homeSchool?.state)?.toUpperCase() ||
-        blank(g.home.state)?.toUpperCase() ||
-        null,
-      zip: contest.zip || homeSchool?.zip || padZip(g.home.zip),
-      lat: contest.lat ?? homeSchool?.lat ?? null,
-      lng: contest.lng ?? homeSchool?.lng ?? null,
-      name: blank(fromFile?.name) || blank(homeSchool?.name) || blank(g.home.name),
-      source: "home_school",
+      source: "contest_location",
     };
   }
   return {
-    city: blank(homeSchool?.city) || blank(g.home.city),
-    state: blank(homeSchool?.state)?.toUpperCase() || blank(g.home.state)?.toUpperCase() || null,
-    zip: homeSchool?.zip || padZip(g.home.zip),
-    lat: homeSchool?.lat ?? null,
-    lng: homeSchool?.lng ?? null,
-    name: blank(homeSchool?.name) || blank(g.home.name),
+    city: blank(fromFile?.city) || home.city,
+    state: blank(fromFile?.state)?.toUpperCase() || home.state,
+    zip: padZip(fromFile?.zip) || home.zip,
+    lat: fromFile?.lat ?? home.lat,
+    lng: fromFile?.lng ?? home.lng,
+    name: blank(fromFile?.name) || home.name,
     source: "home_school",
   };
 }
@@ -356,7 +360,7 @@ function ensureSchool(
   const name = (side.name || "Unmapped opponent").trim();
   const city = side.city || "";
   const state = (side.state || "").toUpperCase();
-  const zip = mapped && !forceZipNull(name, city, state) ? padZip(side.zip) : null;
+  const zip = mapped ? padZip(side.zip) : null;
   schools.set(id, {
     id,
     name,
@@ -405,8 +409,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
   for (const row of siteSchools) {
     const city = row.city || "";
     const state = (row.state || "").toUpperCase();
-    const zipNull = forceZipNull(row.name, city, state);
-    const zip = zipNull ? null : padZip(row.zip5 ?? row.zip ?? row.maxpreps?.zip);
+    const zip = padZip(row.zip5 ?? row.zip ?? row.maxpreps?.zip);
     const mp = row.maxpreps;
     const school: School = {
       id: row.id,
@@ -421,14 +424,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       lat: row.lat ?? null,
       lng: row.lng ?? null,
       type: row.type ?? null,
-      maxpreps: mp?.schoolId
-        ? {
-            schoolId: mp.schoolId,
-            canonicalUrl: mp.canonicalUrl || "",
-            formattedName: mp.formattedName ?? null,
-            footballUrl: mp.footballUrl ?? null,
-          }
-        : null,
+      maxpreps: siteMaxPreps(mp),
       ids_247: { high_school_id: row.ids_247?.high_school_id ?? null },
       talentScore: row.talent_score ?? null,
       recruitCount: row.recruit_count ?? null,

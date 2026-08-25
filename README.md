@@ -16,7 +16,7 @@ Requires Node 22+ and Python 3. The compiled dataset ships in `data/fridayradar.
 ## Product pages
 
 - **Rankings (home)** — programs sorted by talent score (default) or recruit count. Filters: US state, zip code (≈25-mile haversine). The chevron next to a school name expands **every** 2027+ recruit on that roster (name, position, stars, 247/ESPN profile). The school name still opens `/schools/[id]`.
-- **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank, profile link when known).
+- **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank, profile link when known). MaxPreps team page and football schedule links when the school has a MaxPreps id.
 - **Games of the week** — Matchup MaxPreps slate for **2026-08-26 through 2026-08-29**, ranked by **geometric mean** of home and away Scout talent (`√(home × away)`). Combined talent is still shown on each row and is the tie-break. Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state.
 
 ## Ranking math
@@ -58,6 +58,8 @@ Canonical v1 is **Scout + Matchup on disk**, not a live 247 scrape (Load More 40
 
 ```bash
 npm run import:site
+python3 scripts/fill-missing-zips.py   # MaxPreps / Census / public geocode for missing zips (never invents)
+npm run rebuild:games                  # refresh venue = contest site or HOME school
 ```
 
 Or rebuild from the frozen ingest already in this repo (never re-pages 247):

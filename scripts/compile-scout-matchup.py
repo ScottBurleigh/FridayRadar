@@ -69,14 +69,6 @@ US_STATES = [
 ]
 STATE_SET = set(US_STATES)
 
-ZIP_NULL = [
-    (re.compile(r"american heritage", re.I), re.compile(r"fort lauderdale", re.I), "FL"),
-    (re.compile(r"american leadership|ala\b", re.I), re.compile(r"queen creek", re.I), "AZ"),
-    (re.compile(r"lexington christian", re.I), None, "KY"),
-    (re.compile(r"notre dame", re.I), re.compile(r"sherman oaks", re.I), "CA"),
-    (re.compile(r"roosevelt", re.I), re.compile(r"san antonio", re.I), "TX"),
-]
-
 PLACEHOLDER_SCHOOL = re.compile(
     r"^\s*(unknown|tba|tbd|n/?a|na|opponent|varsity\s*opponent)\s*$",
     re.I,
@@ -353,16 +345,6 @@ def real_school_name(name: str | None) -> str | None:
     if PLACEHOLDER_SCHOOL.match(n) or "varsity opponent" in n.lower():
         return None
     return n
-
-
-def force_zip_null(name: str, city: str, state: str) -> bool:
-    st = (state or "").upper()
-    for nre, cre, st_need in ZIP_NULL:
-        if st != st_need:
-            continue
-        if nre.search(name or "") and (cre is None or cre.search(city or "")):
-            return True
-    return False
 
 
 def player_points(stars) -> float:
@@ -1024,12 +1006,7 @@ def build_board():
         if count is not None:
             sch["recruit_count"] = count
 
-    # Force zip-null five.
-    for sch in schools.values():
-        if force_zip_null(sch["name"], sch["city"], sch["state"]):
-            sch["zip"] = None
-            if sch.get("maxpreps"):
-                sch["maxpreps"]["zip"] = None
+    # Keep looked-up zips (including the former ZIP_NULL five). Do not strip.
 
     n2027 = sum(1 for p in players.values() if p["class_year"] == 2027)
     n2028 = sum(1 for p in players.values() if p["class_year"] == 2028)

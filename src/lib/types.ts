@@ -10,6 +10,7 @@ export type MaxPrepsRef = {
   canonicalUrl: string;
   formattedName: string | null;
   footballUrl?: string | null;
+  scheduleUrl?: string | null;
 };
 
 export type School = {

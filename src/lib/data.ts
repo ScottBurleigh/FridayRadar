@@ -24,8 +24,19 @@ export function ratingsForPlayer(dataset: FridayRadarDataset, playerId: string):
   return dataset.ratings.filter((r) => r.player_id === playerId);
 }
 
-export function getSchool(dataset: FridayRadarDataset, id: string): School | undefined {
-  return dataset.schools.find((s) => s.id === id);
+export function maxprepsScheduleUrl(
+  mp: School["maxpreps"] | null | undefined,
+): string | null {
+  if (!mp?.schoolId) return null;
+  if (mp.scheduleUrl) return mp.scheduleUrl;
+  if (mp.footballUrl) {
+    const base = mp.footballUrl.endsWith("/") ? mp.footballUrl : `${mp.footballUrl}/`;
+    return `${base}schedule/`;
+  }
+  const canonical = mp.canonicalUrl?.trim();
+  if (!canonical) return null;
+  const base = canonical.endsWith("/") ? canonical : `${canonical}/`;
+  return `${base}football/schedule/`;
 }
 
 function profileUrlForPlayer(
