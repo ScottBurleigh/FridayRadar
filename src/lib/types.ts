@@ -134,3 +134,15 @@ export type RatedPlayer = Player & {
   points: number;
   ratingsBySource: Partial<Record<RatingSource, Rating>>;
 };
+
+/** Compact roster row for the rankings accordion — not the full school page. */
+export type InlineRecruit = {
+  id: string;
+  name: string;
+  position: string | null;
+  classYear: number;
+  stars247: number | null;
+  starsOn3: number | null;
+  starsEspn: number | null;
+  profileUrl: string | null;
+};

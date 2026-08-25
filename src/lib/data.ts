@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-import type { FridayRadarDataset, Game, Player, Rating, School } from "./types";
-import { competitiveTalent, rankSchools } from "./ranking";
+import type { FridayRadarDataset, Game, InlineRecruit, Player, Rating, School } from "./types";
+import { competitiveTalent, rankSchools, ratingsBySource } from "./ranking";
 import { schoolWithinZipRadius, venueWithinZipRadius } from "./geo";
 
 export const loadDataset = cache((): FridayRadarDataset => {
@@ -26,6 +26,56 @@ export function ratingsForPlayer(dataset: FridayRadarDataset, playerId: string):
 
 export function getSchool(dataset: FridayRadarDataset, id: string): School | undefined {
   return dataset.schools.find((s) => s.id === id);
+}
+
+function profileUrlForPlayer(
+  player: Player,
+  bySrc: ReturnType<typeof ratingsBySource>,
+): string | null {
+  const from247 =
+    bySrc["247sports_composite"]?.profile_url || bySrc["247sports"]?.profile_url;
+  if (from247) return from247;
+  const id247 = player.source_ids["247sports_player_id"];
+  if (id247) return `https://247sports.com/player/${id247}/`;
+  if (bySrc.espn?.profile_url) return bySrc.espn.profile_url;
+  if (player.source_ids.espn_id) {
+    return `https://www.espn.com/college-sports/football/recruiting/player/_/id/${player.source_ids.espn_id}`;
+  }
+  return null;
+}
+
+export function inlineRecruitsForSchools(
+  dataset: FridayRadarDataset,
+  schoolIds: string[],
+): Record<string, InlineRecruit[]> {
+  const want = new Set(schoolIds);
+  const out: Record<string, InlineRecruit[]> = {};
+  for (const id of schoolIds) out[id] = [];
+  const ratingsByPlayer = new Map<string, Rating[]>();
+  for (const r of dataset.ratings) {
+    const list = ratingsByPlayer.get(r.player_id);
+    if (list) list.push(r);
+    else ratingsByPlayer.set(r.player_id, [r]);
+  }
+  for (const player of dataset.players) {
+    if (!want.has(player.high_school_id) || player.class_year < 2027) continue;
+    const mine = ratingsByPlayer.get(player.id) ?? [];
+    const bySrc = ratingsBySource(player.id, mine);
+    out[player.high_school_id].push({
+      id: player.id,
+      name: player.full_name,
+      position: player.position,
+      classYear: player.class_year,
+      stars247: bySrc["247sports_composite"]?.stars ?? bySrc["247sports"]?.stars ?? null,
+      starsOn3: bySrc.on3_rivals?.stars ?? bySrc.on3_industry?.stars ?? null,
+      starsEspn: bySrc.espn?.stars ?? null,
+      profileUrl: profileUrlForPlayer(player, bySrc),
+    });
+  }
+  for (const id of schoolIds) {
+    out[id].sort((a, b) => a.classYear - b.classYear || a.name.localeCompare(b.name));
+  }
+  return out;
 }
 
 export function filteredRankings(

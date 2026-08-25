@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FilterBar } from "@/components/filter-bar";
 import { RankingsTable } from "@/components/rankings-table";
 import { SourceBanner } from "@/components/source-banner";
-import { filteredRankings, loadDataset } from "@/lib/data";
+import { filteredRankings, inlineRecruitsForSchools, loadDataset } from "@/lib/data";
 import { coordsForZip } from "@/lib/geo";
 
 const PAGE_SIZE = 100;
@@ -73,7 +73,13 @@ export default async function RankingsPage({
         </p>
       ) : null}
       <div className="mt-6">
-        <RankingsTable rows={slice} />
+        <RankingsTable
+          rows={slice}
+          recruitsBySchool={inlineRecruitsForSchools(
+            dataset,
+            slice.map((row) => row.school.id),
+          )}
+        />
       </div>
       {pages > 1 ? (
         <nav className="mt-6 flex items-center justify-between gap-3 text-sm text-zinc-400">
