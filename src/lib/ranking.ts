@@ -229,6 +229,8 @@ export function rankSchools(
         stars3: school.stars3 != null ? school.stars3 : stats.stars3,
         talentScore,
         teamStrength: school.teamStrength ?? null,
+        sos: school.sos ?? null,
+        sosLabel: school.sosLabel ?? null,
       };
     })
     .filter((row) => row.recruitCount > 0 || row.talentScore > 0)

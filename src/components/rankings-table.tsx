@@ -2,8 +2,44 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import type { InlineRecruit, SchoolRankingRow } from "@/lib/types";
+import type { InlineRecruit, SchoolRankingRow, SosLabel } from "@/lib/types";
 import { formatTalent } from "@/lib/format";
+
+function SosCell({
+  sos,
+  label,
+  compact = false,
+}: {
+  sos: number | null;
+  label: SosLabel | null;
+  compact?: boolean;
+}) {
+  if (sos == null) {
+    return <span className="text-zinc-600">—</span>;
+  }
+  const tag =
+    label === "tough"
+      ? "text-rose-300/90"
+      : label === "light"
+        ? "text-emerald-400/80"
+        : "text-zinc-500";
+  if (compact) {
+    return (
+      <span className="font-mono text-xs text-zinc-400">
+        SOS {formatTalent(sos)}
+        {label ? <span className={`ml-1 font-sans ${tag}`}>{label}</span> : null}
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex flex-col items-end gap-0.5">
+      <span className="text-zinc-200">{formatTalent(sos)}</span>
+      {label ? (
+        <span className={`font-sans text-[10px] uppercase tracking-wide ${tag}`}>{label}</span>
+      ) : null}
+    </span>
+  );
+}
 
 function SourceStars({ label, stars }: { label: string; stars: number | null }) {
   if (stars == null) return null;
@@ -125,6 +161,12 @@ export function RankingsTable({
               <th className="h-10 w-12 px-2 text-right font-medium text-zinc-500">3★</th>
               <th className="h-10 w-24 px-2 text-right font-medium text-zinc-500">Talent</th>
               <th className="h-10 w-24 px-2 text-right font-medium text-zinc-500">Strength</th>
+              <th
+                className="h-10 w-24 px-2 text-right font-medium text-zinc-500"
+                title="Mean of this season’s MaxPreps opponents’ team strength"
+              >
+                SOS
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -155,6 +197,9 @@ export function RankingsTable({
                   </td>
                   <td className="p-2 align-top text-right text-zinc-200">
                     {row.teamStrength != null ? formatTalent(row.teamStrength) : "—"}
+                  </td>
+                  <td className="p-2 align-top text-right">
+                    <SosCell sos={row.sos} label={row.sosLabel} />
                   </td>
                 </tr>
               );
@@ -194,6 +239,9 @@ export function RankingsTable({
               </p>
               <p className="mt-2 pl-7 font-mono text-xs text-zinc-400">
                 {row.recruitCount} recruits · {row.stars5} 5★ · {row.stars4} 4★ · {row.stars3} 3★
+              </p>
+              <p className="mt-1 pl-7">
+                <SosCell sos={row.sos} label={row.sosLabel} compact />
               </p>
             </li>
           );

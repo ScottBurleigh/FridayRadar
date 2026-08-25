@@ -193,6 +193,8 @@ export type SchoolRankingRow = {
   stars3: number;
   talentScore: number;
   teamStrength: number | null;
+  sos: number | null;
+  sosLabel: "tough" | "average" | "light" | null;
 };
 
 export type RatedPlayer = Player & {
