@@ -70,6 +70,15 @@ export type RankedGame = {
   rank: number;
 };
 
+function isRealOpponentSchool(school: School | undefined): school is School {
+  if (!school?.id || !school.name) return false;
+  const n = school.name.trim();
+  if (!n) return false;
+  if (/varsity opponent/i.test(n)) return false;
+  if (/^(unknown|tba|tbd|n\/a|na|opponent)$/i.test(n)) return false;
+  return true;
+}
+
 export function gamesOfTheWeek(
   dataset: FridayRadarDataset,
   opts: { state?: string; zip?: string; now?: Date } = {},
@@ -92,7 +101,8 @@ export function gamesOfTheWeek(
   const usable = dataset.games.filter((g) => {
     const home = schools.get(g.home_school_id);
     const away = schools.get(g.away_school_id);
-    if (!home || !away) return false;
+    if (!isRealOpponentSchool(home) || !isRealOpponentSchool(away)) return false;
+    if (home.id === away.id) return false;
     if (opts.state || opts.zip) {
       return matchesFilter(home) || matchesFilter(away);
     }

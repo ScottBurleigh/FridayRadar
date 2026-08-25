@@ -64,11 +64,11 @@ npm run ingest
 
 ## Source URLs
 
-- 247Sports Composite: https://247sports.com/season/2027-football/compositerecruitrankings/?InstitutionGroup=Highschool
+- 247Sports Composite: https://247sports.com/season/2027-football/compositerecruitrankings/?InstitutionGroup=Highschool — HTML ranking pages and CSS `icon-starsolid yellow` (not the gated JSON API). Page=1 often 406; Load More is `Page=2+` with `X-Requested-With: XMLHttpRequest` and gzip. The public 2027 HS composite is ~2093 named players with stars.
 - On3/Rivals own list: https://www.on3.com/rivals/rankings/player/football/2027/
 - ESPN 2027 API: https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/recruiting/2027/athletes?limit=300
 - ESPN class chips: `/_/view/rn300/class/2027` and `2028` (no 2029 football 300 yet)
-- MaxPreps school JSON: `GET https://www.maxpreps.com/_next/data/{buildId}/<state>/<city>/<name-mascot>.json` — **read `buildId` from the live site**, never hardcode a stale one. Season `26-27` is live. `homeAwayType` 0 = home, 1 = away, 2 = neutral. Skip `isDeleted` rows and “Varsity Opponent” placeholders. IMG Academy is Bradenton, FL.
+- MaxPreps school JSON: `GET https://www.maxpreps.com/_next/data/{buildId}/<state>/<city>/<name-mascot>.json` — **read `buildId` from the live site**, never hardcode a stale one. Season `26-27` is live. `homeAwayType` 0 = home, 1 = away, 2 = neutral. Drop `isDeleted` contests, “Varsity Opponent” placeholders, and any game missing a real opponent school name. IMG Academy is Bradenton, FL.
 
 If a source blocks (247Sports Load More has returned HTTP 406 from this environment; On3 industry list is often Cloudflare-walled), ingest keeps any live rows it already has and labels the source `PARTIAL` or `BLOCKED` in the UI. It does not invent recruit names.
 

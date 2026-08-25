@@ -130,10 +130,13 @@ def pad_zip(z) -> str | None:
 def parse_247_meta(meta: str | None):
     if not meta:
         return None, None, None
-    m = re.match(r"^(.*?)\s*\(([^,]+),\s*([A-Z]{2})\)\s*$", meta.strip())
+    m = re.match(r"^(.*?)\s*\(([^,]+),\s*([A-Za-z]{2,3})\)\s*$", meta.strip())
     if not m:
         return meta.strip(), None, None
-    return m.group(1).strip(), m.group(2).strip(), m.group(3).strip()
+    hs, city, st = m.group(1).strip(), m.group(2).strip(), m.group(3).strip().upper()
+    if len(st) != 2:
+        st = "INT"
+    return hs, city, st
 
 
 def parse_hometown(text: str | None):
@@ -168,6 +171,15 @@ def attr(item, *path, default=None):
             return default
         cur = cur[p]
     return cur
+
+
+def player_count(path: Path) -> int:
+    if not path.exists():
+        return 0
+    try:
+        return len(json.loads(path.read_text()).get("players") or [])
+    except Exception:
+        return 0
 
 
 def copy_raw():
@@ -216,9 +228,15 @@ def copy_raw():
             print(f"slim espn {year}: {len(slim)}")
         for src_dir, dest_dir in (("247", "247"), ("on3", "on3")):
             s = TMP_RAW / src_dir / f"{year}.json"
-            if s.exists():
-                (RAW / dest_dir / f"{year}.json").write_bytes(s.read_bytes())
-                print(f"copy {src_dir} {year}")
+            if not s.exists():
+                continue
+            dest = RAW / dest_dir / f"{year}.json"
+            n_in, n_old = player_count(s), player_count(dest)
+            if n_in >= n_old:
+                dest.write_bytes(s.read_bytes())
+                print(f"copy {src_dir} {year} ({n_in})")
+            else:
+                print(f"keep existing {src_dir} {year} ({n_old} > tmp {n_in})")
 
 
 def load_year(kind: str, year: int):
@@ -226,6 +244,21 @@ def load_year(kind: str, year: int):
     if not p.exists():
         return []
     return json.loads(p.read_text()).get("players") or []
+
+
+PLACEHOLDER_SCHOOL = re.compile(
+    r"^\s*(unknown|tba|tbd|n/?a|na|opponent|varsity\s*opponent)\s*$",
+    re.I,
+)
+
+
+def real_school_name(name: str | None) -> str | None:
+    n = re.sub(r"\s+", " ", (name or "").strip())
+    if not n:
+        return None
+    if PLACEHOLDER_SCHOOL.match(n) or "varsity opponent" in n.lower():
+        return None
+    return n
 
 
 def school_key(name: str, state: str | None) -> str:
@@ -433,7 +466,7 @@ def merge_all():
         "id": "247sports",
         "label": "247Sports Composite",
         "status": "live-partial" if sum(c247.values()) < 200 else "live",
-        "detail": "https://247sports.com/season/{year}-football/compositerecruitrankings/?InstitutionGroup=Highschool — Load More pagination; later pages may 406.",
+        "detail": "HTML composite ranking pages (CSS icon-starsolid yellow). Page=2+ XHR + gzip; Page=1 often 406. Never the gated JSON API.",
         "counts": c247,
     })
 
@@ -629,14 +662,16 @@ def enrich_maxpreps(schools: dict, players: dict):
     def ingest_game(card, page_school_id, page_path):
         if not card:
             return
+        if card.get("isDeleted"):
+            return
         cid = card.get("contestId")
         if not cid:
             return
         teams = card.get("teams") or []
         if len(teams) < 2:
             return
-        names = [(t.get("schoolName") or "") for t in teams]
-        if any("varsity opponent" in n.lower() for n in names):
+        names = [real_school_name(t.get("schoolName")) for t in teams]
+        if any(n is None for n in names):
             return
         hat = card.get("homeAwayType")
         page_team = teams[0]
@@ -653,12 +688,18 @@ def enrich_maxpreps(schools: dict, players: dict):
             return
 
         def school_from_team(t):
+            name = real_school_name(t.get("schoolName"))
+            if not name:
+                return None
             url = t.get("teamCanonicalUrl") or ""
             tid = t.get("teamId")
             if tid and tid in mp_by_id:
-                return mp_by_id[tid]
+                rec = mp_by_id[tid]
+                if rec.get("name") and not real_school_name(rec.get("name")):
+                    rec["name"] = name
+                    rec["name_normalized"] = normalize_school_name(name)
+                return rec
             m = re.search(r"maxpreps\.com/([a-z]{2})/([^/]+)/([^/]+)/", url)
-            name = t.get("schoolName") or "Unknown"
             city = ""
             st = ""
             if m:
@@ -696,6 +737,8 @@ def enrich_maxpreps(schools: dict, players: dict):
         home = school_from_team(home_t)
         away = school_from_team(away_t)
         if not home or not away:
+            return
+        if not real_school_name(home.get("name")) or not real_school_name(away.get("name")):
             return
         games[cid] = {
             "id": cid,
@@ -835,10 +878,13 @@ def enrich_maxpreps(schools: dict, players: dict):
         else:
             # still keep as a MaxPreps-only school so opponents appear in games
             st = (info.get("stateCode") or "")[:2].upper()
+            mp_name = real_school_name(info.get("name"))
+            if not mp_name:
+                continue
             rec = ensure_mp_school = {
-                "key": school_key(info.get("name") or "Unknown", st),
-                "name": info.get("name") or "Unknown",
-                "name_normalized": normalize_school_name(info.get("name") or ""),
+                "key": school_key(mp_name, st),
+                "name": mp_name,
+                "name_normalized": normalize_school_name(mp_name),
                 "aliases": [],
                 "mascot": info.get("mascot"),
                 "city": info.get("city") or "",
@@ -954,6 +1000,28 @@ def main():
     # drop empty names
     player_list = [p for p in player_list if p.get("full_name")]
     rating_list = [r for r in ratings if r.get("player_id")]
+
+    by_id = {s["id"]: s for s in school_list}
+    kept_games = []
+    dropped_games = 0
+    for g in games:
+        home = by_id.get(g.get("home_school_id"))
+        away = by_id.get(g.get("away_school_id"))
+        if not home or not away:
+            dropped_games += 1
+            continue
+        if not real_school_name(home.get("name")) or not real_school_name(away.get("name")):
+            dropped_games += 1
+            continue
+        if home["id"] == away["id"]:
+            dropped_games += 1
+            continue
+        kept_games.append(g)
+    games = kept_games
+    print(f"games kept {len(games)} dropped placeholders/unresolved {dropped_games}")
+    for src in sources:
+        if src.get("id") == "maxpreps" and isinstance(src.get("counts"), dict):
+            src["counts"]["games"] = len(games)
 
     dataset = {
         "meta": {

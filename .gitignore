@@ -42,6 +42,8 @@ next-env.d.ts
 
 # local scratch
 /agent-tools
+**/__pycache__/
+*.pyc
 
 
 # vercel
