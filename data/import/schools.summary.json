@@ -16,6 +16,6 @@
   "rank_by": "two_sided_talent",
   "on3_national": 1000,
   "on3_joined": 532,
-  "schedules": 1063,
-  "team_strength_note": "team_strength is the mean of talent share (100 \u00d7 talent / board max; IMG = 100) and an On3 national rank log-curve (rank 1 = 100, decaying). Unranked schools omit the On3 term. SOS is the mean of known opponents\u2019 team_strength on that 0\u2013100 scale (unknown omitted, never On3 compositeScore)."
+  "schedules": 1118,
+  "team_strength_note": "team_strength is the mean of talent share (100 \u00d7 talent / board max; IMG = 100) and On3 compositeScore scaled 0\u2013100 (board min\u21920, IMG rating\u2192100) when On3 rank is 1\u2013250. Ranks 251+ keep the On3 badge but use the listed-recruit floor for strength (70 pts \u2192 3.09). Unranked schools use talent share only. SOS is the mean of known opponents\u2019 team_strength (unknown omitted; never raw On3 compositeScore)."
 }
