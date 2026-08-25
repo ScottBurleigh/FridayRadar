@@ -63,9 +63,10 @@ export default async function SchoolPage({
       ? school.talentScore
       : players.reduce((s, p) => s + p.points, 0);
   const recruitCount = school.recruitCount != null ? school.recruitCount : players.length;
-  const scheduleUrl = maxprepsScheduleUrl(school.maxpreps);
   const schedule = scheduleForSchool(dataset, school.id);
+  const scheduleUrl = maxprepsScheduleUrl(school.maxpreps, schedule);
   const on3 = school.on3;
+  const hasSchedule = Boolean(schedule?.games.length);
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
@@ -149,28 +150,20 @@ export default async function SchoolPage({
       <div className="mt-8">
         <RecruitList players={players} ratings={dataset.ratings} />
       </div>
-      <section className="mt-10">
-        <h2 className="text-lg font-semibold text-zinc-50">
-          {schedule?.season ?? "26-27"} football schedule
-        </h2>
-        <p className="mt-1 text-sm text-zinc-500">
-          MaxPreps 26-27 contests for this team. Deleted rows and Varsity Opponent placeholders
-          are omitted. Toughness is this team versus the opponent, not combined talent.
-        </p>
-        <div className="mt-4">
-          {schedule ? (
+      {hasSchedule && schedule ? (
+        <section className="mt-10">
+          <h2 className="text-lg font-semibold text-zinc-50">
+            {schedule.season} football schedule
+          </h2>
+          <p className="mt-1 text-sm text-zinc-500">
+            MaxPreps 26-27 contests for this team. Deleted rows and Varsity Opponent placeholders
+            are omitted. Toughness is this team versus the opponent, not combined talent.
+          </p>
+          <div className="mt-4">
             <SchoolScheduleTable schedule={schedule} />
-          ) : (
-            <div className="rounded-xl border border-dashed border-white/15 px-6 py-10 text-center">
-              <p className="text-base font-medium text-zinc-200">No MaxPreps schedule on file</p>
-              <p className="mt-2 text-sm text-zinc-500">
-                This school is not mapped to a stored 26-27 MaxPreps football schedule, so
-                there is no table and no schedule link to invent.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

@@ -24,12 +24,13 @@ export function ratingsForPlayer(dataset: FridayRadarDataset, playerId: string):
   return dataset.ratings.filter((r) => r.player_id === playerId);
 }
 
-/** Stored MaxPreps schedule only. No schoolId or scheduleUrl ⇒ no link. */
+/** Stored MaxPreps schedule URL only. Requires schoolId; never invents a path. */
 export function maxprepsScheduleUrl(
   mp: School["maxpreps"] | null | undefined,
+  schedule?: SchoolSchedule | null,
 ): string | null {
   if (!mp?.schoolId) return null;
-  const stored = mp.scheduleUrl?.trim();
+  const stored = mp.scheduleUrl?.trim() || schedule?.scheduleUrl?.trim();
   return stored || null;
 }
 

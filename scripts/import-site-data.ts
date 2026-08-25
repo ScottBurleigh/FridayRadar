@@ -636,7 +636,12 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
   const schedules: Record<string, SchoolSchedule> = {};
   for (const [id, row] of Object.entries(siteSchedules)) {
     const mapped = mapSchedule(id, row);
-    if (mapped.games.length) schedules[id] = mapped;
+    if (!mapped.games.length) continue;
+    schedules[id] = mapped;
+    const school = schools.get(id);
+    if (school?.maxpreps?.schoolId && mapped.scheduleUrl && !school.maxpreps.scheduleUrl) {
+      school.maxpreps.scheduleUrl = mapped.scheduleUrl;
+    }
   }
 
   const sources: SourceStatus[] = [

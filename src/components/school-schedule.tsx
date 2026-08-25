@@ -36,32 +36,34 @@ const TOUGHNESS: Record<
 
 function ToughnessCell({ icon }: { icon: ToughnessIcon }) {
   if (icon === "unknown" || !(icon in TOUGHNESS)) {
-    return <span className="text-zinc-600">—</span>;
+    return null;
   }
   const spec = TOUGHNESS[icon];
   const Icon = spec.Icon;
+  const short =
+    icon === "much_easier"
+      ? "easy"
+      : icon === "easier"
+        ? "lean-easy"
+        : icon === "even"
+          ? "toss-up"
+          : icon === "harder"
+            ? "lean-hard"
+            : "hard";
   return (
     <span
-      className={`inline-flex items-center justify-center ${spec.className}`}
+      className={`inline-flex items-center justify-center gap-1 ${spec.className}`}
       title={spec.label}
       aria-label={spec.label}
     >
-      <Icon className="size-4" strokeWidth={2.25} />
+      <Icon className="size-4 shrink-0" strokeWidth={2.25} />
+      <span className="hidden font-sans text-[10px] uppercase tracking-wide sm:inline">{short}</span>
     </span>
   );
 }
 
 export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) {
-  if (!schedule.games.length) {
-    return (
-      <div className="rounded-xl border border-dashed border-white/15 px-6 py-10 text-center">
-        <p className="text-base font-medium text-zinc-200">No 26-27 football games on file</p>
-        <p className="mt-2 text-sm text-zinc-500">
-          MaxPreps had no live (non-deleted) contests for this school this season.
-        </p>
-      </div>
-    );
-  }
+  if (!schedule.games.length) return null;
 
   return (
     <div>
@@ -100,7 +102,18 @@ export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) 
                   </td>
                   <td className="px-3 py-2 text-zinc-400">{siteLabel(g.homeAway)}</td>
                   <td className="px-3 py-2 text-zinc-200">
-                    {formatGameResult(g.result, g.score, g.oppScore)}
+                    {g.maxprepsGameUrl && formatGameResult(g.result, g.score, g.oppScore) !== "—" ? (
+                      <a
+                        href={g.maxprepsGameUrl}
+                        className="text-amber-300/90 hover:underline"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {formatGameResult(g.result, g.score, g.oppScore)}
+                      </a>
+                    ) : (
+                      formatGameResult(g.result, g.score, g.oppScore)
+                    )}
                   </td>
                   <td className="px-3 py-2 text-center">
                     <ToughnessCell icon={g.toughnessIcon} />
