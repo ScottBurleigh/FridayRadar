@@ -638,7 +638,7 @@ def search_schedule_url(school: dict, occupied: set[str]) -> str | None:
                 continue
             if (r.get("state") or "").upper() != st:
                 continue
-            if not name_kind(name, city, r.get("name") or ""):
+            if name_kind(name, city, r.get("name") or "") not in ("exact", "city_prefix"):
                 continue
             canon = (r.get("canonicalUrl") or "").strip()
             if not canon.startswith("https://www.maxpreps.com/"):
@@ -649,6 +649,13 @@ def search_schedule_url(school: dict, occupied: set[str]) -> str | None:
             break
 
     if len(cands) > 1:
+        exact = [
+            r
+            for r in cands
+            if name_kind(name, city, r.get("name") or "") == "exact"
+        ]
+        if exact:
+            cands = exact
         city_hits = [r for r in cands if core_name(r.get("city") or "") == city_core]
         if city_hits:
             cands = city_hits
