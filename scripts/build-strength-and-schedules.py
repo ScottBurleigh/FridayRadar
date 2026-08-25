@@ -35,10 +35,23 @@ UA = {
 PLACEHOLDER = re.compile(
     r"^\s*(unknown|tba|tbd|n/?a|na|opponent|varsity\s*opponent)\s*$", re.I
 )
+BLUE_WHITE = re.compile(r"blue[\s\-]*white", re.I)
 SEASON = "26-27"
+# On3 ranks worse than this stay on the school page but do not enter team_strength.
+# Matchup’s blend uses rating min-max for the top 250; 251+ are the listed-recruit
+# floor (70 pts → 3.09) so a 398th-ranked composite cannot inflate SOS.
+ON3_STRENGTH_RANK_CAP = 250
+LISTED_POINTS = 70.0
 
 
-def http_get(url: str, timeout: int = 20) -> tuple[int, str]:
+HTML_UA = {
+    "User-Agent": UA["User-Agent"],
+    "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+
+def http_get(url: str, timeout: int = 20, headers: dict | None = None) -> tuple[int, str]:
     key = hashlib.sha1(url.encode()).hexdigest()
     CACHE.mkdir(parents=True, exist_ok=True)
     cp = CACHE / f"{key}.json"
@@ -49,7 +62,7 @@ def http_get(url: str, timeout: int = 20) -> tuple[int, str]:
             rec = {}
         if rec.get("status") == 200 and rec.get("body"):
             return 200, rec["body"]
-    req = urllib.request.Request(url, headers=UA)
+    req = urllib.request.Request(url, headers=headers or UA)
     body, status = "", 0
     for attempt in range(3):
         try:
@@ -254,23 +267,34 @@ def talent_norm_map(schools: list[dict]) -> dict[str, float]:
     return out
 
 
-def on3_norm(rank: int, n: int) -> float:
-    """Rank 1 = 100, log decay so mid-board is ~30 not ~50. Never uses compositeScore."""
-    if n <= 1 or rank <= 1:
+def on3_rating_norm(rating: float, rmin: float, rmax: float) -> float:
+    """Scale On3 compositeScore onto 0–100 (IMG rating = 100, board min = 0).
+
+    This is the On3 *term* of team_strength, never the SOS value itself.
+    """
+    if rmax <= rmin:
         return 100.0
-    val = 100.0 * (1.0 - math.log(rank) / math.log(n))
+    val = 100.0 * (float(rating) - rmin) / (rmax - rmin)
     return round(max(0.0, min(100.0, val)), 2)
 
 
-def toughness_icon(us: float | None, them: float | None) -> str:
-    """THIS team's view. Missing opponent strength is a cupcake (0), not unknown.
+def skip_opponent_name(name: str | None) -> bool:
+    n = name or ""
+    if PLACEHOLDER.match(n) or "varsity opponent" in n.lower():
+        return True
+    if BLUE_WHITE.search(n):
+        return True
+    return False
 
-    SOS still omits unknown opponents so they do not count as zeros there.
-    A superteam vs an unmapped nobody is much_easier for the superteam.
+
+def toughness_icon(us: float | None, them: float | None) -> str:
+    """THIS team's view. Unmapped / no team_strength → unknown, not a cupcake.
+
+    SOS omits those opponents (unknown, not zero).
     """
-    if us is None:
+    if us is None or them is None:
         return "unknown"
-    opp = 0.0 if them is None else them
+    opp = them
     d = opp - us
     if d >= 20:
         return "much_harder"
@@ -284,127 +308,128 @@ def toughness_icon(us: float | None, them: float | None) -> str:
 
 
 def read_build_id() -> str:
+    """Live buildId from HTML. Do not reuse a hardcoded _next/data id — it rotates."""
     status, html = http_get("https://www.maxpreps.com/ga/buford/buford-wolves/", timeout=30)
-    m = re.search(r'"buildId":"([^"]+)"', html)
+    m = re.search(r'"buildId":"([^"]+)"', html or "")
     if not m:
         raise RuntimeError("MaxPreps buildId missing")
-    return m.group(1).replace("\\n", "").strip()
+    return m.group(1).replace("\\n", "").replace("\n", "").strip()
 
 
-STOP_SLUG = {"high", "school", "hs", "catholic", "academy", "prep", "collegiate"}
-TEAM_PATHS: dict[str, str] = {}
+# Exact 26-27 schedule URLs from Matchup’s dump. Stored canonicalUrl often omits
+# mascot and uses the site-id city, which 404s (King is king-crusaders, not
+# martin-luther-king; Estacado is estacado-matadors, not lubbock-estacado).
+MATCHUP_SCHEDULE_URLS = {
+    "ca-oxnard-oxnard-pacifica": "https://www.maxpreps.com/ca/oxnard/pacifica-tritons/football/schedule/",
+    "wy-buffalo-big-horn": "https://www.maxpreps.com/wy/big-horn/big-horn-rams/football/schedule/",
+    "tx-lubbock-lubbock-estacado": "https://www.maxpreps.com/tx/lubbock/estacado-matadors/football/schedule/",
+    "oh-cincinnati-cincinnati-country-day-school": (
+        "https://www.maxpreps.com/oh/cincinnati/cincinnati-country-day-nighthawks/football/schedule/"
+    ),
+    "co-montrose-montrose": "https://www.maxpreps.com/co/montrose/montrose-red-hawks/football/schedule/",
+    "wv-charleston-south-charleston": (
+        "https://www.maxpreps.com/wv/south-charleston/south-charleston-black-eagles/football/schedule/"
+    ),
+    "fl-miami-north-miami-beach": (
+        "https://www.maxpreps.com/fl/north-miami-beach/north-miami-beach-chargers/football/schedule/"
+    ),
+    "nj-matawan-old-bridge": "https://www.maxpreps.com/nj/old-bridge/old-bridge-knights/football/schedule/",
+    "ar-jacksonville-jacksonville": "https://www.maxpreps.com/ar/jacksonville/jacksonville-titans/football/schedule/",
+    "mi-detroit-martin-luther-king": "https://www.maxpreps.com/mi/detroit/king-crusaders/football/schedule/",
+}
+
+NAME_STRIP = re.compile(
+    r"\b(high school|hs|high|school|collegiate|prep|preparatory|community|area)\b",
+    re.I,
+)
 
 
-def slugify(value: str) -> str:
-    v = (value or "").lower().replace("&", " and ").replace("saint ", "st ")
-    v = re.sub(r"[^a-z0-9]+", "-", v).strip("-")
-    return v
+def core_name(value: str) -> str:
+    n = (value or "").lower().replace("&amp;", "and").replace("&", "and")
+    n = n.replace("saint ", "st ").replace("st. ", "st ")
+    n = re.sub(r"\([^)]*\)", " ", n)
+    n = NAME_STRIP.sub(" ", n)
+    n = re.sub(r"[.’']", "", n)
+    n = re.sub(r"[^a-z0-9]+", " ", n)
+    n = re.sub(r"\s+", " ", n).strip()
+    if n.startswith("the "):
+        n = n[4:]
+    return n
+
+
+def name_kind(school_name: str, school_city: str | None, result_name: str) -> str | None:
+    """How a MaxPreps school name lines up with ours. Never a 1-token suffix match
+    (King ≠ every 'King'; Estacado is not Lubbock)."""
+    a, b = core_name(school_name), core_name(result_name)
+    if not a or not b:
+        return None
+    if a == b:
+        return "exact"
+    city = core_name(school_city or "")
+    if city and a == f"{city} {b}":
+        return "city_prefix"
+    if city and b == f"{city} {a}":
+        return "city_prefix"
+    ta, tb = a.split(), b.split()
+    shorter, longer = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
+    if len(shorter) >= 2 and (
+        longer[: len(shorter)] == shorter or longer[-len(shorter) :] == shorter
+    ):
+        return "affix"
+    if len(shorter) >= 2 and set(shorter) <= set(longer):
+        return "subset"
+    return None
+
+
+def to_schedule_url(url: str) -> str:
+    """26-27 varsity slate omits the year in the path."""
+    path = urllib.parse.urlparse(url).path.split("?")[0].rstrip("/") + "/"
+    path = re.sub(r"/football/\d{2}-\d{2}/", "/football/", path)
+    if path.endswith("/football/schedule/"):
+        pass
+    elif path.endswith("/football/"):
+        path += "schedule/"
+    elif "/football/" not in path:
+        path += "football/schedule/"
+    else:
+        path = re.sub(r"/football/.*$", "/football/schedule/", path)
+    return "https://www.maxpreps.com" + path
+
+
+def stored_schedule_url(school: dict) -> str | None:
+    sid = school.get("id") or ""
+    if sid in MATCHUP_SCHEDULE_URLS:
+        return MATCHUP_SCHEDULE_URLS[sid]
+    mp = school.get("maxpreps") or {}
+    for key in ("scheduleUrl", "footballUrl", "canonicalUrl"):
+        raw = (mp.get(key) or "").strip()
+        if raw.startswith("https://www.maxpreps.com/"):
+            return to_schedule_url(raw)
+    return None
+
+
+def next_page_props(html: str) -> dict | None:
+    """Parse __NEXT_DATA__ from the HTML. Contests live on props.pageProps."""
+    m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html or "", re.S)
+    if not m:
+        return None
+    raw = m.group(1).replace("\n", "").replace("\r", "")
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+    return (data.get("props") or {}).get("pageProps") or data.get("pageProps") or None
 
 
 def remember_team_path(mp_id: str | None, url: str | None) -> None:
-    if not mp_id or not url:
-        return
-    path = urllib.parse.urlparse(url).path if "://" in url else url
-    path = path.split("?")[0].rstrip("/")
-    path = re.sub(r"/football(/.*)?$", "", path)
-    parts = [p for p in path.split("/") if p]
-    if len(parts) >= 3:
-        TEAM_PATHS[mp_id.lower()] = "/" + "/".join(parts[:3])
-
-
-def school_path_guesses(school: dict) -> list[str]:
-    """MaxPreps pages are /st/city/name-mascot/. Stored canonicalUrl often omits mascot."""
-    mp = school.get("maxpreps") or {}
-    st = (school.get("state") or "").lower()
-    city = slugify(school.get("city") or "")
-    raw_name = slugify(school.get("name") or "")
-    raw_name = raw_name.replace("-high-school", "").replace("-high", "")
-    mascot = slugify(mp.get("mascot") or "")
-    parts = [p for p in raw_name.split("-") if p]
-    names: list[str] = []
-
-    def add_name(n: str) -> None:
-        n = re.sub(r"-+", "-", (n or "")).strip("-")
-        if n and n not in names:
-            names.append(n)
-
-    add_name(raw_name)
-    if city and raw_name.startswith(city) and len(raw_name) > len(city) + 1:
-        add_name(raw_name[len(city) :].strip("-"))
-    add_name("-".join(p for p in parts if p not in STOP_SLUG))
-    if parts:
-        add_name(parts[-1])
-    if len(parts) >= 2:
-        add_name("-".join(parts[-2:]))
-    add_name(city)
-
-    paths: list[str] = []
-
-    def add_path(p: str) -> None:
-        p = re.sub(r"-+", "-", p)
-        if p not in paths and p.count("/") >= 3:
-            paths.append(p)
-
-    sid = (mp.get("schoolId") or "").lower()
-    if sid and sid in TEAM_PATHS:
-        add_path(TEAM_PATHS[sid])
-    for base in (mp.get("footballUrl"), mp.get("canonicalUrl"), mp.get("scheduleUrl")):
-        if not base or not str(base).startswith("http"):
-            continue
-        path = urllib.parse.urlparse(base).path.rstrip("/")
-        path = re.sub(r"/football(/.*)?$", "", path)
-        add_path(path)
-    for n in names:
-        if mascot:
-            add_path(f"/{st}/{city}/{n}-{mascot}")
-            add_path(f"/{st}/{city}/{city}-{mascot}")
-        add_path(f"/{st}/{city}/{n}")
-    return paths[:14]
-
-
-def schedule_json_urls(school: dict, build_id: str) -> list[str]:
-    out = []
-    for path in school_path_guesses(school):
-        sched = path.rstrip("/") + f"/football/{SEASON}/schedule"
-        out.append(f"https://www.maxpreps.com/_next/data/{build_id}{sched}.json")
-    seen = set()
-    uniq = []
-    for u in out:
-        if u not in seen:
-            seen.add(u)
-            uniq.append(u)
-    return uniq
-
-
-def search_school_path(school: dict) -> str | None:
-    st = (school.get("state") or "").lower()
-    city = slugify(school.get("city") or "")
-    if not st or not city:
-        return None
-    q = urllib.parse.urlencode({"q": f"{school.get('name')} {school.get('state')}"})
-    status, html = http_get(f"https://www.maxpreps.com/search/?{q}", timeout=18)
-    if status != 200 or not html:
-        return None
-    prefix = f"/{st}/{city}/"
-    found = []
-    for raw in re.findall(r"(?:https://www\.maxpreps\.com)?(/[a-z]{2}/[a-z0-9-]+/[a-z0-9-]+)/?", html, re.I):
-        path = raw.rstrip("/").lower()
-        if not path.startswith(prefix) or path.count("/") != 3:
-            continue
-        slug = path.rsplit("/", 1)[-1]
-        name_toks = set(slugify(school.get("name") or "").split("-")) - STOP_SLUG
-        if name_toks and not (name_toks & set(slug.split("-"))):
-            continue
-        if path not in found:
-            found.append(path)
-    return found[0] if len(found) == 1 else None
+    return None
 
 
 def parse_team(arr: list) -> dict | None:
     if not isinstance(arr, list) or len(arr) < 17:
         return None
     name = arr[14] if isinstance(arr[14], str) else None
-    if not name or PLACEHOLDER.match(name) or "varsity opponent" in name.lower():
+    if not name or skip_opponent_name(name):
         remember_team_path(arr[1] if isinstance(arr[1], str) else None, arr[13] if len(arr) > 13 and isinstance(arr[13], str) else None)
         return None
     hat = arr[11] if isinstance(arr[11], int) else None
@@ -424,13 +449,27 @@ def parse_team(arr: list) -> dict | None:
     }
 
 
-def parse_contests(payload: dict, page_mp: str | None) -> tuple[list[dict], str | None]:
-    contests = (payload.get("pageProps") or payload).get("contests") or []
+def _page_team_root(page_url: str | None) -> str:
+    if not page_url:
+        return ""
+    path = urllib.parse.urlparse(page_url).path.lower().split("?")[0]
+    path = re.sub(r"/football(/.*)?$", "/", path).rstrip("/")
+    return path
+
+
+def parse_contests(
+    payload: dict, page_mp: str | None, page_url: str | None = None
+) -> tuple[list[dict], str | None]:
+    root = payload.get("pageProps") or payload
+    contests = root.get("contests") or []
     html_url = None
-    tc = ((payload.get("pageProps") or payload).get("teamContext") or {})
+    tc = root.get("teamContext") or {}
     data = tc.get("data") if isinstance(tc, dict) else None
     if isinstance(data, dict):
-        html_url = data.get("canonicalUrl")
+        html_url = data.get("schoolCanonicalUrl") or data.get("canonicalUrl")
+    if not html_url:
+        html_url = root.get("canonicalUrl")
+    team_root = _page_team_root(page_url or html_url)
     games = []
     seen = set()
     for row in contests:
@@ -450,6 +489,12 @@ def parse_contests(payload: dict, page_mp: str | None) -> tuple[list[dict], str 
         if page_mp:
             for t in parsed:
                 if t.get("mp_id") and t["mp_id"].lower() == page_mp.lower():
+                    us = t
+                    break
+        if not us and team_root:
+            for t in parsed:
+                u = (t.get("url") or "").lower()
+                if team_root and team_root in u:
                     us = t
                     break
         if not us:
@@ -496,86 +541,156 @@ def parse_contests(payload: dict, page_mp: str | None) -> tuple[list[dict], str 
     return games, html_url
 
 
-def _schedule_from_url(
-    url: str, build_id: str, page_mp: str | None
+def page_matches_school(pp: dict, school: dict) -> bool:
+    """Drop a 200 page that is a different program (Hialeah Patriots ≠ Plantation)."""
+    tc = ((pp.get("teamContext") or {}).get("data") or {})
+    st = (tc.get("stateCode") or "").upper()
+    if st and st != (school.get("state") or "").upper():
+        return False
+    result_name = tc.get("schoolName") or tc.get("schoolFormattedName") or ""
+    if name_kind(school.get("name") or "", school.get("city"), result_name):
+        return True
+    result_city = core_name(tc.get("schoolCity") or "")
+    school_city = core_name(school.get("city") or "")
+    if result_city and school_city and result_city == school_city:
+        ta = core_name(school.get("name") or "").split()
+        tb = core_name(result_name).split()
+        if tb and ta and ta[-len(tb) :] == tb:
+            return True
+    return False
+
+
+def fetch_schedule_html(
+    url: str, school: dict, *, trust: bool = False
 ) -> tuple[list[dict], str | None] | None:
-    status, body = http_get(url, timeout=18)
-    if status != 200 or not body:
+    """GET the schedule HTML and parse contests from __NEXT_DATA__. No _next/data buildId."""
+    status, html = http_get(url, timeout=28, headers=HTML_UA)
+    if status != 200 or not html:
         return None
-    try:
-        payload = json.loads(body)
-    except json.JSONDecodeError:
+    pp = None
+    if "__NEXT_DATA__" in html:
+        pp = next_page_props(html)
+    elif html.startswith("{"):
+        try:
+            payload = json.loads(html)
+        except json.JSONDecodeError:
+            payload = None
+        if isinstance(payload, dict):
+            pp = (
+                payload.get("pageProps")
+                or (payload.get("props") or {}).get("pageProps")
+                or payload
+            )
+    if not pp:
         return None
-    games, page_url = parse_contests(payload, page_mp)
+    if not trust and not page_matches_school(pp, school):
+        return None
+    page_mp = ((school.get("maxpreps") or {}).get("schoolId") or "").lower() or None
+    games, page_url = parse_contests(pp, page_mp, url)
     if not games:
         return None
-    html = page_url
-    if "/_next/data/" in url:
-        rebuilt = "https://www.maxpreps.com" + urllib.parse.urlparse(url).path.replace(
-            f"/_next/data/{build_id}", ""
-        ).replace(".json", "/")
-        if not rebuilt.endswith("/"):
-            rebuilt += "/"
-        html = rebuilt
-    return games, html
+    return games, page_url or url
 
 
-def fetch_schedule(school: dict, build_id: str, *, search: bool = False) -> tuple[list[dict], str | None]:
-    mp = ((school.get("maxpreps") or {}).get("schoolId") or "").lower() or None
-    urls = schedule_json_urls(school, build_id)
-    mp_info = school.get("maxpreps") or {}
+def search_schedule_url(school: dict, occupied: set[str]) -> str | None:
+    """MaxPreps search is a JS app — school rows are in __NEXT_DATA__, not <a href>.
+
+    Take a unique name+state hit. If several share the name, city must disambiguate.
+    Never keep a URL another ranked school already owns.
+    """
+    st = (school.get("state") or "").upper()
+    name = school.get("name") or ""
+    city = school.get("city") or ""
+    queries: list[str] = []
+    for q in (
+        name,
+        NAME_STRIP.sub(" ", name).strip(),
+        f"{name} {city}".strip(),
+        f"{name} {st}".strip(),
+    ):
+        q = re.sub(r"\s+", " ", q).strip()
+        if q and q not in queries:
+            queries.append(q)
+    city_core = core_name(city)
+    name_core = core_name(name)
+    if city_core and name_core.startswith(city_core + " "):
+        rest = name_core[len(city_core) :].strip()
+        if rest:
+            queries.append(rest)
+
+    seen_ids: set[str] = set()
+    cands: list[dict] = []
+    for q in queries:
+        status, html = http_get(
+            "https://www.maxpreps.com/search/?" + urllib.parse.urlencode({"q": q}),
+            timeout=22,
+            headers=HTML_UA,
+        )
+        if status != 200 or not html:
+            continue
+        pp = next_page_props(html)
+        rows = (pp or {}).get("initialSchoolResults") or []
+        for r in rows:
+            if not isinstance(r, dict):
+                continue
+            rid = (r.get("schoolId") or r.get("canonicalUrl") or "").lower()
+            if not rid or rid in seen_ids:
+                continue
+            if (r.get("state") or "").upper() != st:
+                continue
+            if not name_kind(name, city, r.get("name") or ""):
+                continue
+            canon = (r.get("canonicalUrl") or "").strip()
+            if not canon.startswith("https://www.maxpreps.com/"):
+                continue
+            seen_ids.add(rid)
+            cands.append(r)
+        if len(cands) == 1:
+            break
+
+    if len(cands) > 1:
+        city_hits = [r for r in cands if core_name(r.get("city") or "") == city_core]
+        if city_hits:
+            cands = city_hits
+    if len(cands) != 1:
+        return None
+    url = to_schedule_url(cands[0]["canonicalUrl"])
+    path = urllib.parse.urlparse(url).path.rstrip("/").lower()
+    if path in occupied:
+        return None
+    return url
+
+
+def fetch_schedule(
+    school: dict, build_id: str | None = None, *, search: bool = False, occupied: set[str] | None = None
+) -> tuple[list[dict], str | None]:
+    """Fetch 26-27 contests from a known MaxPreps HTML URL. Do not invent slugs."""
+    del build_id
     tried: set[str] = set()
 
-    def consider(url: str) -> tuple[list[dict], str | None] | None:
-        if url in tried:
+    def consider(url: str | None, *, trust: bool = False) -> tuple[list[dict], str | None] | None:
+        if not url or url in tried:
             return None
         tried.add(url)
-        return _schedule_from_url(url, build_id, mp)
+        return fetch_schedule_html(url, school, trust=trust)
 
-    for url in urls:
-        hit = consider(url)
+    hit = consider(stored_schedule_url(school), trust=school.get("id") in MATCHUP_SCHEDULE_URLS)
+    if hit:
+        return hit
+    if search:
+        hit = consider(search_schedule_url(school, occupied or set()), trust=True)
         if hit:
             return hit
-
-    if search and not (mp_info.get("mascot") or "").strip():
-        st = (school.get("state") or "").lower()
-        city = slugify(school.get("city") or "")
-        full = slugify(school.get("name") or "")
-        last = full.split("-")[-1] if full else ""
-        for mascot in (
-            "eagles", "tigers", "panthers", "wildcats", "lions", "knights",
-            "warriors", "saints", "explorers", "raiders", "wolves", "bears",
-            "hawks", "falcons", "cardinals", "cougars", "mustangs", "rams",
-            "bulldogs", "spartans", "huskies", "trojans", "chargers", "stags",
-        ):
-            for n in dict.fromkeys([last, full]):
-                if not n:
-                    continue
-                path = f"/{st}/{city}/{n}-{mascot}/football/{SEASON}/schedule"
-                hit = consider(f"https://www.maxpreps.com/_next/data/{build_id}{path}.json")
-                if hit:
-                    return hit
-
-    if search:
-        extra = search_school_path(school)
-        if extra:
-            hit = consider(
-                f"https://www.maxpreps.com/_next/data/{build_id}{extra}/football/{SEASON}/schedule.json"
-            )
-            if hit:
-                return hit
     return [], None
 
 
 def opp_norm_name(name: str) -> str:
-    """Strip parentheticals and known extra suffixes, then the usual HS tokens.
-
-    'The St. James Performance Academy' → 'the st james' (equals The St. James).
-    'Legacy School of Sport Sciences' → 'legacy' (does not equal Legacy Christian).
+    """Strip parentheticals and 'School of Sport Sciences'. Do not strip
+    'Performance Academy' — The St. James Performance Academy is not The St. James.
     """
     n = name or ""
     n = re.sub(r"\([^)]*\)", " ", n)
-    n = re.sub(r"\b(performance academy|school of sport sciences)\b", " ", n, flags=re.I)
+    n = re.sub(r"\bschool of sport sciences\b", " ", n, flags=re.I)
     return norm_name(n)
 
 
@@ -616,18 +731,28 @@ def sos_label(value: float, p25: float, p75: float) -> str:
     return "average"
 
 
-def apply_strength(schools: list[dict], joined: dict[str, dict], n_on3: int) -> None:
+def apply_strength(schools: list[dict], joined: dict[str, dict], on3_teams: list[dict]) -> None:
     tnorm = talent_norm_map(schools)
+    ratings = [float(t["rating"]) for t in on3_teams if t.get("rating") is not None]
+    rmin = min(ratings) if ratings else 0.0
+    rmax = max(ratings) if ratings else 100.0
+    max_t = max((float(s["talent_score"]) for s in schools if s.get("talent_score") is not None), default=0.0)
+    listed_floor = round(100.0 * LISTED_POINTS / max_t, 2) if max_t else 0.0
     for s in schools:
         sid = s["id"]
         tn = tnorm.get(sid)
         on3 = joined.get(sid)
-        if on3 and tn is not None:
-            st = round((tn + on3_norm(on3["rank"], n_on3)) / 2.0, 2)
+        if (
+            on3
+            and on3.get("rating") is not None
+            and int(on3["rank"]) <= ON3_STRENGTH_RANK_CAP
+            and tn is not None
+        ):
+            st = round((tn + on3_rating_norm(on3["rating"], rmin, rmax)) / 2.0, 2)
+        elif on3 and int(on3["rank"]) > ON3_STRENGTH_RANK_CAP:
+            st = listed_floor
         elif tn is not None:
             st = tn
-        elif on3:
-            st = on3_norm(on3["rank"], n_on3)
         else:
             st = None
         s["team_strength"] = st
@@ -651,8 +776,11 @@ def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
         row["team_strength"] = school.get("team_strength")
         row["season"] = SEASON
         row["as_of"] = "2026-08-25T21:22:57Z"
+        kept = []
         for g in row.get("games") or []:
             opp = g.get("opponent") or {}
+            if skip_opponent_name(opp.get("name")):
+                continue
             hit = match_opponent(by_mp, by_st_nn, opp)
             if hit:
                 opp["site_id"] = hit["id"]
@@ -662,6 +790,8 @@ def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
                 opp["team_strength"] = None
             g["opponent"] = opp
             g["toughness_icon"] = toughness_icon(school.get("team_strength"), opp.get("team_strength"))
+            kept.append(g)
+        row["games"] = kept
         known = [
             g["opponent"]["team_strength"]
             for g in row.get("games") or []
@@ -833,9 +963,10 @@ def write_board(schools: list[dict], schedules: dict[str, dict], n_on3: int, joi
             "rank_by": "two_sided_talent",
             "team_strength_note": (
                 "team_strength is the mean of talent share (100 × talent / board max; IMG = 100) "
-                "and an On3 national rank log-curve (rank 1 = 100, decaying). "
-                "Unranked schools omit the On3 term. SOS is the mean of known opponents’ "
-                "team_strength on that 0–100 scale (unknown omitted, never On3 compositeScore)."
+                "and On3 compositeScore scaled 0–100 (board min→0, IMG rating→100) when On3 rank "
+                "is 1–250. Ranks 251+ keep the On3 badge but use the listed-recruit floor for "
+                "strength (70 pts → 3.09). Unranked schools use talent share only. SOS is the mean "
+                "of known opponents’ team_strength (unknown omitted; never raw On3 compositeScore)."
             ),
             "note": (
                 "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. "
@@ -849,15 +980,153 @@ def write_board(schools: list[dict], schedules: dict[str, dict], n_on3: int, joi
     (IMPORT / "schools.summary.json").write_text(json.dumps(summary, indent=2))
 
 
-def restamp_from_disk() -> int:
-    """Recompute 0–100 strength + SOS from on-disk schedules. Does not scrape."""
+def attach_schedule_row(
+    school: dict,
+    games: list[dict],
+    page_url: str | None,
+    by_mp: dict,
+    by_st_nn: dict,
+) -> dict:
+    mp = school.get("maxpreps") or {}
+    sched_url = mp.get("scheduleUrl") or page_url
+    if page_url and not mp.get("scheduleUrl"):
+        mp["scheduleUrl"] = page_url
+        school["maxpreps"] = mp
+    kept = []
+    for g in games:
+        opp = g.get("opponent") or {}
+        if skip_opponent_name(opp.get("name")):
+            continue
+        hit = match_opponent(by_mp, by_st_nn, opp)
+        if hit:
+            opp["site_id"] = hit["id"]
+            opp["team_strength"] = hit.get("team_strength")
+        else:
+            opp["site_id"] = None
+            opp["team_strength"] = None
+        g["opponent"] = opp
+        g["toughness_icon"] = toughness_icon(school.get("team_strength"), opp.get("team_strength"))
+        kept.append(g)
+    known = [
+        g["opponent"]["team_strength"]
+        for g in kept
+        if g.get("opponent") and g["opponent"].get("team_strength") is not None
+    ]
+    sos = round(sum(known) / len(known), 2) if known else None
+    school["sos"] = sos
+    school["sos_games"] = len(known)
+    school["schedule_games"] = len(kept)
+    return {
+        "school_id": school["id"],
+        "season": SEASON,
+        "as_of": "2026-08-25T21:22:57Z",
+        "team_strength": school.get("team_strength"),
+        "schedule_url": sched_url,
+        "sos": sos,
+        "sos_games": len(known),
+        "games": kept,
+    }
+
+
+def occupied_schedule_paths(schools: list[dict], schedules: dict[str, dict]) -> set[str]:
+    out: set[str] = set()
+    for row in schedules.values():
+        u = (row.get("schedule_url") or "").strip()
+        if u:
+            out.add(urllib.parse.urlparse(u).path.rstrip("/").lower())
+    for s in schools:
+        mp = s.get("maxpreps") or {}
+        for key in ("scheduleUrl", "footballUrl", "canonicalUrl"):
+            u = (mp.get(key) or "").strip()
+            if u.startswith("https://www.maxpreps.com/") and s["id"] in schedules:
+                out.add(urllib.parse.urlparse(to_schedule_url(u)).path.rstrip("/").lower())
+    return out
+
+
+def fill_missing_schedules(schools: list[dict], schedules: dict[str, dict]) -> int:
+    """Fetch MaxPreps 26-27 only for ranked schools that currently have no schedule.
+
+    Uses stored scheduleUrl / canonicalUrl+football/schedule/ (yearless), plus the
+    exact Matchup URLs. Search falls back to __NEXT_DATA__ school results, never
+    guessed mascot slugs or harvested opponent paths.
+    """
+    missing = [
+        s
+        for s in schools
+        if s["id"] not in schedules
+        and (
+            (s.get("maxpreps") or {}).get("schoolId")
+            or (s.get("maxpreps") or {}).get("canonicalUrl")
+            or s["id"] in MATCHUP_SCHEDULE_URLS
+        )
+    ]
+    print(f"fill-missing {len(missing)} ranked schools without a schedule", flush=True)
+    if not missing:
+        return 0
+    occupied = occupied_schedule_paths(schools, schedules)
+    cores: dict[tuple[str, str], list[str]] = {}
+    for s in schools:
+        cores.setdefault(((s.get("state") or "").upper(), core_name(s.get("name") or "")), []).append(s["id"])
+    search_blocked = {sid for ids in cores.values() if len(ids) > 1 for sid in ids}
+
+    fetched: dict[str, tuple[list[dict], str | None]] = {}
+
+    def run_fetch(batch: list[dict], search: bool) -> None:
+        if not batch:
+            return
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            futs = {
+                pool.submit(
+                    fetch_schedule,
+                    s,
+                    search=search and s["id"] not in search_blocked,
+                    occupied=occupied,
+                ): s["id"]
+                for s in batch
+            }
+            done = 0
+            for fut in as_completed(futs):
+                sid = futs[fut]
+                done += 1
+                try:
+                    games, page_url = fut.result()
+                except Exception as e:
+                    print(f"  schedule fail {sid}: {e}", flush=True)
+                    continue
+                fetched[sid] = (games, page_url)
+                if games and page_url:
+                    occupied.add(urllib.parse.urlparse(page_url).path.rstrip("/").lower())
+                if done % 10 == 0 or done == len(batch):
+                    ok = sum(1 for g, _ in fetched.values() if g)
+                    print(f"  {done}/{len(batch)} fetched {ok}", flush=True)
+
+    run_fetch(missing, search=False)
+    miss = [s for s in missing if not fetched.get(s["id"], ([], None))[0]]
+    print(f"pass1 stored/matchup {sum(1 for g,_ in fetched.values() if g)} miss {len(miss)}", flush=True)
+    run_fetch(miss, search=True)
+    added = 0
+    by_mp, by_st_nn = opponent_indexes(schools)
+    for s in missing:
+        games, page_url = fetched.get(s["id"], ([], None))
+        if not games:
+            continue
+        schedules[s["id"]] = attach_schedule_row(s, games, page_url, by_mp, by_st_nn)
+        added += 1
+    print(f"added {added} schedules (now {len(schedules)})", flush=True)
+    return added
+
+
+def restamp_from_disk(*, fill_missing: bool = False) -> int:
+    """Recompute 0–100 strength + SOS from on-disk schedules. Optionally fill gaps."""
     schools = json.loads((SITE / "schools.json").read_text())
     schedules = json.loads((SITE / "schedules.json").read_text())
     fill_published_week_zips(schools)
+    if fill_missing:
+        fill_missing_schedules(schools, schedules)
     on3_teams = fetch_on3()
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
-    apply_strength(schools, joined, n_on3)
+    apply_strength(schools, joined, on3_teams)
     restamp_schedules(schools, schedules)
     n_games = slice_v1_games(schools, 196)
     write_board(schools, schedules, n_on3, len(joined))
@@ -885,52 +1154,20 @@ def main() -> int:
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
     print(f"on3 joined {len(joined)} / {n_on3} onto {len(schools)} schools")
-    tnorm = talent_norm_map(schools)
-    strength: dict[str, float] = {}
-    for s in schools:
-        sid = s["id"]
-        tn = tnorm.get(sid)
-        on3 = joined.get(sid)
-        if on3 and tn is not None:
-            on = on3_norm(on3["rank"], n_on3)
-            st = round((tn + on) / 2.0, 2)
-        elif tn is not None:
-            st = tn
-        elif on3:
-            st = on3_norm(on3["rank"], n_on3)
-        else:
-            st = None
-        s["team_strength"] = st
-        if st is not None:
-            strength[sid] = st
-        if on3:
-            s["on3"] = {
-                "rank": on3["rank"],
-                "rating": round(on3["rating"], 3) if on3.get("rating") is not None else None,
-                "org_key": on3.get("org_key"),
-            }
-        else:
-            s.pop("on3", None)
-
-    by_mp = {}
+    apply_strength(schools, joined, on3_teams)
+    by_mp, by_st_nn = opponent_indexes(schools)
     by_id = {s["id"]: s for s in schools}
-    for s in schools:
-        mp = (s.get("maxpreps") or {}).get("schoolId")
-        if mp:
-            by_mp[mp.lower()] = s
 
-    try:
-        build_id = read_build_id()
-        print("maxpreps buildId", build_id)
-    except Exception as e:
-        print("buildId fail", e)
-        build_id = "30052b80-31ab3f27"
+    occupied = occupied_schedule_paths(schools, {})
 
     def run_fetch(batch: list[dict], search: bool) -> None:
         if not batch:
             return
-        with ThreadPoolExecutor(max_workers=8) as pool:
-            futs = {pool.submit(fetch_schedule, s, build_id, search=search): s["id"] for s in batch}
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            futs = {
+                pool.submit(fetch_schedule, s, search=search, occupied=occupied): s["id"]
+                for s in batch
+            }
             done = 0
             for fut in as_completed(futs):
                 sid = futs[fut]
@@ -941,9 +1178,11 @@ def main() -> int:
                     print(f"  schedule fail {sid}: {e}", flush=True)
                     continue
                 fetched[sid] = (games, page_url)
+                if games and page_url:
+                    occupied.add(urllib.parse.urlparse(page_url).path.rstrip("/").lower())
                 if done % 50 == 0:
                     ok = sum(1 for g, _ in fetched.values() if g)
-                    print(f"  {done}/{len(batch)} fetched {ok} paths {len(TEAM_PATHS)}", flush=True)
+                    print(f"  {done}/{len(batch)} fetched {ok}", flush=True)
 
     schedules: dict[str, dict] = {}
     want = [
@@ -955,54 +1194,15 @@ def main() -> int:
     fetched: dict[str, tuple[list[dict], str | None]] = {}
     run_fetch(want, search=False)
     miss = [s for s in want if not fetched.get(s["id"], ([], None))[0]]
-    print(f"pass1 {sum(1 for g,_ in fetched.values() if g)} miss {len(miss)} harvested_paths {len(TEAM_PATHS)}", flush=True)
-    run_fetch(miss, search=False)
-    miss = [s for s in want if not fetched.get(s["id"], ([], None))[0]]
-    print(f"pass2 harvest miss {len(miss)}", flush=True)
+    print(f"pass1 {sum(1 for g,_ in fetched.values() if g)} miss {len(miss)}", flush=True)
     run_fetch(miss, search=True)
-    print(f"pass3 search done {sum(1 for g,_ in fetched.values() if g)}", flush=True)
+    print(f"pass2 search done {sum(1 for g,_ in fetched.values() if g)}", flush=True)
 
     for s in want:
         games, page_url = fetched.get(s["id"], ([], None))
         if not games:
             continue
-        mp = s.get("maxpreps") or {}
-        sched_url = mp.get("scheduleUrl") or page_url
-        if page_url and not mp.get("scheduleUrl"):
-            mp["scheduleUrl"] = page_url
-            s["maxpreps"] = mp
-        for g in games:
-            opp = g["opponent"]
-            hit = by_mp.get((opp.get("maxpreps_id") or "").lower()) if opp.get("maxpreps_id") else None
-            if not hit:
-                nn = norm_name(opp["name"])
-                st = (opp.get("state") or "").upper()
-                cands = [
-                    x
-                    for x in schools
-                    if (x.get("name_normalized") or norm_name(x["name"])) == nn
-                    and (not st or x.get("state") == st)
-                ]
-                if len(cands) == 1:
-                    hit = cands[0]
-            if hit:
-                opp["site_id"] = hit["id"]
-                opp["team_strength"] = hit.get("team_strength")
-            g["toughness_icon"] = toughness_icon(s.get("team_strength"), opp.get("team_strength"))
-        known = [g["opponent"]["team_strength"] for g in games if g["opponent"].get("team_strength") is not None]
-        sos = round(sum(known) / len(known), 2) if known else None
-        s["sos"] = sos
-        s["sos_games"] = len(known)
-        s["schedule_games"] = len(games)
-        schedules[s["id"]] = {
-            "school_id": s["id"],
-            "season": SEASON,
-            "team_strength": s.get("team_strength"),
-            "schedule_url": sched_url,
-            "sos": sos,
-            "sos_games": len(known),
-            "games": games,
-        }
+        schedules[s["id"]] = attach_schedule_row(s, games, page_url, by_mp, by_st_nn)
 
     sos_vals = sorted(s["sos"] for s in schools if s.get("sos") is not None and (s.get("sos_games") or 0) >= 2)
     p25 = sos_vals[len(sos_vals) // 4] if sos_vals else 0
@@ -1057,6 +1257,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    if "--restamp" in sys.argv:
-        raise SystemExit(restamp_from_disk())
-    raise SystemExit(main())
+    if "--full-fetch" in sys.argv:
+        raise SystemExit(main())
+    fill = "--fill-missing" in sys.argv
+    raise SystemExit(restamp_from_disk(fill_missing=fill))

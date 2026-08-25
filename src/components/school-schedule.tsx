@@ -142,8 +142,8 @@ export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) 
         </li>
       </ul>
       <p className="mt-1 text-xs text-zinc-600">
-        Icons compare this team&apos;s strength to the opponent&apos;s. Unmapped opponents count as
-        cupcakes for the icon, not as zeros on strength of schedule.
+        Icons compare this team&apos;s strength to the opponent&apos;s. Unmapped opponents
+        (no team_strength) skip SOS and show no toughness icon.
       </p>
     </div>
   );
