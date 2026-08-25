@@ -543,9 +543,12 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
   const players: Player[] = [];
   const ratings: Rating[] = [];
   const asOf = new Date().toISOString().slice(0, 10);
+  const existingSchoolIds = new Set(siteSchools.map((s) => s.id));
 
   for (const row of siteSchools) {
-    const cid = canonicalSchoolId(row.id);
+    const mappedId = canonicalSchoolId(row.id);
+    const cid =
+      mappedId !== row.id && existingSchoolIds.has(mappedId) ? row.id : mappedId;
     const city = row.city || "";
     const state = (row.state || "").toUpperCase();
     const zip = padZip(row.zip5 ?? row.zip ?? row.maxpreps?.zip);
