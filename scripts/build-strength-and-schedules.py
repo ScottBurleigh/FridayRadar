@@ -486,15 +486,15 @@ def parse_contests(
         if len(parsed) < 2:
             continue
         us = None
-        if page_mp:
-            for t in parsed:
-                if t.get("mp_id") and t["mp_id"].lower() == page_mp.lower():
-                    us = t
-                    break
-        if not us and team_root:
+        if team_root:
             for t in parsed:
                 u = (t.get("url") or "").lower()
                 if team_root and team_root in u:
+                    us = t
+                    break
+        if not us and page_mp:
+            for t in parsed:
+                if t.get("mp_id") and t["mp_id"].lower() == page_mp.lower():
                     us = t
                     break
         if not us:
