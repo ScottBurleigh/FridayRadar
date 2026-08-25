@@ -7,6 +7,7 @@ FridayRadar ranks **U.S. high school football programs** by the recruiting talen
 ```bash
 npm install
 npx tsx scripts/import-site-data.ts   # compiles site-data/ or data/import/ → data/fridayradar.json
+# or: npm run compile:scout            # rebuilds the frozen board + top-213 week slice, then imports
 npm run dev                           # http://127.0.0.1:43123
 ```
 
@@ -57,9 +58,17 @@ Canonical v1 is **Scout + Matchup on disk**, not a live 247 scrape (Load More 40
 npm run import:site
 ```
 
-See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games.json`, and how frozen 2027/2028 ingest players nest on school rows.
+Or rebuild from the frozen ingest already in this repo (never re-pages 247):
 
-Do **not** re-run `npm run ingest:247`. A seed of the top Scout schools and the Matchup week slate ships in `data/import/` so production is not stuck on a page-1 247 board. Full dump: 1,554 schools / 2,986 players.
+```bash
+npm run compile:scout
+```
+
+v1 `/games` reads **`games-top213.json`** (top 213 by combined Scout talent for 2026-08-26..29). Do not load a full 837-game `games.json` as the site slate; the importer slices anything longer down to 213.
+
+See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games-top213.json`, and how frozen 2027/2028 ingest players nest on school rows.
+
+Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is the top **213** Matchup-week games by combined talent.
 
 School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 

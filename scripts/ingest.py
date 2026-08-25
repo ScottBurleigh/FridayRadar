@@ -402,7 +402,7 @@ def merge_all():
         })
 
     espn_counts = {}
-    for year in (2027, 2028, 2029):
+    for year in (2027, 2028):
         rows = load_year("espn", year)
         espn_counts[str(year)] = len(rows)
         for r in rows:
@@ -436,7 +436,7 @@ def merge_all():
     })
 
     c247 = {}
-    for year in (2027, 2028, 2029):
+    for year in (2027, 2028):
         rows = load_year("247", year)
         c247[str(year)] = len(rows)
         for r in rows:
@@ -471,7 +471,7 @@ def merge_all():
     })
 
     on3c = {}
-    for year in (2027, 2028, 2029):
+    for year in (2027, 2028):
         rows = load_year("on3", year)
         on3c[str(year)] = len(rows)
         for r in rows:

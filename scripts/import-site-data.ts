@@ -3,8 +3,12 @@
  * Compile Scout + Matchup site-data into data/fridayradar.json.
  *
  * Looks for canonical Builder dumps in this order:
- *   1) site-data/{schools,schools.summary,games}.json
- *   2) data/import/{schools,schools.summary,games}.json
+ *   1) site-data/{schools,schools.summary,games-top213|games}.json
+ *   2) data/import/{schools,schools.summary,games-top213|games}.json
+ *
+ * v1 games file is games-top213.json (213 games, week 2026-08-26..29).
+ * Never load a full 837-game games.json as the /games slate — if that file is
+ * what is present, slice to the top 213 by combined_talent.
  *
  * Nested school.recruits become Player + Rating rows. Do not invent names.
  * Unmapped Matchup opponents become placeholder schools (mapped: false) so
@@ -140,6 +144,33 @@ function findImportDir(): string {
   return fallback;
 }
 
+function isPlaceholderName(name?: string | null): boolean {
+  if (!name?.trim()) return true;
+  const n = name.trim();
+  if (/varsity opponent/i.test(n)) return true;
+  return /^(unknown|tba|tbd|n\/a|na|opponent)$/i.test(n);
+}
+
+function findGamesPath(dir: string): string {
+  for (const name of ["games-top213.json", "games.json"]) {
+    const p = join(dir, name);
+    if (existsSync(p)) return p;
+  }
+  throw new Error(`Missing games-top213.json or games.json in ${dir}`);
+}
+
+function sliceTopGames(games: SiteGame[], limit = 213): SiteGame[] {
+  const cleaned = games.filter(
+    (g) => !isPlaceholderName(g.home?.name) && !isPlaceholderName(g.away?.name),
+  );
+  const ranked = [...cleaned].sort((a, b) => {
+    const dt = (b.combined_talent ?? 0) - (a.combined_talent ?? 0);
+    if (dt !== 0) return dt;
+    return (a.home?.name || "").localeCompare(b.home?.name || "");
+  });
+  return ranked.length > limit ? ranked.slice(0, limit) : ranked;
+}
+
 async function readJson<T>(path: string): Promise<T> {
   return JSON.parse(await readFile(path, "utf8")) as T;
 }
@@ -224,15 +255,16 @@ function ensureSchool(
 export async function importSiteData(): Promise<FridayRadarDataset> {
   const dir = findImportDir();
   const schoolsPath = join(dir, "schools.json");
-  const gamesPath = join(dir, "games.json");
+  const gamesPath = findGamesPath(dir);
   const summaryPath = join(dir, "schools.summary.json");
-  if (!existsSync(schoolsPath) || !existsSync(gamesPath)) {
-    throw new Error(`Missing schools.json or games.json in ${dir}`);
+  if (!existsSync(schoolsPath)) {
+    throw new Error(`Missing schools.json in ${dir}`);
   }
 
   const schoolRaw = await readJson<SiteSchool[] | { schools: SiteSchool[] }>(schoolsPath);
   const siteSchools = Array.isArray(schoolRaw) ? schoolRaw : schoolRaw.schools;
   const gamesFile = await readJson<SiteGamesFile>(gamesPath);
+  gamesFile.games = sliceTopGames(gamesFile.games || []);
   const summary = existsSync(summaryPath)
     ? await readJson<Record<string, unknown>>(summaryPath)
     : {};
@@ -320,6 +352,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
   const games: Game[] = [];
   for (const g of gamesFile.games || []) {
     if (!g.contest_id || !g.home || !g.away) continue;
+    if (isPlaceholderName(g.home.name) || isPlaceholderName(g.away.name)) continue;
     const homeMapped = g.home.mapped !== false && Boolean(g.home.site_id);
     const awayMapped = g.away.mapped !== false && Boolean(g.away.site_id);
     const homeId = homeMapped ? String(g.home.site_id) : unmappedId(g.home);
@@ -359,7 +392,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       id: "matchup",
       label: "Matchup MaxPreps week slate",
       status: "live",
-      detail: `Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"}. One-sided talent kept.`,
+      detail: `Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"}. Top ${games.length} by combined talent. One-sided talent kept.`,
       counts: { games: games.length },
     },
   ];

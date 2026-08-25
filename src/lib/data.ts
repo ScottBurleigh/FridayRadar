@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-import type { FridayRadarDataset, Player, Rating, School } from "./types";
+import type { FridayRadarDataset, Game, Player, Rating, School } from "./types";
 import { rankSchools } from "./ranking";
 import { schoolWithinZipRadius } from "./geo";
 
