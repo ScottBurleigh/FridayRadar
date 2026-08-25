@@ -63,10 +63,11 @@ export function FilterBar({
           <select
             id="sort"
             name="sort"
-            defaultValue={sort === "count" ? "count" : "talent"}
+            defaultValue={sort === "count" || sort === "strength" ? sort : "talent"}
             className="mt-1 h-8 w-full rounded-lg border border-input bg-input/30 px-2.5 text-sm text-foreground"
           >
             <option value="talent">Talent score</option>
+            <option value="strength">Team strength</option>
             <option value="count">Recruit count</option>
           </select>
         </div>

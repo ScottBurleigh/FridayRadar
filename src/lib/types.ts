@@ -36,6 +36,17 @@ export type School = {
   stars3?: number | null;
   /** false = Matchup opponent with no Scout roster (one-sided talent). */
   mapped?: boolean;
+  /** Talent percentile mixed with On3 rank curve when the school is on the national board. */
+  teamStrength?: number | null;
+  on3?: {
+    rank: number;
+    rating: number | null;
+    orgKey?: string | number | null;
+  } | null;
+  sos?: number | null;
+  sosGames?: number | null;
+  sosLabel?: "tough" | "average" | "light" | null;
+  scheduleGames?: number | null;
 };
 
 export type Player = {
@@ -127,6 +138,50 @@ export type FridayRadarDataset = {
   players: Player[];
   ratings: Rating[];
   games: Game[];
+  schedules?: Record<string, SchoolSchedule>;
+};
+
+export type SosLabel = "tough" | "average" | "light";
+
+export type ToughnessIcon =
+  | "much_harder"
+  | "harder"
+  | "even"
+  | "easier"
+  | "much_easier"
+  | "unknown";
+
+export type ScheduleOpponent = {
+  name: string;
+  city: string | null;
+  state: string | null;
+  maxprepsId: string | null;
+  siteId: string | null;
+  teamStrength: number | null;
+};
+
+export type ScheduleGame = {
+  contestId: string | null;
+  date: string | null;
+  kickoff: string | null;
+  homeAway: "home" | "away" | "neutral";
+  location: string | null;
+  opponent: ScheduleOpponent;
+  result: string | null;
+  score: number | null;
+  oppScore: number | null;
+  maxprepsGameUrl: string | null;
+  toughnessIcon: ToughnessIcon;
+};
+
+export type SchoolSchedule = {
+  schoolId: string;
+  season: string;
+  teamStrength: number | null;
+  scheduleUrl: string | null;
+  sos: number | null;
+  sosGames: number;
+  games: ScheduleGame[];
 };
 
 export type SchoolRankingRow = {
@@ -137,6 +192,7 @@ export type SchoolRankingRow = {
   stars4: number;
   stars3: number;
   talentScore: number;
+  teamStrength: number | null;
 };
 
 export type RatedPlayer = Player & {

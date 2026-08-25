@@ -29,6 +29,12 @@ Leave zip null for: American Heritage (Fort Lauderdale, FL), ALA Queen Creek AZ,
 
 Rollup the importer prints in `meta.sources`. Canonical v1: **1,554 schools / 2,986 players** (2,135 class 2027, 851 class 2028).
 
+### `schedules.json`
+
+MaxPreps **26-27** football schedules keyed by FridayRadar school id. Built by `python3 scripts/build-strength-and-schedules.py`. Deleted contests and Varsity Opponent rows are omitted. Each game has date, opponent, home/away/neutral, result, and `toughness_icon` from this team’s strength vs the opponent.
+
+The importer copies this into `data/fridayradar.json` as `schedules`.
+
 ### `games-top213.json` (v1 `/games`)
 
 Matchup week **2026-08-26 through 2026-08-29**. This is the only games file the importer loads: **two-sided games only** (`rank_by: two_sided_talent`). Do **not** load `games.json`.

@@ -15,8 +15,8 @@ Requires Node 22+ and Python 3. The compiled dataset ships in `data/fridayradar.
 
 ## Product pages
 
-- **Rankings (home)** — programs sorted by talent score (default) or recruit count. Filters: US state, zip code (≈25-mile haversine). The chevron next to a school name expands **every** 2027+ recruit on that roster (name, position, stars, 247/ESPN profile). The school name still opens `/schools/[id]`.
-- **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank, profile link when known). MaxPreps football schedule link when `maxpreps.schoolId` and `maxpreps.scheduleUrl` are both stored (no invented URL).
+- **Rankings (home)** — programs sorted by talent score (default), team strength, or recruit count. Filters: US state, zip code (≈25-mile haversine). The chevron next to a school name expands **every** 2027+ recruit on that roster (name, position, stars, 247/ESPN profile). The school name still opens `/schools/[id]`.
+- **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank, profile link when known). Talent score stays its own number. Team strength, On3 national rank (only when joined), and strength of schedule sit in the header. The MaxPreps 26-27 football schedule is a table under the recruits (date, opponent, site, result, toughness icon) plus a MaxPreps schedule link when `schoolId` and `scheduleUrl` are both stored. No schedule on file → empty state and no invented link.
 - **Games of the week** — Matchup MaxPreps slate for **2026-08-26 through 2026-08-29**, ranked by **geometric mean** of home and away Scout talent (`√(home × away)`). Combined talent is still shown on each row and is the tie-break. Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state.
 
 ## Ranking math
@@ -44,7 +44,9 @@ Eligible: `class_year >= 2027`. Never 2026 or earlier.
 | 1 | 40 |
 | listed / unranked | 25 |
 
-**School talent score** = Scout precomputed sum of 2027+ player points (`School.talentScore`). Rankings prefer that field so the board matches Scout before every rating row is imported. If it is missing, FridayRadar sums imported 2027+ player points.
+**School talent score** = Scout precomputed sum of 2027+ player points (`School.talentScore`). Rankings prefer that field so the board matches Scout before every rating row is imported. If it is missing, FridayRadar sums imported 2027+ player points. Talent remains its own column and the default rankings sort.
+
+**Team strength** blends two 0–100 terms and does not invent On3 ranks. Talent percentile is the share of the 1,554-school board at or below this school’s talent score (IMG = 100). When the school joins to the On3 national high-school football composite (name + city/state, then MaxPreps id when the opponent row carries one), the second term is a rank curve `100 × (N − rank + 1) / N` over that 1,000-team board (rank 1 = 100). Strength is the mean of the two terms; unranked schools omit the On3 term and keep talent percentile only. Strength of schedule on the school page is the mean of this-season MaxPreps opponents’ strength (played + remaining, skipping deleted / Varsity Opponent rows). Opponents with no strength are omitted from that mean (unknown, not zero). Tough/average/light labels are the top/middle/bottom quartile of SOS among schools with at least two known opponents. Game toughness icons compare this team’s strength to the opponent’s (unmapped opponents count as cupcakes for the icon only).
 
 **Star badge counts** on the rankings table = composite stars rounded to the nearest star.
 
@@ -60,6 +62,7 @@ Canonical v1 is **Scout + Matchup on disk**, not a live 247 scrape (Load More 40
 npm run import:site
 python3 scripts/fill-missing-zips.py   # MaxPreps / Census / public geocode for missing zips (never invents)
 npm run rebuild:games                  # refresh venue = contest site or HOME school
+npm run build:strength                 # On3 national board + MaxPreps 26-27 schedules → strength / SOS / toughness
 ```
 
 Or rebuild from the frozen ingest already in this repo (never re-pages 247):
@@ -81,7 +84,7 @@ School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contes
 - 247Sports Composite: https://247sports.com/season/2027-football/compositerecruitrankings/?InstitutionGroup=Highschool — HTML ranking pages and CSS `icon-starsolid yellow` (not the gated JSON API). Page=1 often 406; Load More is `Page=2+` with `X-Requested-With: XMLHttpRequest` and gzip. The public 2027 HS composite is ~2093 named players with stars.
 - On3/Rivals own list: https://www.on3.com/rivals/rankings/player/football/2027/
 - ESPN 2027 API: https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/recruiting/2027/athletes?limit=300
-- ESPN class chips: `/_/view/rn300/class/2027` and `2028` (no 2029 football 300 yet)
+- On3 national HS football: https://www.on3.com/high-school/rankings/football/national/ — captured via `GET https://api.on3.com/rdb/v1/organization-composite-rankings?sportKey=1&orgType=HighSchool&year=2026&page={1-40}` (25/page, 1,000 teams). Joined to PrepTalent by normalized name + city/state. Ranks are never invented for unranked schools.
 - MaxPreps school JSON: `GET https://www.maxpreps.com/_next/data/{buildId}/<state>/<city>/<name-mascot>.json` — **read `buildId` from the live site**, never hardcode a stale one. Season `26-27` is live. `homeAwayType` 0 = home, 1 = away, 2 = neutral. Drop `isDeleted` contests, “Varsity Opponent” placeholders, and any game missing a real opponent school name. IMG Academy is Bradenton, FL.
 
 If a source blocks (247Sports Load More has returned HTTP 406 from this environment; On3 industry list is often Cloudflare-walled), ingest keeps any live rows it already has and labels the source `PARTIAL` or `BLOCKED` in the UI. It does not invent recruit names.
@@ -90,7 +93,8 @@ If a source blocks (247Sports Load More has returned HTTP 406 from this environm
 
 Stored in `data/fridayradar.json`:
 
-- **School** — `id` (slug, e.g. `fl-bradenton-img-academy`), `name`, `name_normalized`, `aliases`, `mascot`, `city`, `state`, `zip`, `address`, `lat`, `lng`, `type`, `maxpreps {schoolId, canonicalUrl, formattedName}`, `ids_247.high_school_id`, optional Scout `talentScore` / `recruitCount`, `mapped`
+- **School** — `id` (slug, e.g. `fl-bradenton-img-academy`), `name`, `name_normalized`, `aliases`, `mascot`, `city`, `state`, `zip`, `address`, `lat`, `lng`, `type`, `maxpreps {schoolId, canonicalUrl, formattedName, scheduleUrl}`, `ids_247.high_school_id`, optional Scout `talentScore` / `recruitCount`, `teamStrength`, `on3 {rank, rating, orgKey}`, `sos` / `sosLabel`, `mapped`
+- **SchoolSchedule** — keyed by school id in `schedules`; `season` (`26-27`), games with date, opponent, home/away/neutral, result, `toughnessIcon`
 - **Player** — `id`, `full_name`, `class_year`, `position`, `height`, `weight`, `hometown_city`, `hometown_state`, `high_school_id` (school slug), `college_commit`, `source_ids {247sports_player_id, on3_rivals_id, espn_id}`
 - **Rating** — `player_id`, `source` (`247sports` | `247sports_composite` | `on3_rivals` | `on3_industry` | `espn`), `class_year`, `as_of`, `national_rank`, `position_rank`, `state_rank`, `stars`, `rating`, `position`, `high_school_name_raw`, `profile_url`
 - **Game** — `id` (MaxPreps contestId), `season`, `kickoff`, `home_school_id`, `away_school_id`, `home_score`, `away_score`, `is_gow`, `game_url`, venue `city` / `state` / `zip` / `lat` / `lng` plus `venue {city,state,zip,name,source}`, `two_sided_talent`, `home_away_type` (0 home, 2 neutral)

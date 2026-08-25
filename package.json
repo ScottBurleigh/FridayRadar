@@ -12,6 +12,7 @@
     "compile:scout": "python3 scripts/compile-scout-matchup.py && npx tsx scripts/import-site-data.ts",
     "rebuild:games": "python3 scripts/rebuild-v1-games.py && npx tsx scripts/import-site-data.ts",
     "fill:zips": "python3 scripts/fill-missing-zips.py",
+    "build:strength": "python3 scripts/build-strength-and-schedules.py && npx tsx scripts/import-site-data.ts",
     "seed:import": "python3 scripts/build-seed-import.py && npx tsx scripts/import-site-data.ts",
     "ingest:espn": "npx tsx scripts/ingest-espn.ts",
     "ingest:247": "npx tsx scripts/ingest-247.ts",

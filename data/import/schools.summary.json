@@ -4,7 +4,7 @@
   "class_2027": 2135,
   "class_2028": 851,
   "maxpreps_ids": 1120,
-  "with_zip": 1044,
+  "with_zip": 1438,
   "week_games_unfiltered": 5996,
   "week_both_sides": 213,
   "v1_games": 265,
@@ -13,5 +13,9 @@
   "canonical_schools": 1554,
   "canonical_players": 2986,
   "note": "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. v1 /games is games-top213.json (265 two-sided games, 0 partial) for 2026-08-26..2026-08-29 ranked by geometric mean of home/away talent. Never load games.json.",
-  "rank_by": "two_sided_talent"
+  "rank_by": "two_sided_talent",
+  "on3_national": 1000,
+  "on3_joined": 573,
+  "schedules": 1063,
+  "team_strength_note": "team_strength is the mean of talent percentile (among the 1554-school board) and On3 composite national rank curve (rank 1 = 100, last = ~0.1). Unranked schools omit the On3 term and use talent percentile only."
 }

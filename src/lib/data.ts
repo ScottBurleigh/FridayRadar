@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-import type { FridayRadarDataset, Game, InlineRecruit, Player, Rating, School } from "./types";
+import type { FridayRadarDataset, Game, InlineRecruit, Player, Rating, School, SchoolSchedule } from "./types";
 import { competitiveTalent, rankSchools, ratingsBySource } from "./ranking";
 import { schoolWithinZipRadius, venueWithinZipRadius } from "./geo";
 
@@ -31,6 +31,13 @@ export function maxprepsScheduleUrl(
   if (!mp?.schoolId) return null;
   const stored = mp.scheduleUrl?.trim();
   return stored || null;
+}
+
+export function scheduleForSchool(
+  dataset: FridayRadarDataset,
+  schoolId: string,
+): SchoolSchedule | null {
+  return dataset.schedules?.[schoolId] ?? null;
 }
 
 function profileUrlForPlayer(
@@ -85,7 +92,7 @@ export function inlineRecruitsForSchools(
 
 export function filteredRankings(
   dataset: FridayRadarDataset,
-  opts: { state?: string; zip?: string; sort?: "talent" | "count" },
+  opts: { state?: string; zip?: string; sort?: "talent" | "count" | "strength" },
 ) {
   let schools = dataset.schools;
   if (opts.state) {

@@ -7,6 +7,44 @@ export function formatTalent(n: number): string {
   });
 }
 
+export function formatStrength(n: number | null | undefined): string {
+  if (n == null || Number.isNaN(n)) return "—";
+  return formatTalent(n);
+}
+
+export function formatScheduleDate(isoDate: string | null, kickoff: string | null): string {
+  const raw = kickoff || isoDate;
+  if (!raw) return "TBD";
+  const d = new Date(raw.length <= 10 ? `${raw}T12:00:00-04:00` : raw);
+  if (Number.isNaN(d.getTime())) return isoDate || "TBD";
+  return d.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "America/New_York",
+  });
+}
+
+export function formatGameResult(
+  result: string | null | undefined,
+  score: number | null | undefined,
+  oppScore: number | null | undefined,
+): string {
+  const letter = (result || "").trim().toUpperCase();
+  if (letter && score != null && oppScore != null) {
+    return `${letter} ${score}–${oppScore}`;
+  }
+  if (letter) return letter;
+  if (score != null && oppScore != null) return `${score}–${oppScore}`;
+  return "—";
+}
+
+export function siteLabel(homeAway: string): string {
+  if (homeAway === "away") return "Away";
+  if (homeAway === "neutral") return "Neutral";
+  return "Home";
+}
+
 export function formatKickoff(iso: string | null, tba: boolean): string {
   if (!iso) return "TBD";
   const d = new Date(iso);

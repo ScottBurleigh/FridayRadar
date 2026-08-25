@@ -26,7 +26,10 @@ import type {
   Rating,
   RatingSource,
   School,
+  SchoolSchedule,
+  ScheduleGame,
   SourceStatus,
+  ToughnessIcon,
 } from "../src/lib/types";
 
 const ROOT = join(import.meta.dirname, "..");
@@ -97,6 +100,16 @@ type SiteSchool = {
     formattedName?: string | null;
   } | null;
   recruits?: SiteRecruit[];
+  team_strength?: number | null;
+  on3?: {
+    rank?: number;
+    rating?: number | null;
+    org_key?: string | number | null;
+  } | null;
+  sos?: number | null;
+  sos_games?: number | null;
+  sos_label?: "tough" | "average" | "light" | null;
+  schedule_games?: number | null;
 };
 
 type SiteSide = {
@@ -149,6 +162,94 @@ type SiteGamesFile = {
   rank_by?: string;
   games: SiteGame[];
 };
+
+type SiteScheduleOpponent = {
+  name?: string;
+  city?: string | null;
+  state?: string | null;
+  maxpreps_id?: string | null;
+  site_id?: string | null;
+  team_strength?: number | null;
+};
+
+type SiteScheduleGame = {
+  contest_id?: string | null;
+  date?: string | null;
+  kickoff?: string | null;
+  home_away?: string;
+  location?: string | null;
+  opponent?: SiteScheduleOpponent;
+  result?: string | null;
+  score?: number | null;
+  opp_score?: number | null;
+  maxpreps_game_url?: string | null;
+  toughness_icon?: string;
+};
+
+type SiteSchedule = {
+  school_id?: string;
+  season?: string;
+  team_strength?: number | null;
+  schedule_url?: string | null;
+  sos?: number | null;
+  sos_games?: number | null;
+  games?: SiteScheduleGame[];
+};
+
+const TOUGHNESS = new Set<ToughnessIcon>([
+  "much_harder",
+  "harder",
+  "even",
+  "easier",
+  "much_easier",
+  "unknown",
+]);
+
+function asToughness(raw: string | undefined): ToughnessIcon {
+  return raw && TOUGHNESS.has(raw as ToughnessIcon) ? (raw as ToughnessIcon) : "unknown";
+}
+
+function asHomeAway(raw: string | undefined): ScheduleGame["homeAway"] {
+  if (raw === "away" || raw === "neutral") return raw;
+  return "home";
+}
+
+function mapSchedule(id: string, row: SiteSchedule): SchoolSchedule {
+  const games: ScheduleGame[] = [];
+  for (const g of row.games || []) {
+    const opp = g.opponent || {};
+    if (isPlaceholderName(opp.name)) continue;
+    games.push({
+      contestId: g.contest_id ?? null,
+      date: g.date ?? null,
+      kickoff: g.kickoff ?? null,
+      homeAway: asHomeAway(g.home_away),
+      location: g.location ?? null,
+      opponent: {
+        name: (opp.name || "Opponent").trim(),
+        city: opp.city ?? null,
+        state: opp.state ?? null,
+        maxprepsId: opp.maxpreps_id ?? null,
+        siteId: opp.site_id ?? null,
+        teamStrength: opp.team_strength ?? null,
+      },
+      result: g.result ?? null,
+      score: g.score ?? null,
+      oppScore: g.opp_score ?? null,
+      maxprepsGameUrl: g.maxpreps_game_url ?? null,
+      toughnessIcon: asToughness(g.toughness_icon),
+    });
+  }
+  return {
+    schoolId: row.school_id || id,
+    season: row.season || "26-27",
+    teamStrength: row.team_strength ?? null,
+    scheduleUrl: row.schedule_url ?? null,
+    sos: row.sos ?? null,
+    sosGames: row.sos_games ?? 0,
+    games,
+  };
+}
 
 function findImportDir(): string {
   const site = join(ROOT, "site-data");
@@ -404,6 +505,11 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     ? await readJson<Record<string, unknown>>(summaryPath)
     : {};
 
+  const schedulesPath = join(dir, "schedules.json");
+  const siteSchedules = existsSync(schedulesPath)
+    ? await readJson<Record<string, SiteSchedule>>(schedulesPath)
+    : {};
+
   const schools = new Map<string, School>();
   const players: Player[] = [];
   const ratings: Rating[] = [];
@@ -435,6 +541,18 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       stars4: row.star_buckets?.stars4 ?? row.star_buckets?.["4"] ?? null,
       stars3: row.star_buckets?.stars3 ?? row.star_buckets?.["3"] ?? null,
       mapped: row.mapped !== false,
+      teamStrength: row.team_strength ?? null,
+      on3: row.on3?.rank != null
+        ? {
+            rank: row.on3.rank,
+            rating: row.on3.rating ?? null,
+            orgKey: row.on3.org_key ?? null,
+          }
+        : null,
+      sos: row.sos ?? null,
+      sosGames: row.sos_games ?? null,
+      sosLabel: row.sos_label ?? null,
+      scheduleGames: row.schedule_games ?? null,
     };
     schools.set(school.id, school);
 
@@ -515,6 +633,12 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     });
   }
 
+  const schedules: Record<string, SchoolSchedule> = {};
+  for (const [id, row] of Object.entries(siteSchedules)) {
+    const mapped = mapSchedule(id, row);
+    if (mapped.games.length) schedules[id] = mapped;
+  }
+
   const sources: SourceStatus[] = [
     {
       id: "scout",
@@ -528,11 +652,31 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       },
     },
     {
+      id: "on3_hs",
+      label: "On3 national high school football rankings",
+      status: Number(summary.on3_national ?? 0) >= 900 ? "live" : "blocked",
+      detail:
+        Number(summary.on3_national ?? 0) >= 900
+          ? `On3 2026 national composite (${summary.on3_national} teams); joined ${summary.on3_joined ?? 0} PrepTalent schools by name + city/state. Unranked schools keep talent-only strength — ranks are never invented.`
+          : "On3 national board was not captured. Team strength is talent percentile only.",
+      counts: {
+        national: Number(summary.on3_national ?? 0),
+        joined: Number(summary.on3_joined ?? 0),
+      },
+    },
+    {
       id: "matchup",
       label: "Matchup MaxPreps week slate",
       status: "live",
       detail: `Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} from games-top213.json (${games.length} two-sided games). Ranked by geometric mean of home/away talent; combined talent is display only. Venue state/zip, not either school. Never games.json.`,
       counts: { games: games.length },
+    },
+    {
+      id: "maxpreps_schedule",
+      label: "MaxPreps 26-27 football schedules",
+      status: Object.keys(schedules).length ? "live" : "blocked",
+      detail: `${Object.keys(schedules).length} school schedules stored from MaxPreps 26-27 (deleted / Varsity Opponent rows dropped).`,
+      counts: { schedules: Object.keys(schedules).length },
     },
   ];
 
@@ -545,6 +689,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       notes: [
         "High schools are ranked, not colleges.",
         "School talentScore is the Scout precomputed sum of 2027+ player points.",
+        "Team strength is the mean of talent percentile (among the 1,554-school board) and the On3 national rank curve (rank 1 = 100) when the school is on that board. Unranked schools omit the On3 term.",
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
         "Matchup week is 2026-08-26 through 2026-08-29. /games ranks two-sided talent as √(home × away); combined talent is display + tie-break. Filters use the game venue.",
         String(summary.note ?? "Canonical v1: 1,554 schools / 2,986 players when the full Scout dump is imported."),
@@ -558,6 +703,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     players,
     ratings,
     games,
+    schedules,
   };
   return dataset;
 }
@@ -578,6 +724,8 @@ async function main() {
     dataset.ratings.length,
     "games",
     dataset.games.length,
+    "schedules",
+    Object.keys(dataset.schedules ?? {}).length,
   );
 }
 

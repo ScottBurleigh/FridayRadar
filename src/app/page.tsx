@@ -25,7 +25,8 @@ export default async function RankingsPage({
   const params = await searchParams;
   const state = typeof params.state === "string" ? params.state : undefined;
   const zip = typeof params.zip === "string" ? params.zip.replace(/\D/g, "").slice(0, 5) : undefined;
-  const sort = params.sort === "count" ? "count" : "talent";
+  const sort =
+    params.sort === "count" || params.sort === "strength" ? params.sort : "talent";
   const page = Math.max(1, Number(params.page) || 1);
   const dataset = loadDataset();
   const zipOk = zip && zip.length === 5 ? coordsForZip(zip) : null;
@@ -51,8 +52,9 @@ export default async function RankingsPage({
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-zinc-400">
             High schools ranked by the recruiting talent on their 2027, 2028, and 2029+
-            rosters. A player belongs to the school they attend — not the college they
-            committed to.
+            rosters. Talent score stays its own number; team strength blends that
+            percentile with On3 national rank when the school is on the board. Default
+            sort is talent.
           </p>
         </div>
         <p className="font-mono text-sm text-zinc-500">

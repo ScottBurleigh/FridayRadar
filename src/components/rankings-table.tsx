@@ -124,6 +124,7 @@ export function RankingsTable({
               <th className="h-10 w-12 px-2 text-right font-medium text-zinc-500">4★</th>
               <th className="h-10 w-12 px-2 text-right font-medium text-zinc-500">3★</th>
               <th className="h-10 w-24 px-2 text-right font-medium text-zinc-500">Talent</th>
+              <th className="h-10 w-24 px-2 text-right font-medium text-zinc-500">Strength</th>
             </tr>
           </thead>
           <tbody>
@@ -152,6 +153,9 @@ export function RankingsTable({
                   <td className="p-2 align-top text-right font-semibold text-amber-200">
                     {formatTalent(row.talentScore)}
                   </td>
+                  <td className="p-2 align-top text-right text-zinc-200">
+                    {row.teamStrength != null ? formatTalent(row.teamStrength) : "—"}
+                  </td>
                 </tr>
               );
             })}
@@ -170,6 +174,11 @@ export function RankingsTable({
                 <span className="font-mono text-xs text-zinc-500">#{row.rank}</span>
                 <span className="font-mono text-sm font-semibold text-amber-200">
                   {formatTalent(row.talentScore)}
+                  {row.teamStrength != null ? (
+                    <span className="ml-2 font-normal text-zinc-400">
+                      str {formatTalent(row.teamStrength)}
+                    </span>
+                  ) : null}
                 </span>
               </div>
               <div className="mt-1">

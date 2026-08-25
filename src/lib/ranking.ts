@@ -181,7 +181,7 @@ export function rankSchools(
   schools: School[],
   players: Player[],
   ratings: Rating[],
-  sort: "talent" | "count" = "talent",
+  sort: "talent" | "count" | "strength" = "talent",
 ): SchoolRankingRow[] {
   const ratingsByPlayer = new Map<string, Rating[]>();
   for (const r of ratings) {
@@ -228,6 +228,7 @@ export function rankSchools(
         stars4: school.stars4 != null ? school.stars4 : stats.stars4,
         stars3: school.stars3 != null ? school.stars3 : stats.stars3,
         talentScore,
+        teamStrength: school.teamStrength ?? null,
       };
     })
     .filter((row) => row.recruitCount > 0 || row.talentScore > 0)
@@ -236,6 +237,11 @@ export function rankSchools(
   rows.sort((a, b) => {
     if (sort === "count") {
       if (b.recruitCount !== a.recruitCount) return b.recruitCount - a.recruitCount;
+      if (b.talentScore !== a.talentScore) return b.talentScore - a.talentScore;
+    } else if (sort === "strength") {
+      const as = a.teamStrength ?? -1;
+      const bs = b.teamStrength ?? -1;
+      if (bs !== as) return bs - as;
       if (b.talentScore !== a.talentScore) return b.talentScore - a.talentScore;
     } else {
       if (b.talentScore !== a.talentScore) return b.talentScore - a.talentScore;
