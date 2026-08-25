@@ -33,11 +33,11 @@ Rollup the importer prints in `meta.sources`. Canonical v1: **1,554 schools / 2,
 
 MaxPreps **26-27** football schedules keyed by FridayRadar school id. Built by `python3 scripts/build-strength-and-schedules.py`. Deleted contests and Varsity Opponent rows are omitted. Each game has date, opponent, home/away/neutral, result, and `toughness_icon` from this team’s strength vs the opponent.
 
-The importer copies this into `data/fridayradar.json` as `schedules`.
+The importer copies this into `data/fridayradar.json` as `schedules`. SOS on each school is the mean of known opponents’ `team_strength` (0–100 talent-share × On3 log-rank blend). It is never On3 `compositeScore`.
 
 ### `games-top213.json` (v1 `/games`)
 
-Matchup week **2026-08-26 through 2026-08-29**. This is the only games file the importer loads: **two-sided games only** (`rank_by: two_sided_talent`). Do **not** load `games.json`.
+Matchup week **2026-08-26 through 2026-08-29**. This is the only games file the importer loads: **196 two-sided games** (`rank_by: two_sided_talent`). Do **not** load `games.json`.
 
 Unknown / empty / Varsity Opponent names are dropped. St. Frances @ DeLand is not in this slice (DeLand is unmapped). Rank key is **√(home × away)**; combined talent is still on each row (Cornerstone Christian @ IMG 2418.49).
 

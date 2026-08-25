@@ -46,7 +46,7 @@ Eligible: `class_year >= 2027`. Never 2026 or earlier.
 
 **School talent score** = Scout precomputed sum of 2027+ player points (`School.talentScore`). Rankings prefer that field so the board matches Scout before every rating row is imported. If it is missing, FridayRadar sums imported 2027+ player points. Talent remains its own column and the default rankings sort.
 
-**Team strength** blends two 0–100 terms and does not invent On3 ranks. Talent percentile is the share of the 1,554-school board at or below this school’s talent score (IMG = 100). When the school joins to the On3 national high-school football composite (name + city/state, then MaxPreps id when the opponent row carries one), the second term is a rank curve `100 × (N − rank + 1) / N` over that 1,000-team board (rank 1 = 100). Strength is the mean of the two terms; unranked schools omit the On3 term and keep talent percentile only. Strength of schedule on the school page is the mean of this-season MaxPreps opponents’ strength (played + remaining, skipping deleted / Varsity Opponent rows). Opponents with no strength are omitted from that mean (unknown, not zero). Tough/average/light labels are the top/middle/bottom quartile of SOS among schools with at least two known opponents. Game toughness icons compare this team’s strength to the opponent’s (unmapped opponents count as cupcakes for the icon only; `unknown` is skipped).
+**Team strength** blends two 0–100 terms and does not invent On3 ranks. Talent share is `100 × talent / board-max` (IMG = 100) — not a percentile of the 1,554-school board, and never On3’s compositeScore. When the school joins the On3 national high-school football composite (name + city/state), the second term is a log rank curve (rank 1 = 100, decaying). Strength is the mean of the two terms; unranked schools omit the On3 term. Strength of schedule is the mean of this-season MaxPreps opponents’ team_strength on that same 0–100 scale (played + remaining, skipping deleted / Varsity Opponent rows). Opponents with no strength are omitted from that mean (unknown, not zero). Tough/average/light labels are the top/middle/bottom quartile of SOS among schools with at least two known opponents. Game toughness icons compare this team’s strength to the opponent’s (unmapped opponents count as cupcakes for the icon only; `unknown` is skipped).
 
 **Star badge counts** on the rankings table = composite stars rounded to the nearest star.
 
@@ -75,7 +75,7 @@ v1 `/games` reads **`site-data/games-top213.json` only** — two-sided Matchup g
 
 See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games-top213.json`, and how frozen 2027/2028 ingest players nest on school rows.
 
-Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (two-sided games only, ranked by geometric mean).
+Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (**196** two-sided games, ranked by geometric mean; all have `venue.zip`).
 
 School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 

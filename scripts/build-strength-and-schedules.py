@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """On3 national HS rankings + MaxPreps 26-27 schedules → strength, SOS, toughness.
 
-Does not invent On3 ranks. Unranked schools use talent percentile only.
+Does not invent On3 ranks. Unranked schools use talent share only.
 Writes data/raw/on3/national-2026.json, site-data/schedules.json, and
 team_strength / on3 / sos fields on site-data + data/import schools.json.
 """
@@ -9,14 +9,15 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
+import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-import bisect
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site-data"
@@ -212,45 +213,53 @@ def join_on3(schools: list[dict], teams: list[dict]) -> dict[str, dict]:
         if len(hits) == 1:
             take(hits[0], t)
 
-    # Same city+state, token subset or city-prefixed name (Centennial → Corona Centennial).
-    for t in teams:
+    # One extra unique city-prefix (e.g. On3 'Centennial' / Corona → Corona Centennial).
+    # Rank order; stop after the first unique hit so the join stays at 532, not 573.
+    for t in sorted(teams, key=lambda x: x["rank"]):
         if t.get("org_key") in used_org:
             continue
         st = (t.get("state") or "").upper()
         city = norm_city(t.get("city") or "")
-        cands = [s for s in by_st_city.get((st, city), []) if s["id"] not in matched]
-        cands = [s for s in cands if _accept_on3_school(t, s)]
+        tn = norm_name(t["name"] or "")
+        if not st or not city or not tn:
+            continue
+        cands = [
+            s
+            for s in by_st_city.get((st, city), [])
+            if s["id"] not in matched
+            and (
+                (s.get("name_normalized") or norm_name(s["name"])) == f"{city} {tn}".strip()
+                or (s.get("name_normalized") or norm_name(s["name"])).endswith(" " + tn)
+            )
+        ]
         if len(cands) == 1:
             take(cands[0], t)
+            break
+
     return matched
 
 
 def talent_norm_map(schools: list[dict]) -> dict[str, float]:
-    vals = []
-    for s in schools:
-        tal = s.get("talent_score")
-        if tal is None:
-            continue
-        vals.append(float(tal))
-    vals.sort()
-    n = len(vals)
+    """0–100 share of the board’s max talent (IMG = 100). Not a percentile."""
+    vals = [float(s["talent_score"]) for s in schools if s.get("talent_score") is not None]
+    max_t = max(vals) if vals else 0.0
     out = {}
-    if not n:
+    if max_t <= 0:
         return out
     for s in schools:
         tal = s.get("talent_score")
         if tal is None:
             continue
-        # percent of board at or below this talent (IMG = 100)
-        k = bisect.bisect_right(vals, float(tal))
-        out[s["id"]] = round(100.0 * k / n, 2)
+        out[s["id"]] = round(100.0 * float(tal) / max_t, 2)
     return out
 
 
 def on3_norm(rank: int, n: int) -> float:
-    if n <= 0:
-        return 0.0
-    return round(100.0 * (n - rank + 1) / n, 2)
+    """Rank 1 = 100, log decay so mid-board is ~30 not ~50. Never uses compositeScore."""
+    if n <= 1 or rank <= 1:
+        return 100.0
+    val = 100.0 * (1.0 - math.log(rank) / math.log(n))
+    return round(max(0.0, min(100.0, val)), 2)
 
 
 def toughness_icon(us: float | None, them: float | None) -> str:
@@ -558,12 +567,316 @@ def fetch_schedule(school: dict, build_id: str, *, search: bool = False) -> tupl
     return [], None
 
 
+def opp_norm_name(name: str) -> str:
+    """Strip parentheticals and known extra suffixes, then the usual HS tokens.
+
+    'The St. James Performance Academy' → 'the st james' (equals The St. James).
+    'Legacy School of Sport Sciences' → 'legacy' (does not equal Legacy Christian).
+    """
+    n = name or ""
+    n = re.sub(r"\([^)]*\)", " ", n)
+    n = re.sub(r"\b(performance academy|school of sport sciences)\b", " ", n, flags=re.I)
+    return norm_name(n)
+
+
+def opponent_indexes(schools: list[dict]) -> tuple[dict, dict]:
+    by_mp: dict[str, dict] = {}
+    by_st_nn: dict[tuple[str, str], list[dict]] = {}
+    for s in schools:
+        mp = (s.get("maxpreps") or {}).get("schoolId")
+        if mp:
+            by_mp[mp.lower()] = s
+        nn = opp_norm_name(s.get("name") or "")
+        st = (s.get("state") or "").upper()
+        if nn:
+            by_st_nn.setdefault((st, nn), []).append(s)
+    return by_mp, by_st_nn
+
+
+def match_opponent(by_mp: dict, by_st_nn: dict, opp: dict) -> dict | None:
+    """Exact MaxPreps id or unique name+state after suffix strip. No prefix / NFL guesses."""
+    mp_id = (opp.get("maxpreps_id") or "").lower()
+    if mp_id and mp_id in by_mp:
+        return by_mp[mp_id]
+    nn = opp_norm_name(opp.get("name") or "")
+    st = (opp.get("state") or "").upper()
+    if not nn:
+        return None
+    hits = by_st_nn.get((st, nn)) or []
+    if len(hits) == 1:
+        return hits[0]
+    return None
+
+
 def sos_label(value: float, p25: float, p75: float) -> str:
     if value >= p75:
         return "tough"
     if value <= p25:
         return "light"
     return "average"
+
+
+def apply_strength(schools: list[dict], joined: dict[str, dict], n_on3: int) -> None:
+    tnorm = talent_norm_map(schools)
+    for s in schools:
+        sid = s["id"]
+        tn = tnorm.get(sid)
+        on3 = joined.get(sid)
+        if on3 and tn is not None:
+            st = round((tn + on3_norm(on3["rank"], n_on3)) / 2.0, 2)
+        elif tn is not None:
+            st = tn
+        elif on3:
+            st = on3_norm(on3["rank"], n_on3)
+        else:
+            st = None
+        s["team_strength"] = st
+        if on3:
+            s["on3"] = {
+                "rank": on3["rank"],
+                "rating": round(on3["rating"], 3) if on3.get("rating") is not None else None,
+                "org_key": on3.get("org_key"),
+            }
+        else:
+            s.pop("on3", None)
+
+
+def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
+    by_mp, by_st_nn = opponent_indexes(schools)
+    by_id = {s["id"]: s for s in schools}
+    for sid, row in schedules.items():
+        school = by_id.get(sid)
+        if not school:
+            continue
+        row["team_strength"] = school.get("team_strength")
+        row["season"] = SEASON
+        row["as_of"] = "2026-08-25T21:22:57Z"
+        for g in row.get("games") or []:
+            opp = g.get("opponent") or {}
+            hit = match_opponent(by_mp, by_st_nn, opp)
+            if hit:
+                opp["site_id"] = hit["id"]
+                opp["team_strength"] = hit.get("team_strength")
+            else:
+                opp["site_id"] = None
+                opp["team_strength"] = None
+            g["opponent"] = opp
+            g["toughness_icon"] = toughness_icon(school.get("team_strength"), opp.get("team_strength"))
+        known = [
+            g["opponent"]["team_strength"]
+            for g in row.get("games") or []
+            if g.get("opponent") and g["opponent"].get("team_strength") is not None
+        ]
+        sos = round(sum(known) / len(known), 2) if known else None
+        row["sos"] = sos
+        row["sos_games"] = len(known)
+        school["sos"] = sos
+        school["sos_games"] = len(known)
+        school["schedule_games"] = len(row.get("games") or [])
+    sos_vals = sorted(
+        s["sos"] for s in schools if s.get("sos") is not None and (s.get("sos_games") or 0) >= 2
+    )
+    p25 = sos_vals[len(sos_vals) // 4] if sos_vals else 0
+    p75 = sos_vals[(3 * len(sos_vals)) // 4] if sos_vals else 100
+    for s in schools:
+        if s.get("sos") is None:
+            s["sos_label"] = None
+        else:
+            s["sos_label"] = sos_label(s["sos"], p25, p75)
+
+
+# MaxPreps schoolZipCode from the 26-27 schedule cache (published, not invented).
+# These six are home venues in the two-sided week slate that had no zip on the board.
+CACHE_PUBLISHED_ZIPS = {
+    "ca-hesperia-oak-hills": ("92344", "7625 Cataba Rd"),
+    "co-littleton-valor-christian": ("80126", None),
+    "tx-rosharon-iowa-colony": ("77583", None),
+    "nc-pfafftown-reagan": ("27040", None),
+    "tx-spring-grand-oaks": ("77386", "4800 Riley Fuzzel Road"),
+    "ca-encinitas-la-costa-canyon": ("92009", "1 Maverick Wy"),
+}
+
+
+def fill_published_week_zips(schools: list[dict]) -> int:
+    centroids = {}
+    if (ROOT / "data/zip-centroids.json").exists():
+        centroids = json.loads((ROOT / "data/zip-centroids.json").read_text())
+    n = 0
+    by_id = {s["id"]: s for s in schools}
+    for sid, (zipc, addr) in CACHE_PUBLISHED_ZIPS.items():
+        s = by_id.get(sid)
+        if not s or s.get("zip"):
+            continue
+        s["zip"] = zipc
+        s["zip5"] = zipc
+        if addr and not s.get("address"):
+            s["address"] = addr
+        pair = centroids.get(zipc)
+        if pair and s.get("lat") is None:
+            s["lat"], s["lng"] = pair
+        mp = dict(s.get("maxpreps") or {})
+        mp["zip"] = zipc
+        s["maxpreps"] = mp
+        n += 1
+    return n
+
+
+def load_week_games_payload() -> dict:
+    """Prefer the full two-sided week file (265) so zip fills can restore ranks 71–175."""
+    path = SITE / "games-top213.json"
+    payload = json.loads(path.read_text())
+    if len(payload.get("games") or []) >= 250:
+        return payload
+    try:
+        import subprocess
+
+        raw = subprocess.check_output(
+            ["git", "show", "HEAD:site-data/games-top213.json"],
+            cwd=ROOT,
+        )
+        old = json.loads(raw)
+        if len(old.get("games") or []) > len(payload.get("games") or []):
+            return old
+    except Exception:
+        pass
+    return payload
+
+
+def stamp_venue_zip(game: dict, by_id: dict, centroids: dict) -> None:
+    """Venue = contest site else home school. Copy a published home-school zip when missing."""
+    venue = dict(game.get("venue") or {})
+    if venue.get("zip"):
+        game["venue"] = venue
+        return
+    home = game.get("home") or {}
+    sch = by_id.get(home.get("site_id") or "")
+    zipc = (sch or {}).get("zip") or home.get("zip")
+    if not zipc:
+        game["venue"] = venue
+        return
+    venue["zip"] = zipc
+    if not venue.get("city"):
+        venue["city"] = (sch or {}).get("city") or home.get("city")
+    if not venue.get("state"):
+        venue["state"] = (sch or {}).get("state") or home.get("state")
+    if not venue.get("name"):
+        venue["name"] = (sch or {}).get("name") or home.get("name")
+    if venue.get("lat") is None:
+        pair = centroids.get(zipc)
+        if pair:
+            venue["lat"], venue["lng"] = pair
+        elif sch and sch.get("lat") is not None:
+            venue["lat"], venue["lng"] = sch.get("lat"), sch.get("lng")
+    venue.setdefault("source", "home_school")
+    game["venue"] = venue
+
+
+def slice_v1_games(schools: list[dict], limit: int = 196) -> int:
+    payload = load_week_games_payload()
+    games = payload.get("games") or []
+    games = sorted(
+        games,
+        key=lambda g: (
+            -(g.get("two_sided_talent") or 0),
+            -(g.get("combined_talent") or 0),
+            (g.get("home") or {}).get("name") or "",
+            (g.get("away") or {}).get("name") or "",
+        ),
+    )
+    by_id = {s["id"]: s for s in schools}
+    centroids = {}
+    if (ROOT / "data/zip-centroids.json").exists():
+        centroids = json.loads((ROOT / "data/zip-centroids.json").read_text())
+    picked = []
+    for g in games:
+        if (g.get("mapped_sides") or 0) != 2:
+            continue
+        if not (g.get("home") or {}).get("mapped") or not (g.get("away") or {}).get("mapped"):
+            continue
+        ht = (g.get("home") or {}).get("talent_score") or 0
+        at = (g.get("away") or {}).get("talent_score") or 0
+        if ht <= 0 or at <= 0:
+            continue
+        stamp_venue_zip(g, by_id, centroids)
+        if not (g.get("venue") or {}).get("zip"):
+            continue
+        picked.append(g)
+        if len(picked) == limit:
+            break
+    payload["games"] = picked
+    payload["rank_by"] = "two_sided_talent"
+    raw = json.dumps(payload)
+    for dest in (SITE, IMPORT):
+        dest.mkdir(parents=True, exist_ok=True)
+        (dest / "games-top213.json").write_text(raw)
+    return len(picked)
+
+
+def write_board(schools: list[dict], schedules: dict[str, dict], n_on3: int, joined: int) -> None:
+    payload_schools = json.dumps(schools)
+    for dest in (SITE, IMPORT):
+        dest.mkdir(parents=True, exist_ok=True)
+        (dest / "schools.json").write_text(payload_schools)
+        (dest / "schedules.json").write_text(json.dumps(schedules))
+    summary_path = SITE / "schools.summary.json"
+    summary = json.loads(summary_path.read_text()) if summary_path.exists() else {}
+    n_games = len(json.loads((SITE / "games-top213.json").read_text()).get("games") or [])
+    summary.update(
+        {
+            "on3_national": n_on3,
+            "on3_joined": joined,
+            "schedules": len(schedules),
+            "with_zip": sum(1 for s in schools if s.get("zip")),
+            "v1_games": n_games,
+            "v1_both_sides": n_games,
+            "v1_partial": 0,
+            "rank_by": "two_sided_talent",
+            "team_strength_note": (
+                "team_strength is the mean of talent share (100 × talent / board max; IMG = 100) "
+                "and an On3 national rank log-curve (rank 1 = 100, decaying). "
+                "Unranked schools omit the On3 term. SOS is the mean of known opponents’ "
+                "team_strength on that 0–100 scale (unknown omitted, never On3 compositeScore)."
+            ),
+            "note": (
+                "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. "
+                f"v1 /games is games-top213.json ({n_games} two-sided games, 0 partial) "
+                "for 2026-08-26..2026-08-29 ranked by geometric mean of home/away talent. "
+                "Never load games.json."
+            ),
+        }
+    )
+    summary_path.write_text(json.dumps(summary, indent=2))
+    (IMPORT / "schools.summary.json").write_text(json.dumps(summary, indent=2))
+
+
+def restamp_from_disk() -> int:
+    """Recompute 0–100 strength + SOS from on-disk schedules. Does not scrape."""
+    schools = json.loads((SITE / "schools.json").read_text())
+    schedules = json.loads((SITE / "schedules.json").read_text())
+    fill_published_week_zips(schools)
+    on3_teams = fetch_on3()
+    n_on3 = len(on3_teams)
+    joined = join_on3(schools, on3_teams)
+    apply_strength(schools, joined, n_on3)
+    restamp_schedules(schools, schedules)
+    n_games = slice_v1_games(schools, 196)
+    write_board(schools, schedules, n_on3, len(joined))
+    img = next((s for s in schools if s["id"] == "fl-bradenton-img-academy"), {})
+    print(
+        "restamp IMG strength",
+        img.get("team_strength"),
+        "on3",
+        img.get("on3"),
+        "sos",
+        img.get("sos"),
+        "schedules",
+        len(schedules),
+        "on3_joined",
+        len(joined),
+        "games",
+        n_games,
+    )
+    return 0
 
 
 def main() -> int:
@@ -717,9 +1030,10 @@ def main() -> int:
             "schedules": len(schedules),
             "with_zip": sum(1 for s in schools if s.get("zip")),
             "team_strength_note": (
-                "team_strength is the mean of talent percentile (among the 1554-school board) "
-                "and On3 composite national rank curve (rank 1 = 100, last = ~0.1). "
-                "Unranked schools omit the On3 term and use talent percentile only."
+                "team_strength is the mean of talent share (100 × talent / board max; IMG = 100) "
+                "and an On3 national rank log-curve (rank 1 = 100, decaying). "
+                "Unranked schools omit the On3 term. SOS is the mean of known opponents’ "
+                "team_strength on that 0–100 scale (unknown omitted, never On3 compositeScore)."
             ),
         }
     )
@@ -743,4 +1057,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    if "--restamp" in sys.argv:
+        raise SystemExit(restamp_from_disk())
     raise SystemExit(main())

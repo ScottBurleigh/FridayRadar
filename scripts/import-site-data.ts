@@ -663,7 +663,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       detail:
         Number(summary.on3_national ?? 0) >= 900
           ? `On3 2026 national composite (${summary.on3_national} teams); joined ${summary.on3_joined ?? 0} PrepTalent schools by name + city/state. Unranked schools keep talent-only strength — ranks are never invented.`
-          : "On3 national board was not captured. Team strength is talent percentile only.",
+          : "On3 national board was not captured. Team strength is talent share only.",
       counts: {
         national: Number(summary.on3_national ?? 0),
         joined: Number(summary.on3_joined ?? 0),
@@ -694,7 +694,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       notes: [
         "High schools are ranked, not colleges.",
         "School talentScore is the Scout precomputed sum of 2027+ player points.",
-        "Team strength is the mean of talent percentile (among the 1,554-school board) and the On3 national rank curve (rank 1 = 100) when the school is on that board. Unranked schools omit the On3 term.",
+        "Team strength is the mean of talent share (100 × talent / board max) and the On3 national log-rank curve (rank 1 = 100) when the school is on that board. Unranked schools omit the On3 term. SOS is the mean of known opponents’ team_strength — never On3 compositeScore.",
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
         "Matchup week is 2026-08-26 through 2026-08-29. /games ranks two-sided talent as √(home × away); combined talent is display + tie-break. Filters use the game venue.",
         String(summary.note ?? "Canonical v1: 1,554 schools / 2,986 players when the full Scout dump is imported."),

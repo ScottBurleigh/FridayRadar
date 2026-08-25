@@ -36,7 +36,7 @@ export type School = {
   stars3?: number | null;
   /** false = Matchup opponent with no Scout roster (one-sided talent). */
   mapped?: boolean;
-  /** Talent percentile mixed with On3 rank curve when the school is on the national board. */
+  /** 0–100 talent-share × On3 rank curve when the school is on the national board. */
   teamStrength?: number | null;
   on3?: {
     rank: number;
