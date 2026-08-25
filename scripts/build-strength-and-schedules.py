@@ -336,6 +336,39 @@ MATCHUP_SCHEDULE_URLS = {
     "nj-matawan-old-bridge": "https://www.maxpreps.com/nj/old-bridge/old-bridge-knights/football/schedule/",
     "ar-jacksonville-jacksonville": "https://www.maxpreps.com/ar/jacksonville/jacksonville-titans/football/schedule/",
     "mi-detroit-martin-luther-king": "https://www.maxpreps.com/mi/detroit/king-crusaders/football/schedule/",
+    "va-lynchburg-liberty-christian-academy": (
+        "https://www.maxpreps.com/va/lynchburg/liberty-christian-bulldogs/football/schedule/"
+    ),
+    "co-littleton-mountain-vista": (
+        "https://www.maxpreps.com/co/highlands-ranch/mountain-vista-golden-eagles/football/schedule/"
+    ),
+    "tx-round-rock-round-rock": "https://www.maxpreps.com/tx/round-rock/round-rock-dragons/football/schedule/",
+    "oh-columbus-columbus-academy": (
+        "https://www.maxpreps.com/oh/gahanna/columbus-academy-vikings/football/schedule/"
+    ),
+    "ne-omaha-elkhorn-north": "https://www.maxpreps.com/ne/elkhorn/elkhorn-north-wolves/football/schedule/",
+    "mt-great-falls-great-falls": "https://www.maxpreps.com/mt/great-falls/great-falls-bison/football/schedule/",
+    "ia-carroll-kuemper-catholic": "https://www.maxpreps.com/ia/carroll/kuemper-knights/football/schedule/",
+    "ny-henrietta-rush-henrietta": (
+        "https://www.maxpreps.com/ny/henrietta/rush-henrietta-royal-comets/football/schedule/"
+    ),
+    "ne-omaha-skutt-catholic": "https://www.maxpreps.com/ne/omaha/skutt-catholic-skyhawks/football/schedule/",
+}
+
+# Duplicates, wrong MaxPreps ids, or no 26-27 varsity slate. Do not attach
+# another school's schedule (Plantation Heritage, Orlando TFA, Mansfield Summit,
+# Harding, Southlake Carroll already live under the canonical site id).
+SKIP_SCHEDULE_IDS = {
+    "fl-fort-lauderdale-american-heritage",
+    "fl-windemere-first-academy",
+    "ga-loganville-grayson",
+    "tx-na-central-high-school",
+    "nj-pennington-pennington-school",
+    "ny-buffalo-st-joseph-school",
+    "fl-callahan-west-nassau-county",
+    "tx-arlington-summit-high-school",
+    "oh-warren-warren-g-harding-high-school",
+    "tx-southlake-carroll-high-school",
 }
 
 NAME_STRIP = re.compile(
@@ -815,8 +848,14 @@ def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
     )
     p25 = sos_vals[len(sos_vals) // 4] if sos_vals else 0
     p75 = sos_vals[(3 * len(sos_vals)) // 4] if sos_vals else 100
+    scheduled = set(schedules)
     for s in schools:
-        if s.get("sos") is None:
+        if s["id"] not in scheduled:
+            s["sos"] = None
+            s["sos_games"] = None
+            s["schedule_games"] = None
+            s["sos_label"] = None
+        elif s.get("sos") is None:
             s["sos_label"] = None
         else:
             s["sos_label"] = sos_label(s["sos"], p25, p75)
@@ -1054,41 +1093,40 @@ def fill_missing_schedules(schools: list[dict], schedules: dict[str, dict]) -> i
     """Fetch MaxPreps 26-27 only for ranked schools that currently have no schedule.
 
     Uses stored scheduleUrl / canonicalUrl+football/schedule/ (yearless), plus the
-    exact Matchup URLs. Search falls back to __NEXT_DATA__ school results, never
-    guessed mascot slugs or harvested opponent paths.
+    exact Matchup URLs. Does not guess slugs or search.
     """
+    dropped = 0
+    for sid in list(schedules):
+        if sid in SKIP_SCHEDULE_IDS:
+            schedules.pop(sid, None)
+            dropped += 1
+    if dropped:
+        print(f"dropped {dropped} skip/alias schedule rows", flush=True)
+
     missing = [
         s
         for s in schools
         if s["id"] not in schedules
+        and s["id"] not in SKIP_SCHEDULE_IDS
         and (
-            (s.get("maxpreps") or {}).get("schoolId")
+            s["id"] in MATCHUP_SCHEDULE_URLS
+            or (s.get("maxpreps") or {}).get("scheduleUrl")
             or (s.get("maxpreps") or {}).get("canonicalUrl")
-            or s["id"] in MATCHUP_SCHEDULE_URLS
         )
     ]
     print(f"fill-missing {len(missing)} ranked schools without a schedule", flush=True)
     if not missing:
         return 0
     occupied = occupied_schedule_paths(schools, schedules)
-    cores: dict[tuple[str, str], list[str]] = {}
-    for s in schools:
-        cores.setdefault(((s.get("state") or "").upper(), core_name(s.get("name") or "")), []).append(s["id"])
-    search_blocked = {sid for ids in cores.values() if len(ids) > 1 for sid in ids}
 
     fetched: dict[str, tuple[list[dict], str | None]] = {}
 
-    def run_fetch(batch: list[dict], search: bool) -> None:
+    def run_fetch(batch: list[dict]) -> None:
         if not batch:
             return
         with ThreadPoolExecutor(max_workers=6) as pool:
             futs = {
-                pool.submit(
-                    fetch_schedule,
-                    s,
-                    search=search and s["id"] not in search_blocked,
-                    occupied=occupied,
-                ): s["id"]
+                pool.submit(fetch_schedule, s, search=False, occupied=occupied): s["id"]
                 for s in batch
             }
             done = 0
@@ -1107,10 +1145,7 @@ def fill_missing_schedules(schools: list[dict], schedules: dict[str, dict]) -> i
                     ok = sum(1 for g, _ in fetched.values() if g)
                     print(f"  {done}/{len(batch)} fetched {ok}", flush=True)
 
-    run_fetch(missing, search=False)
-    miss = [s for s in missing if not fetched.get(s["id"], ([], None))[0]]
-    print(f"pass1 stored/matchup {sum(1 for g,_ in fetched.values() if g)} miss {len(miss)}", flush=True)
-    run_fetch(miss, search=True)
+    run_fetch(missing)
     added = 0
     by_mp, by_st_nn = opponent_indexes(schools)
     for s in missing:
