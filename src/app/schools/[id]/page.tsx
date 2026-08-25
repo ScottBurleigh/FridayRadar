@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { RecruitList } from "@/components/recruit-list";
-import { loadDataset, playersAtSchool, maxprepsFootballSeason, maxprepsScheduleUrl } from "@/lib/data";
+import { loadDataset, playersAtSchool, maxprepsScheduleUrl } from "@/lib/data";
 import { formatLocation, formatTalent } from "@/lib/format";
 import { officialStars, badgeStars, playerPoints, ratingsBySource } from "@/lib/ranking";
 import type { RatedPlayer } from "@/lib/types";
@@ -46,7 +46,7 @@ export default async function SchoolPage({
       ? school.talentScore
       : players.reduce((s, p) => s + p.points, 0);
   const recruitCount = school.recruitCount != null ? school.recruitCount : players.length;
-  const scheduleUrl = maxprepsScheduleUrl(school.maxpreps, maxprepsFootballSeason(dataset));
+  const scheduleUrl = maxprepsScheduleUrl(school.maxpreps);
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">

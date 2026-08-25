@@ -216,38 +216,14 @@ function footballSeasonFromGames(file: SiteGamesFile): string {
   return "26-27";
 }
 
-function joinUrl(base: string, suffix: string): string {
-  const b = base.endsWith("/") ? base : `${base}/`;
-  return `${b}${suffix.replace(/^\//, "")}`;
-}
-
-function siteMaxPreps(mp: SiteSchool["maxpreps"], season: string): School["maxpreps"] {
+function siteMaxPreps(mp: SiteSchool["maxpreps"]): School["maxpreps"] {
   if (!mp?.schoolId) return null;
-  const canonical = (mp.canonicalUrl || "").trim();
-  if (!canonical && !(mp.footballUrl || "").trim() && !(mp.scheduleUrl || "").trim()) {
-    return {
-      schoolId: mp.schoolId,
-      canonicalUrl: "",
-      formattedName: mp.formattedName ?? null,
-      footballUrl: null,
-      scheduleUrl: null,
-    };
-  }
-  const football =
-    (mp.footballUrl || "").trim() || (canonical ? joinUrl(canonical, "football/") : "");
-  const stored = (mp.scheduleUrl || "").trim();
-  const schedule = /\/football\/\d{2}-\d{2}\/schedule\/?$/i.test(stored)
-    ? stored
-    : canonical
-      ? joinUrl(canonical, `football/${season}/schedule/`)
-      : football
-        ? joinUrl(football.replace(/\/football\/?$/i, `/football/${season}/`), "schedule/")
-        : stored || null;
+  const schedule = (mp.scheduleUrl || "").trim();
   return {
     schoolId: mp.schoolId,
-    canonicalUrl: canonical,
+    canonicalUrl: (mp.canonicalUrl || "").trim(),
     formattedName: mp.formattedName ?? null,
-    footballUrl: football || null,
+    footballUrl: (mp.footballUrl || "").trim() || null,
     scheduleUrl: schedule || null,
   };
 }
@@ -451,7 +427,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       lat: row.lat ?? null,
       lng: row.lng ?? null,
       type: row.type ?? null,
-      maxpreps: siteMaxPreps(mp, footballSeason),
+      maxpreps: siteMaxPreps(mp),
       ids_247: { high_school_id: row.ids_247?.high_school_id ?? null },
       talentScore: row.talent_score ?? null,
       recruitCount: row.recruit_count ?? null,

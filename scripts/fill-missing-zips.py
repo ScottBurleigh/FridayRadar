@@ -445,7 +445,7 @@ def apply_lookup(school: dict, zipc: str, lat, lng, address=None, mp_info=None, 
         if mp.get("canonicalUrl"):
             base = mp["canonicalUrl"].rstrip("/") + "/"
             mp.setdefault("footballUrl", base + "football/")
-            mp.setdefault("scheduleUrl", base + "football/26-27/schedule/")
+            mp.setdefault("scheduleUrl", base + "football/schedule/")
         school["maxpreps"] = mp
     school["_zip_source"] = source  # stripped before write
 

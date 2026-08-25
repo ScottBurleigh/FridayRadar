@@ -101,6 +101,7 @@ KNOWN_META = {
             "mascot": "Ascenders",
             "formattedName": "IMG Academy (Bradenton, FL)",
             "footballUrl": "https://www.maxpreps.com/fl/bradenton/img-academy-ascenders/football/",
+            "scheduleUrl": "https://www.maxpreps.com/fl/bradenton/img-academy-ascenders/football/schedule/",
         },
     },
     "ga-buford-buford": {
@@ -112,6 +113,7 @@ KNOWN_META = {
             "mascot": "Wolves",
             "formattedName": "Buford (Buford, GA)",
             "footballUrl": "https://www.maxpreps.com/ga/buford/buford-wolves/football/",
+            "scheduleUrl": "https://www.maxpreps.com/ga/buford/buford-wolves/football/schedule/",
         },
     },
     "md-baltimore-st-frances-academy": {
