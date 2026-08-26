@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { InlineRecruit, SchoolRankingRow, SosLabel } from "@/lib/types";
 import { formatTalent } from "@/lib/format";
+import { StrengthExplainButton } from "@/components/strength-explain";
 
 function SosCell({
   sos,
@@ -196,7 +197,18 @@ export function RankingsTable({
                     {formatTalent(row.talentScore)}
                   </td>
                   <td className="p-2 align-top text-right text-zinc-200">
-                    {row.teamStrength != null ? formatTalent(row.teamStrength) : "—"}
+                    {row.teamStrength != null ? (
+                      <span className="inline-flex items-center justify-end gap-0.5">
+                        {formatTalent(row.teamStrength)}
+                        <StrengthExplainButton
+                          schoolName={row.school.name}
+                          breakdown={row.school.strengthBreakdown}
+                          teamStrength={row.teamStrength}
+                        />
+                      </span>
+                    ) : (
+                      "—"
+                    )}
                   </td>
                   <td className="p-2 align-top text-right">
                     <SosCell sos={row.sos} label={row.sosLabel} />
@@ -220,8 +232,13 @@ export function RankingsTable({
                 <span className="font-mono text-sm font-semibold text-amber-200">
                   {formatTalent(row.talentScore)}
                   {row.teamStrength != null ? (
-                    <span className="ml-2 font-normal text-zinc-400">
+                    <span className="ml-2 inline-flex items-center gap-0.5 font-normal text-zinc-400">
                       str {formatTalent(row.teamStrength)}
+                      <StrengthExplainButton
+                        schoolName={row.school.name}
+                        breakdown={row.school.strengthBreakdown}
+                        teamStrength={row.teamStrength}
+                      />
                     </span>
                   ) : null}
                 </span>

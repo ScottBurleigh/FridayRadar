@@ -13,6 +13,25 @@ export type MaxPrepsRef = {
   scheduleUrl?: string | null;
 };
 
+export type StrengthBreakdown = {
+  talentScore?: number | null;
+  talentMax?: number | null;
+  talentMaxName?: string | null;
+  talentNorm?: number | null;
+  on3Rank?: number | null;
+  on3Rating?: number | null;
+  on3Min?: number | null;
+  on3Max?: number | null;
+  on3Norm?: number | null;
+  maxprepsRank?: number | null;
+  maxprepsNorm?: number | null;
+  rankingNorm?: number | null;
+  blended?: number | null;
+  dctfRank?: number | null;
+  bonus?: number | null;
+  teamStrength?: number | null;
+};
+
 export type School = {
   id: string;
   name: string;
@@ -45,6 +64,7 @@ export type School = {
   } | null;
   maxprepsNational?: { rank: number } | null;
   dctf?: { rank: number; board?: string | null } | null;
+  strengthBreakdown?: StrengthBreakdown | null;
   sos?: number | null;
   sosGames?: number | null;
   sosLabel?: "tough" | "average" | "light" | null;

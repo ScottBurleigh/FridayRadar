@@ -963,6 +963,14 @@ def apply_strength(
     ratings = [float(t["rating"]) for t in on3_teams if t.get("rating") is not None]
     rmin = min(ratings) if ratings else 0.0
     rmax = max(ratings) if ratings else 100.0
+    max_t = max(
+        (float(s["talent_score"]) for s in schools if s.get("talent_score") is not None),
+        default=0.0,
+    )
+    max_name = next(
+        (s["name"] for s in schools if s.get("talent_score") is not None and float(s["talent_score"]) == max_t),
+        None,
+    )
     joined_mp = joined_mp or {}
     joined_dctf = joined_dctf or {}
     for s in schools:
@@ -975,12 +983,14 @@ def apply_strength(
         mp_rank = joined_mp.get(sid)
         mpn = maxpreps_rank_norm(mp_rank) if mp_rank is not None else None
         ranking_norm = mean_present([on3n, mpn])
-        st = mean_present([tn, ranking_norm])
+        blended = mean_present([tn, ranking_norm])
         dctf_rank = joined_dctf.get(sid)
-        if dctf_rank is not None and (s.get("state") or "").upper() == "TX" and st is not None:
-            st = st + dctf_bonus(dctf_rank)
+        bonus = 0.0
+        if dctf_rank is not None and (s.get("state") or "").upper() == "TX":
+            bonus = dctf_bonus(dctf_rank)
+        st = blended
         if st is not None:
-            st = round(max(0.0, min(100.0, st)), 2)
+            st = round(max(0.0, min(100.0, st + bonus)), 2)
         s["team_strength"] = st
         if on3:
             s["on3"] = {
@@ -998,6 +1008,30 @@ def apply_strength(
             s["dctf"] = {"rank": int(dctf_rank), "board": "6A"}
         else:
             s.pop("dctf", None)
+        bd: dict = {
+            "talent_score": round(float(s["talent_score"]), 2) if s.get("talent_score") is not None else None,
+            "talent_max": round(max_t, 2) if max_t else None,
+            "talent_max_name": max_name,
+            "talent_norm": tn,
+            "bonus": round(bonus, 2),
+            "team_strength": st,
+        }
+        if on3n is not None and on3:
+            bd["on3_rank"] = on3["rank"]
+            bd["on3_rating"] = round(on3["rating"], 3) if on3.get("rating") is not None else None
+            bd["on3_min"] = round(rmin, 3)
+            bd["on3_max"] = round(rmax, 3)
+            bd["on3_norm"] = on3n
+        if mpn is not None:
+            bd["maxpreps_rank"] = int(mp_rank)
+            bd["maxpreps_norm"] = mpn
+        if ranking_norm is not None:
+            bd["ranking_norm"] = round(ranking_norm, 2)
+        if blended is not None:
+            bd["blended"] = round(blended, 2)
+        if dctf_rank is not None and (s.get("state") or "").upper() == "TX":
+            bd["dctf_rank"] = int(dctf_rank)
+        s["strength_breakdown"] = {k: v for k, v in bd.items() if v is not None or k in ("bonus", "team_strength")}
 
 
 def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:

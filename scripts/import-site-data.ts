@@ -29,6 +29,7 @@ import type {
   SchoolSchedule,
   ScheduleGame,
   SourceStatus,
+  StrengthBreakdown,
   ToughnessIcon,
 } from "../src/lib/types";
 
@@ -137,6 +138,24 @@ type SiteSchool = {
   } | null;
   maxpreps_national?: { rank?: number } | null;
   dctf?: { rank?: number; board?: string | null } | null;
+  strength_breakdown?: {
+    talent_score?: number | null;
+    talent_max?: number | null;
+    talent_max_name?: string | null;
+    talent_norm?: number | null;
+    on3_rank?: number | null;
+    on3_rating?: number | null;
+    on3_min?: number | null;
+    on3_max?: number | null;
+    on3_norm?: number | null;
+    maxpreps_rank?: number | null;
+    maxpreps_norm?: number | null;
+    ranking_norm?: number | null;
+    blended?: number | null;
+    dctf_rank?: number | null;
+    bonus?: number | null;
+    team_strength?: number | null;
+  } | null;
   sos?: number | null;
   sos_games?: number | null;
   sos_label?: "tough" | "average" | "light" | null;
@@ -358,6 +377,34 @@ function siteMaxPreps(mp: SiteSchool["maxpreps"]): School["maxpreps"] {
     footballUrl: (mp.footballUrl || "").trim() || null,
     scheduleUrl: schedule || null,
   };
+}
+
+function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown | null {
+  if (!raw) return null;
+  const bd: StrengthBreakdown = {
+    talentScore: raw.talent_score ?? null,
+    talentMax: raw.talent_max ?? null,
+    talentMaxName: raw.talent_max_name ?? null,
+    talentNorm: raw.talent_norm ?? null,
+    on3Rank: raw.on3_rank ?? null,
+    on3Rating: raw.on3_rating ?? null,
+    on3Min: raw.on3_min ?? null,
+    on3Max: raw.on3_max ?? null,
+    on3Norm: raw.on3_norm ?? null,
+    maxprepsRank: raw.maxpreps_rank ?? null,
+    maxprepsNorm: raw.maxpreps_norm ?? null,
+    rankingNorm: raw.ranking_norm ?? null,
+    blended: raw.blended ?? null,
+    dctfRank: raw.dctf_rank ?? null,
+    bonus: raw.bonus ?? null,
+    teamStrength: raw.team_strength ?? null,
+  };
+  const has =
+    bd.talentNorm != null ||
+    bd.on3Norm != null ||
+    bd.maxprepsNorm != null ||
+    bd.teamStrength != null;
+  return has ? bd : null;
 }
 
 function asSource(raw: string | undefined): RatingSource | null {
@@ -593,6 +640,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       dctf: row.dctf?.rank != null
         ? { rank: row.dctf.rank, board: row.dctf.board ?? "6A" }
         : null,
+      strengthBreakdown: siteBreakdown(row.strength_breakdown),
       sos: row.sos ?? null,
       sosGames: row.sos_games ?? null,
       sosLabel: row.sos_label ?? null,

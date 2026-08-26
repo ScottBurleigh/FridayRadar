@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { RecruitList } from "@/components/recruit-list";
 import { SchoolScheduleTable } from "@/components/school-schedule";
+import { StrengthExplainButton } from "@/components/strength-explain";
 import { loadDataset, playersAtSchool, maxprepsScheduleUrl, scheduleForSchool } from "@/lib/data";
 import { formatLocation, formatTalent, formatStrength } from "@/lib/format";
 import { officialStars, badgeStars, playerPoints, ratingsBySource } from "@/lib/ranking";
@@ -95,7 +96,14 @@ export default async function SchoolPage({
           <span className="text-amber-200">{formatTalent(talent)}</span>
         </Stat>
         <Stat label="Team strength">
-          <span className="text-amber-200">{formatStrength(school.teamStrength)}</span>
+          <span className="inline-flex items-center gap-1">
+            <span className="text-amber-200">{formatStrength(school.teamStrength)}</span>
+            <StrengthExplainButton
+              schoolName={school.name}
+              breakdown={school.strengthBreakdown}
+              teamStrength={school.teamStrength}
+            />
+          </span>
         </Stat>
         <Stat label="On3 national">
           <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
