@@ -147,7 +147,7 @@ export default async function SchoolPage({
         </Stat>
         <Stat label="Zip">{school.zip ?? "—"}</Stat>
       </dl>
-      {school.maxpreps?.canonicalUrl || scheduleUrl ? (
+      {school.maxpreps?.canonicalUrl || scheduleUrl || school.hudlTeamUrl ? (
         <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           {school.maxpreps?.canonicalUrl ? (
             <a
@@ -167,6 +167,16 @@ export default async function SchoolPage({
               rel="noreferrer"
             >
               MaxPreps schedule
+            </a>
+          ) : null}
+          {school.hudlTeamUrl ? (
+            <a
+              href={school.hudlTeamUrl}
+              className="text-amber-300/90 hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Hudl team
             </a>
           ) : null}
         </p>

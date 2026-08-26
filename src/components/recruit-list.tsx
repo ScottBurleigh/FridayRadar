@@ -1,8 +1,9 @@
+import { ProfileLinks } from "@/components/profile-links";
 import { StarBadge } from "@/components/star-badge";
-import type { RatedPlayer } from "@/lib/types";
 import { sourceLabel } from "@/lib/format";
+import { profileLinksForPlayer } from "@/lib/profile-links";
 import { ratingsBySource } from "@/lib/ranking";
-import type { Rating } from "@/lib/types";
+import type { RatedPlayer, Rating } from "@/lib/types";
 
 const SOURCE_ORDER = [
   "247sports_composite",
@@ -73,6 +74,10 @@ export function RecruitList({
                       </p>
                     </div>
                   </div>
+                  <ProfileLinks
+                    links={profileLinksForPlayer(p, bySrc)}
+                    className="mt-2"
+                  />
                   <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                     {SOURCE_ORDER.map((src) => {
                       const r = bySrc[src];

@@ -57,6 +57,10 @@ const CANONICAL_SCHOOL_ID: Record<string, string> = {
   "al-montgomery-the-montgomery-academy": "al-montgomery-montgomery-academy",
   "tx-houston-c-e-king-high-school": "tx-houston-c-e-king",
   "ga-grayson-grayson": "ga-loganville-grayson",
+  "md-baltimore-saint-frances-academy": "md-baltimore-st-frances-academy",
+  "va-springfield-saint-james": "va-springfield-the-st-james",
+  "nj-jersey-city-saint-peters-prep": "nj-jersey-city-st-peter-s-prep",
+  "il-east-saint-louis-east-saint-louis": "il-east-st-louis-east-st-louis",
 };
 
 function canonicalSchoolId(id: string | undefined | null): string {
@@ -100,6 +104,7 @@ type SiteRecruit = {
   talent_points?: number;
   sources?: string[];
   source_ids?: Player["source_ids"];
+  profile_urls?: Player["profile_urls"];
 };
 
 type SiteSchool = {
@@ -131,6 +136,7 @@ type SiteSchool = {
   } | null;
   recruits?: SiteRecruit[];
   team_strength?: number | null;
+  hudl_team_url?: string | null;
   on3?: {
     rank?: number;
     rating?: number | null;
@@ -434,6 +440,56 @@ function parseHometown(text: string | null | undefined): { city: string | null; 
   return { city: text.trim(), state: null };
 }
 
+type HudlFile = {
+  players?: {
+    recruit_id?: string;
+    hudl_url?: string;
+    hudl_athlete_id?: string;
+  }[];
+  schools?: { school_id?: string; hudl_team_url?: string }[];
+};
+
+function hudlFilePath(importDir: string): string | null {
+  const candidates = [
+    join(ROOT, "site-data/hudl.json"),
+    join(importDir, "hudl.json"),
+    join(ROOT, "data/import/hudl.json"),
+  ];
+  return candidates.find((p) => existsSync(p)) ?? null;
+}
+
+/** Overlay verified Hudl athlete/team URLs. Never invents missing profiles. */
+function applyHudlOverlay(
+  doc: HudlFile | null,
+  schools: Map<string, School>,
+  players: Player[],
+): { athletes: number; teams: number } {
+  if (!doc) return { athletes: 0, teams: 0 };
+  const byId = new Map(players.map((p) => [p.id, p]));
+  const seen = new Set<string>();
+  for (const row of doc.players || []) {
+    const rid = row.recruit_id;
+    const url = (row.hudl_url || "").trim();
+    const hid = row.hudl_athlete_id ? String(row.hudl_athlete_id) : "";
+    if (!rid || !url || !hid || seen.has(rid)) continue;
+    const player = byId.get(rid);
+    if (!player) continue;
+    seen.add(rid);
+    player.source_ids = { ...player.source_ids, hudl: hid };
+    player.profile_urls = { ...player.profile_urls, hudl: url };
+  }
+  let teams = 0;
+  for (const row of doc.schools || []) {
+    const sid = row.school_id ? canonicalSchoolId(row.school_id) : "";
+    const url = (row.hudl_team_url || "").trim();
+    const school = sid ? schools.get(sid) : undefined;
+    if (!school || !url) continue;
+    school.hudlTeamUrl = url;
+    teams += 1;
+  }
+  return { athletes: seen.size, teams };
+}
+
 function unmappedId(side: SiteSide): string {
   if (side.site_id) return side.site_id;
   const st = (side.state || "xx").toLowerCase();
@@ -627,6 +683,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       stars3: row.star_buckets?.stars3 ?? row.star_buckets?.["3"] ?? null,
       mapped: row.mapped !== false,
       teamStrength: row.team_strength ?? null,
+      hudlTeamUrl: row.hudl_team_url ?? null,
       on3: row.on3?.rank != null
         ? {
             rank: row.on3.rank,
@@ -663,6 +720,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
         high_school_id: school.id,
         college_commit: rec.college_commit ?? null,
         source_ids: rec.source_ids ?? {},
+        profile_urls: rec.profile_urls,
       };
       players.push(player);
       for (const rt of rec.ratings || []) {
@@ -685,6 +743,10 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       }
     }
   }
+
+  const hudlPath = hudlFilePath(dir);
+  const hudlDoc = hudlPath ? await readJson<HudlFile>(hudlPath) : null;
+  const hudlCounts = applyHudlOverlay(hudlDoc, schools, players);
 
   const games: Game[] = [];
   for (const g of gamesFile.games || []) {
@@ -777,6 +839,15 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       status: Object.keys(schedules).length ? "live" : "blocked",
       detail: `${Object.keys(schedules).length} school schedules stored from MaxPreps 26-27 (deleted / Varsity Opponent rows dropped).`,
       counts: { schedules: Object.keys(schedules).length },
+    },
+    {
+      id: "hudl",
+      label: "Hudl public profiles (verified batch)",
+      status: hudlCounts.athletes ? "live-partial" : "blocked",
+      detail: hudlCounts.athletes
+        ? `${hudlCounts.athletes} verified Hudl athlete profiles (On3 embed matches only; 359 unmatched skipped). ${hudlCounts.teams} public team pages. Missing Hudl is omitted, never a dead link.`
+        : "Hudl overlay was not loaded.",
+      counts: { athletes: hudlCounts.athletes, teams: hudlCounts.teams },
     },
     {
       id: "maxpreps_national",

@@ -1,0 +1,698 @@
+{
+  "as_of": "2026-08-26",
+  "notes": [
+    "First verified public Hudl batch (On3 embed \u2192 hudl.com/profile/{id}).",
+    "52 payload rows / 49 unique athlete ids. Duplicate payload UUIDs share one Hudl id (Glassboro, Jones, East St. Louis).",
+    "Payload UUID is not the FridayRadar recruit id; join is payload id \u2192 public Hudl name \u2192 school roster recruit id.",
+    "359 unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
+    "41/41 top-school public team pages. C.E. King has a team page and 0 recruit Hudl profiles."
+  ],
+  "players": [
+    {
+      "id": "3761cbf2-6555-46d9-a8ac-bbf8f1fd9e6b",
+      "recruit_id": "247-46148083",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Eric McFarland III",
+      "hudl_name": "Eric Mcfarland lll",
+      "hudl_url": "https://www.hudl.com/profile/22055854",
+      "hudl_athlete_id": "22055854"
+    },
+    {
+      "id": "f91ff5f0-d5bd-4d8e-b4c7-4a2a9364d1b8",
+      "recruit_id": "247-46151892",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Zyron Forstall",
+      "hudl_name": "Zyron Forstall",
+      "hudl_url": "https://www.hudl.com/profile/19304058",
+      "hudl_athlete_id": "19304058"
+    },
+    {
+      "id": "907ea573-1ff9-4133-b101-1605c1036a2a",
+      "recruit_id": "247-46141493",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Aaryn Washington",
+      "hudl_name": "Aaryn Washington",
+      "hudl_url": "https://www.hudl.com/profile/22432094",
+      "hudl_athlete_id": "22432094"
+    },
+    {
+      "id": "a6f951e1-5311-4021-84dd-4746f5a3dea0",
+      "recruit_id": "247-46152715",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Jackson Vaughn",
+      "hudl_name": "Jackson Vaughn",
+      "hudl_url": "https://www.hudl.com/profile/18008781",
+      "hudl_athlete_id": "18008781"
+    },
+    {
+      "id": "41c6ba4d-1f24-4496-8345-7ffe79fa3f25",
+      "recruit_id": "247-46149177",
+      "school_id": "md-baltimore-st-frances-academy",
+      "payload_school_id": "md-baltimore-saint-frances-academy",
+      "full_name": "Anthony Sweeney",
+      "hudl_name": "Anthony Sweeney",
+      "hudl_url": "https://www.hudl.com/profile/16860665",
+      "hudl_athlete_id": "16860665"
+    },
+    {
+      "id": "c8f07adf-460b-4ddc-bc3e-2b4d1925f53e",
+      "recruit_id": "247-46150124",
+      "school_id": "md-baltimore-st-frances-academy",
+      "payload_school_id": "md-baltimore-saint-frances-academy",
+      "full_name": "Raylaun Henry",
+      "hudl_name": "Raylaun Henry",
+      "hudl_url": "https://www.hudl.com/profile/19341597",
+      "hudl_athlete_id": "19341597"
+    },
+    {
+      "id": "eb32030a-af36-46a9-bae7-2d098ac3e690",
+      "recruit_id": "247-46146837",
+      "school_id": "ca-santa-ana-mater-dei",
+      "payload_school_id": "ca-santa-ana-mater-dei",
+      "full_name": "Danny Lang",
+      "hudl_name": "Danny Lang",
+      "hudl_url": "https://www.hudl.com/profile/19576984",
+      "hudl_athlete_id": "19576984"
+    },
+    {
+      "id": "1d5125cc-e660-4c82-a804-e7a37af3a9a1",
+      "recruit_id": "247-46145576",
+      "school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "payload_school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "full_name": "Mark Matthews",
+      "hudl_name": "Mark Matthews",
+      "hudl_url": "https://www.hudl.com/profile/19972142",
+      "hudl_athlete_id": "19972142"
+    },
+    {
+      "id": "98ddcd17-0385-484c-adbd-7f78c9cffeb1",
+      "recruit_id": "247-46148129",
+      "school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "payload_school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "full_name": "Julius Jones",
+      "hudl_name": "Julius Jones",
+      "hudl_url": "https://www.hudl.com/profile/20767020",
+      "hudl_athlete_id": "20767020"
+    },
+    {
+      "id": "90d48419-ca6e-41a3-a790-3686eee36afd",
+      "recruit_id": "247-46162554",
+      "school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "payload_school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "full_name": "Wyatt Smith",
+      "hudl_name": "Wyatt Smith",
+      "hudl_url": "https://www.hudl.com/profile/20133523",
+      "hudl_athlete_id": "20133523"
+    },
+    {
+      "id": "7d13ff78-840a-48a6-889e-988293c98b49",
+      "recruit_id": "247-46145579",
+      "school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "payload_school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "full_name": "Zayden Gamble",
+      "hudl_name": "Zayden Gamble",
+      "hudl_url": "https://www.hudl.com/profile/19530451",
+      "hudl_athlete_id": "19530451"
+    },
+    {
+      "id": "d6669fbb-5e03-4888-9515-8267268cad51",
+      "recruit_id": "247-46158449",
+      "school_id": "ga-loganville-grayson",
+      "payload_school_id": "ga-loganville-grayson",
+      "full_name": "Jordan Agbanoma",
+      "hudl_name": "Jordan Agbanoma",
+      "hudl_url": "https://www.hudl.com/profile/24297059",
+      "hudl_athlete_id": "24297059"
+    },
+    {
+      "id": "ae2cc99d-2dcc-4f9f-9a01-190d55b649f2",
+      "recruit_id": "247-46145095",
+      "school_id": "ga-buford-buford",
+      "payload_school_id": "ga-buford-buford",
+      "full_name": "Jalen Brewster",
+      "hudl_name": "Jalen Brewster",
+      "hudl_url": "https://www.hudl.com/profile/19965528",
+      "hudl_athlete_id": "19965528"
+    },
+    {
+      "id": "24978ef8-546f-4ca0-8615-acf9779d9e1b",
+      "recruit_id": "247-46149091",
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "payload_school_id": "ca-chatsworth-sierra-canyon",
+      "full_name": "Marcus Fakatou",
+      "hudl_name": "Marcus Fakatou",
+      "hudl_url": "https://www.hudl.com/profile/22567319",
+      "hudl_athlete_id": "22567319"
+    },
+    {
+      "id": "8959a7f9-04e8-4b92-b96d-42936ec9a0d2",
+      "recruit_id": "247-46149610",
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "payload_school_id": "ca-chatsworth-sierra-canyon",
+      "full_name": "Kasi Currie",
+      "hudl_name": "Kasi Currie",
+      "hudl_url": "https://www.hudl.com/profile/19474303",
+      "hudl_athlete_id": "19474303"
+    },
+    {
+      "id": "8b329194-bff6-4f2a-a0cd-e40b1f154056",
+      "recruit_id": "247-46149978",
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "payload_school_id": "ca-chatsworth-sierra-canyon",
+      "full_name": "Myles Baker",
+      "hudl_name": "Myles Baker",
+      "hudl_url": "https://www.hudl.com/profile/19495559",
+      "hudl_athlete_id": "19495559"
+    },
+    {
+      "id": "0e703375-d7d9-4584-bcc4-7a6750ba5abd",
+      "recruit_id": "247-46155022",
+      "school_id": "az-goodyear-desert-edge",
+      "payload_school_id": "az-goodyear-desert-edge",
+      "full_name": "Blake Roskopf",
+      "hudl_name": "Blake Roskopf",
+      "hudl_url": "https://www.hudl.com/profile/18174937",
+      "hudl_athlete_id": "18174937"
+    },
+    {
+      "id": "4ed560dd-6c52-486e-a3cd-b593a286de02",
+      "recruit_id": "247-46147446",
+      "school_id": "nv-las-vegas-bishop-gorman",
+      "payload_school_id": "nv-las-vegas-bishop-gorman",
+      "full_name": "Hayden Stepp",
+      "hudl_name": "Hayden Stepp",
+      "hudl_url": "https://www.hudl.com/profile/19444261",
+      "hudl_athlete_id": "19444261"
+    },
+    {
+      "id": "caecfea7-ef21-4079-bfd6-0673dbf80941",
+      "recruit_id": "247-46154551",
+      "school_id": "ca-temecula-chaparral",
+      "payload_school_id": "ca-temecula-chaparral",
+      "full_name": "Eli Woodard",
+      "hudl_name": "Eli Woodard",
+      "hudl_url": "https://www.hudl.com/profile/19603450",
+      "hudl_athlete_id": "19603450"
+    },
+    {
+      "id": "4b3aad70-8593-429d-ae45-b154c11da0df",
+      "recruit_id": "247-46150822",
+      "school_id": "az-chandler-basha",
+      "payload_school_id": "az-chandler-basha",
+      "full_name": "Jake Hildebrand",
+      "hudl_name": "Jake Hildebrand",
+      "hudl_url": "https://www.hudl.com/profile/19470635",
+      "hudl_athlete_id": "19470635"
+    },
+    {
+      "id": "e893dbfd-80dd-4f7d-bb4a-d68e2b4d28ea",
+      "recruit_id": "247-46149965",
+      "school_id": "ma-marion-tabor-academy",
+      "payload_school_id": "ma-marion-tabor-academy",
+      "full_name": "Peter Bourque",
+      "hudl_name": "Peter Bourque",
+      "hudl_url": "https://www.hudl.com/profile/15927844",
+      "hudl_athlete_id": "15927844"
+    },
+    {
+      "id": "0d0a9bbd-bff3-4338-a1d9-2b110f2e2030",
+      "recruit_id": "247-46152057",
+      "school_id": "tn-chattanooga-baylor-school",
+      "payload_school_id": "tn-chattanooga-baylor-school",
+      "full_name": "David Gabriel Georges",
+      "hudl_name": "David Gabriel Georges",
+      "hudl_url": "https://www.hudl.com/profile/15480201",
+      "hudl_athlete_id": "15480201"
+    },
+    {
+      "id": "27789f63-3647-418c-8c34-34cf6bd3399a",
+      "recruit_id": "247-46149869",
+      "school_id": "tn-chattanooga-baylor-school",
+      "payload_school_id": "tn-chattanooga-baylor-school",
+      "full_name": "Keegan Croucher",
+      "hudl_name": "Keegan Croucher",
+      "hudl_url": "https://www.hudl.com/profile/18094089",
+      "hudl_athlete_id": "18094089"
+    },
+    {
+      "id": "5ad68265-8f35-4622-b247-cb77e174a769",
+      "recruit_id": "247-46154955",
+      "school_id": "ca-corona-corona-centennial",
+      "payload_school_id": "ca-corona-corona-centennial",
+      "full_name": "Jaden Walk-Green",
+      "hudl_name": "Jaden Walk-Green",
+      "hudl_url": "https://www.hudl.com/profile/18196284",
+      "hudl_athlete_id": "18196284"
+    },
+    {
+      "id": "1340414a-f86f-4008-96d7-6c95106b24ff",
+      "recruit_id": "247-46152565",
+      "school_id": "ca-corona-corona-centennial",
+      "payload_school_id": "ca-corona-corona-centennial",
+      "full_name": "Quentin Hale",
+      "hudl_name": "Quentin Hale",
+      "hudl_url": "https://www.hudl.com/profile/20129253",
+      "hudl_athlete_id": "20129253"
+    },
+    {
+      "id": "49797109-a3e2-4574-b78e-610af7112973",
+      "recruit_id": "247-46154299",
+      "school_id": "va-springfield-the-st-james",
+      "payload_school_id": "va-springfield-saint-james",
+      "full_name": "Kenaz Sullivan",
+      "hudl_name": "Kenaz Sullivan",
+      "hudl_url": "https://www.hudl.com/profile/19688611",
+      "hudl_athlete_id": "19688611"
+    },
+    {
+      "id": "df20e770-9033-4462-ba50-3e5444e27959",
+      "recruit_id": "247-46142626",
+      "school_id": "nj-glassboro-glassboro",
+      "payload_school_id": "nj-glassboro-glassboro",
+      "full_name": "Xavier Sabb",
+      "hudl_name": "Xavier Sabb",
+      "hudl_url": "https://www.hudl.com/profile/19055410",
+      "hudl_athlete_id": "19055410"
+    },
+    {
+      "id": "050f1a88-b495-467e-a80d-de9feeffcbe0",
+      "recruit_id": "247-46142626",
+      "school_id": "nj-glassboro-glassboro",
+      "payload_school_id": "nj-glassboro-glassboro",
+      "full_name": "Xavier Sabb",
+      "hudl_name": "Xavier Sabb",
+      "hudl_url": "https://www.hudl.com/profile/19055410",
+      "hudl_athlete_id": "19055410"
+    },
+    {
+      "id": "3fc59d5e-9080-49be-92f2-29af0502185c",
+      "recruit_id": "247-46142775",
+      "school_id": "ca-tustin-tustin",
+      "payload_school_id": "ca-tustin-tustin",
+      "full_name": "Khalil Terry",
+      "hudl_name": "Khalil Terry",
+      "hudl_url": "https://www.hudl.com/profile/16240673",
+      "hudl_athlete_id": "16240673"
+    },
+    {
+      "id": "764eaca7-fcab-4731-a5f8-ee8d5439fbb3",
+      "recruit_id": "247-46146822",
+      "school_id": "ca-tustin-tustin",
+      "payload_school_id": "ca-tustin-tustin",
+      "full_name": "Taven Epps",
+      "hudl_name": "Taven Epps",
+      "hudl_url": "https://www.hudl.com/profile/19520967",
+      "hudl_athlete_id": "19520967"
+    },
+    {
+      "id": "37904ca5-6ff5-44d4-b950-e10896a1d952",
+      "recruit_id": "247-46149434",
+      "school_id": "nc-cornelius-hough",
+      "payload_school_id": "nc-cornelius-hough",
+      "full_name": "Joshua Dobson",
+      "hudl_name": "Joshua Dobson",
+      "hudl_url": "https://www.hudl.com/profile/9823173",
+      "hudl_athlete_id": "9823173"
+    },
+    {
+      "id": "4721f539-8749-450a-b15a-466b4616fc0d",
+      "recruit_id": "247-46153290",
+      "school_id": "nc-cornelius-hough",
+      "payload_school_id": "nc-cornelius-hough",
+      "full_name": "Davion Jones",
+      "hudl_name": "Davion Jones",
+      "hudl_url": "https://www.hudl.com/profile/19494412",
+      "hudl_athlete_id": "19494412"
+    },
+    {
+      "id": "97fc3776-92ba-4cfa-9110-1eebfe77f22b",
+      "recruit_id": "247-46143677",
+      "school_id": "la-ruston-ruston",
+      "payload_school_id": "la-ruston-ruston",
+      "full_name": "Ahmad Hudson",
+      "hudl_name": "Ahmad Hudson",
+      "hudl_url": "https://www.hudl.com/profile/16751692",
+      "hudl_athlete_id": "16751692"
+    },
+    {
+      "id": "acee3e06-220d-44c8-b924-acf03d868b32",
+      "recruit_id": "247-46152579",
+      "school_id": "la-ruston-ruston",
+      "payload_school_id": "la-ruston-ruston",
+      "full_name": "Jayden Anding",
+      "hudl_name": "Jayden Anding",
+      "hudl_url": "https://www.hudl.com/profile/23629919",
+      "hudl_athlete_id": "23629919"
+    },
+    {
+      "id": "881161e9-5056-40a3-ae0c-e82dac3bcbb9",
+      "recruit_id": "247-46154755",
+      "school_id": "ga-gainesville-gainesville",
+      "payload_school_id": "ga-gainesville-gainesville",
+      "full_name": "Kharim Hughley",
+      "hudl_name": "Kharim Hughley",
+      "hudl_url": "https://www.hudl.com/profile/16833240",
+      "hudl_athlete_id": "16833240"
+    },
+    {
+      "id": "60f2ba82-2609-47a4-9637-6ae553a6d188",
+      "recruit_id": "247-46145239",
+      "school_id": "ga-gainesville-gainesville",
+      "payload_school_id": "ga-gainesville-gainesville",
+      "full_name": "Nigel Newkirk",
+      "hudl_name": "Nigel Newkirk",
+      "hudl_url": "https://www.hudl.com/profile/19384713",
+      "hudl_athlete_id": "19384713"
+    },
+    {
+      "id": "d91c0ebc-5ec1-48d0-8366-c4277ffb46ca",
+      "recruit_id": "247-46145646",
+      "school_id": "hi-mililani-mililani",
+      "payload_school_id": "hi-mililani-mililani",
+      "full_name": "Toa Satele",
+      "hudl_name": "Samson \"Toa\" Satele",
+      "hudl_url": "https://www.hudl.com/profile/17953752",
+      "hudl_athlete_id": "17953752"
+    },
+    {
+      "id": "68714512-ff29-481c-8dbf-bd60129fd2ff",
+      "recruit_id": "247-46151027",
+      "school_id": "nj-jersey-city-st-peter-s-prep",
+      "payload_school_id": "nj-jersey-city-saint-peters-prep",
+      "full_name": "Oluwasemilore Olubobola",
+      "hudl_name": "Oluwasemilore Olubobola",
+      "hudl_url": "https://www.hudl.com/profile/19739500",
+      "hudl_athlete_id": "19739500"
+    },
+    {
+      "id": "97fd826f-1e02-46e5-acbe-ab6deb456077",
+      "recruit_id": "247-46159242",
+      "school_id": "ga-powder-springs-mceachern",
+      "payload_school_id": "ga-powder-springs-mceachern",
+      "full_name": "Joakim Gouda",
+      "hudl_name": "Joakim Gouda",
+      "hudl_url": "https://www.hudl.com/profile/19308460",
+      "hudl_athlete_id": "19308460"
+    },
+    {
+      "id": "30cd2ff8-9a6b-4bc1-94ac-2528b1620557",
+      "recruit_id": "247-46148432",
+      "school_id": "ga-leesburg-lee-county",
+      "payload_school_id": "ga-leesburg-lee-county",
+      "full_name": "Jaden Upshaw",
+      "hudl_name": "Jaden Upshaw",
+      "hudl_url": "https://www.hudl.com/profile/19321690",
+      "hudl_athlete_id": "19321690"
+    },
+    {
+      "id": "8c098bc1-8ca9-42d6-9673-12105197ee9f",
+      "recruit_id": "247-46155530",
+      "school_id": "tn-brentwood-brentwood-academy",
+      "payload_school_id": "tn-brentwood-brentwood-academy",
+      "full_name": "Kenneth Simon II",
+      "hudl_name": "Kenneth Simon II",
+      "hudl_url": "https://www.hudl.com/profile/21922659",
+      "hudl_athlete_id": "21922659"
+    },
+    {
+      "id": "03f54899-e6f6-4fb9-b2c0-a8feee231741",
+      "recruit_id": "247-46147214",
+      "school_id": "tn-brentwood-brentwood-academy",
+      "payload_school_id": "tn-brentwood-brentwood-academy",
+      "full_name": "Kesean Bowman",
+      "hudl_name": "Kesean Bowman",
+      "hudl_url": "https://www.hudl.com/profile/19544745",
+      "hudl_athlete_id": "19544745"
+    },
+    {
+      "id": "d11e1c07-d731-463b-922b-05851cdc7834",
+      "recruit_id": "247-46155001",
+      "school_id": "fl-orlando-jones",
+      "payload_school_id": "fl-orlando-jones",
+      "full_name": "Frederick Ards",
+      "hudl_name": "Fred Ards",
+      "hudl_url": "https://www.hudl.com/profile/19746113",
+      "hudl_athlete_id": "19746113"
+    },
+    {
+      "id": "045811c5-f54b-4961-bdd1-436b06f4af48",
+      "recruit_id": "247-46155001",
+      "school_id": "fl-orlando-jones",
+      "payload_school_id": "fl-orlando-jones",
+      "full_name": "Frederick Ards",
+      "hudl_name": "Fred Ards",
+      "hudl_url": "https://www.hudl.com/profile/19746113",
+      "hudl_athlete_id": "19746113"
+    },
+    {
+      "id": "61578221-1ef2-44c7-86fa-3278d91d6168",
+      "recruit_id": "247-46156925",
+      "school_id": "pa-pittsburgh-central-catholic",
+      "payload_school_id": "pa-pittsburgh-central-catholic",
+      "full_name": "James Halter",
+      "hudl_name": "James Halter",
+      "hudl_url": "https://www.hudl.com/profile/22637312",
+      "hudl_athlete_id": "22637312"
+    },
+    {
+      "id": "ba29b1bb-e829-4b92-8274-d535cf047ba1",
+      "recruit_id": "247-46163000",
+      "school_id": "ga-fairburn-creekside",
+      "payload_school_id": "ga-fairburn-creekside",
+      "full_name": "Gary Walker",
+      "hudl_name": "Gary Walker",
+      "hudl_url": "https://www.hudl.com/profile/19403692",
+      "hudl_athlete_id": "19403692"
+    },
+    {
+      "id": "0aaf6b71-85ad-4934-b344-7635909169af",
+      "recruit_id": "247-46139675",
+      "school_id": "il-chicago-mount-carmel",
+      "payload_school_id": "il-chicago-mount-carmel",
+      "full_name": "Quentin Burrell",
+      "hudl_name": "Quentin Burrell",
+      "hudl_url": "https://www.hudl.com/profile/20228458",
+      "hudl_athlete_id": "20228458"
+    },
+    {
+      "id": "0c936d91-8246-442a-9c67-8e4ab5fe9cab",
+      "recruit_id": "247-46154637",
+      "school_id": "il-chicago-mount-carmel",
+      "payload_school_id": "il-chicago-mount-carmel",
+      "full_name": "Roman Igwebuike",
+      "hudl_name": "Roman Igwebuike",
+      "hudl_url": "https://www.hudl.com/profile/19379885",
+      "hudl_athlete_id": "19379885"
+    },
+    {
+      "id": "f6330c42-28fe-4995-90b5-a11b9fcab628",
+      "recruit_id": "247-46155142",
+      "school_id": "il-chicago-mount-carmel",
+      "payload_school_id": "il-chicago-mount-carmel",
+      "full_name": "Tavares Harrington",
+      "hudl_name": "Tavares Harrington",
+      "hudl_url": "https://www.hudl.com/profile/20228529",
+      "hudl_athlete_id": "20228529"
+    },
+    {
+      "id": "ffebebbd-0afc-4b31-8e0c-e361b6e7e096",
+      "recruit_id": "247-46143247",
+      "school_id": "il-east-st-louis-east-st-louis",
+      "payload_school_id": "il-east-saint-louis-east-saint-louis",
+      "full_name": "Myson Johnson-Cook",
+      "hudl_name": "Myson Johnson-Cook",
+      "hudl_url": "https://www.hudl.com/profile/22185816",
+      "hudl_athlete_id": "22185816"
+    },
+    {
+      "id": "ba9ca33f-3bcf-4b71-9bda-c324f801ad53",
+      "recruit_id": "247-46143247",
+      "school_id": "il-east-st-louis-east-st-louis",
+      "payload_school_id": "il-east-saint-louis-east-saint-louis",
+      "full_name": "Myson Johnson-Cook",
+      "hudl_name": "Myson Johnson-Cook",
+      "hudl_url": "https://www.hudl.com/profile/22185816",
+      "hudl_athlete_id": "22185816"
+    },
+    {
+      "id": "73ad61cf-08b4-4a55-b990-d1c98e36c84f",
+      "recruit_id": "247-46153229",
+      "school_id": "il-east-st-louis-east-st-louis",
+      "payload_school_id": "il-east-saint-louis-east-saint-louis",
+      "full_name": "Raheem Floyd",
+      "hudl_name": "Raheem Floyd",
+      "hudl_url": "https://www.hudl.com/profile/20080624",
+      "hudl_athlete_id": "20080624"
+    }
+  ],
+  "schools": [
+    {
+      "school_id": "fl-bradenton-img-academy",
+      "hudl_team_url": "https://fan.hudl.com/usa/fl/bradenton/organization/29038/img-academy/team/81606/boys-varsity-football"
+    },
+    {
+      "school_id": "md-baltimore-st-frances-academy",
+      "hudl_team_url": "https://fan.hudl.com/usa/md/baltimore/organization/11813/st-frances-academy/team/27609/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-santa-ana-mater-dei",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/santa-ana/organization/6380/mater-dei-high-school/team/19620/boys-varsity-football"
+    },
+    {
+      "school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "hudl_team_url": "https://fan.hudl.com/usa/fl/fort-lauderdale/organization/9478/st-thomas-aquinas-high-school/team/22383/boys-varsity-football"
+    },
+    {
+      "school_id": "ga-loganville-grayson",
+      "hudl_team_url": "https://fan.hudl.com/usa/ga/loganville/organization/1486/grayson-high-school/team/3632/boys-varsity-football"
+    },
+    {
+      "school_id": "ga-buford-buford",
+      "hudl_team_url": "https://fan.hudl.com/usa/ga/buford/organization/8640/buford-high-school/team/20910/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/chatsworth/organization/749/sierra-canyon-high-school/team/2112/boys-varsity-football"
+    },
+    {
+      "school_id": "az-goodyear-desert-edge",
+      "hudl_team_url": "https://fan.hudl.com/usa/az/goodyear/organization/4041/desert-edge-high-school/team/10684/boys-varsity-football"
+    },
+    {
+      "school_id": "nv-las-vegas-bishop-gorman",
+      "hudl_team_url": "https://fan.hudl.com/usa/nv/las-vegas/organization/561/bishop-gorman-high-school/team/1492/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-temecula-chaparral",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/temecula/organization/5544/chaparral-high-school/team/14757/boys-varsity-football"
+    },
+    {
+      "school_id": "az-chandler-basha",
+      "hudl_team_url": "https://fan.hudl.com/usa/az/chandler/organization/23047/basha-high-school/team/47714/boys-varsity-football"
+    },
+    {
+      "school_id": "ma-marion-tabor-academy",
+      "hudl_team_url": "https://fan.hudl.com/usa/ma/marion/organization/4340/tabor-academy-high/team/11592/boys-varsity-football"
+    },
+    {
+      "school_id": "tn-chattanooga-baylor-school",
+      "hudl_team_url": "https://fan.hudl.com/usa/tn/chattanooga/organization/12981/baylor-school-high-school/team/29587/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-corona-corona-centennial",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/corona/organization/9599/centennial-high-school/team/22512/boys-varsity-football"
+    },
+    {
+      "school_id": "va-springfield-the-st-james",
+      "hudl_team_url": "https://fan.hudl.com/usa/va/springfield/organization/185835/the-st-james-academ-high-school/team/862466/boys-varsity-football"
+    },
+    {
+      "school_id": "nj-glassboro-glassboro",
+      "hudl_team_url": "https://fan.hudl.com/usa/nj/glassboro/organization/19970/glassboro-high-school/team/36577/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-tustin-tustin",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/tustin/organization/1674/tustin-high-school/team/4021/boys-varsity-football"
+    },
+    {
+      "school_id": "nc-cornelius-hough",
+      "hudl_team_url": "https://fan.hudl.com/usa/nc/cornelius/organization/4521/william-a-hough-high-school/team/12090/boys-varsity-football"
+    },
+    {
+      "school_id": "la-ruston-ruston",
+      "hudl_team_url": "https://fan.hudl.com/usa/la/ruston/organization/11970/ruston-high-school/team/28217/boys-varsity-football"
+    },
+    {
+      "school_id": "ga-gainesville-gainesville",
+      "hudl_team_url": "https://fan.hudl.com/usa/ga/gainesville/organization/11888/gainesville-high-school/team/27871/boys-varsity-football"
+    },
+    {
+      "school_id": "hi-mililani-mililani",
+      "hudl_team_url": "https://fan.hudl.com/usa/hi/mililani/organization/6631/mililani-high-school/team/17068/boys-varsity-football"
+    },
+    {
+      "school_id": "nj-jersey-city-st-peter-s-prep",
+      "hudl_team_url": "https://fan.hudl.com/usa/nj/jersey-city/organization/1517/st-peters-prep/team/3700/boys-varsity-football"
+    },
+    {
+      "school_id": "ga-powder-springs-mceachern",
+      "hudl_team_url": "https://fan.hudl.com/usa/ga/powder-springs/organization/4080/mceachern-high-school/team/10852/boys-varsity-football"
+    },
+    {
+      "school_id": "ga-leesburg-lee-county",
+      "hudl_team_url": "https://fan.hudl.com/usa/ga/leesburg/organization/7589/lee-county-high-school/team/18738/boys-varsity-football"
+    },
+    {
+      "school_id": "tn-brentwood-brentwood-academy",
+      "hudl_team_url": "https://fan.hudl.com/usa/tn/brentwood/organization/4890/brentwood-academy/team/12991/boys-varsity-football"
+    },
+    {
+      "school_id": "fl-orlando-jones",
+      "hudl_team_url": "https://fan.hudl.com/usa/fl/orlando/organization/27240/jones-high-school/team/66291/boys-varsity-football"
+    },
+    {
+      "school_id": "pa-pittsburgh-central-catholic",
+      "hudl_team_url": "https://fan.hudl.com/usa/pa/pittsburgh/organization/20159/central-catholic-high-school/team/36766/boys-varsity-football"
+    },
+    {
+      "school_id": "ga-fairburn-creekside",
+      "hudl_team_url": "https://fan.hudl.com/usa/ga/fairburn/organization/18726/creekside-high-school/team/35333/boys-varsity-football"
+    },
+    {
+      "school_id": "il-chicago-mount-carmel",
+      "hudl_team_url": "https://fan.hudl.com/usa/il/chicago/organization/1942/mount-carmel-high-school/team/4640/boys-varsity-football"
+    },
+    {
+      "school_id": "il-east-st-louis-east-st-louis",
+      "hudl_team_url": "https://fan.hudl.com/usa/il/east-st-louis/organization/13361/east-st-louis-high-school/team/29967/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-bellflower-st-john-bosco",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/bellflower/organization/6603/st-john-bosco-high-school/team/17022/boys-varsity-football"
+    },
+    {
+      "school_id": "al-alabaster-thompson",
+      "hudl_team_url": "https://fan.hudl.com/usa/al/alabaster/organization/21421/thompson-high-school/team/38907/boys-varsity-football"
+    },
+    {
+      "school_id": "fl-hollywood-chaminade-madonna",
+      "hudl_team_url": "https://fan.hudl.com/usa/fl/hollywood/organization/28574/chaminade-madonna-high-school/team/77940/boys-varsity-football"
+    },
+    {
+      "school_id": "nc-charlotte-providence-day-school",
+      "hudl_team_url": "https://fan.hudl.com/usa/nc/charlotte/organization/6076/providence-day-high-school/team/16213/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-orange-orange-lutheran",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/orange/organization/4062/orange-lutheran-high-school/team/16475/boys-varsity-football"
+    },
+    {
+      "school_id": "ca-irvine-crean-lutheran",
+      "hudl_team_url": "https://fan.hudl.com/usa/ca/irvine/organization/10639/crean-lutheran-high-school/team/24407/boys-varsity-football"
+    },
+    {
+      "school_id": "fl-miami-miami-central",
+      "hudl_team_url": "https://fan.hudl.com/usa/fl/miami/organization/13686/central-high-school/team/30292/boys-varsity-football"
+    },
+    {
+      "school_id": "ut-orem-orem",
+      "hudl_team_url": "https://fan.hudl.com/usa/ut/orem/organization/16696/orem-high-school/team/33303/boys-varsity-football"
+    },
+    {
+      "school_id": "ga-douglasville-douglas-county",
+      "hudl_team_url": "https://fan.hudl.com/usa/ga/douglasville/organization/4699/douglas-county-high-school/team/12538/boys-varsity-football"
+    },
+    {
+      "school_id": "fl-jacksonville-the-bolles-school",
+      "hudl_team_url": "https://fan.hudl.com/usa/fl/jacksonville/organization/10209/the-bolles-school-high-school/team/23286/boys-varsity-football"
+    },
+    {
+      "school_id": "tx-houston-c-e-king",
+      "hudl_team_url": "https://fan.hudl.com/usa/tx/houston/organization/11065/ce-king-high-school/team/25478/boys-varsity-football"
+    }
+  ]
+}

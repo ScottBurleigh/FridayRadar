@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { ProfileLinks } from "@/components/profile-links";
 import type { InlineRecruit, SchoolRankingRow, SosLabel } from "@/lib/types";
 import { formatTalent } from "@/lib/format";
 import { StrengthExplainButton } from "@/components/strength-explain";
@@ -71,16 +72,7 @@ function InlineRecruitList({ players }: { players: InlineRecruit[] }) {
             <SourceStars label="On3" stars={p.starsOn3} />
             <SourceStars label="ESPN" stars={p.starsEspn} />
           </span>
-          {p.profileUrl ? (
-            <a
-              href={p.profileUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs text-amber-300/90 hover:underline"
-            >
-              Profile
-            </a>
-          ) : null}
+          <ProfileLinks links={p.profileUrls} className="basis-full text-xs" />
         </li>
       ))}
     </ul>

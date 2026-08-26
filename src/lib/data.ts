@@ -1,9 +1,18 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-import type { FridayRadarDataset, Game, InlineRecruit, Player, Rating, School, SchoolSchedule } from "./types";
+import type {
+  FridayRadarDataset,
+  Game,
+  InlineRecruit,
+  Player,
+  Rating,
+  School,
+  SchoolSchedule,
+} from "./types";
 import { competitiveTalent, rankSchools, ratingsBySource } from "./ranking";
 import { schoolWithinZipRadius, venueWithinZipRadius } from "./geo";
+import { profileLinksForPlayer } from "./profile-links";
 
 export const loadDataset = cache((): FridayRadarDataset => {
   const path = join(process.cwd(), "data", "fridayradar.json");
@@ -45,16 +54,7 @@ function profileUrlForPlayer(
   player: Player,
   bySrc: ReturnType<typeof ratingsBySource>,
 ): string | null {
-  const from247 =
-    bySrc["247sports_composite"]?.profile_url || bySrc["247sports"]?.profile_url;
-  if (from247) return from247;
-  const id247 = player.source_ids["247sports_player_id"];
-  if (id247) return `https://247sports.com/player/${id247}/`;
-  if (bySrc.espn?.profile_url) return bySrc.espn.profile_url;
-  if (player.source_ids.espn_id) {
-    return `https://www.espn.com/college-sports/football/recruiting/player/_/id/${player.source_ids.espn_id}`;
-  }
-  return null;
+  return profileLinksForPlayer(player, bySrc)[0]?.href ?? null;
 }
 
 export function inlineRecruitsForSchools(
@@ -83,6 +83,7 @@ export function inlineRecruitsForSchools(
       starsOn3: bySrc.on3_rivals?.stars ?? bySrc.on3_industry?.stars ?? null,
       starsEspn: bySrc.espn?.stars ?? null,
       profileUrl: profileUrlForPlayer(player, bySrc),
+      profileUrls: profileLinksForPlayer(player, bySrc),
     });
   }
   for (const id of schoolIds) {

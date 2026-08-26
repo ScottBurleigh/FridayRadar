@@ -57,6 +57,8 @@ export type School = {
   mapped?: boolean;
   /** 0–100 talent share blended with On3 / MaxPreps ranks, plus DCTF 6A bonus in Texas. */
   teamStrength?: number | null;
+  /** Public fan.hudl.com boys-varsity-football page when verified. Never invented. */
+  hudlTeamUrl?: string | null;
   on3?: {
     rank: number;
     rating: number | null;
@@ -86,6 +88,14 @@ export type Player = {
     "247sports_player_id"?: string;
     on3_rivals_id?: string;
     espn_id?: string;
+    hudl?: string;
+  };
+  /** External profiles. Hudl is set only from the verified payload — never invented. */
+  profile_urls?: {
+    "247sports_composite"?: string;
+    on3_rivals?: string;
+    espn?: string;
+    hudl?: string;
   };
 };
 
@@ -226,6 +236,11 @@ export type RatedPlayer = Player & {
   ratingsBySource: Partial<Record<RatingSource, Rating>>;
 };
 
+export type ProfileLink = {
+  label: "247" | "On3" | "ESPN" | "Hudl";
+  href: string;
+};
+
 /** Compact roster row for the rankings accordion — not the full school page. */
 export type InlineRecruit = {
   id: string;
@@ -236,4 +251,5 @@ export type InlineRecruit = {
   starsOn3: number | null;
   starsEspn: number | null;
   profileUrl: string | null;
+  profileUrls: ProfileLink[];
 };

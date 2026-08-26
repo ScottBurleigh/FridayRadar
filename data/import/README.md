@@ -49,6 +49,10 @@ Venue: `venue {city,state,zip,name,source}`. Home games use the home school (`so
 
 Scout already scored the frozen 2027/2028 ingest (247Sports composite + On3/Rivals + ESPN). Nested `recruits` on `schools.json` are those rows. Raw copies remain under `data/raw/{espn,247,on3}/{year}.json`. **Do not re-run 247 Load More** (it 406s). The importer never invents recruit names.
 
+### `hudl.json`
+
+Verified public Hudl batch only. 52 payload player rows join to FridayRadar `247-*` recruit ids via the public Hudl profile name. 41 top-school `hudl_team_url` values are fan.hudl.com boys-varsity-football pages. Missing Hudl is omitted. `python3 scripts/apply-hudl.py` writes this file and merges onto `schools.json`; the importer overlays it again so a Scout recompile does not invent or drop URLs.
+
 ## Official talent
 
 Average available stars across `247sports_composite`, `on3_rivals` (else `on3_industry`, never both), ESPN. Interpolate onto 5=98, 4=85, 3=70, 2=55, 1=40, listed=25. School talent = sum of 2027+ points.
