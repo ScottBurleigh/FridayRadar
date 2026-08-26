@@ -53,7 +53,7 @@ function SourceStars({ label, stars }: { label: string; stars: number | null }) 
 
 function InlineRecruitList({ players }: { players: InlineRecruit[] }) {
   if (!players.length) {
-    return <p className="text-sm text-zinc-500">No 2027+ recruits on file for this school.</p>;
+    return <p className="text-sm text-zinc-400">No 2027+ recruits on file for this school.</p>;
   }
   return (
     <ul className="space-y-1.5">
@@ -101,7 +101,7 @@ function SchoolRosterCell({
     <details name="rankings-roster" className="group w-full">
       <summary className="flex cursor-pointer list-none items-start gap-0.5 [&::-webkit-details-marker]:hidden">
         <span
-          className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-md text-zinc-500 group-open:text-amber-300 hover:bg-white/10 hover:text-amber-300"
+          className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-md text-zinc-400 group-open:text-amber-300 hover:bg-white/10 hover:text-amber-300"
           aria-label={`Show ${name} recruits`}
         >
           <ChevronRight className="size-3.5 transition-transform group-open:rotate-90" />
@@ -112,11 +112,11 @@ function SchoolRosterCell({
           onClick={(e) => e.stopPropagation()}
         >
           {name}
-          {mascot ? <span className="ml-2 font-normal text-zinc-500">{mascot}</span> : null}
+          {mascot ? <span className="ml-2 font-normal text-zinc-400">{mascot}</span> : null}
         </Link>
       </summary>
-      <div className="mt-2 ml-7 max-h-[min(28rem,70vh)] overflow-y-auto whitespace-normal border-t border-white/10 pt-2">
-        <p className="mb-2 font-sans text-xs text-zinc-500">
+      <div className="mt-2 ml-7 max-h-[min(28rem,70vh)] overflow-y-auto whitespace-normal border-t border-amber-400/20 pt-2">
+        <p className="mb-2 font-sans text-xs text-zinc-400">
           {recruits.length
             ? `${recruits.length} recruit${recruits.length === 1 ? "" : "s"} on the 2027+ roster`
             : "Empty 2027+ roster"}
@@ -136,9 +136,9 @@ export function RankingsTable({
 }) {
   if (!rows.length) {
     return (
-      <div className="rounded-xl border border-dashed border-white/15 px-6 py-16 text-center">
-        <p className="text-lg font-medium text-zinc-200">No programs match these filters</p>
-        <p className="mt-2 text-sm text-zinc-500">
+      <div className="rounded-xl border border-dashed border-amber-400/25 bg-[#121c2e] px-6 py-16 text-center">
+        <p className="text-lg font-medium text-zinc-100">No programs match these filters</p>
+        <p className="mt-2 text-sm text-zinc-400">
           Clear the state or zip filter to return to the nationwide 2027+ talent board.
         </p>
       </div>
@@ -150,20 +150,20 @@ export function RankingsTable({
       <div className="hidden md:block">
         <table className="w-full caption-bottom font-mono text-[13px]">
           <thead>
-            <tr className="border-b border-white/10">
-              <th className="h-10 w-14 px-2 text-left font-medium text-zinc-500">Rk</th>
-              <th className="h-10 px-2 text-left font-medium text-zinc-500">School</th>
-              <th className="h-10 px-2 text-left font-medium text-zinc-500">City</th>
-              <th className="h-10 w-12 px-2 text-left font-medium text-zinc-500">St</th>
-              <th className="h-10 w-16 px-2 text-left font-medium text-zinc-500">Zip</th>
-              <th className="h-10 w-16 px-2 text-right font-medium text-zinc-500">Rec</th>
-              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-500">5★</th>
-              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-500">4★</th>
-              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-500">3★</th>
-              <th className="h-10 w-24 px-2 text-right font-medium text-zinc-500">Talent</th>
-              <th className="h-10 w-24 px-2 text-right font-medium text-zinc-500">Strength</th>
+            <tr className="border-b border-amber-400/20">
+              <th className="h-10 w-14 px-2 text-left font-medium text-zinc-300">Rk</th>
+              <th className="h-10 px-2 text-left font-medium text-zinc-300">School</th>
+              <th className="h-10 px-2 text-left font-medium text-zinc-300">City</th>
+              <th className="h-10 w-12 px-2 text-left font-medium text-zinc-300">St</th>
+              <th className="h-10 w-16 px-2 text-left font-medium text-zinc-300">Zip</th>
+              <th className="h-10 w-16 px-2 text-right font-medium text-zinc-300">Rec</th>
+              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-300">5★</th>
+              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-300">4★</th>
+              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-300">3★</th>
+              <th className="h-10 w-24 px-2 text-right font-medium text-zinc-300">Talent</th>
+              <th className="h-10 w-24 px-2 text-right font-medium text-zinc-300">Strength</th>
               <th
-                className="h-10 w-24 px-2 text-right font-medium text-zinc-500"
+                className="h-10 w-24 px-2 text-right font-medium text-zinc-300"
                 title="Mean of this season’s MaxPreps opponents’ team strength"
               >
                 SOS
@@ -225,10 +225,10 @@ export function RankingsTable({
           return (
             <li
               key={row.school.id}
-              className="rounded-xl border border-white/10 bg-white/[0.03] p-3"
+              className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-3"
             >
               <div className="flex items-baseline justify-between gap-3">
-                <span className="font-mono text-xs text-zinc-500">#{row.rank}</span>
+                <span className="font-mono text-xs text-zinc-400">#{row.rank}</span>
                 <span className="font-mono text-sm font-semibold text-amber-200">
                   {formatTalent(row.talentScore)}
                   {row.teamStrength != null ? (
@@ -251,7 +251,7 @@ export function RankingsTable({
                   recruits={recruits}
                 />
               </div>
-              <p className="mt-1 pl-7 text-sm text-zinc-500">
+              <p className="mt-1 pl-7 text-sm text-zinc-400">
                 {row.school.city}, {row.school.state} {row.school.zip ?? ""}
               </p>
               <p className="mt-2 pl-7 font-mono text-xs text-zinc-400">

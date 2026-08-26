@@ -2,8 +2,8 @@ import type { SourceStatus } from "@/lib/types";
 
 export function SourceBanner({ sources }: { sources: SourceStatus[] }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-zinc-400">
-      <p className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
+    <div className="rounded-xl border border-amber-400/20 bg-[#121c2e] px-4 py-3 text-sm text-zinc-300">
+      <p className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-200">
         Data sources
       </p>
       <ul className="grid gap-1 sm:grid-cols-2 lg:grid-cols-4">

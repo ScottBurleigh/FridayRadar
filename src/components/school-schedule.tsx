@@ -67,10 +67,10 @@ export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) 
 
   return (
     <div>
-      <div className="overflow-x-auto rounded-xl border border-white/10">
+      <div className="overflow-x-auto rounded-xl border border-amber-400/20 bg-[#121c2e]">
         <table className="w-full caption-bottom font-mono text-[13px]">
           <thead>
-            <tr className="border-b border-white/10 text-left text-zinc-500">
+            <tr className="border-b border-amber-400/20 text-left text-zinc-300">
               <th className="h-10 px-3 font-medium">Date</th>
               <th className="h-10 px-3 font-medium">Opponent</th>
               <th className="h-10 px-3 font-medium">Site</th>
@@ -124,7 +124,7 @@ export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) 
           </tbody>
         </table>
       </div>
-      <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500">
+      <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-400">
         <li className="inline-flex items-center gap-1 text-emerald-400">
           <ChevronsDown className="size-3.5" /> mismatch-easy
         </li>
@@ -141,7 +141,7 @@ export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) 
           <ChevronsUp className="size-3.5" /> mismatch-hard
         </li>
       </ul>
-      <p className="mt-1 text-xs text-zinc-600">
+      <p className="mt-1 text-xs text-zinc-400">
         Icons compare this team&apos;s strength to the opponent&apos;s. Unmapped opponents
         (no team_strength) skip SOS and show no toughness icon.
       </p>

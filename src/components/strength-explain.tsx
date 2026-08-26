@@ -80,7 +80,7 @@ export function StrengthExplainButton({
         type="button"
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-xs" }),
-          "-mr-1 text-zinc-500 hover:bg-white/10 hover:text-amber-300",
+          "-mr-1 text-zinc-400 hover:bg-white/10 hover:text-amber-300",
         )}
         aria-label={label}
         popoverTarget={panelId}
@@ -93,7 +93,7 @@ export function StrengthExplainButton({
         popover="auto"
         role="dialog"
         aria-label={`${schoolName} team strength`}
-        className="relative w-[min(32rem,calc(100%-2rem))] max-h-[min(36rem,85vh)] overflow-y-auto rounded-xl bg-[#10141b] p-4 text-zinc-100 shadow-xl ring-1 ring-white/15 [&::backdrop]:bg-black/60"
+        className="relative w-[min(32rem,calc(100%-2rem))] max-h-[min(36rem,85vh)] overflow-y-auto rounded-xl bg-[#121c2e] p-4 text-zinc-100 shadow-xl ring-1 ring-amber-400/25 [&::backdrop]:bg-[#0a1220]/75"
         style={{
           position: "fixed",
           inset: "unset",
@@ -123,7 +123,7 @@ export function StrengthExplainButton({
         <div className="mt-4 space-y-4 text-sm">
           {talentLine ? (
             <section>
-              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
                 Recruit talent
               </h3>
               <p className="mt-1 text-zinc-300">
@@ -135,7 +135,7 @@ export function StrengthExplainButton({
           ) : null}
           {on3Line ? (
             <section>
-              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
                 On3 national
               </h3>
               <p className="mt-1 text-zinc-300">
@@ -148,7 +148,7 @@ export function StrengthExplainButton({
           ) : null}
           {mpLine ? (
             <section>
-              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
                 MaxPreps national
               </h3>
               <p className="mt-1 text-zinc-300">
@@ -160,7 +160,7 @@ export function StrengthExplainButton({
           ) : null}
           {rankingLine ? (
             <section>
-              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
                 Ranking average
               </h3>
               <p className="mt-1 text-zinc-300">
@@ -171,7 +171,7 @@ export function StrengthExplainButton({
           ) : null}
           {blendLine ? (
             <section>
-              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Blend</h3>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">Blend</h3>
               <p className="mt-1 text-zinc-300">
                 Mean of talent and the ranking average, using only the pieces this school has.
               </p>
@@ -179,7 +179,7 @@ export function StrengthExplainButton({
             </section>
           ) : null}
           <section>
-            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
               DCTF 6A bonus
             </h3>
             <p className="mt-1 text-zinc-300">
@@ -190,7 +190,7 @@ export function StrengthExplainButton({
             <Formula>{bonusLine}</Formula>
           </section>
           <section>
-            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
               Team strength
             </h3>
             <p className="mt-1 text-zinc-300">Clamped to 0–100. This is the number on the page.</p>

@@ -21,6 +21,16 @@ export const metadata: Metadata = {
   },
   description:
     "High school football programs ranked by 2027-and-later recruiting talent across 247Sports, On3/Rivals, and ESPN.",
+  icons: {
+    icon: [{ url: "/fridayradar-logo.png", type: "image/png" }],
+    apple: "/fridayradar-logo.png",
+    shortcut: "/fridayradar-logo.png",
+  },
+};
+
+export const viewport = {
+  themeColor: "#0a1220",
+  colorScheme: "dark" as const,
 };
 
 export default function RootLayout({
@@ -33,7 +43,7 @@ export default function RootLayout({
       lang="en"
       className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-[#07090c] text-zinc-100">
+      <body className="flex min-h-full flex-col bg-[#0a1220] text-zinc-100">
         <SiteHeader />
         <div className="flex flex-1 flex-col">{children}</div>
       </body>

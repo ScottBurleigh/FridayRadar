@@ -50,7 +50,7 @@ export default async function RankingsPage({
           <h1 className="mt-1 text-3xl font-semibold tracking-tight text-zinc-50">
             Program rankings
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-zinc-400">
+          <p className="mt-2 max-w-2xl text-sm text-zinc-300">
             High schools ranked by the recruiting talent on their 2027, 2028, and 2029+
             rosters. Talent score stays its own number; team strength blends talent
             share (vs the board max) with On3 and MaxPreps national computer ranks when
@@ -58,7 +58,7 @@ export default async function RankingsPage({
             sort is talent.
           </p>
         </div>
-        <p className="font-mono text-sm text-zinc-500">
+        <p className="font-mono text-sm text-zinc-400">
           {rows.length.toLocaleString()} programs · as of {dataset.meta.as_of}
         </p>
       </div>
@@ -71,7 +71,7 @@ export default async function RankingsPage({
           Zip {zip} is not in the centroid file, so the radius filter was ignored.
         </p>
       ) : zipOk && zip ? (
-        <p className="mt-3 text-sm text-zinc-500">
+        <p className="mt-3 text-sm text-zinc-400">
           Showing schools within about 25 miles of {zip}.
         </p>
       ) : null}
@@ -89,7 +89,7 @@ export default async function RankingsPage({
           {safePage > 1 ? (
             <Link
               href={buildQuery({ state, zip, sort, page: safePage - 1 })}
-              className="rounded-md border border-white/10 px-3 py-1.5 hover:text-amber-300"
+              className="rounded-md border border-amber-400/25 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
             >
               Previous
             </Link>
@@ -102,7 +102,7 @@ export default async function RankingsPage({
           {safePage < pages ? (
             <Link
               href={buildQuery({ state, zip, sort, page: safePage + 1 })}
-              className="rounded-md border border-white/10 px-3 py-1.5 hover:text-amber-300"
+              className="rounded-md border border-amber-400/25 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
             >
               Next
             </Link>

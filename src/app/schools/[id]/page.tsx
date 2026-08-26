@@ -28,8 +28,8 @@ function Stat({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-      <dt className="text-xs uppercase tracking-wide text-zinc-500">{label}</dt>
+    <div className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-3">
+      <dt className="text-xs uppercase tracking-wide text-zinc-300">{label}</dt>
       <dd className="mt-1 font-mono text-xl text-zinc-50">{children}</dd>
     </div>
   );
@@ -73,7 +73,7 @@ export default async function SchoolPage({
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-zinc-400">
         <Link href="/" className="hover:text-amber-300">
           Rankings
         </Link>
@@ -83,7 +83,7 @@ export default async function SchoolPage({
       <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-50">
         {school.name}
         {school.mascot ? (
-          <span className="ml-3 text-xl font-normal text-zinc-500">{school.mascot}</span>
+          <span className="ml-3 text-xl font-normal text-zinc-400">{school.mascot}</span>
         ) : null}
       </h1>
       <p className="mt-2 text-zinc-400">
@@ -173,7 +173,7 @@ export default async function SchoolPage({
           <h2 className="text-lg font-semibold text-zinc-50">
             {schedule.season} football schedule
           </h2>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-zinc-400">
             MaxPreps 26-27 contests for this team. Deleted rows and Varsity Opponent placeholders
             are omitted. Toughness is this team versus the opponent, not combined talent.
           </p>

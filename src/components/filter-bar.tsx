@@ -21,27 +21,33 @@ export function FilterBar({
   zipLabel?: string;
 }) {
   return (
-    <form action={action} method="get" className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:flex-row sm:flex-wrap sm:items-end">
+    <form
+      action={action}
+      method="get"
+      className="flex flex-col gap-3 rounded-xl border border-amber-400/25 bg-[#121c2e] p-3 sm:flex-row sm:flex-wrap sm:items-end"
+    >
       <div className="min-w-40 flex-1">
-        <Label htmlFor="state" className="text-xs uppercase tracking-wide text-zinc-500">
+        <Label htmlFor="state" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
           {stateLabel}
         </Label>
         <select
           id="state"
           name="state"
           defaultValue={state ?? ""}
-          className="mt-1 h-8 w-full rounded-lg border border-input bg-input/30 px-2.5 text-sm text-foreground"
+          className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
         >
-          <option value="">All states</option>
+          <option value="" className="bg-[#0d1628] text-zinc-50">
+            All states
+          </option>
           {US_STATES.map((s) => (
-            <option key={s.code} value={s.code}>
+            <option key={s.code} value={s.code} className="bg-[#0d1628] text-zinc-50">
               {s.name}
             </option>
           ))}
         </select>
       </div>
       <div className="min-w-36 flex-1">
-        <Label htmlFor="zip" className="text-xs uppercase tracking-wide text-zinc-500">
+        <Label htmlFor="zip" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
           {zipLabel}
         </Label>
         <Input
@@ -52,23 +58,29 @@ export function FilterBar({
           maxLength={5}
           placeholder="30518"
           defaultValue={zip ?? ""}
-          className="mt-1"
+          className="mt-1 border-amber-200/45 bg-[#0d1628] text-zinc-50 placeholder:text-zinc-400"
         />
       </div>
       {showSort ? (
         <div className="min-w-40 flex-1">
-          <Label htmlFor="sort" className="text-xs uppercase tracking-wide text-zinc-500">
+          <Label htmlFor="sort" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
             Sort
           </Label>
           <select
             id="sort"
             name="sort"
             defaultValue={sort === "count" || sort === "strength" ? sort : "talent"}
-            className="mt-1 h-8 w-full rounded-lg border border-input bg-input/30 px-2.5 text-sm text-foreground"
+            className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
           >
-            <option value="talent">Talent score</option>
-            <option value="strength">Team strength</option>
-            <option value="count">Recruit count</option>
+            <option value="talent" className="bg-[#0d1628] text-zinc-50">
+              Talent score
+            </option>
+            <option value="strength" className="bg-[#0d1628] text-zinc-50">
+              Team strength
+            </option>
+            <option value="count" className="bg-[#0d1628] text-zinc-50">
+              Recruit count
+            </option>
           </select>
         </div>
       ) : null}

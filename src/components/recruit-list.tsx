@@ -21,7 +21,7 @@ export function RecruitList({
 }) {
   if (!players.length) {
     return (
-      <div className="rounded-xl border border-dashed border-white/15 px-6 py-12 text-center text-zinc-500">
+      <div className="rounded-xl border border-dashed border-amber-400/25 bg-[#121c2e] px-6 py-12 text-center text-zinc-400">
         No 2027-or-later recruits are on file for this school.
       </div>
     );
@@ -39,7 +39,7 @@ export function RecruitList({
     <div className="space-y-8">
       {years.map((year) => (
         <section key={year}>
-          <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-zinc-500">
+          <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-zinc-300">
             Class of {year}
           </h2>
           <ul className="space-y-3">
@@ -48,12 +48,12 @@ export function RecruitList({
               return (
                 <li
                   key={p.id}
-                  className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                  className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <p className="text-base font-medium text-zinc-50">{p.full_name}</p>
-                      <p className="mt-0.5 text-sm text-zinc-500">
+                      <p className="mt-0.5 text-sm text-zinc-400">
                         {p.position ?? "ATH"}
                         {p.height ? ` · ${p.height}` : ""}
                         {p.weight ? ` / ${p.weight}` : ""}
@@ -65,7 +65,7 @@ export function RecruitList({
                     </div>
                     <div className="text-right">
                       <StarBadge stars={p.badgeStars} />
-                      <p className="mt-1 font-mono text-xs text-zinc-500">
+                      <p className="mt-1 font-mono text-xs text-zinc-400">
                         {p.points.toFixed(1)} pts
                         {p.compositeStars != null
                           ? ` · ${p.compositeStars.toFixed(2)}★ avg`
@@ -80,7 +80,7 @@ export function RecruitList({
                         return (
                           <div
                             key={src}
-                            className="rounded-lg border border-white/5 px-3 py-2 text-xs text-zinc-600"
+                            className="rounded-lg border border-amber-400/15 px-3 py-2 text-xs text-zinc-400"
                           >
                             {sourceLabel(src)}
                             <span className="ml-2">—</span>
@@ -90,7 +90,7 @@ export function RecruitList({
                       return (
                         <div
                           key={src}
-                          className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs"
+                          className="rounded-lg border border-amber-400/20 bg-[#0d1628] px-3 py-2 text-xs"
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-zinc-400">{sourceLabel(src)}</span>

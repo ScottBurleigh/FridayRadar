@@ -43,13 +43,13 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
         <Table className="font-mono text-[13px]">
           <TableHeader>
             <TableRow className="border-white/10 hover:bg-transparent">
-              <TableHead className="w-14 text-zinc-500">Rk</TableHead>
-              <TableHead className="text-zinc-500">Kickoff</TableHead>
-              <TableHead className="text-zinc-500">Matchup</TableHead>
-              <TableHead className="text-right text-zinc-500">Away rec / talent</TableHead>
-              <TableHead className="text-right text-zinc-500">Home rec / talent</TableHead>
-              <TableHead className="text-right text-zinc-500">Combined</TableHead>
-              <TableHead className="text-zinc-500">Site</TableHead>
+              <TableHead className="w-14 text-zinc-300">Rk</TableHead>
+              <TableHead className="text-zinc-300">Kickoff</TableHead>
+              <TableHead className="text-zinc-300">Matchup</TableHead>
+              <TableHead className="text-right text-zinc-300">Away rec / talent</TableHead>
+              <TableHead className="text-right text-zinc-300">Home rec / talent</TableHead>
+              <TableHead className="text-right text-zinc-300">Combined</TableHead>
+              <TableHead className="text-zinc-300">Site</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -85,10 +85,10 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
         {rows.map((row) => (
           <li
             key={row.game.id}
-            className="rounded-xl border border-white/10 bg-white/[0.03] p-3"
+            className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-3"
           >
             <div className="flex items-baseline justify-between gap-3 text-xs">
-              <span className="font-mono text-zinc-500">#{row.rank}</span>
+              <span className="font-mono text-zinc-400">#{row.rank}</span>
               <span className="text-zinc-400">
                 {formatKickoff(row.game.kickoff, row.game.is_time_tba)}
               </span>
@@ -98,7 +98,7 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
               <span className="px-2 text-zinc-600">@</span>
               <SchoolName school={row.home} mapped={row.homeMapped} />
             </p>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-zinc-400">
               {venueLabel(row.game)}
             </p>
             <p className="mt-2 font-mono text-xs text-zinc-400">
