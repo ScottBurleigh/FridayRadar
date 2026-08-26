@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronsDown, ChevronDown, Equal, ChevronUp, ChevronsUp } from "lucide-react";
 import type { SchoolSchedule, ToughnessIcon } from "@/lib/types";
 import { formatGameResult, formatScheduleDate, siteLabel } from "@/lib/format";
+import { GameToughnessButton, ToughnessExplainButton } from "@/components/toughness-explain";
 
 const TOUGHNESS: Record<
   Exclude<ToughnessIcon, "unknown">,
@@ -62,7 +63,13 @@ function ToughnessCell({ icon }: { icon: ToughnessIcon }) {
   );
 }
 
-export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) {
+export function SchoolScheduleTable({
+  schedule,
+  schoolName,
+}: {
+  schedule: SchoolSchedule;
+  schoolName: string;
+}) {
   if (!schedule.games.length) return null;
 
   return (
@@ -75,7 +82,15 @@ export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) 
               <th className="h-10 px-3 font-medium">Opponent</th>
               <th className="h-10 px-3 font-medium">Site</th>
               <th className="h-10 px-3 font-medium">Result</th>
-              <th className="h-10 px-3 text-center font-medium">Tough</th>
+              <th className="h-10 px-3 text-center font-medium">
+                <span className="inline-flex items-center justify-center gap-0.5">
+                  Tough
+                  <ToughnessExplainButton
+                    schoolName={schoolName}
+                    teamStrength={schedule.teamStrength}
+                  />
+                </span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -116,7 +131,17 @@ export function SchoolScheduleTable({ schedule }: { schedule: SchoolSchedule }) 
                     )}
                   </td>
                   <td className="px-3 py-2 text-center">
-                    <ToughnessCell icon={g.toughnessIcon} />
+                    {g.toughnessIcon === "unknown" ? null : (
+                      <GameToughnessButton
+                        schoolName={schoolName}
+                        teamStrength={schedule.teamStrength}
+                        opponentName={g.opponent.name}
+                        opponentStrength={g.opponent.teamStrength}
+                        icon={g.toughnessIcon}
+                      >
+                        <ToughnessCell icon={g.toughnessIcon} />
+                      </GameToughnessButton>
+                    )}
                   </td>
                 </tr>
               );

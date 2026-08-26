@@ -178,7 +178,7 @@ export default async function SchoolPage({
             are omitted. Toughness is this team versus the opponent, not combined talent.
           </p>
           <div className="mt-4">
-            <SchoolScheduleTable schedule={schedule} />
+            <SchoolScheduleTable schedule={schedule} schoolName={school.name} />
           </div>
         </section>
       ) : null}
