@@ -1,7 +1,4 @@
-"use client";
-
-import { useEffect, useId, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useId } from "react";
 import { Info, XIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -28,36 +25,10 @@ export function StrengthExplainButton({
   breakdown: StrengthBreakdown | null | undefined;
   teamStrength: number | null | undefined;
 }) {
-  const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const titleId = useId();
-  const descId = useId();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        setOpen(false);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    panelRef.current?.focus();
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-
+  const reactId = useId();
   if (teamStrength == null || !breakdown) return null;
 
+  const panelId = `strength-formula-${reactId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const talentLine =
     breakdown.talentScore != null && breakdown.talentMax != null && breakdown.talentNorm != null
       ? `talent_norm = 100 × ${n(breakdown.talentScore)} / ${n(breakdown.talentMax)} = ${n(breakdown.talentNorm)}`
@@ -103,129 +74,6 @@ export function StrengthExplainButton({
   const blendedShown = breakdown.blended ?? result;
   const label = `How ${schoolName} team strength is calculated`;
 
-  const popup =
-    mounted && open
-      ? createPortal(
-          <div
-            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 sm:items-center"
-            onClick={() => setOpen(false)}
-          >
-            <div
-              ref={panelRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={titleId}
-              aria-describedby={descId}
-              tabIndex={-1}
-              className="relative my-8 w-full max-w-lg rounded-xl bg-[#10141b] p-4 text-zinc-100 shadow-xl ring-1 ring-white/15 outline-none"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "icon-sm" }),
-                  "absolute top-2 right-2 text-zinc-400 hover:text-zinc-50",
-                )}
-                aria-label="Close"
-                onClick={() => setOpen(false)}
-              >
-                <XIcon className="size-4" />
-              </button>
-              <h2 id={titleId} className="pr-8 text-base font-medium text-zinc-50">
-                {schoolName} team strength
-              </h2>
-              <p id={descId} className="mt-2 text-sm text-zinc-400">
-                Recruit talent mixed with national rankings when this school is on those
-                boards. Missing boards are skipped, not counted as zero.
-              </p>
-              <div className="mt-4 space-y-4 text-sm">
-                {talentLine ? (
-                  <section>
-                    <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      Recruit talent
-                    </h3>
-                    <p className="mt-1 text-zinc-300">
-                      Share of the board’s top talent score
-                      {breakdown.talentMaxName ? ` (${breakdown.talentMaxName})` : ""}.
-                    </p>
-                    <Formula>{talentLine}</Formula>
-                  </section>
-                ) : null}
-                {on3Line ? (
-                  <section>
-                    <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      On3 national
-                    </h3>
-                    <p className="mt-1 text-zinc-300">
-                      On3 rank #{breakdown.on3Rank}
-                      {breakdown.on3Rating != null ? ` · rating ${n(breakdown.on3Rating)}` : ""} on
-                      the 1,000-team board.
-                    </p>
-                    <Formula>{on3Line}</Formula>
-                  </section>
-                ) : null}
-                {mpLine ? (
-                  <section>
-                    <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      MaxPreps national
-                    </h3>
-                    <p className="mt-1 text-zinc-300">
-                      MaxPreps computer rank #{breakdown.maxprepsRank} of 100 (not the editorial
-                      Top 25).
-                    </p>
-                    <Formula>{mpLine}</Formula>
-                  </section>
-                ) : null}
-                {rankingLine ? (
-                  <section>
-                    <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      Ranking average
-                    </h3>
-                    <p className="mt-1 text-zinc-300">
-                      Mean of whichever of On3 and MaxPreps exist for this school.
-                    </p>
-                    <Formula>{rankingLine}</Formula>
-                  </section>
-                ) : null}
-                {blendLine ? (
-                  <section>
-                    <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      Blend
-                    </h3>
-                    <p className="mt-1 text-zinc-300">
-                      Mean of talent and the ranking average, using only the pieces this
-                      school has.
-                    </p>
-                    <Formula>{blendLine}</Formula>
-                  </section>
-                ) : null}
-                <section>
-                  <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                    DCTF 6A bonus
-                  </h3>
-                  <p className="mt-1 text-zinc-300">
-                    {dctf
-                      ? `Texas 6A Top 25 at #${breakdown.dctfRank}.`
-                      : "Not in the Dave Campbell’s Texas Football 6A Top 25."}
-                  </p>
-                  <Formula>{bonusLine}</Formula>
-                </section>
-                <section>
-                  <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                    Team strength
-                  </h3>
-                  <p className="mt-1 text-zinc-300">
-                    Clamped to 0–100. This is the number on the page.
-                  </p>
-                  <Formula>{`team_strength = clamp(${n(blendedShown)} + ${n(bonus)}, 0, 100) = ${n(result)}`}</Formula>
-                </section>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )
-      : null;
-
   return (
     <>
       <button
@@ -235,18 +83,121 @@ export function StrengthExplainButton({
           "-mr-1 text-zinc-500 hover:bg-white/10 hover:text-amber-300",
         )}
         aria-label={label}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setOpen(true);
-        }}
-        onPointerDown={(e) => e.stopPropagation()}
+        popoverTarget={panelId}
+        popoverTargetAction="toggle"
       >
         <Info className="size-3.5" aria-hidden />
       </button>
-      {popup}
+      <div
+        id={panelId}
+        popover="auto"
+        role="dialog"
+        aria-label={`${schoolName} team strength`}
+        className="relative w-[min(32rem,calc(100%-2rem))] max-h-[min(36rem,85vh)] overflow-y-auto rounded-xl bg-[#10141b] p-4 text-zinc-100 shadow-xl ring-1 ring-white/15 [&::backdrop]:bg-black/60"
+        style={{
+          position: "fixed",
+          inset: "unset",
+          top: "50%",
+          left: "50%",
+          margin: 0,
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <button
+          type="button"
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon-sm" }),
+            "absolute top-2 right-2 text-zinc-400 hover:text-zinc-50",
+          )}
+          aria-label="Close"
+          popoverTarget={panelId}
+          popoverTargetAction="hide"
+        >
+          <XIcon className="size-4" />
+        </button>
+        <h2 className="pr-8 text-base font-medium text-zinc-50">{schoolName} team strength</h2>
+        <p className="mt-2 text-sm text-zinc-400">
+          Recruit talent mixed with national rankings when this school is on those boards.
+          Missing boards are skipped, not counted as zero.
+        </p>
+        <div className="mt-4 space-y-4 text-sm">
+          {talentLine ? (
+            <section>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                Recruit talent
+              </h3>
+              <p className="mt-1 text-zinc-300">
+                Share of the board’s top talent score
+                {breakdown.talentMaxName ? ` (${breakdown.talentMaxName})` : ""}.
+              </p>
+              <Formula>{talentLine}</Formula>
+            </section>
+          ) : null}
+          {on3Line ? (
+            <section>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                On3 national
+              </h3>
+              <p className="mt-1 text-zinc-300">
+                On3 rank #{breakdown.on3Rank}
+                {breakdown.on3Rating != null ? ` · rating ${n(breakdown.on3Rating)}` : ""} on the
+                1,000-team board.
+              </p>
+              <Formula>{on3Line}</Formula>
+            </section>
+          ) : null}
+          {mpLine ? (
+            <section>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                MaxPreps national
+              </h3>
+              <p className="mt-1 text-zinc-300">
+                MaxPreps computer rank #{breakdown.maxprepsRank} of 100 (not the editorial Top
+                25).
+              </p>
+              <Formula>{mpLine}</Formula>
+            </section>
+          ) : null}
+          {rankingLine ? (
+            <section>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                Ranking average
+              </h3>
+              <p className="mt-1 text-zinc-300">
+                Mean of whichever of On3 and MaxPreps exist for this school.
+              </p>
+              <Formula>{rankingLine}</Formula>
+            </section>
+          ) : null}
+          {blendLine ? (
+            <section>
+              <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Blend</h3>
+              <p className="mt-1 text-zinc-300">
+                Mean of talent and the ranking average, using only the pieces this school has.
+              </p>
+              <Formula>{blendLine}</Formula>
+            </section>
+          ) : null}
+          <section>
+            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+              DCTF 6A bonus
+            </h3>
+            <p className="mt-1 text-zinc-300">
+              {dctf
+                ? `Texas 6A Top 25 at #${breakdown.dctfRank}.`
+                : "Not in the Dave Campbell’s Texas Football 6A Top 25."}
+            </p>
+            <Formula>{bonusLine}</Formula>
+          </section>
+          <section>
+            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+              Team strength
+            </h3>
+            <p className="mt-1 text-zinc-300">Clamped to 0–100. This is the number on the page.</p>
+            <Formula>{`team_strength = clamp(${n(blendedShown)} + ${n(bonus)}, 0, 100) = ${n(result)}`}</Formula>
+          </section>
+        </div>
+      </div>
     </>
   );
 }
