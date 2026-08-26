@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +9,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import type { StrengthBreakdown } from "@/lib/types";
 
@@ -33,6 +33,7 @@ export function StrengthExplainButton({
   breakdown: StrengthBreakdown | null | undefined;
   teamStrength: number | null | undefined;
 }) {
+  const [open, setOpen] = useState(false);
   if (teamStrength == null || !breakdown) return null;
 
   const talentLine =
@@ -78,24 +79,29 @@ export function StrengthExplainButton({
     : `bonus = 0`;
   const result = breakdown.teamStrength ?? teamStrength;
   const blendedShown = breakdown.blended ?? result;
+  const label = `How ${schoolName} team strength is calculated`;
 
   return (
-    <Dialog>
-      <DialogTrigger
-        render={
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            className="-mr-1 text-zinc-500 hover:bg-white/10 hover:text-amber-300"
-            aria-label={`How ${schoolName} team strength is calculated`}
-            onClick={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
-          />
-        }
+    <>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-xs"
+        className="-mr-1 text-zinc-500 hover:bg-white/10 hover:text-amber-300"
+        aria-label={label}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
       >
         <Info className="size-3.5" aria-hidden />
-      </DialogTrigger>
+      </Button>
+      {open ? (
+      <Dialog open onOpenChange={setOpen}>
       <DialogContent
         className="max-h-[min(36rem,85vh)] overflow-y-auto bg-[#10141b] text-zinc-100 ring-white/15 sm:max-w-lg"
         onClick={(e) => e.stopPropagation()}
@@ -190,6 +196,8 @@ export function StrengthExplainButton({
           </section>
         </div>
       </DialogContent>
-    </Dialog>
+      </Dialog>
+      ) : null}
+    </>
   );
 }
