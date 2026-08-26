@@ -103,7 +103,7 @@ export function filteredRankings(
   if (opts.zip) {
     schools = schools.filter((s) => schoolWithinZipRadius(s, opts.zip!));
   }
-  return rankSchools(schools, dataset.players, dataset.ratings, opts.sort ?? "talent");
+  return rankSchools(schools, dataset.players, dataset.ratings, opts.sort ?? "strength");
 }
 
 export function mondayOf(date: Date): Date {

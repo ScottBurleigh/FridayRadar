@@ -6,7 +6,8 @@ import { RecruitList } from "@/components/recruit-list";
 import { SchoolScheduleTable } from "@/components/school-schedule";
 import { StrengthExplainButton } from "@/components/strength-explain";
 import { loadDataset, playersAtSchool, maxprepsScheduleUrl, scheduleForSchool } from "@/lib/data";
-import { formatLocation, formatTalent, formatStrength } from "@/lib/format";
+import { formatLocation, formatStrength } from "@/lib/format";
+import { TalentGrade } from "@/components/talent-explain";
 import { officialStars, badgeStars, playerPoints, ratingsBySource } from "@/lib/ranking";
 import type { RatedPlayer } from "@/lib/types";
 
@@ -92,8 +93,13 @@ export default async function SchoolPage({
       </p>
       <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <Stat label="2027+ recruits">{recruitCount}</Stat>
-        <Stat label="Talent score">
-          <span className="text-amber-200">{formatTalent(talent)}</span>
+        <Stat label="Talent">
+          <TalentGrade
+            schoolName={school.name}
+            talentScore={talent}
+            breakdown={school.strengthBreakdown}
+            size="stat"
+          />
         </Stat>
         <Stat label="Team strength">
           <span className="inline-flex items-center gap-1">

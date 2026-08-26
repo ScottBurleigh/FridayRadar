@@ -11,7 +11,7 @@ function buildQuery(opts: { state?: string; zip?: string; sort?: string; page?: 
   const p = new URLSearchParams();
   if (opts.state) p.set("state", opts.state);
   if (opts.zip) p.set("zip", opts.zip);
-  if (opts.sort && opts.sort !== "talent") p.set("sort", opts.sort);
+  if (opts.sort && opts.sort !== "strength") p.set("sort", opts.sort);
   if (opts.page && opts.page > 1) p.set("page", String(opts.page));
   const s = p.toString();
   return s ? `/?${s}` : "/";
@@ -26,7 +26,7 @@ export default async function RankingsPage({
   const state = typeof params.state === "string" ? params.state : undefined;
   const zip = typeof params.zip === "string" ? params.zip.replace(/\D/g, "").slice(0, 5) : undefined;
   const sort =
-    params.sort === "count" || params.sort === "strength" ? params.sort : "talent";
+    params.sort === "count" || params.sort === "talent" ? params.sort : "strength";
   const page = Math.max(1, Number(params.page) || 1);
   const dataset = loadDataset();
   const zipOk = zip && zip.length === 5 ? coordsForZip(zip) : null;
@@ -51,11 +51,11 @@ export default async function RankingsPage({
             Program rankings
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-zinc-300">
-            High schools ranked by the recruiting talent on their 2027, 2028, and 2029+
-            rosters. Talent score stays its own number; team strength blends talent
-            share (vs the board max) with On3 and MaxPreps national computer ranks when
-            those boards list the school. Texas 6A DCTF Top 25 adds a bonus. Default
-            sort is talent.
+            High schools ranked by team strength by default: talent share versus the
+            board max, mixed with On3 and MaxPreps national computer ranks when those
+            boards list the school. Texas 6A DCTF Top 25 adds a bonus. Talent is a
+            letter grade (open it for the numeric total). Sort by talent or recruit
+            count if you want the raw roster instead.
           </p>
         </div>
         <p className="font-mono text-sm text-zinc-400">

@@ -69,14 +69,14 @@ export function FilterBar({
           <select
             id="sort"
             name="sort"
-            defaultValue={sort === "count" || sort === "strength" ? sort : "talent"}
+            defaultValue={sort === "count" || sort === "talent" ? sort : "strength"}
             className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
           >
-            <option value="talent" className="bg-[#0d1628] text-zinc-50">
-              Talent score
-            </option>
             <option value="strength" className="bg-[#0d1628] text-zinc-50">
               Team strength
+            </option>
+            <option value="talent" className="bg-[#0d1628] text-zinc-50">
+              Talent
             </option>
             <option value="count" className="bg-[#0d1628] text-zinc-50">
               Recruit count

@@ -181,7 +181,7 @@ export function rankSchools(
   schools: School[],
   players: Player[],
   ratings: Rating[],
-  sort: "talent" | "count" | "strength" = "talent",
+  sort: "talent" | "count" | "strength" = "strength",
 ): SchoolRankingRow[] {
   const ratingsByPlayer = new Map<string, Rating[]>();
   for (const r of ratings) {

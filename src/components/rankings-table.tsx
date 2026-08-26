@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import type { InlineRecruit, SchoolRankingRow, SosLabel } from "@/lib/types";
 import { formatTalent } from "@/lib/format";
 import { StrengthExplainButton } from "@/components/strength-explain";
+import { TalentGrade } from "@/components/talent-explain";
 
 function SosCell({
   sos,
@@ -46,7 +47,7 @@ function SourceStars({ label, stars }: { label: string; stars: number | null }) 
   if (stars == null) return null;
   return (
     <span className="font-mono text-[11px] text-zinc-500">
-      {label} <span className="text-amber-300">{stars}★</span>
+      {label} <span className="text-amber-300">{stars}-star</span>
     </span>
   );
 }
@@ -65,7 +66,7 @@ function InlineRecruitList({ players }: { players: InlineRecruit[] }) {
           <span className="text-zinc-100">{p.name}</span>
           <span className="text-zinc-500">{p.position ?? "ATH"}</span>
           <span className="font-mono text-[11px] text-zinc-600">{p.classYear}</span>
-          <span className="flex flex-wrap gap-x-2">
+          <span className="flex flex-wrap gap-x-3 gap-y-0.5">
             <SourceStars label="247" stars={p.stars247} />
             <SourceStars label="On3" stars={p.starsOn3} />
             <SourceStars label="ESPN" stars={p.starsEspn} />
@@ -157,9 +158,15 @@ export function RankingsTable({
               <th className="h-10 w-12 px-2 text-left font-medium text-zinc-300">St</th>
               <th className="h-10 w-16 px-2 text-left font-medium text-zinc-300">Zip</th>
               <th className="h-10 w-16 px-2 text-right font-medium text-zinc-300">Rec</th>
-              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-300">5★</th>
-              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-300">4★</th>
-              <th className="h-10 w-12 px-2 text-right font-medium text-zinc-300">3★</th>
+              <th className="h-10 min-w-[4.75rem] px-2 text-right font-medium whitespace-nowrap text-zinc-300">
+                5-star
+              </th>
+              <th className="h-10 min-w-[4.75rem] px-2 text-right font-medium whitespace-nowrap text-zinc-300">
+                4-star
+              </th>
+              <th className="h-10 min-w-[4.75rem] px-2 text-right font-medium whitespace-nowrap text-zinc-300">
+                3-star
+              </th>
               <th className="h-10 w-24 px-2 text-right font-medium text-zinc-300">Talent</th>
               <th className="h-10 w-24 px-2 text-right font-medium text-zinc-300">Strength</th>
               <th
@@ -193,8 +200,12 @@ export function RankingsTable({
                   <td className="p-2 align-top text-right text-amber-300">{row.stars5 || "—"}</td>
                   <td className="p-2 align-top text-right text-zinc-300">{row.stars4 || "—"}</td>
                   <td className="p-2 align-top text-right text-zinc-400">{row.stars3 || "—"}</td>
-                  <td className="p-2 align-top text-right font-semibold text-amber-200">
-                    {formatTalent(row.talentScore)}
+                  <td className="p-2 align-top text-right">
+                    <TalentGrade
+                      schoolName={row.school.name}
+                      talentScore={row.talentScore}
+                      breakdown={row.school.strengthBreakdown}
+                    />
                   </td>
                   <td className="p-2 align-top text-right text-zinc-200">
                     {row.teamStrength != null ? (
@@ -229,10 +240,14 @@ export function RankingsTable({
             >
               <div className="flex items-baseline justify-between gap-3">
                 <span className="font-mono text-xs text-zinc-400">#{row.rank}</span>
-                <span className="font-mono text-sm font-semibold text-amber-200">
-                  {formatTalent(row.talentScore)}
+                <span className="inline-flex items-baseline gap-2 font-mono text-sm">
+                  <TalentGrade
+                    schoolName={row.school.name}
+                    talentScore={row.talentScore}
+                    breakdown={row.school.strengthBreakdown}
+                  />
                   {row.teamStrength != null ? (
-                    <span className="ml-2 inline-flex items-center gap-0.5 font-normal text-zinc-400">
+                    <span className="inline-flex items-center gap-0.5 font-normal text-zinc-400">
                       str {formatTalent(row.teamStrength)}
                       <StrengthExplainButton
                         schoolName={row.school.name}
@@ -255,7 +270,13 @@ export function RankingsTable({
                 {row.school.city}, {row.school.state} {row.school.zip ?? ""}
               </p>
               <p className="mt-2 pl-7 font-mono text-xs text-zinc-400">
-                {row.recruitCount} recruits · {row.stars5} 5★ · {row.stars4} 4★ · {row.stars3} 3★
+                {row.recruitCount} recruits
+                <span className="px-1.5 text-zinc-600">·</span>
+                {row.stars5} 5-star
+                <span className="px-1.5 text-zinc-600">·</span>
+                {row.stars4} 4-star
+                <span className="px-1.5 text-zinc-600">·</span>
+                {row.stars3} 3-star
               </p>
               <p className="mt-1 pl-7">
                 <SosCell sos={row.sos} label={row.sosLabel} compact />
