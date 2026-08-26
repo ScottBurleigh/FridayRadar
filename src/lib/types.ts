@@ -36,13 +36,15 @@ export type School = {
   stars3?: number | null;
   /** false = Matchup opponent with no Scout roster (one-sided talent). */
   mapped?: boolean;
-  /** 0–100 talent-share × On3 rank curve when the school is on the national board. */
+  /** 0–100 talent share blended with On3 / MaxPreps ranks, plus DCTF 6A bonus in Texas. */
   teamStrength?: number | null;
   on3?: {
     rank: number;
     rating: number | null;
     orgKey?: string | number | null;
   } | null;
+  maxprepsNational?: { rank: number } | null;
+  dctf?: { rank: number; board?: string | null } | null;
   sos?: number | null;
   sosGames?: number | null;
   sosLabel?: "tough" | "average" | "light" | null;

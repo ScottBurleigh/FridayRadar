@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """On3 national HS rankings + MaxPreps 26-27 schedules → strength, SOS, toughness.
 
-Does not invent On3 ranks. Unranked schools use talent share only.
-Writes data/raw/on3/national-2026.json, site-data/schedules.json, and
-team_strength / on3 / sos fields on site-data + data/import schools.json.
+Team strength blends talent share with On3 and MaxPreps national computer ranks
+when those boards list the school, then a DCTF 6A Top 25 bonus for Texas.
+Does not invent ranks. Writes site-data schedules and strength fields.
 """
 from __future__ import annotations
 
@@ -23,6 +23,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site-data"
 IMPORT = ROOT / "data/import"
 RAW_ON3 = ROOT / "data/raw/on3" / "national-2026.json"
+RAW_MP = ROOT / "data/raw/maxpreps" / "national-rankings.json"
+RAW_DCTF = ROOT / "data/raw/dctf" / "6a-top25-week1.json"
 CACHE = Path("/tmp/fridayradar-sched-cache")
 UA = {
     "User-Agent": (
@@ -37,11 +39,20 @@ PLACEHOLDER = re.compile(
 )
 BLUE_WHITE = re.compile(r"blue[\s\-]*white", re.I)
 SEASON = "26-27"
-# On3 ranks worse than this stay on the school page but do not enter team_strength.
-# Matchup’s blend uses rating min-max for the top 250; 251+ are the listed-recruit
-# floor (70 pts → 3.09) so a 398th-ranked composite cannot inflate SOS.
-ON3_STRENGTH_RANK_CAP = 250
-LISTED_POINTS = 70.0
+MAXPREPS_N = 100
+DCTF_N = 25
+DCTF_BONUS_MAX = 10.0
+
+STRENGTH_NOTE = (
+    "team_strength is the mean of talent_norm (100 × talent / board max; IMG = 100 "
+    "on talent only) and ranking_norm. ranking_norm is the mean of whichever of "
+    "on3_norm (On3 1000-team compositeScore min–max onto 0–100) and maxpreps_norm "
+    "(100 × (N+1−rank)/N on the 100-team MaxPreps national computer board) exist. "
+    "Unranked boards are omitted, never 0. Texas 6A DCTF Top 25 then adds "
+    "10 × (26−rank)/25 (#1 +10.00, #25 +0.40) and the result is clamped 0–100. "
+    "SOS is the mean of known opponents’ team_strength (unknown omitted; never "
+    "raw On3 compositeScore)."
+)
 
 
 HTML_UA = {
@@ -268,14 +279,64 @@ def talent_norm_map(schools: list[dict]) -> dict[str, float]:
 
 
 def on3_rating_norm(rating: float, rmin: float, rmax: float) -> float:
-    """Scale On3 compositeScore onto 0–100 (IMG rating = 100, board min = 0).
+    """Scale On3 compositeScore onto 0–100 (board max → 100, board min → 0).
 
-    This is the On3 *term* of team_strength, never the SOS value itself.
+    This is the On3 *term* of ranking_norm, never the SOS value itself.
     """
     if rmax <= rmin:
         return 100.0
     val = 100.0 * (float(rating) - rmin) / (rmax - rmin)
     return round(max(0.0, min(100.0, val)), 2)
+
+
+def maxpreps_rank_norm(rank: int, n: int = MAXPREPS_N) -> float:
+    """Rank 1 = 100, rank N = 1. Unranked must not call this (never 0)."""
+    return round(100.0 * (n + 1 - int(rank)) / n, 2)
+
+
+def dctf_bonus(rank: int, n: int = DCTF_N, cap: float = DCTF_BONUS_MAX) -> float:
+    """#1 +10.00, #25 +0.40. Unranked Texas get 0 extra, not a penalty."""
+    return round(cap * (n + 1 - int(rank)) / n, 2)
+
+
+def mean_present(vals: list[float | None]) -> float | None:
+    xs = [float(v) for v in vals if v is not None]
+    if not xs:
+        return None
+    return sum(xs) / len(xs)
+
+
+def resolve_rank_site_id(raw: str | None, aliases: dict[str, str], school_ids: set[str]) -> str | None:
+    """Join on site_id. St./Saint aliases only; never invent a missing school."""
+    sid = (raw or "").strip()
+    if not sid:
+        return None
+    sid = aliases.get(sid, sid)
+    sid = CANONICAL_SCHOOL_IDS.get(sid, sid)
+    if sid in school_ids:
+        return sid
+    return None
+
+
+def join_site_rank_board(schools: list[dict], path: Path) -> tuple[dict[str, int], dict]:
+    payload = json.loads(path.read_text()) if path.exists() else {}
+    school_ids = {s["id"] for s in schools}
+    aliases = dict(payload.get("site_id_aliases") or {})
+    out: dict[str, int] = {}
+    unresolved = []
+    for row in payload.get("teams") or []:
+        rank = row.get("rank")
+        resolved = resolve_rank_site_id(row.get("site_id"), aliases, school_ids)
+        if rank is None or resolved is None:
+            if row.get("site_id"):
+                unresolved.append((row.get("site_id"), rank))
+            continue
+        if resolved in out:
+            continue
+        out[resolved] = int(rank)
+    if unresolved:
+        print(f"rank board {path.name} unresolved {unresolved}", flush=True)
+    return out, payload
 
 
 def skip_opponent_name(name: str | None) -> bool:
@@ -891,30 +952,35 @@ def sos_label(value: float, p25: float, p75: float) -> str:
     return "average"
 
 
-def apply_strength(schools: list[dict], joined: dict[str, dict], on3_teams: list[dict]) -> None:
+def apply_strength(
+    schools: list[dict],
+    joined_on3: dict[str, dict],
+    on3_teams: list[dict],
+    joined_mp: dict[str, int] | None = None,
+    joined_dctf: dict[str, int] | None = None,
+) -> None:
     tnorm = talent_norm_map(schools)
     ratings = [float(t["rating"]) for t in on3_teams if t.get("rating") is not None]
     rmin = min(ratings) if ratings else 0.0
     rmax = max(ratings) if ratings else 100.0
-    max_t = max((float(s["talent_score"]) for s in schools if s.get("talent_score") is not None), default=0.0)
-    listed_floor = round(100.0 * LISTED_POINTS / max_t, 2) if max_t else 0.0
+    joined_mp = joined_mp or {}
+    joined_dctf = joined_dctf or {}
     for s in schools:
         sid = s["id"]
         tn = tnorm.get(sid)
-        on3 = joined.get(sid)
-        if (
-            on3
-            and on3.get("rating") is not None
-            and int(on3["rank"]) <= ON3_STRENGTH_RANK_CAP
-            and tn is not None
-        ):
-            st = round((tn + on3_rating_norm(on3["rating"], rmin, rmax)) / 2.0, 2)
-        elif on3 and int(on3["rank"]) > ON3_STRENGTH_RANK_CAP:
-            st = listed_floor
-        elif tn is not None:
-            st = tn
-        else:
-            st = None
+        on3 = joined_on3.get(sid)
+        on3n = None
+        if on3 and on3.get("rating") is not None:
+            on3n = on3_rating_norm(on3["rating"], rmin, rmax)
+        mp_rank = joined_mp.get(sid)
+        mpn = maxpreps_rank_norm(mp_rank) if mp_rank is not None else None
+        ranking_norm = mean_present([on3n, mpn])
+        st = mean_present([tn, ranking_norm])
+        dctf_rank = joined_dctf.get(sid)
+        if dctf_rank is not None and (s.get("state") or "").upper() == "TX" and st is not None:
+            st = st + dctf_bonus(dctf_rank)
+        if st is not None:
+            st = round(max(0.0, min(100.0, st)), 2)
         s["team_strength"] = st
         if on3:
             s["on3"] = {
@@ -924,6 +990,14 @@ def apply_strength(schools: list[dict], joined: dict[str, dict], on3_teams: list
             }
         else:
             s.pop("on3", None)
+        if mp_rank is not None:
+            s["maxpreps_national"] = {"rank": int(mp_rank)}
+        else:
+            s.pop("maxpreps_national", None)
+        if dctf_rank is not None and (s.get("state") or "").upper() == "TX":
+            s["dctf"] = {"rank": int(dctf_rank), "board": "6A"}
+        else:
+            s.pop("dctf", None)
 
 
 def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
@@ -1108,7 +1182,16 @@ def slice_v1_games(schools: list[dict], limit: int = 196) -> int:
     return len(picked)
 
 
-def write_board(schools: list[dict], schedules: dict[str, dict], n_on3: int, joined: int) -> None:
+def write_board(
+    schools: list[dict],
+    schedules: dict[str, dict],
+    n_on3: int,
+    joined: int,
+    n_mp: int = 0,
+    mp_joined: int = 0,
+    n_dctf: int = 0,
+    dctf_joined: int = 0,
+) -> None:
     payload_schools = json.dumps(schools)
     for dest in (SITE, IMPORT):
         dest.mkdir(parents=True, exist_ok=True)
@@ -1121,19 +1204,17 @@ def write_board(schools: list[dict], schedules: dict[str, dict], n_on3: int, joi
         {
             "on3_national": n_on3,
             "on3_joined": joined,
+            "maxpreps_national": n_mp,
+            "maxpreps_joined": mp_joined,
+            "dctf_6a": n_dctf,
+            "dctf_joined": dctf_joined,
             "schedules": len(schedules),
             "with_zip": sum(1 for s in schools if s.get("zip")),
             "v1_games": n_games,
             "v1_both_sides": n_games,
             "v1_partial": 0,
             "rank_by": "two_sided_talent",
-            "team_strength_note": (
-                "team_strength is the mean of talent share (100 × talent / board max; IMG = 100) "
-                "and On3 compositeScore scaled 0–100 (board min→0, IMG rating→100) when On3 rank "
-                "is 1–250. Ranks 251+ keep the On3 badge but use the listed-recruit floor for "
-                "strength (70 pts → 3.09). Unranked schools use talent share only. SOS is the mean "
-                "of known opponents’ team_strength (unknown omitted; never raw On3 compositeScore)."
-            ),
+            "team_strength_note": STRENGTH_NOTE,
             "note": (
                 "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. "
                 f"v1 /games is games-top213.json ({n_games} two-sided games, 0 partial) "
@@ -1289,22 +1370,39 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
     on3_teams = fetch_on3()
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
-    apply_strength(schools, joined, on3_teams)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
     restamp_schedules(schools, schedules)
     n_games = slice_v1_games(schools, 196)
-    write_board(schools, schedules, n_on3, len(joined))
+    write_board(
+        schools,
+        schedules,
+        n_on3,
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+    )
     img = next((s for s in schools if s["id"] == "fl-bradenton-img-academy"), {})
     print(
         "restamp IMG strength",
         img.get("team_strength"),
         "on3",
         img.get("on3"),
+        "maxpreps",
+        img.get("maxpreps_national"),
         "sos",
         img.get("sos"),
         "schedules",
         len(schedules),
         "on3_joined",
         len(joined),
+        "maxpreps_joined",
+        len(joined_mp),
+        "dctf_joined",
+        len(joined_dctf),
         "games",
         n_games,
     )
@@ -1316,8 +1414,11 @@ def main() -> int:
     on3_teams = fetch_on3()
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
+    joined_mp, _mp = join_site_rank_board(schools, RAW_MP)
+    joined_dctf, _dctf = join_site_rank_board(schools, RAW_DCTF)
     print(f"on3 joined {len(joined)} / {n_on3} onto {len(schools)} schools")
-    apply_strength(schools, joined, on3_teams)
+    print(f"maxpreps national joined {len(joined_mp)} dctf joined {len(joined_dctf)}")
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
     by_mp, by_st_nn = opponent_indexes(schools)
     by_id = {s["id"]: s for s in schools}
 
@@ -1392,12 +1493,7 @@ def main() -> int:
             "on3_joined": len(joined),
             "schedules": len(schedules),
             "with_zip": sum(1 for s in schools if s.get("zip")),
-            "team_strength_note": (
-                "team_strength is the mean of talent share (100 × talent / board max; IMG = 100) "
-                "and an On3 national rank log-curve (rank 1 = 100, decaying). "
-                "Unranked schools omit the On3 term. SOS is the mean of known opponents’ "
-                "team_strength on that 0–100 scale (unknown omitted, never On3 compositeScore)."
-            ),
+            "team_strength_note": STRENGTH_NOTE,
         }
     )
     summary_path.write_text(json.dumps(summary, indent=2))

@@ -66,6 +66,8 @@ export default async function SchoolPage({
   const schedule = scheduleForSchool(dataset, school.id);
   const scheduleUrl = maxprepsScheduleUrl(school.maxpreps, schedule);
   const on3 = school.on3;
+  const mpRank = school.maxprepsNational?.rank;
+  const dctfRank = school.dctf?.rank;
   const hasSchedule = Boolean(schedule?.games.length);
 
   return (
@@ -96,16 +98,24 @@ export default async function SchoolPage({
           <span className="text-amber-200">{formatStrength(school.teamStrength)}</span>
         </Stat>
         <Stat label="On3 national">
-          {on3?.rank != null ? (
-            <>
-              #{on3.rank}
-              {on3.rating != null ? (
-                <span className="ml-2 text-sm font-normal text-zinc-500">{on3.rating}</span>
-              ) : null}
-            </>
-          ) : (
-            <span className="text-zinc-500">Unranked</span>
-          )}
+          <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            {on3?.rank != null ? (
+              <span>
+                #{on3.rank}
+                {on3.rating != null ? (
+                  <span className="ml-2 text-sm font-normal text-zinc-500">{on3.rating}</span>
+                ) : null}
+              </span>
+            ) : (
+              <span className="text-zinc-500">Unranked</span>
+            )}
+            {mpRank != null ? (
+              <span className="text-base font-normal text-zinc-300">MaxPreps #{mpRank}</span>
+            ) : null}
+            {dctfRank != null ? (
+              <span className="text-base font-normal text-zinc-300">DCTF #{dctfRank}</span>
+            ) : null}
+          </span>
         </Stat>
         <Stat label="Strength of schedule">
           {school.sos != null ? (

@@ -33,7 +33,7 @@ Rollup the importer prints in `meta.sources`. Canonical v1: **1,554 schools / 2,
 
 MaxPreps **26-27** football schedules keyed by FridayRadar school id. Built by `python3 scripts/build-strength-and-schedules.py`. Deleted contests and Varsity Opponent rows are omitted. Each game has date, opponent, home/away/neutral, result, and `toughness_icon` from this team’s strength vs the opponent.
 
-The importer copies this into `data/fridayradar.json` as `schedules`. SOS on each school is the mean of known opponents’ `team_strength` (0–100 talent-share × On3 rating min-max for ranks 1–250; listed floor 3.09 for weaker On3 ranks). It is never raw On3 `compositeScore`. Skip unmapped opponents.
+The importer copies this into `data/fridayradar.json` as `schedules`. SOS on each school is the mean of known opponents’ `team_strength` (talent share blended with On3 min–max and MaxPreps national computer rank; Texas 6A DCTF Top 25 bonus then clamp 0–100). It is never raw On3 `compositeScore`. Skip unmapped opponents. Missing SOS is an em dash, not zero.
 
 ### `games-top213.json` (v1 `/games`)
 

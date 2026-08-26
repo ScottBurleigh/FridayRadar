@@ -1,0 +1,40 @@
+{
+  "as_of": "2026-08-24",
+  "week": 1,
+  "board": "6A",
+  "source": "Dave Campbell's Texas Football Week 1 TXHSFB rankings (AP/DCTX)",
+  "source_url": "https://www.texasfootball.com/article/2026/08/24/official-week-1-txhsfb-rankings",
+  "joined": 23,
+  "site_id_aliases": {
+    "tx-woodlands-college-park": "tx-the-woodlands-college-park"
+  },
+  "skipped": [
+    {"rank": 19, "name": "Lake Travis"},
+    {"rank": 25, "name": "Vandegrift"}
+  ],
+  "teams": [
+    {"rank": 1, "site_id": "tx-waxahachie-waxahachie"},
+    {"rank": 2, "site_id": "tx-houston-north-shore"},
+    {"rank": 3, "site_id": "tx-houston-c-e-king"},
+    {"rank": 4, "site_id": "tx-fort-worth-north-crowley"},
+    {"rank": 5, "site_id": "tx-humble-summer-creek"},
+    {"rank": 6, "site_id": "tx-duncanville-duncanville"},
+    {"rank": 7, "site_id": "tx-allen-allen"},
+    {"rank": 8, "site_id": "tx-southlake-southlake-carroll"},
+    {"rank": 9, "site_id": "tx-denton-denton-guyer"},
+    {"rank": 10, "site_id": "tx-dickinson-dickinson"},
+    {"rank": 11, "site_id": "tx-humble-atascocita"},
+    {"rank": 12, "site_id": "tx-coppell-coppell"},
+    {"rank": 13, "site_id": "tx-san-antonio-san-antonio-johnson"},
+    {"rank": 14, "site_id": "tx-katy-katy"},
+    {"rank": 15, "site_id": "tx-missouri-city-fort-bend-ridge-point"},
+    {"rank": 16, "site_id": "tx-aledo-aledo"},
+    {"rank": 17, "site_id": "tx-the-woodlands-college-park"},
+    {"rank": 18, "site_id": "tx-longview-longview"},
+    {"rank": 20, "site_id": "tx-cibolo-cibolo-steele"},
+    {"rank": 21, "site_id": "tx-cypress-cy-ranch"},
+    {"rank": 22, "site_id": "tx-pearland-shadow-creek"},
+    {"rank": 23, "site_id": "tx-austin-austin-westlake"},
+    {"rank": 24, "site_id": "tx-dripping-springs-dripping-springs"}
+  ]
+}

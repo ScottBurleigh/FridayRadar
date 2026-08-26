@@ -135,6 +135,8 @@ type SiteSchool = {
     rating?: number | null;
     org_key?: string | number | null;
   } | null;
+  maxpreps_national?: { rank?: number } | null;
+  dctf?: { rank?: number; board?: string | null } | null;
   sos?: number | null;
   sos_games?: number | null;
   sos_label?: "tough" | "average" | "light" | null;
@@ -585,6 +587,12 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
             orgKey: row.on3.org_key ?? null,
           }
         : null,
+      maxprepsNational: row.maxpreps_national?.rank != null
+        ? { rank: row.maxpreps_national.rank }
+        : null,
+      dctf: row.dctf?.rank != null
+        ? { rank: row.dctf.rank, board: row.dctf.board ?? "6A" }
+        : null,
       sos: row.sos ?? null,
       sosGames: row.sos_games ?? null,
       sosLabel: row.sos_label ?? null,
@@ -701,8 +709,8 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       status: Number(summary.on3_national ?? 0) >= 900 ? "live" : "blocked",
       detail:
         Number(summary.on3_national ?? 0) >= 900
-          ? `On3 2026 national composite (${summary.on3_national} teams); joined ${summary.on3_joined ?? 0} PrepTalent schools by name + city/state. Unranked schools keep talent-only strength — ranks are never invented.`
-          : "On3 national board was not captured. Team strength is talent share only.",
+          ? `On3 2026 national composite (${summary.on3_national} teams); joined ${summary.on3_joined ?? 0} PrepTalent schools by name + city/state. Unranked schools omit the On3 term — ranks are never invented.`
+          : "On3 national board was not captured. Team strength omits the On3 term.",
       counts: {
         national: Number(summary.on3_national ?? 0),
         joined: Number(summary.on3_joined ?? 0),
@@ -722,6 +730,32 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       detail: `${Object.keys(schedules).length} school schedules stored from MaxPreps 26-27 (deleted / Varsity Opponent rows dropped).`,
       counts: { schedules: Object.keys(schedules).length },
     },
+    {
+      id: "maxpreps_national",
+      label: "MaxPreps national computer rankings",
+      status: Number(summary.maxpreps_national ?? 0) >= 100 ? "live" : "blocked",
+      detail:
+        Number(summary.maxpreps_joined ?? 0)
+          ? `MaxPreps 100-team national computer board (not editorial Top 25), as of 2026-08-24; joined ${summary.maxpreps_joined} PrepTalent schools by site_id. Unranked omitted, never 0.`
+          : "MaxPreps national computer board was not joined.",
+      counts: {
+        national: Number(summary.maxpreps_national ?? 0),
+        joined: Number(summary.maxpreps_joined ?? 0),
+      },
+    },
+    {
+      id: "dctf_6a",
+      label: "Dave Campbell’s Texas Football 6A Top 25",
+      status: Number(summary.dctf_joined ?? 0) >= 20 ? "live" : "blocked",
+      detail:
+        Number(summary.dctf_joined ?? 0)
+          ? `Week 1 AP/DCTX 6A Top 25 (2026-08-24); joined ${summary.dctf_joined} Texas schools by site_id. Bonus 10 × (26−rank)/25 after the talent/On3/MaxPreps blend; unranked Texas get 0 extra.`
+          : "DCTF 6A Top 25 was not joined.",
+      counts: {
+        board: Number(summary.dctf_6a ?? 0),
+        joined: Number(summary.dctf_joined ?? 0),
+      },
+    },
   ];
 
   const dataset: FridayRadarDataset = {
@@ -733,7 +767,10 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       notes: [
         "High schools are ranked, not colleges.",
         "School talentScore is the Scout precomputed sum of 2027+ player points.",
-        "Team strength is the mean of talent share (100 × talent / board max) and On3 compositeScore scaled 0–100 when rank is 1–250. Ranks 251+ use the listed-recruit floor. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
+        String(
+          summary.team_strength_note ??
+            "Team strength is the mean of talent_norm and ranking_norm (On3 min–max and MaxPreps rank curve). Texas 6A DCTF Top 25 adds a bonus then clamps 0–100. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
+        ),
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
         "Matchup week is 2026-08-26 through 2026-08-29. /games ranks two-sided talent as √(home × away); combined talent is display + tie-break. Filters use the game venue.",
         String(summary.note ?? "Canonical v1: 1,554 schools / 2,986 players when the full Scout dump is imported."),

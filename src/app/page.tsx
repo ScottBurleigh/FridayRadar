@@ -53,8 +53,9 @@ export default async function RankingsPage({
           <p className="mt-2 max-w-2xl text-sm text-zinc-400">
             High schools ranked by the recruiting talent on their 2027, 2028, and 2029+
             rosters. Talent score stays its own number; team strength blends talent
-            share (vs the board max) with On3 national rank when the school is on the
-            board. Default sort is talent.
+            share (vs the board max) with On3 and MaxPreps national computer ranks when
+            those boards list the school. Texas 6A DCTF Top 25 adds a bonus. Default
+            sort is talent.
           </p>
         </div>
         <p className="font-mono text-sm text-zinc-500">
