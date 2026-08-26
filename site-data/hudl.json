@@ -2,7 +2,7 @@
   "as_of": "2026-08-26",
   "notes": [
     "Verified public Hudl batch (On3 embed \u2192 hudl.com/profile/{id}).",
-    "327 payload rows after dropping Hough Davion Jones (athlete 19494412 is West Charlotte) and adding IMG Charles Roberts (20157149).",
+    "337 payload rows: 90-set plus later verified crumbs. Davion Jones stays unlinked (athlete 19494412 is West Charlotte).",
     "Duplicate payload UUIDs that share a Hudl id map to one FridayRadar recruit.",
     "Payload UUID is not the FridayRadar recruit id; join is payload id \u2192 public Hudl name \u2192 school roster recruit id.",
     "Unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
@@ -2951,6 +2951,96 @@
       "hudl_name": "Chuck Roberts",
       "hudl_url": "https://www.hudl.com/profile/20157149",
       "hudl_athlete_id": "20157149"
+    },
+    {
+      "id": "56b97201-0193-4538-bebe-74a10b913e44",
+      "recruit_id": "247-46154221",
+      "school_id": "fl-fort-lauderdale-saint-thomas-aquinas",
+      "full_name": "Austin Coles",
+      "hudl_name": "Austin Coles",
+      "hudl_url": "https://www.hudl.com/profile/22037955",
+      "hudl_athlete_id": "22037955"
+    },
+    {
+      "id": "8577c0cc-bc5f-464a-ac0b-bea87e117111",
+      "recruit_id": "247-46158908",
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "full_name": "Lance Ciechanowski",
+      "hudl_name": "Lance Ciechanowski",
+      "hudl_url": "https://www.hudl.com/profile/22998316",
+      "hudl_athlete_id": "22998316"
+    },
+    {
+      "id": "7b3dfb16-88d2-45b9-99d5-ef7b591d301b",
+      "recruit_id": "247-46156083",
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "full_name": "Mykel Ramos",
+      "hudl_name": "Mykel Ramos",
+      "hudl_url": "https://www.hudl.com/profile/21962277",
+      "hudl_athlete_id": "21962277"
+    },
+    {
+      "id": "a7b24ffa-dd52-47c0-9def-f1d66703c5c1",
+      "recruit_id": "247-46165749",
+      "school_id": "nc-charlotte-providence-day-school",
+      "full_name": "Cooper Hodson",
+      "hudl_name": "Coop Hodson",
+      "hudl_url": "https://www.hudl.com/profile/26572638",
+      "hudl_athlete_id": "26572638"
+    },
+    {
+      "id": "dda4fd89-be2a-40c7-82cc-645d240ab201",
+      "recruit_id": "247-46148009",
+      "school_id": "nc-cornelius-hough",
+      "full_name": "Ethan Royal",
+      "hudl_name": "Ethan Royal",
+      "hudl_url": "https://www.hudl.com/profile/19525270",
+      "hudl_athlete_id": "19525270"
+    },
+    {
+      "id": "a42a36dc-2e70-4d8a-8a48-8799c432e0a0",
+      "recruit_id": "247-46154825",
+      "school_id": "hi-mililani-mililani",
+      "full_name": "Nui Gilman",
+      "hudl_name": "Nui Gilman",
+      "hudl_url": "https://www.hudl.com/profile/22913764",
+      "hudl_athlete_id": "22913764"
+    },
+    {
+      "id": "2dd20ded-7715-422f-911f-6f4d4865e243",
+      "recruit_id": "247-46161634",
+      "school_id": "al-alabaster-thompson",
+      "full_name": "Mason McClure",
+      "hudl_name": "Mason McClure",
+      "hudl_url": "https://www.hudl.com/profile/16502915",
+      "hudl_athlete_id": "16502915"
+    },
+    {
+      "id": "b8863072-8ee4-45fb-baba-fec76671d7e9",
+      "recruit_id": "247-46162759",
+      "school_id": "az-chandler-basha",
+      "full_name": "Mikey Barth",
+      "hudl_name": "Mikey Barth",
+      "hudl_url": "https://www.hudl.com/profile/18634858",
+      "hudl_athlete_id": "18634858"
+    },
+    {
+      "id": "73146578-4e68-47c8-b3f7-c60fb89d77ba",
+      "recruit_id": "247-46150435",
+      "school_id": "pa-pittsburgh-central-catholic",
+      "full_name": "Chrys Black Jr.",
+      "hudl_name": "Chrys Black Jr",
+      "hudl_url": "https://www.hudl.com/profile/20181076",
+      "hudl_athlete_id": "20181076"
+    },
+    {
+      "id": "fc50dba4-d2ab-4911-bf62-454c4ab4c8d5",
+      "recruit_id": "247-46152618",
+      "school_id": "ut-orem-orem",
+      "full_name": "Jag Ioane",
+      "hudl_name": "Jag Iaone",
+      "hudl_url": "https://www.hudl.com/profile/26298922",
+      "hudl_athlete_id": "26298922"
     }
   ],
   "schools": [
