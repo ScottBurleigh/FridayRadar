@@ -61,6 +61,8 @@ const CANONICAL_SCHOOL_ID: Record<string, string> = {
   "va-springfield-saint-james": "va-springfield-the-st-james",
   "nj-jersey-city-saint-peters-prep": "nj-jersey-city-st-peter-s-prep",
   "il-east-saint-louis-east-saint-louis": "il-east-st-louis-east-st-louis",
+  "ca-bellflower-saint-john-bosco": "ca-bellflower-st-john-bosco",
+  "fl-jacksonville-bolles-school": "fl-jacksonville-the-bolles-school",
 };
 
 function canonicalSchoolId(id: string | undefined | null): string {
@@ -845,7 +847,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       label: "Hudl public profiles (verified batch)",
       status: hudlCounts.athletes ? "live-partial" : "blocked",
       detail: hudlCounts.athletes
-        ? `${hudlCounts.athletes} verified Hudl athlete profiles (On3 embed matches only; 359 unmatched skipped). ${hudlCounts.teams} public team pages. Missing Hudl is omitted, never a dead link.`
+        ? `${hudlCounts.athletes} verified Hudl athlete profiles (On3 embed matches only; unmatched skipped). ${hudlCounts.teams} public team pages. Missing Hudl is omitted, never a dead link.`
         : "Hudl overlay was not loaded.",
       counts: { athletes: hudlCounts.athletes, teams: hudlCounts.teams },
     },

@@ -1,11 +1,11 @@
 {
   "as_of": "2026-08-26",
   "notes": [
-    "First verified public Hudl batch (On3 embed \u2192 hudl.com/profile/{id}).",
-    "52 payload rows / 49 unique athlete ids. Duplicate payload UUIDs share one Hudl id (Glassboro, Jones, East St. Louis).",
+    "Verified public Hudl batch (On3 embed \u2192 hudl.com/profile/{id}).",
+    "90 payload rows. Duplicate payload UUIDs that share a Hudl id map to one FridayRadar recruit.",
     "Payload UUID is not the FridayRadar recruit id; join is payload id \u2192 public Hudl name \u2192 school roster recruit id.",
-    "359 unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
-    "41/41 top-school public team pages. C.E. King has a team page and 0 recruit Hudl profiles."
+    "Unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
+    "41/41 top-school public team pages. C.E. King is fully matched (6 unique recruits / 7 payload rows)."
   ],
   "players": [
     {
@@ -527,6 +527,386 @@
       "hudl_name": "Raheem Floyd",
       "hudl_url": "https://www.hudl.com/profile/20080624",
       "hudl_athlete_id": "20080624"
+    },
+    {
+      "id": "3650e7a1-e4fc-4f76-8e68-1f0898948672",
+      "recruit_id": "247-46157377",
+      "school_id": "tx-houston-c-e-king",
+      "payload_school_id": "tx-houston-c-e-king",
+      "full_name": "Cameron Sydnor",
+      "hudl_name": "Cameron Sydnor",
+      "hudl_url": "https://www.hudl.com/profile/23608081",
+      "hudl_athlete_id": "23608081"
+    },
+    {
+      "id": "e19a5c77-1c43-4c80-8928-bfb953cb8618",
+      "recruit_id": "247-46156965",
+      "school_id": "tx-houston-c-e-king",
+      "payload_school_id": "tx-houston-c-e-king",
+      "full_name": "Dillon Mitchell",
+      "hudl_name": "Dillon Mitchell",
+      "hudl_url": "https://www.hudl.com/profile/22881131",
+      "hudl_athlete_id": "22881131"
+    },
+    {
+      "id": "003e04c6-7f27-42c8-aff3-b37bff919c12",
+      "recruit_id": "247-46156965",
+      "school_id": "tx-houston-c-e-king",
+      "payload_school_id": "tx-houston-c-e-king",
+      "full_name": "Dillon Mitchell",
+      "hudl_name": "Dillon Mitchell",
+      "hudl_url": "https://www.hudl.com/profile/22881131",
+      "hudl_athlete_id": "22881131"
+    },
+    {
+      "id": "00aecfaf-dad1-436c-8e31-2394e126fb37",
+      "recruit_id": "247-46157633",
+      "school_id": "tx-houston-c-e-king",
+      "payload_school_id": "tx-houston-c-e-king",
+      "full_name": "Antwon Sanders",
+      "hudl_name": "Antwon Sanders",
+      "hudl_url": "https://www.hudl.com/profile/19900618",
+      "hudl_athlete_id": "19900618"
+    },
+    {
+      "id": "8652c0ee-11cb-456a-99ef-f50f9e064746",
+      "recruit_id": "247-46158603",
+      "school_id": "tx-houston-c-e-king",
+      "payload_school_id": "tx-houston-c-e-king",
+      "full_name": "Braylon Lane",
+      "hudl_name": "Braylon Lane",
+      "hudl_url": "https://www.hudl.com/profile/24436426",
+      "hudl_athlete_id": "24436426"
+    },
+    {
+      "id": "40663f21-bb35-456a-a071-49c7f7603d12",
+      "recruit_id": "247-46161951",
+      "school_id": "tx-houston-c-e-king",
+      "payload_school_id": "tx-houston-c-e-king",
+      "full_name": "Khylan Davis",
+      "hudl_name": "Khylan Davis",
+      "hudl_url": "https://www.hudl.com/profile/19633855",
+      "hudl_athlete_id": "19633855"
+    },
+    {
+      "id": "4488a8ed-97ce-4538-a5a3-5720d3652332",
+      "recruit_id": "247-46153677",
+      "school_id": "tx-houston-c-e-king",
+      "payload_school_id": "tx-houston-c-e-king",
+      "full_name": "Triston Willis",
+      "hudl_name": "Tristian Willis",
+      "hudl_url": "https://www.hudl.com/profile/30031086",
+      "hudl_athlete_id": "30031086"
+    },
+    {
+      "id": "62da1e50-1afa-4d1f-a725-bf3b56f4ced5",
+      "recruit_id": "247-46131982",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Jayden Wade",
+      "hudl_name": "Jayden Wade",
+      "hudl_url": "https://www.hudl.com/profile/20658937",
+      "hudl_athlete_id": "20658937"
+    },
+    {
+      "id": "4e0e2af3-5f0a-48df-b435-8e60530b3dee",
+      "recruit_id": "247-46142805",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Amarri Irvin",
+      "hudl_name": "Amarri Irvin",
+      "hudl_url": "https://www.hudl.com/profile/18140454",
+      "hudl_athlete_id": "18140454"
+    },
+    {
+      "id": "393f80c9-9b19-45b2-8b5d-21da56d51617",
+      "recruit_id": "247-46148084",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Censere Gaylord",
+      "hudl_name": "Censere Gaylord",
+      "hudl_url": "https://www.hudl.com/profile/20175621",
+      "hudl_athlete_id": "20175621"
+    },
+    {
+      "id": "5f1745da-e816-4b20-b2e4-594f982e19ba",
+      "recruit_id": "247-46142595",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Larry Moon III",
+      "hudl_name": "Larry Moon III",
+      "hudl_url": "https://www.hudl.com/profile/25931535",
+      "hudl_athlete_id": "25931535"
+    },
+    {
+      "id": "7e6208db-e024-44aa-a89a-cd7710a076ce",
+      "recruit_id": "247-46151065",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Elijah Newman-Hall",
+      "hudl_name": "Elijah Newman hall",
+      "hudl_url": "https://www.hudl.com/profile/22913187",
+      "hudl_athlete_id": "22913187"
+    },
+    {
+      "id": "4b870c66-4009-46e8-bd99-57db2a7e144b",
+      "recruit_id": "247-46159031",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Jordan Gorham",
+      "hudl_name": "Jordan Gorham",
+      "hudl_url": "https://www.hudl.com/profile/22668782",
+      "hudl_athlete_id": "22668782"
+    },
+    {
+      "id": "a8ec5394-1f62-4184-8e00-24ec04d85a9e",
+      "recruit_id": "247-46161068",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Nation Farmer",
+      "hudl_name": "Nation Farmer",
+      "hudl_url": "https://www.hudl.com/profile/26334971",
+      "hudl_athlete_id": "26334971"
+    },
+    {
+      "id": "33aa1f74-7601-49df-bbc4-54182baeaddd",
+      "recruit_id": "247-46150621",
+      "school_id": "fl-bradenton-img-academy",
+      "payload_school_id": "fl-bradenton-img-academy",
+      "full_name": "Phoenix Evans",
+      "hudl_name": "Phoenix Evans",
+      "hudl_url": "https://www.hudl.com/profile/22736401",
+      "hudl_athlete_id": "22736401"
+    },
+    {
+      "id": "05788485-31e0-4e58-9f3e-efa8e4cc5835",
+      "recruit_id": "247-46143010",
+      "school_id": "md-baltimore-st-frances-academy",
+      "payload_school_id": "md-baltimore-saint-frances-academy",
+      "full_name": "Carter Bonner",
+      "hudl_name": "Carter Bonner",
+      "hudl_url": "https://www.hudl.com/profile/22563373",
+      "hudl_athlete_id": "22563373"
+    },
+    {
+      "id": "d3a53fc5-5d72-49db-8806-b1e942cffbe7",
+      "recruit_id": "247-46160854",
+      "school_id": "md-baltimore-st-frances-academy",
+      "payload_school_id": "md-baltimore-saint-frances-academy",
+      "full_name": "Brandon Jefferson",
+      "hudl_name": "Brandon Jefferson",
+      "hudl_url": "https://www.hudl.com/profile/23180248",
+      "hudl_athlete_id": "23180248"
+    },
+    {
+      "id": "155290f9-18b0-4fdc-a5a3-b65580a11dce",
+      "recruit_id": "247-46154553",
+      "school_id": "ca-bellflower-st-john-bosco",
+      "payload_school_id": "ca-bellflower-saint-john-bosco",
+      "full_name": "Brandon Nash",
+      "hudl_name": "Brandon Nash",
+      "hudl_url": "https://www.hudl.com/profile/22337387",
+      "hudl_athlete_id": "22337387"
+    },
+    {
+      "id": "0c47e0c2-a865-471c-b28a-96ca4ab033ef",
+      "recruit_id": "247-46152361",
+      "school_id": "ca-bellflower-st-john-bosco",
+      "payload_school_id": "ca-bellflower-saint-john-bosco",
+      "full_name": "Elijah Tuua",
+      "hudl_name": "Elijah Tuua",
+      "hudl_url": "https://www.hudl.com/profile/22648306",
+      "hudl_athlete_id": "22648306"
+    },
+    {
+      "id": "ad72609e-be87-4268-9114-b4a4b32a490c",
+      "recruit_id": "247-46149897",
+      "school_id": "ca-bellflower-st-john-bosco",
+      "payload_school_id": "ca-bellflower-saint-john-bosco",
+      "full_name": "Dillon Davis",
+      "hudl_name": "Dillon Davis",
+      "hudl_url": "https://www.hudl.com/profile/19523895",
+      "hudl_athlete_id": "19523895"
+    },
+    {
+      "id": "cd8b852a-aa65-415b-b683-38d8a384b74f",
+      "recruit_id": "247-46152209",
+      "school_id": "ca-bellflower-st-john-bosco",
+      "payload_school_id": "ca-bellflower-saint-john-bosco",
+      "full_name": "Dorian Franklin",
+      "hudl_name": "Dorian Franklin",
+      "hudl_url": "https://www.hudl.com/profile/19481896",
+      "hudl_athlete_id": "19481896"
+    },
+    {
+      "id": "64dac21f-7fcb-4d03-a91e-0f19ea0f9684",
+      "recruit_id": "247-46157985",
+      "school_id": "ca-bellflower-st-john-bosco",
+      "payload_school_id": "ca-bellflower-saint-john-bosco",
+      "full_name": "Josiah Poyer",
+      "hudl_name": "Josiah Poyer",
+      "hudl_url": "https://www.hudl.com/profile/19520167",
+      "hudl_athlete_id": "19520167"
+    },
+    {
+      "id": "20a59dbe-412f-4edb-8b0d-b98d6460baa5",
+      "recruit_id": "247-46142061",
+      "school_id": "ca-bellflower-st-john-bosco",
+      "payload_school_id": "ca-bellflower-saint-john-bosco",
+      "full_name": "Kekoa Peko",
+      "hudl_name": "Kekoa Peko",
+      "hudl_url": "https://www.hudl.com/profile/19523898",
+      "hudl_athlete_id": "19523898"
+    },
+    {
+      "id": "fe4850e5-415e-4baf-b7c3-38392a8ad9f1",
+      "recruit_id": "247-46156768",
+      "school_id": "ca-santa-ana-mater-dei",
+      "payload_school_id": "ca-santa-ana-mater-dei",
+      "full_name": "Cameron Pooley",
+      "hudl_name": "Cameron Pooley",
+      "hudl_url": "https://www.hudl.com/profile/18050346",
+      "hudl_athlete_id": "18050346"
+    },
+    {
+      "id": "2757aac6-6f89-481e-aede-514a968c9872",
+      "recruit_id": "247-46157160",
+      "school_id": "ca-santa-ana-mater-dei",
+      "payload_school_id": "ca-santa-ana-mater-dei",
+      "full_name": "Ezekiel Su'a",
+      "hudl_name": "Ezekiel Su'a",
+      "hudl_url": "https://www.hudl.com/profile/22340667",
+      "hudl_athlete_id": "22340667"
+    },
+    {
+      "id": "04eac779-11c9-40f1-a691-8d2b3492a4b3",
+      "recruit_id": "247-46145331",
+      "school_id": "al-alabaster-thompson",
+      "payload_school_id": "al-alabaster-thompson",
+      "full_name": "Cameron Pritchett",
+      "hudl_name": "Cam Pritchett",
+      "hudl_url": "https://www.hudl.com/profile/17725367",
+      "hudl_athlete_id": "17725367"
+    },
+    {
+      "id": "8af8e935-eb83-454a-b638-5be77cfc634b",
+      "recruit_id": "247-46136488",
+      "school_id": "al-alabaster-thompson",
+      "payload_school_id": "al-alabaster-thompson",
+      "full_name": "Trent Seaborn",
+      "hudl_name": "Trent Seaborn",
+      "hudl_url": "https://www.hudl.com/profile/9232253",
+      "hudl_athlete_id": "9232253"
+    },
+    {
+      "id": "e5512f85-644a-41ff-8706-4894b51d9be4",
+      "recruit_id": "247-46150348",
+      "school_id": "ga-buford-buford",
+      "payload_school_id": "ga-buford-buford",
+      "full_name": "Luke Nabors",
+      "hudl_name": "Luke Nabors",
+      "hudl_url": "https://www.hudl.com/profile/22406990",
+      "hudl_athlete_id": "22406990"
+    },
+    {
+      "id": "f88de7fb-49e4-4a99-bc78-713beb79ef16",
+      "recruit_id": "247-46142570",
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "payload_school_id": "ca-chatsworth-sierra-canyon",
+      "full_name": "Duvay Williams",
+      "hudl_name": "Duvay Williams",
+      "hudl_url": "https://www.hudl.com/profile/19492468",
+      "hudl_athlete_id": "19492468"
+    },
+    {
+      "id": "ef92c329-9f49-44e0-84ed-672f76b6b34d",
+      "recruit_id": "247-46142570",
+      "school_id": "ca-chatsworth-sierra-canyon",
+      "payload_school_id": "ca-chatsworth-sierra-canyon",
+      "full_name": "Duvay Williams",
+      "hudl_name": "Duvay Williams",
+      "hudl_url": "https://www.hudl.com/profile/19492468",
+      "hudl_athlete_id": "19492468"
+    },
+    {
+      "id": "c6cf51ce-d63c-4f5e-b3ed-46e3e1ceb7a3",
+      "recruit_id": "247-46151179",
+      "school_id": "az-goodyear-desert-edge",
+      "payload_school_id": "az-goodyear-desert-edge",
+      "full_name": "Jalanie George",
+      "hudl_name": "Jalanie George",
+      "hudl_url": "https://www.hudl.com/profile/22503401",
+      "hudl_athlete_id": "22503401"
+    },
+    {
+      "id": "35ce350a-dafb-4c4d-892d-6ce07872ca56",
+      "recruit_id": "247-46153753",
+      "school_id": "nv-las-vegas-bishop-gorman",
+      "payload_school_id": "nv-las-vegas-bishop-gorman",
+      "full_name": "Kamil Loud",
+      "hudl_name": "Kamil Loud",
+      "hudl_url": "https://www.hudl.com/profile/22489586",
+      "hudl_athlete_id": "22489586"
+    },
+    {
+      "id": "5c7b46ef-9bbf-434e-a88d-bdd3a9baf4bb",
+      "recruit_id": "247-46150755",
+      "school_id": "az-chandler-basha",
+      "payload_school_id": "az-chandler-basha",
+      "full_name": "Landen Wade",
+      "hudl_name": "Landen Wade",
+      "hudl_url": "https://www.hudl.com/profile/22860094",
+      "hudl_athlete_id": "22860094"
+    },
+    {
+      "id": "24548396-5c9e-4c7b-8545-209b1920ddf6",
+      "recruit_id": "247-46151079",
+      "school_id": "nc-charlotte-providence-day-school",
+      "payload_school_id": "nc-charlotte-providence-day-school",
+      "full_name": "Braylon Clark",
+      "hudl_name": "Braylon Clark",
+      "hudl_url": "https://www.hudl.com/profile/19587842",
+      "hudl_athlete_id": "19587842"
+    },
+    {
+      "id": "7e9b6429-1544-4243-8b65-b80bd6735bbb",
+      "recruit_id": "247-46161284",
+      "school_id": "ca-orange-orange-lutheran",
+      "payload_school_id": "ca-orange-orange-lutheran",
+      "full_name": "Austin Attalah",
+      "hudl_name": "Austin Attalah",
+      "hudl_url": "https://www.hudl.com/profile/26306695",
+      "hudl_athlete_id": "26306695"
+    },
+    {
+      "id": "9abbbd5f-21fe-426d-b091-d6be6546835f",
+      "recruit_id": "247-46158028",
+      "school_id": "ut-orem-orem",
+      "payload_school_id": "ut-orem-orem",
+      "full_name": "Maui Tonata",
+      "hudl_name": "Maui Tonata",
+      "hudl_url": "https://www.hudl.com/profile/19875204",
+      "hudl_athlete_id": "19875204"
+    },
+    {
+      "id": "a638dd64-35d5-4132-bd9a-3d86cf658d2b",
+      "recruit_id": "247-46149998",
+      "school_id": "ga-powder-springs-mceachern",
+      "payload_school_id": "ga-powder-springs-mceachern",
+      "full_name": "Casey Barner",
+      "hudl_name": "Casey Barner",
+      "hudl_url": "https://www.hudl.com/profile/22565505",
+      "hudl_athlete_id": "22565505"
+    },
+    {
+      "id": "866a1f9e-bbbe-4c6f-9f66-a6683b8db52c",
+      "recruit_id": "247-46147706",
+      "school_id": "fl-jacksonville-the-bolles-school",
+      "payload_school_id": "fl-jacksonville-bolles-school",
+      "full_name": "Asher Ghioto",
+      "hudl_name": "Asher Ghioto",
+      "hudl_url": "https://www.hudl.com/profile/22338333",
+      "hudl_athlete_id": "22338333"
     }
   ],
   "schools": [

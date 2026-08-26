@@ -22,6 +22,8 @@ CANON_SCHOOL = {
     "va-springfield-saint-james": "va-springfield-the-st-james",
     "nj-jersey-city-saint-peters-prep": "nj-jersey-city-st-peter-s-prep",
     "il-east-saint-louis-east-saint-louis": "il-east-st-louis-east-st-louis",
+    "ca-bellflower-saint-john-bosco": "ca-bellflower-st-john-bosco",
+    "fl-jacksonville-bolles-school": "fl-jacksonville-the-bolles-school",
 }
 
 # Payload rows: uuid, payload_school_id, hudl_url, hudl_athlete_id
@@ -78,6 +80,44 @@ f6330c42-28fe-4995-90b5-a11b9fcab628 il-chicago-mount-carmel https://www.hudl.co
 ffebebbd-0afc-4b31-8e0c-e361b6e7e096 il-east-saint-louis-east-saint-louis https://www.hudl.com/profile/22185816 22185816
 ba9ca33f-3bcf-4b71-9bda-c324f801ad53 il-east-saint-louis-east-saint-louis https://www.hudl.com/profile/22185816 22185816
 73ad61cf-08b4-4a55-b990-d1c98e36c84f il-east-saint-louis-east-saint-louis https://www.hudl.com/profile/20080624 20080624
+3650e7a1-e4fc-4f76-8e68-1f0898948672 tx-houston-c-e-king https://www.hudl.com/profile/23608081 23608081
+e19a5c77-1c43-4c80-8928-bfb953cb8618 tx-houston-c-e-king https://www.hudl.com/profile/22881131 22881131
+003e04c6-7f27-42c8-aff3-b37bff919c12 tx-houston-c-e-king https://www.hudl.com/profile/22881131 22881131
+00aecfaf-dad1-436c-8e31-2394e126fb37 tx-houston-c-e-king https://www.hudl.com/profile/19900618 19900618
+8652c0ee-11cb-456a-99ef-f50f9e064746 tx-houston-c-e-king https://www.hudl.com/profile/24436426 24436426
+40663f21-bb35-456a-a071-49c7f7603d12 tx-houston-c-e-king https://www.hudl.com/profile/19633855 19633855
+4488a8ed-97ce-4538-a5a3-5720d3652332 tx-houston-c-e-king https://www.hudl.com/profile/30031086 30031086
+62da1e50-1afa-4d1f-a725-bf3b56f4ced5 fl-bradenton-img-academy https://www.hudl.com/profile/20658937 20658937
+4e0e2af3-5f0a-48df-b435-8e60530b3dee fl-bradenton-img-academy https://www.hudl.com/profile/18140454 18140454
+393f80c9-9b19-45b2-8b5d-21da56d51617 fl-bradenton-img-academy https://www.hudl.com/profile/20175621 20175621
+5f1745da-e816-4b20-b2e4-594f982e19ba fl-bradenton-img-academy https://www.hudl.com/profile/25931535 25931535
+7e6208db-e024-44aa-a89a-cd7710a076ce fl-bradenton-img-academy https://www.hudl.com/profile/22913187 22913187
+4b870c66-4009-46e8-bd99-57db2a7e144b fl-bradenton-img-academy https://www.hudl.com/profile/22668782 22668782
+a8ec5394-1f62-4184-8e00-24ec04d85a9e fl-bradenton-img-academy https://www.hudl.com/profile/26334971 26334971
+33aa1f74-7601-49df-bbc4-54182baeaddd fl-bradenton-img-academy https://www.hudl.com/profile/22736401 22736401
+05788485-31e0-4e58-9f3e-efa8e4cc5835 md-baltimore-saint-frances-academy https://www.hudl.com/profile/22563373 22563373
+d3a53fc5-5d72-49db-8806-b1e942cffbe7 md-baltimore-saint-frances-academy https://www.hudl.com/profile/23180248 23180248
+155290f9-18b0-4fdc-a5a3-b65580a11dce ca-bellflower-saint-john-bosco https://www.hudl.com/profile/22337387 22337387
+0c47e0c2-a865-471c-b28a-96ca4ab033ef ca-bellflower-saint-john-bosco https://www.hudl.com/profile/22648306 22648306
+ad72609e-be87-4268-9114-b4a4b32a490c ca-bellflower-saint-john-bosco https://www.hudl.com/profile/19523895 19523895
+cd8b852a-aa65-415b-b683-38d8a384b74f ca-bellflower-saint-john-bosco https://www.hudl.com/profile/19481896 19481896
+64dac21f-7fcb-4d03-a91e-0f19ea0f9684 ca-bellflower-saint-john-bosco https://www.hudl.com/profile/19520167 19520167
+20a59dbe-412f-4edb-8b0d-b98d6460baa5 ca-bellflower-saint-john-bosco https://www.hudl.com/profile/19523898 19523898
+fe4850e5-415e-4baf-b7c3-38392a8ad9f1 ca-santa-ana-mater-dei https://www.hudl.com/profile/18050346 18050346
+2757aac6-6f89-481e-aede-514a968c9872 ca-santa-ana-mater-dei https://www.hudl.com/profile/22340667 22340667
+04eac779-11c9-40f1-a691-8d2b3492a4b3 al-alabaster-thompson https://www.hudl.com/profile/17725367 17725367
+8af8e935-eb83-454a-b638-5be77cfc634b al-alabaster-thompson https://www.hudl.com/profile/9232253 9232253
+e5512f85-644a-41ff-8706-4894b51d9be4 ga-buford-buford https://www.hudl.com/profile/22406990 22406990
+f88de7fb-49e4-4a99-bc78-713beb79ef16 ca-chatsworth-sierra-canyon https://www.hudl.com/profile/19492468 19492468
+ef92c329-9f49-44e0-84ed-672f76b6b34d ca-chatsworth-sierra-canyon https://www.hudl.com/profile/19492468 19492468
+c6cf51ce-d63c-4f5e-b3ed-46e3e1ceb7a3 az-goodyear-desert-edge https://www.hudl.com/profile/22503401 22503401
+35ce350a-dafb-4c4d-892d-6ce07872ca56 nv-las-vegas-bishop-gorman https://www.hudl.com/profile/22489586 22489586
+5c7b46ef-9bbf-434e-a88d-bdd3a9baf4bb az-chandler-basha https://www.hudl.com/profile/22860094 22860094
+24548396-5c9e-4c7b-8545-209b1920ddf6 nc-charlotte-providence-day-school https://www.hudl.com/profile/19587842 19587842
+7e9b6429-1544-4243-8b65-b80bd6735bbb ca-orange-orange-lutheran https://www.hudl.com/profile/26306695 26306695
+9abbbd5f-21fe-426d-b091-d6be6546835f ut-orem-orem https://www.hudl.com/profile/19875204 19875204
+a638dd64-35d5-4132-bd9a-3d86cf658d2b ga-powder-springs-mceachern https://www.hudl.com/profile/22565505 22565505
+866a1f9e-bbbe-4c6f-9f66-a6683b8db52c fl-jacksonville-bolles-school https://www.hudl.com/profile/22338333 22338333
 """.strip().splitlines()
 
 HUDL_NAMES = {
@@ -130,6 +170,42 @@ HUDL_NAMES = {
     "20228529": "Tavares Harrington",
     "22185816": "Myson Johnson-Cook",
     "20080624": "Raheem Floyd",
+    "20658937": "Jayden Wade",
+    "18140454": "Amarri Irvin",
+    "20175621": "Censere Gaylord",
+    "25931535": "Larry Moon III",
+    "22913187": "Elijah Newman hall",
+    "22668782": "Jordan Gorham",
+    "26334971": "Nation Farmer",
+    "22736401": "Phoenix Evans",
+    "22563373": "Carter Bonner",
+    "23180248": "Brandon Jefferson",
+    "22337387": "Brandon Nash",
+    "22648306": "Elijah Tuua",
+    "19523895": "Dillon Davis",
+    "19481896": "Dorian Franklin",
+    "19520167": "Josiah Poyer",
+    "19523898": "Kekoa Peko",
+    "18050346": "Cameron Pooley",
+    "22340667": "Ezekiel Su'a",
+    "17725367": "Cam Pritchett",
+    "9232253": "Trent Seaborn",
+    "22406990": "Luke Nabors",
+    "19492468": "Duvay Williams",
+    "22503401": "Jalanie George",
+    "22489586": "Kamil Loud",
+    "22860094": "Landen Wade",
+    "19587842": "Braylon Clark",
+    "26306695": "Austin Attalah",
+    "19875204": "Maui Tonata",
+    "22565505": "Casey Barner",
+    "22338333": "Asher Ghioto",
+    "23608081": "Cameron Sydnor",
+    "22881131": "Dillon Mitchell",
+    "19900618": "Antwon Sanders",
+    "24436426": "Braylon Lane",
+    "19633855": "Khylan Davis",
+    "30031086": "Tristian Willis",
 }
 
 TEAM_URLS = {
@@ -234,6 +310,14 @@ def match_recruit(school: dict, hudl_name: str) -> dict:
         uniq = {r["id"]: r for r in nick_hits}
         if len(uniq) == 1:
             return next(iter(uniq.values()))
+    if last and len(first) >= 4:
+        last_hits = [
+            r for r in roster if last in norm(r.get("full_name") or "").split()
+        ]
+        if len(last_hits) == 1:
+            rec_first = (norm(last_hits[0].get("full_name") or "").split() or [""])[0]
+            if rec_first[:4] == first[:4]:
+                return last_hits[0]
     raise SystemExit(f"no unique roster match for {hudl_name!r} at {school['id']}")
 
 
@@ -267,8 +351,8 @@ def main() -> None:
             raise SystemExit(f"conflicting Hudl ids for {rec['id']}")
         recruit_hudl[rec["id"]] = row
 
-    if len(players_out) != 52:
-        raise SystemExit(f"expected 52 payload players, got {len(players_out)}")
+    if len(players_out) != 90:
+        raise SystemExit(f"expected 90 payload players, got {len(players_out)}")
     if len(TEAM_URLS) != 41:
         raise SystemExit(f"expected 41 team URLs, got {len(TEAM_URLS)}")
     for sid in TEAM_URLS:
@@ -280,11 +364,11 @@ def main() -> None:
     hudl_doc = {
         "as_of": "2026-08-26",
         "notes": [
-            "First verified public Hudl batch (On3 embed → hudl.com/profile/{id}).",
-            "52 payload rows / 49 unique athlete ids. Duplicate payload UUIDs share one Hudl id (Glassboro, Jones, East St. Louis).",
+            "Verified public Hudl batch (On3 embed → hudl.com/profile/{id}).",
+            "90 payload rows. Duplicate payload UUIDs that share a Hudl id map to one FridayRadar recruit.",
             "Payload UUID is not the FridayRadar recruit id; join is payload id → public Hudl name → school roster recruit id.",
-            "359 unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
-            "41/41 top-school public team pages. C.E. King has a team page and 0 recruit Hudl profiles.",
+            "Unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
+            "41/41 top-school public team pages. C.E. King is fully matched (6 unique recruits / 7 payload rows).",
         ],
         "players": players_out,
         "schools": [
@@ -311,13 +395,16 @@ def main() -> None:
             urls["hudl"] = hit["hudl_url"]
             rec["profile_urls"] = urls
 
-    # King recruits must not get Hudl
+    # King recruits must all have Hudl
     king = by_id["tx-houston-c-e-king"]
     if king.get("hudl_team_url") != TEAM_URLS["tx-houston-c-e-king"]:
         raise SystemExit("C.E. King team URL missing")
-    for rec in king.get("recruits") or []:
-        if rec.get("profile_urls", {}).get("hudl") or (rec.get("source_ids") or {}).get("hudl"):
-            raise SystemExit(f"invented King Hudl on {rec['id']}")
+    king_hudl = [r for r in king.get("recruits") or [] if (r.get("profile_urls") or {}).get("hudl")]
+    if len(king_hudl) != len(king.get("recruits") or []):
+        raise SystemExit(f"C.E. King expected all recruits to have Hudl, got {len(king_hudl)}")
+    willis = next(r for r in king["recruits"] if r["id"] == "247-46153677")
+    if willis["profile_urls"]["hudl"] != "https://www.hudl.com/profile/30031086":
+        raise SystemExit("Triston Willis Hudl mismatch")
 
     img = by_id["fl-bradenton-img-academy"]
     mcf = next(r for r in img["recruits"] if r["id"] == "247-46148083")
