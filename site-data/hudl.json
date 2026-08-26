@@ -2,7 +2,7 @@
   "as_of": "2026-08-26",
   "notes": [
     "Verified public Hudl batch (On3 embed \u2192 hudl.com/profile/{id}).",
-    "337 payload rows: 90-set plus later verified crumbs. Davion Jones stays unlinked (athlete 19494412 is West Charlotte).",
+    "343 payload rows: 327-set minus Hough Davion Jones plus later verified first-batch crumbs. Davion Jones stays unlinked (athlete 19494412 is West Charlotte).",
     "Duplicate payload UUIDs that share a Hudl id map to one FridayRadar recruit.",
     "Payload UUID is not the FridayRadar recruit id; join is payload id \u2192 public Hudl name \u2192 school roster recruit id.",
     "Unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
@@ -3041,6 +3041,60 @@
       "hudl_name": "Jag Iaone",
       "hudl_url": "https://www.hudl.com/profile/26298922",
       "hudl_athlete_id": "26298922"
+    },
+    {
+      "id": "59897798-ad62-407c-92c2-977db7dd2be0",
+      "recruit_id": "247-46156977",
+      "school_id": "ca-temecula-chaparral",
+      "full_name": "Trevor Schneider",
+      "hudl_name": "Trevor Schneider",
+      "hudl_url": "https://www.hudl.com/profile/18195770",
+      "hudl_athlete_id": "18195770"
+    },
+    {
+      "id": "c97d4a8a-bf32-42b1-bc68-5f2244c0a99f",
+      "recruit_id": "247-46154622",
+      "school_id": "tn-chattanooga-baylor-school",
+      "full_name": "Xavier Bowman",
+      "hudl_name": "Xavier Bowman",
+      "hudl_url": "https://www.hudl.com/profile/17855853",
+      "hudl_athlete_id": "17855853"
+    },
+    {
+      "id": "a4e2f1a6-117a-4d01-b1a3-2762595be60d",
+      "recruit_id": "247-46147413",
+      "school_id": "fl-miami-miami-central",
+      "full_name": "Sean Thompson",
+      "hudl_name": "Sean Thompson",
+      "hudl_url": "https://www.hudl.com/profile/19530845",
+      "hudl_athlete_id": "19530845"
+    },
+    {
+      "id": "3937b2fd-7dc6-4ddd-9993-c03ff570c74c",
+      "recruit_id": "247-46165970",
+      "school_id": "va-springfield-the-st-james",
+      "full_name": "Jakari Graham",
+      "hudl_name": "Jakari Graham",
+      "hudl_url": "https://www.hudl.com/profile/16289433",
+      "hudl_athlete_id": "16289433"
+    },
+    {
+      "id": "25441e14-5d2a-4138-9b90-68bd4af07e07",
+      "recruit_id": "247-46143771",
+      "school_id": "ut-orem-orem",
+      "full_name": "Krew Jones",
+      "hudl_name": "KREW JONES",
+      "hudl_url": "https://www.hudl.com/profile/19370158",
+      "hudl_athlete_id": "19370158"
+    },
+    {
+      "id": "5100140b-f69d-4528-b51c-035ce4a0acce",
+      "recruit_id": "247-46165206",
+      "school_id": "nc-cornelius-hough",
+      "full_name": "Moreno Fisher",
+      "hudl_name": "Reno Fisher",
+      "hudl_url": "https://www.hudl.com/profile/19658142",
+      "hudl_athlete_id": "19658142"
     }
   ],
   "schools": [

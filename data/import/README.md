@@ -51,7 +51,7 @@ Scout already scored the frozen 2027/2028 ingest (247Sports composite + On3/Riva
 
 ### `hudl.json`
 
-Verified public Hudl batch only (337 payload rows / 327 unique FridayRadar recruits). Payload player rows join to FridayRadar `247-*` recruit ids via the public Hudl profile name. Davion Jones at Hough is omitted on purpose. 41 top-school `hudl_team_url` values are fan.hudl.com boys-varsity-football pages. Missing Hudl is omitted. `python3 scripts/apply-hudl.py` writes this file and merges onto `schools.json`; the importer overlays it again so a Scout recompile does not invent or drop URLs.
+Verified public Hudl batch only (343 payload rows / 333 unique FridayRadar recruits). Payload player rows join to FridayRadar `247-*` recruit ids via the public Hudl profile name. Davion Jones at Hough is omitted on purpose. 41 top-school `hudl_team_url` values are fan.hudl.com boys-varsity-football pages. Missing Hudl is omitted. `python3 scripts/apply-hudl.py` writes this file and merges onto `schools.json`; the importer overlays it again so a Scout recompile does not invent or drop URLs.
 
 ## Official talent
 

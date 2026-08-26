@@ -31,6 +31,12 @@ SCHOOL_HINT = {
     "b8863072-8ee4-45fb-baba-fec76671d7e9": "az-chandler-basha",
     "73146578-4e68-47c8-b3f7-c60fb89d77ba": "pa-pittsburgh-central-catholic",
     "fc50dba4-d2ab-4911-bf62-454c4ab4c8d5": "ut-orem-orem",  # Hudl title Jag Iaone
+    "59897798-ad62-407c-92c2-977db7dd2be0": "ca-temecula-chaparral",
+    "c97d4a8a-bf32-42b1-bc68-5f2244c0a99f": "tn-chattanooga-baylor-school",
+    "a4e2f1a6-117a-4d01-b1a3-2762595be60d": "fl-miami-miami-central",
+    "3937b2fd-7dc6-4ddd-9993-c03ff570c74c": "va-springfield-the-st-james",
+    "25441e14-5d2a-4138-9b90-68bd4af07e07": "ut-orem-orem",
+    "5100140b-f69d-4528-b51c-035ce4a0acce": "nc-cornelius-hough",  # Reno/Moreno Fisher
 }
 
 FIRST_ALIASES = {
@@ -50,6 +56,8 @@ FIRST_ALIASES = {
     "michael": {"mike"},
     "coop": {"cooper"},
     "cooper": {"coop"},
+    "reno": {"moreno"},
+    "moreno": {"reno"},
 }
 
 TEAM_URLS = {
@@ -216,8 +224,8 @@ def main() -> None:
         for line in (SITE / "hudl-pairs.txt").read_text().splitlines()
         if line.strip() and not line.startswith("#")
     ]
-    if len(pairs) != 337:
-        raise SystemExit(f"expected 337 payload pairs, got {len(pairs)}")
+    if len(pairs) != 343:
+        raise SystemExit(f"expected 343 payload pairs, got {len(pairs)}")
     if any(uid == "4721f539-8749-450a-b15a-466b4616fc0d" for uid, _ in pairs):
         raise SystemExit("Davion Jones UUID must stay unlinked")
     if len(TEAM_URLS) != 41:
@@ -292,8 +300,8 @@ def main() -> None:
 
     if unmatched:
         raise SystemExit("unmatched Hudl payload rows:\n" + "\n".join(map(str, unmatched)))
-    if len(players_out) != 337:
-        raise SystemExit(f"expected 337 payload players, got {len(players_out)}")
+    if len(players_out) != 343:
+        raise SystemExit(f"expected 343 payload players, got {len(players_out)}")
     charles = next(p for p in players_out if p["id"] == "46cfe0d8-10e2-4f73-ae02-2f2c8e93ec20")
     if charles["hudl_athlete_id"] != "20157149" or charles["recruit_id"] != "247-46143570":
         raise SystemExit(f"Charles Roberts mapping wrong: {charles}")
@@ -303,12 +311,15 @@ def main() -> None:
     ioane = next(p for p in players_out if p["id"] == "fc50dba4-d2ab-4911-bf62-454c4ab4c8d5")
     if ioane["recruit_id"] != "247-46152618":
         raise SystemExit(f"Jag Ioane mapping wrong: {ioane}")
+    fisher = next(p for p in players_out if p["id"] == "5100140b-f69d-4528-b51c-035ce4a0acce")
+    if fisher["recruit_id"] != "247-46165206" or fisher["hudl_athlete_id"] != "19658142":
+        raise SystemExit(f"Moreno Fisher mapping wrong: {fisher}")
 
     hudl_doc = {
         "as_of": "2026-08-26",
         "notes": [
             "Verified public Hudl batch (On3 embed → hudl.com/profile/{id}).",
-            "337 payload rows: 90-set plus later verified crumbs. Davion Jones stays unlinked (athlete 19494412 is West Charlotte).",
+            "343 payload rows: 327-set minus Hough Davion Jones plus later verified first-batch crumbs. Davion Jones stays unlinked (athlete 19494412 is West Charlotte).",
             "Duplicate payload UUIDs that share a Hudl id map to one FridayRadar recruit.",
             "Payload UUID is not the FridayRadar recruit id; join is payload id → public Hudl name → school roster recruit id.",
             "Unmatched recruits are omitted on purpose. Do not invent athlete URLs.",

@@ -77,7 +77,7 @@ See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games-t
 
 Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (**196** two-sided games, ranked by geometric mean; all have `venue.zip`).
 
-Verified Hudl athlete profiles live in `site-data/hudl.json` (337 payload rows / 327 unique recruits; unmatched skipped). Davion Jones (Hough) is intentionally unlinked — athlete 19494412 is West Charlotte. Re-apply with `python3 scripts/apply-hudl.py` then `npm run import:site`. Do not invent Hudl URLs.
+Verified Hudl athlete profiles live in `site-data/hudl.json` (343 payload rows / 333 unique recruits; unmatched skipped). Davion Jones (Hough) is intentionally unlinked — athlete 19494412 is West Charlotte. Re-apply with `python3 scripts/apply-hudl.py` then `npm run import:site`. Do not invent Hudl URLs.
 
 School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 
