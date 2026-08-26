@@ -3,7 +3,7 @@
   "players": 2986,
   "class_2027": 2135,
   "class_2028": 851,
-  "maxpreps_ids": 1120,
+  "maxpreps_ids": 1123,
   "with_zip": 1444,
   "week_games_unfiltered": 5996,
   "week_both_sides": 213,
@@ -16,10 +16,10 @@
   "rank_by": "two_sided_talent",
   "on3_national": 1000,
   "on3_joined": 532,
-  "schedules": 1119,
+  "schedules": 1120,
   "team_strength_note": "team_strength is the mean of talent_norm (100 \u00d7 talent / board max; IMG = 100 on talent only) and ranking_norm. ranking_norm is the mean of whichever of on3_norm (On3 1000-team compositeScore min\u2013max onto 0\u2013100) and maxpreps_norm (100 \u00d7 (N+1\u2212rank)/N on the 100-team MaxPreps national computer board) exist. Unranked boards are omitted, never 0. Texas 6A DCTF Top 25 then adds 10 \u00d7 (26\u2212rank)/25 (#1 +10.00, #25 +0.40) and the result is clamped 0\u2013100. SOS is the mean of known opponents\u2019 team_strength (unknown omitted; never raw On3 compositeScore).",
   "maxpreps_national": 100,
-  "maxpreps_joined": 87,
+  "maxpreps_joined": 88,
   "dctf_6a": 25,
   "dctf_joined": 23
 }

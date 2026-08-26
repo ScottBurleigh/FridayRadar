@@ -397,6 +397,7 @@ MATCHUP_SCHEDULE_URLS = {
     "nj-matawan-old-bridge": "https://www.maxpreps.com/nj/old-bridge/old-bridge-knights/football/schedule/",
     "ar-jacksonville-jacksonville": "https://www.maxpreps.com/ar/jacksonville/jacksonville-titans/football/schedule/",
     "mi-detroit-martin-luther-king": "https://www.maxpreps.com/mi/detroit/king-crusaders/football/schedule/",
+    "tx-houston-c-e-king": "https://www.maxpreps.com/tx/houston/king-panthers/football/schedule/",
     "va-lynchburg-liberty-christian-academy": (
         "https://www.maxpreps.com/va/lynchburg/liberty-christian-bulldogs/football/schedule/"
     ),
