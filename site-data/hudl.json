@@ -2,7 +2,7 @@
   "as_of": "2026-08-26",
   "notes": [
     "Verified public Hudl batch (On3 embed \u2192 hudl.com/profile/{id}).",
-    "343 payload rows: 327-set minus Hough Davion Jones plus later verified first-batch crumbs. Davion Jones stays unlinked (athlete 19494412 is West Charlotte).",
+    "347 payload rows: 326-set (Davion Jones unlinked) plus later verified first-batch crumbs. Woodward twins stay unlinked.",
     "Duplicate payload UUIDs that share a Hudl id map to one FridayRadar recruit.",
     "Payload UUID is not the FridayRadar recruit id; join is payload id \u2192 public Hudl name \u2192 school roster recruit id.",
     "Unmatched recruits are omitted on purpose. Do not invent athlete URLs.",
@@ -3095,6 +3095,42 @@
       "hudl_name": "Reno Fisher",
       "hudl_url": "https://www.hudl.com/profile/19658142",
       "hudl_athlete_id": "19658142"
+    },
+    {
+      "id": "05e4103a-3ffd-447f-ab73-e112b948b36d",
+      "recruit_id": "247-46163587",
+      "school_id": "va-springfield-the-st-james",
+      "full_name": "AJ Southard",
+      "hudl_name": "AJ Southard",
+      "hudl_url": "https://www.hudl.com/profile/17765827",
+      "hudl_athlete_id": "17765827"
+    },
+    {
+      "id": "58929be2-2516-400c-a455-17cf55bea14e",
+      "recruit_id": "247-46163827",
+      "school_id": "ga-loganville-grayson",
+      "full_name": "Preston Glasco",
+      "hudl_name": "Preston Glasco",
+      "hudl_url": "https://www.hudl.com/profile/21107646",
+      "hudl_athlete_id": "21107646"
+    },
+    {
+      "id": "dbb29209-554e-401b-97f8-759a733540ad",
+      "recruit_id": "247-46145663",
+      "school_id": "nv-las-vegas-bishop-gorman",
+      "full_name": "Rocco Malaki",
+      "hudl_name": "Aloalii Malaki",
+      "hudl_url": "https://www.hudl.com/profile/19382462",
+      "hudl_athlete_id": "19382462"
+    },
+    {
+      "id": "3d1a0cf5-c97d-47da-833a-1367d2bdfdbe",
+      "recruit_id": "247-46159963",
+      "school_id": "fl-orlando-jones",
+      "full_name": "Reggie Harris",
+      "hudl_name": "Reggie Harris",
+      "hudl_url": "https://www.hudl.com/profile/22541018",
+      "hudl_athlete_id": "22541018"
     }
   ],
   "schools": [
