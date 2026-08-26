@@ -468,6 +468,21 @@ function applyHudlOverlay(
 ): { athletes: number; teams: number } {
   if (!doc) return { athletes: 0, teams: 0 };
   const byId = new Map(players.map((p) => [p.id, p]));
+  for (const player of players) {
+    if (player.profile_urls?.hudl) {
+      const urls = { ...player.profile_urls };
+      delete urls.hudl;
+      player.profile_urls = urls;
+    }
+    if (player.source_ids?.hudl) {
+      const ids = { ...player.source_ids };
+      delete ids.hudl;
+      player.source_ids = ids;
+    }
+  }
+  for (const school of schools.values()) {
+    school.hudlTeamUrl = null;
+  }
   const seen = new Set<string>();
   for (const row of doc.players || []) {
     const rid = row.recruit_id;
