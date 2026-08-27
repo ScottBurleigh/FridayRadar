@@ -22,7 +22,10 @@ export const metadata: Metadata = {
   description:
     "High school football programs ranked by 2027-and-later recruiting talent across 247Sports, On3/Rivals, and ESPN.",
   icons: {
-    icon: [{ url: "/fridayradar-logo.png", type: "image/png" }],
+    icon: [
+      { url: "/fridayradar-mark.svg", type: "image/svg+xml" },
+      { url: "/fridayradar-logo.png", type: "image/png" },
+    ],
     apple: "/fridayradar-logo.png",
     shortcut: "/fridayradar-logo.png",
   },

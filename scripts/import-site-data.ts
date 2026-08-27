@@ -145,8 +145,7 @@ type SiteSchool = {
     talent_norm?: number | null;
     on3_rank?: number | null;
     on3_rating?: number | null;
-    on3_min?: number | null;
-    on3_max?: number | null;
+    on3_n?: number | null;
     on3_norm?: number | null;
     maxpreps_rank?: number | null;
     maxpreps_norm?: number | null;
@@ -388,8 +387,7 @@ function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown
     talentNorm: raw.talent_norm ?? null,
     on3Rank: raw.on3_rank ?? null,
     on3Rating: raw.on3_rating ?? null,
-    on3Min: raw.on3_min ?? null,
-    on3Max: raw.on3_max ?? null,
+    on3N: raw.on3_n ?? null,
     on3Norm: raw.on3_norm ?? null,
     maxprepsRank: raw.maxpreps_rank ?? null,
     maxprepsNorm: raw.maxpreps_norm ?? null,
@@ -766,9 +764,9 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     },
     {
       id: "matchup",
-      label: "Matchup MaxPreps week slate",
+      label: "Games of the week",
       status: "live",
-      detail: `Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} from games-top213.json (${games.length} two-sided games). Ranked by geometric mean of home/away talent; combined talent is display only. Venue state/zip, not either school. Never games.json.`,
+      detail: `/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules (dedup by contestId, both sides must be tracked schools), ranked by geometric mean of home/away talent; combined talent is display only. Venue state/zip, not either school. Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} is the default week shown.`,
       counts: { games: games.length },
     },
     {
@@ -817,10 +815,10 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
         "School talentScore is the Scout precomputed sum of 2027+ player points.",
         String(
           summary.team_strength_note ??
-            "Team strength is the mean of talent_norm and ranking_norm (On3 min–max and MaxPreps rank curve). Texas 6A DCTF Top 25 adds a bonus then clamps 0–100. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
+            "Team strength is the mean of talent_norm and ranking_norm (On3 and MaxPreps rank curves — both rank-based, never raw rating min–max). Texas 6A DCTF Top 25 adds a bonus then clamps 0–100. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
         ),
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
-        "Matchup week is 2026-08-26 through 2026-08-29. /games ranks two-sided talent as √(home × away); combined talent is display + tie-break. Filters use the game venue.",
+        "/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules, ranked by geometric mean of home/away talent (√(home × away)); combined talent is display + tie-break. Filters use the game venue.",
         String(summary.note ?? "Canonical v1: 1,554 schools / 2,986 players when the full Scout dump is imported."),
       ],
       matchup_week: {

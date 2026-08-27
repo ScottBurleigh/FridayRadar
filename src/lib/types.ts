@@ -20,8 +20,7 @@ export type StrengthBreakdown = {
   talentNorm?: number | null;
   on3Rank?: number | null;
   on3Rating?: number | null;
-  on3Min?: number | null;
-  on3Max?: number | null;
+  on3N?: number | null;
   on3Norm?: number | null;
   maxprepsRank?: number | null;
   maxprepsNorm?: number | null;

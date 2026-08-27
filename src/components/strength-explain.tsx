@@ -34,11 +34,8 @@ export function StrengthExplainButton({
       ? `talent_norm = 100 × ${n(breakdown.talentScore)} / ${n(breakdown.talentMax)} = ${n(breakdown.talentNorm)}`
       : null;
   const on3Line =
-    breakdown.on3Norm != null &&
-    breakdown.on3Rating != null &&
-    breakdown.on3Min != null &&
-    breakdown.on3Max != null
-      ? `on3_norm = 100 × (${n(breakdown.on3Rating)} − ${n(breakdown.on3Min)}) / (${n(breakdown.on3Max)} − ${n(breakdown.on3Min)}) = ${n(breakdown.on3Norm)}`
+    breakdown.on3Norm != null && breakdown.on3Rank != null && breakdown.on3N != null
+      ? `on3_norm = 100 × (${breakdown.on3N + 1} − ${breakdown.on3Rank}) / ${breakdown.on3N} = ${n(breakdown.on3Norm)}`
       : null;
   const mpLine =
     breakdown.maxprepsRank != null && breakdown.maxprepsNorm != null
@@ -93,7 +90,7 @@ export function StrengthExplainButton({
         popover="auto"
         role="dialog"
         aria-label={`${schoolName} team strength`}
-        className="relative w-[min(32rem,calc(100%-2rem))] max-h-[min(36rem,85vh)] overflow-y-auto rounded-xl bg-[#121c2e] p-4 text-zinc-100 shadow-xl ring-1 ring-amber-400/25 [&::backdrop]:bg-[#0a1220]/75"
+        className="relative w-[min(32rem,calc(100%-2rem))] max-h-[min(36rem,85vh)] overflow-y-auto rounded-xl bg-[#17233d] p-4 text-zinc-100 shadow-xl ring-1 ring-amber-400/25 [&::backdrop]:bg-[#0a1220]/75"
         style={{
           position: "fixed",
           inset: "unset",

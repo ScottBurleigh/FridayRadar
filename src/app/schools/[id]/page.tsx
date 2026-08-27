@@ -5,8 +5,9 @@ import Link from "next/link";
 import { RecruitList } from "@/components/recruit-list";
 import { SchoolScheduleTable } from "@/components/school-schedule";
 import { StrengthExplainButton } from "@/components/strength-explain";
+import { StrengthScore } from "@/components/strength-score";
 import { loadDataset, playersAtSchool, maxprepsScheduleUrl, scheduleForSchool } from "@/lib/data";
-import { formatLocation, formatTalent, formatStrength } from "@/lib/format";
+import { formatLocation, formatTalent } from "@/lib/format";
 import { officialStars, badgeStars, playerPoints, ratingsBySource } from "@/lib/ranking";
 import type { RatedPlayer } from "@/lib/types";
 
@@ -28,7 +29,7 @@ function Stat({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-3">
+    <div className="rounded-xl border border-amber-400/30 bg-[#17233d] p-3">
       <dt className="text-xs uppercase tracking-wide text-zinc-300">{label}</dt>
       <dd className="mt-1 font-mono text-xl text-zinc-50">{children}</dd>
     </div>
@@ -97,7 +98,7 @@ export default async function SchoolPage({
         </Stat>
         <Stat label="Team strength">
           <span className="inline-flex items-center gap-1">
-            <span className="text-amber-200">{formatStrength(school.teamStrength)}</span>
+            <StrengthScore value={school.teamStrength} showLabel />
             <StrengthExplainButton
               schoolName={school.name}
               breakdown={school.strengthBreakdown}
@@ -111,11 +112,11 @@ export default async function SchoolPage({
               <span>
                 #{on3.rank}
                 {on3.rating != null ? (
-                  <span className="ml-2 text-sm font-normal text-zinc-500">{on3.rating}</span>
+                  <span className="ml-2 text-sm font-normal text-zinc-400">{on3.rating}</span>
                 ) : null}
               </span>
             ) : (
-              <span className="text-zinc-500">Unranked</span>
+              <span className="text-zinc-400">Unranked</span>
             )}
             {mpRank != null ? (
               <span className="text-base font-normal text-zinc-300">MaxPreps #{mpRank}</span>
@@ -126,18 +127,14 @@ export default async function SchoolPage({
           </span>
         </Stat>
         <Stat label="Strength of schedule">
-          {school.sos != null ? (
-            <>
-              {formatStrength(school.sos)}
-              {school.sosLabel ? (
-                <span className="ml-2 text-sm font-normal capitalize text-zinc-400">
-                  {school.sosLabel}
-                </span>
-              ) : null}
-            </>
-          ) : (
-            <span className="text-zinc-500">—</span>
-          )}
+          <span className="inline-flex items-center gap-1">
+            <StrengthScore value={school.sos} />
+            {school.sosLabel ? (
+              <span className="text-sm font-normal capitalize text-zinc-400">
+                {school.sosLabel}
+              </span>
+            ) : null}
+          </span>
         </Stat>
         <Stat label="Zip">{school.zip ?? "—"}</Stat>
       </dl>

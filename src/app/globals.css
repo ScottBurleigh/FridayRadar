@@ -137,7 +137,7 @@
   .night-select {
     appearance: none;
     color-scheme: dark;
-    background-color: #0d1628;
+    background-color: #0f1a2e;
     color: #fafafa;
     border: 1px solid rgb(253 230 138 / 0.45);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e4e4e7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");

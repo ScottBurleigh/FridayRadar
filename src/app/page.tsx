@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FilterBar } from "@/components/filter-bar";
 import { RankingsTable } from "@/components/rankings-table";
-import { SourceBanner } from "@/components/source-banner";
+import { StrengthLegend } from "@/components/strength-score";
 import { filteredRankings, inlineRecruitsForSchools, loadDataset } from "@/lib/data";
 import { coordsForZip } from "@/lib/geo";
 
@@ -50,22 +50,12 @@ export default async function RankingsPage({
           <h1 className="mt-1 text-3xl font-semibold tracking-tight text-zinc-50">
             Program rankings
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-zinc-300">
-            High schools ranked by the recruiting talent on their 2027, 2028, and 2029+
-            rosters. Talent score stays its own number; team strength blends talent
-            share (vs the board max) with On3 and MaxPreps national computer ranks when
-            those boards list the school. Texas 6A DCTF Top 25 adds a bonus. Default
-            sort is talent.
-          </p>
         </div>
         <p className="font-mono text-sm text-zinc-400">
           {rows.length.toLocaleString()} programs · as of {dataset.meta.as_of}
         </p>
       </div>
-      <SourceBanner sources={dataset.meta.sources} />
-      <div className="mt-4">
-        <FilterBar action="/" state={state} zip={zip} sort={sort} />
-      </div>
+      <FilterBar action="/" state={state} zip={zip} sort={sort} />
       {zipError ? (
         <p className="mt-3 text-sm text-rose-300">
           Zip {zip} is not in the centroid file, so the radius filter was ignored.
@@ -75,7 +65,13 @@ export default async function RankingsPage({
           Showing schools within about 25 miles of {zip}.
         </p>
       ) : null}
-      <div className="mt-6">
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <span className="font-sans text-xs font-medium uppercase tracking-wide text-zinc-400">
+          Strength score
+        </span>
+        <StrengthLegend />
+      </div>
+      <div className="mt-2">
         <RankingsTable
           rows={slice}
           recruitsBySchool={inlineRecruitsForSchools(
@@ -89,7 +85,7 @@ export default async function RankingsPage({
           {safePage > 1 ? (
             <Link
               href={buildQuery({ state, zip, sort, page: safePage - 1 })}
-              className="rounded-md border border-amber-400/25 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
+              className="rounded-md border border-amber-400/35 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
             >
               Previous
             </Link>
@@ -102,7 +98,7 @@ export default async function RankingsPage({
           {safePage < pages ? (
             <Link
               href={buildQuery({ state, zip, sort, page: safePage + 1 })}
-              className="rounded-md border border-amber-400/25 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
+              className="rounded-md border border-amber-400/35 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
             >
               Next
             </Link>

@@ -46,12 +46,14 @@ DCTF_BONUS_MAX = 10.0
 STRENGTH_NOTE = (
     "team_strength is the mean of talent_norm (100 × talent / board max; IMG = 100 "
     "on talent only) and ranking_norm. ranking_norm is the mean of whichever of "
-    "on3_norm (On3 1000-team compositeScore min–max onto 0–100) and maxpreps_norm "
-    "(100 × (N+1−rank)/N on the 100-team MaxPreps national computer board) exist. "
-    "Unranked boards are omitted, never 0. Texas 6A DCTF Top 25 then adds "
-    "10 × (26−rank)/25 (#1 +10.00, #25 +0.40) and the result is clamped 0–100. "
-    "SOS is the mean of known opponents’ team_strength (unknown omitted; never "
-    "raw On3 compositeScore)."
+    "on3_norm (100 × (N+1−rank)/N on the 1000-team On3 national board) and "
+    "maxpreps_norm (100 × (N+1−rank)/N on the 100-team MaxPreps national computer "
+    "board) exist — both rank-based; On3's raw compositeScore only spans ~79–91 "
+    "across all 1000 teams, so min–max on the raw score wildly overweighted tiny "
+    "rating gaps near the top and is not used. Unranked boards are omitted, never "
+    "0. Texas 6A DCTF Top 25 then adds 10 × (26−rank)/25 (#1 +10.00, #25 +0.40) "
+    "and the result is clamped 0–100. SOS is the mean of known opponents’ "
+    "team_strength (unknown omitted; never raw On3 compositeScore)."
 )
 
 
@@ -278,15 +280,19 @@ def talent_norm_map(schools: list[dict]) -> dict[str, float]:
     return out
 
 
-def on3_rating_norm(rating: float, rmin: float, rmax: float) -> float:
-    """Scale On3 compositeScore onto 0–100 (board max → 100, board min → 0).
+def on3_rank_norm(rank: int, n: int) -> float:
+    """Rank 1 = 100, rank N = ~0. Mirrors maxpreps_rank_norm.
+
+    On3's raw compositeScore only spans ~79–91 across the full 1000-team
+    board, so min–max normalizing the raw rating (the old approach) turned a
+    handful of raw points near the top into a 0–100-scale swing — e.g. rank
+    #8 vs #32 (both top 3.2% nationally) came out ~98 vs ~59. Rank position
+    is the honest signal On3 itself is publishing; use it directly, the same
+    way the MaxPreps board term already does.
 
     This is the On3 *term* of ranking_norm, never the SOS value itself.
     """
-    if rmax <= rmin:
-        return 100.0
-    val = 100.0 * (float(rating) - rmin) / (rmax - rmin)
-    return round(max(0.0, min(100.0, val)), 2)
+    return round(max(0.0, min(100.0, 100.0 * (n + 1 - int(rank)) / n)), 2)
 
 
 def maxpreps_rank_norm(rank: int, n: int = MAXPREPS_N) -> float:
@@ -960,9 +966,7 @@ def apply_strength(
     joined_dctf: dict[str, int] | None = None,
 ) -> None:
     tnorm = talent_norm_map(schools)
-    ratings = [float(t["rating"]) for t in on3_teams if t.get("rating") is not None]
-    rmin = min(ratings) if ratings else 0.0
-    rmax = max(ratings) if ratings else 100.0
+    n_on3 = len(on3_teams) or 1
     max_t = max(
         (float(s["talent_score"]) for s in schools if s.get("talent_score") is not None),
         default=0.0,
@@ -978,8 +982,8 @@ def apply_strength(
         tn = tnorm.get(sid)
         on3 = joined_on3.get(sid)
         on3n = None
-        if on3 and on3.get("rating") is not None:
-            on3n = on3_rating_norm(on3["rating"], rmin, rmax)
+        if on3 and on3.get("rank") is not None:
+            on3n = on3_rank_norm(on3["rank"], n_on3)
         mp_rank = joined_mp.get(sid)
         mpn = maxpreps_rank_norm(mp_rank) if mp_rank is not None else None
         ranking_norm = mean_present([on3n, mpn])
@@ -1019,8 +1023,7 @@ def apply_strength(
         if on3n is not None and on3:
             bd["on3_rank"] = on3["rank"]
             bd["on3_rating"] = round(on3["rating"], 3) if on3.get("rating") is not None else None
-            bd["on3_min"] = round(rmin, 3)
-            bd["on3_max"] = round(rmax, 3)
+            bd["on3_n"] = n_on3
             bd["on3_norm"] = on3n
         if mpn is not None:
             bd["maxpreps_rank"] = int(mp_rank)

@@ -12,6 +12,62 @@ export function formatStrength(n: number | null | undefined): string {
   return formatTalent(n);
 }
 
+export type StrengthTier = {
+  label: string;
+  text: string;
+  dot: string;
+  chipBg: string;
+  chipText: string;
+};
+
+/**
+ * team_strength (and SOS, same 0–100 scale) is heavily right-skewed: most
+ * schools never touch the On3/MaxPreps boards, so the vast majority sit
+ * under ~7. Thresholds are picked from the real distribution (~8/18/13/60%
+ * of schools) rather than splitting 0–100 evenly, so "building" isn't a
+ * judgment — it's most programs.
+ */
+const STRENGTH_TIERS: Array<{ min: number } & StrengthTier> = [
+  {
+    min: 45,
+    label: "Elite",
+    text: "text-emerald-300",
+    dot: "bg-emerald-400",
+    chipBg: "bg-emerald-400/15 ring-1 ring-emerald-400/40",
+    chipText: "text-emerald-300",
+  },
+  {
+    min: 20,
+    label: "Strong",
+    text: "text-amber-300",
+    dot: "bg-amber-300",
+    chipBg: "bg-amber-400/15 ring-1 ring-amber-400/40",
+    chipText: "text-amber-300",
+  },
+  {
+    min: 7,
+    label: "Solid",
+    text: "text-sky-300",
+    dot: "bg-sky-300",
+    chipBg: "bg-sky-400/15 ring-1 ring-sky-400/40",
+    chipText: "text-sky-300",
+  },
+  {
+    min: -Infinity,
+    label: "Building",
+    text: "text-zinc-300",
+    dot: "bg-zinc-400",
+    chipBg: "bg-zinc-400/10 ring-1 ring-zinc-400/25",
+    chipText: "text-zinc-300",
+  },
+];
+
+export function strengthTier(n: number | null | undefined): StrengthTier | null {
+  if (n == null || Number.isNaN(n)) return null;
+  const tier = STRENGTH_TIERS.find((t) => n >= t.min)!;
+  return tier;
+}
+
 export function formatScheduleDate(isoDate: string | null, kickoff: string | null): string {
   const raw = kickoff || isoDate;
   if (!raw) return "TBD";
