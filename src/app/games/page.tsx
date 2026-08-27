@@ -54,6 +54,7 @@ export default async function GamesPage({
         state={state}
         zip={zip}
         showSort={false}
+        showSearch={false}
         stateLabel="Venue state"
         zipLabel="Venue zip (≈25 miles)"
       />

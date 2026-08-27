@@ -182,6 +182,13 @@ export function rankSchools(
   players: Player[],
   ratings: Rating[],
   sort: "talent" | "count" | "strength" = "talent",
+  /**
+   * Include schools with no recruiting data (schedule-only opponents,
+   * mapped:false). They carry 0 talent/strength by construction, so they
+   * always sort below every school that has data. Off by default — /games
+   * ranks on two-sided talent and must not see zero-talent teams.
+   */
+  includeUnranked = false,
 ): SchoolRankingRow[] {
   const ratingsByPlayer = new Map<string, Rating[]>();
   for (const r of ratings) {
@@ -233,8 +240,11 @@ export function rankSchools(
         sosLabel: school.sosLabel ?? null,
       };
     })
-    .filter((row) => row.recruitCount > 0 || row.talentScore > 0)
-    .filter((row) => row.school.mapped !== false);
+    .filter(
+      (row) =>
+        includeUnranked || row.recruitCount > 0 || row.talentScore > 0,
+    )
+    .filter((row) => includeUnranked || row.school.mapped !== false);
 
   rows.sort((a, b) => {
     if (sort === "count") {

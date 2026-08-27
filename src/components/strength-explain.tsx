@@ -67,6 +67,12 @@ export function StrengthExplainButton({
   const bonusLine = dctf
     ? `bonus = 10 × (26 − ${breakdown.dctfRank}) / 25 = ${n(bonus)}`
     : `bonus = 0`;
+
+  const successAdj = breakdown.successAdj;
+  const hasSuccess = successAdj != null && breakdown.successWinPct != null;
+  const successLine = hasSuccess
+    ? `recent_form = 8 × (2 × ${n(breakdown.successWinPct)} − 1) × ${n(breakdown.successConfidence)} = ${successAdj >= 0 ? "+" : ""}${n(successAdj)}`
+    : null;
   const result = breakdown.teamStrength ?? teamStrength;
   const blendedShown = breakdown.blended ?? result;
   const label = `How ${schoolName} team strength is calculated`;
@@ -188,10 +194,23 @@ export function StrengthExplainButton({
           </section>
           <section>
             <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
+              Recent form
+            </h3>
+            <p className="mt-1 text-zinc-300">
+              {hasSuccess
+                ? `Recency-weighted win rate over ${breakdown.successSeasons} season${
+                    breakdown.successSeasons === 1 ? "" : "s"
+                  } (${breakdown.successGames} games), centred on .500 and capped at ±8. Win rate ignores schedule quality, so it adjusts the score rather than forming part of the blend.`
+                : "No MaxPreps season history on file, so recent form is skipped — not counted as a loss."}
+            </p>
+            <Formula>{successLine ?? "recent_form = 0"}</Formula>
+          </section>
+          <section>
+            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
               Team strength
             </h3>
             <p className="mt-1 text-zinc-300">Clamped to 0–100. This is the number on the page.</p>
-            <Formula>{`team_strength = clamp(${n(blendedShown)} + ${n(bonus)}, 0, 100) = ${n(result)}`}</Formula>
+            <Formula>{`team_strength = clamp(${n(blendedShown)} + ${n(bonus)} + ${n(successAdj ?? 0)}, 0, 100) = ${n(result)}`}</Formula>
           </section>
         </div>
       </div>

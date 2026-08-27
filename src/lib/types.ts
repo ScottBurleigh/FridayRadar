@@ -28,6 +28,14 @@ export type StrengthBreakdown = {
   blended?: number | null;
   dctfRank?: number | null;
   bonus?: number | null;
+  /** Recency-weighted win rate over recent seasons, 0–1. */
+  successWinPct?: number | null;
+  successGames?: number | null;
+  successSeasons?: number | null;
+  /** 0–1 shrinkage applied when few games are on file. */
+  successConfidence?: number | null;
+  /** Points recent form moved team_strength, positive or negative. */
+  successAdj?: number | null;
   teamStrength?: number | null;
 };
 
@@ -60,6 +68,7 @@ export type School = {
     rank: number;
     rating: number | null;
     orgKey?: string | number | null;
+    slug?: string | null;
   } | null;
   maxprepsNational?: { rank: number } | null;
   dctf?: { rank: number; board?: string | null } | null;
@@ -68,6 +77,18 @@ export type School = {
   sosGames?: number | null;
   sosLabel?: "tough" | "average" | "light" | null;
   scheduleGames?: number | null;
+  /** MaxPreps overall W-L(-T) by season, newest first. */
+  seasonHistory?: SeasonRecord[] | null;
+};
+
+export type SeasonRecord = {
+  /** MaxPreps season label, e.g. "25-26". */
+  season: string;
+  wins: number;
+  losses: number;
+  ties: number;
+  /** Raw "9-0" / "11-2-1" string as MaxPreps reports it. */
+  record: string;
 };
 
 export type Player = {

@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ListOrdered, CalendarDays } from "lucide-react";
+import { ListOrdered, CalendarDays, LogOut } from "lucide-react";
+import { signOut } from "@/lib/auth-actions";
 
 export function SiteHeader() {
   const pathname = usePathname();
+  // The login page carries its own branding and has no signed-in nav to show.
+  if (pathname === "/login") return null;
   const links = [
     { href: "/", label: "Rankings", Icon: ListOrdered },
     { href: "/games", label: "Games of the week", Icon: CalendarDays },
@@ -20,9 +23,10 @@ export function SiteHeader() {
             FridayRadar
           </span>
         </Link>
+        <div className="flex items-center gap-2 self-stretch sm:self-auto">
         <nav
           aria-label="View"
-          className="flex items-center gap-1 self-stretch rounded-lg border border-white/10 bg-white/5 p-1 text-sm sm:self-auto"
+          className="flex flex-1 items-center gap-1 rounded-lg border border-white/10 bg-white/5 p-1 text-sm sm:flex-none"
         >
           {links.map((l) => {
             const active = l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
@@ -44,6 +48,17 @@ export function SiteHeader() {
             );
           })}
         </nav>
+        <form action={signOut}>
+          <button
+            type="submit"
+            title="Sign out"
+            className="inline-flex size-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-zinc-100"
+          >
+            <LogOut className="size-4" strokeWidth={2} aria-hidden />
+            <span className="sr-only">Sign out</span>
+          </button>
+        </form>
+        </div>
       </div>
     </header>
   );

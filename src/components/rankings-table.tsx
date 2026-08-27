@@ -199,9 +199,13 @@ export function RankingsTable({
           <tbody>
             {rows.map((row) => {
               const recruits = recruitsBySchool[row.school.id] ?? [];
+              // Schedule-only school: 0s here mean "no recruits tracked", not a
+              // measured zero, so show them as blanks rather than hard numbers.
+              const noData = row.school.mapped === false;
+              const dash = <span className="text-zinc-600">—</span>;
               return (
                 <tr key={row.school.id} className="border-b border-white/12 hover:bg-amber-400/8">
-                  <td className="p-2 align-top text-zinc-400">{row.rank}</td>
+                  <td className="p-2 align-top text-zinc-400">{noData ? dash : row.rank}</td>
                   <td className="p-2 align-top whitespace-normal">
                     <SchoolRosterCell
                       href={`/schools/${row.school.id}`}
@@ -215,15 +219,25 @@ export function RankingsTable({
                   </td>
                   <td className="p-2 align-top text-zinc-200">{row.school.state}</td>
                   <td className="p-2 align-top text-zinc-300">{row.school.zip ?? "—"}</td>
-                  <td className="p-2 align-top text-right text-zinc-100">{row.recruitCount}</td>
-                  <td className="p-2 align-top text-right text-amber-300">{row.stars5 || "—"}</td>
-                  <td className="p-2 align-top text-right text-zinc-200">{row.stars4 || "—"}</td>
-                  <td className="p-2 align-top text-right text-zinc-300">{row.stars3 || "—"}</td>
+                  <td className="p-2 align-top text-right text-zinc-100">
+                    {noData ? dash : row.recruitCount}
+                  </td>
+                  <td className="p-2 align-top text-right text-amber-300">
+                    {noData ? dash : row.stars5 || "—"}
+                  </td>
+                  <td className="p-2 align-top text-right text-zinc-200">
+                    {noData ? dash : row.stars4 || "—"}
+                  </td>
+                  <td className="p-2 align-top text-right text-zinc-300">
+                    {noData ? dash : row.stars3 || "—"}
+                  </td>
                   <td className="p-2 align-top text-right font-semibold text-amber-200">
-                    {formatTalent(row.talentScore)}
+                    {noData ? dash : formatTalent(row.talentScore)}
                   </td>
                   <td className="p-2 align-top text-right">
-                    {row.teamStrength != null ? (
+                    {noData ? (
+                      dash
+                    ) : row.teamStrength != null ? (
                       <span className="inline-flex items-center justify-end gap-0.5">
                         <StrengthScore value={row.teamStrength} />
                         <StrengthExplainButton
@@ -248,13 +262,16 @@ export function RankingsTable({
       <ul className="space-y-2.5 md:hidden">
         {rows.map((row) => {
           const recruits = recruitsBySchool[row.school.id] ?? [];
+          const noData = row.school.mapped === false;
           return (
             <li
               key={row.school.id}
               className="rounded-xl border border-amber-400/30 bg-[#17233d] p-3.5"
             >
               <div className="flex items-start justify-between gap-3">
-                <span className="mt-1 font-mono text-xs text-zinc-400">#{row.rank}</span>
+                <span className="mt-1 font-mono text-xs text-zinc-400">
+                  {noData ? "—" : `#${row.rank}`}
+                </span>
                 <div className="min-w-0 flex-1">
                   <SchoolRosterCell
                     href={`/schools/${row.school.id}`}
@@ -268,39 +285,52 @@ export function RankingsTable({
                 {row.school.city}, {row.school.state} {row.school.zip ?? ""}
               </p>
 
-              <div className="mt-3 grid grid-cols-3 gap-1.5 pl-7">
-                <MobileStat label="Talent">
-                  <span className="font-semibold text-amber-200">
-                    {formatTalent(row.talentScore)}
-                  </span>
-                </MobileStat>
-                <MobileStat label="Strength">
-                  {row.teamStrength != null ? (
-                    <span className="inline-flex items-center gap-0.5">
-                      <StrengthScore value={row.teamStrength} />
-                      <StrengthExplainButton
-                        schoolName={row.school.name}
-                        breakdown={row.school.strengthBreakdown}
-                        teamStrength={row.teamStrength}
-                      />
-                    </span>
-                  ) : (
-                    <span className="text-zinc-500">—</span>
-                  )}
-                </MobileStat>
-                <MobileStat label="SOS">
-                  <SosCell sos={row.sos} label={row.sosLabel} compact hidePrefix />
-                </MobileStat>
-              </div>
+              {noData ? (
+                <div className="mt-3 grid grid-cols-2 gap-1.5 pl-7">
+                  <MobileStat label="Recruiting">
+                    <span className="font-sans text-xs text-zinc-400">No data</span>
+                  </MobileStat>
+                  <MobileStat label="SOS">
+                    <SosCell sos={row.sos} label={row.sosLabel} compact hidePrefix />
+                  </MobileStat>
+                </div>
+              ) : (
+                <>
+                  <div className="mt-3 grid grid-cols-3 gap-1.5 pl-7">
+                    <MobileStat label="Talent">
+                      <span className="font-semibold text-amber-200">
+                        {formatTalent(row.talentScore)}
+                      </span>
+                    </MobileStat>
+                    <MobileStat label="Strength">
+                      {row.teamStrength != null ? (
+                        <span className="inline-flex items-center gap-0.5">
+                          <StrengthScore value={row.teamStrength} />
+                          <StrengthExplainButton
+                            schoolName={row.school.name}
+                            breakdown={row.school.strengthBreakdown}
+                            teamStrength={row.teamStrength}
+                          />
+                        </span>
+                      ) : (
+                        <span className="text-zinc-500">—</span>
+                      )}
+                    </MobileStat>
+                    <MobileStat label="SOS">
+                      <SosCell sos={row.sos} label={row.sosLabel} compact hidePrefix />
+                    </MobileStat>
+                  </div>
 
-              <div className="mt-2.5 flex flex-wrap items-center gap-1.5 pl-7">
-                <StarCountChip n={row.stars5} label="5★" />
-                <StarCountChip n={row.stars4} label="4★" />
-                <StarCountChip n={row.stars3} label="3★" />
-                <span className="font-sans text-xs text-zinc-400">
-                  {row.recruitCount} recruit{row.recruitCount === 1 ? "" : "s"}
-                </span>
-              </div>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-1.5 pl-7">
+                    <StarCountChip n={row.stars5} label="5★" />
+                    <StarCountChip n={row.stars4} label="4★" />
+                    <StarCountChip n={row.stars3} label="3★" />
+                    <span className="font-sans text-xs text-zinc-400">
+                      {row.recruitCount} recruit{row.recruitCount === 1 ? "" : "s"}
+                    </span>
+                  </div>
+                </>
+              )}
             </li>
           );
         })}

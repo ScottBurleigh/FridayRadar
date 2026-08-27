@@ -28,6 +28,7 @@ import type {
   School,
   SchoolSchedule,
   ScheduleGame,
+  SeasonRecord,
   SourceStatus,
   StrengthBreakdown,
   ToughnessIcon,
@@ -46,7 +47,11 @@ const CANONICAL_SCHOOL_ID: Record<string, string> = {
   "nv-na-mater-academy-east-las-vegas": "nv-las-vegas-mater-academy-east",
   "al-na-mcgill-toolen-catholic-high-school": "al-mobile-mcgill-toolen",
   "mi-na-saint-mary-s-preparatory-school": "mi-orchard-lake-orchard-lake-st-mary-s",
-  "tx-na-the-woodlands-college-park-high-school": "tx-the-woodlands-college-park",
+  // NOTE: "tx-na-the-woodlands-college-park-high-school" was once aliased onto
+  // tx-the-woodlands-college-park. That was wrong — ESPN files The Woodlands HS
+  // recruits under College Park's name, but they are two separate schools in
+  // the same town (MaxPreps a9887370… vs 06029cb1…). The record is now stored
+  // with its real identity as tx-the-woodlands-the-woodlands; do not re-add it.
   "eur-na-nfl-academy": "en-london-nfl-academy",
   "tx-arlington-summit-high-school": "tx-arlington-mansfield-summit",
   "oh-warren-warren-g-harding-high-school": "oh-warren-harding",
@@ -135,6 +140,7 @@ type SiteSchool = {
     rank?: number;
     rating?: number | null;
     org_key?: string | number | null;
+    slug?: string | null;
   } | null;
   maxpreps_national?: { rank?: number } | null;
   dctf?: { rank?: number; board?: string | null } | null;
@@ -153,6 +159,11 @@ type SiteSchool = {
     blended?: number | null;
     dctf_rank?: number | null;
     bonus?: number | null;
+    success_win_pct?: number | null;
+    success_games?: number | null;
+    success_seasons?: number | null;
+    success_confidence?: number | null;
+    success_adj?: number | null;
     team_strength?: number | null;
   } | null;
   sos?: number | null;
@@ -378,6 +389,19 @@ function siteMaxPreps(mp: SiteSchool["maxpreps"]): School["maxpreps"] {
   };
 }
 
+/** "11-2" / "11-2-1" -> a typed SeasonRecord. Malformed strings are dropped. */
+function parseSeasonRecord(season: string, raw: string | undefined): SeasonRecord | null {
+  const m = (raw ?? "").trim().match(/^(\d+)-(\d+)(?:-(\d+))?$/);
+  if (!m) return null;
+  return {
+    season,
+    wins: Number(m[1]),
+    losses: Number(m[2]),
+    ties: m[3] ? Number(m[3]) : 0,
+    record: raw!.trim(),
+  };
+}
+
 function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown | null {
   if (!raw) return null;
   const bd: StrengthBreakdown = {
@@ -395,6 +419,11 @@ function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown
     blended: raw.blended ?? null,
     dctfRank: raw.dctf_rank ?? null,
     bonus: raw.bonus ?? null,
+    successWinPct: raw.success_win_pct ?? null,
+    successGames: raw.success_games ?? null,
+    successSeasons: raw.success_seasons ?? null,
+    successConfidence: raw.success_confidence ?? null,
+    successAdj: raw.success_adj ?? null,
     teamStrength: raw.team_strength ?? null,
   };
   const has =
@@ -586,6 +615,15 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     ? await readJson<Record<string, SiteSchedule>>(schedulesPath)
     : {};
 
+  const historyPath = join(ROOT, "data/raw/maxpreps/season-history.json");
+  const seasonHistory = existsSync(historyPath)
+    ? (await readJson<{ seasons?: string[]; records?: Record<string, Record<string, string>> }>(
+        historyPath,
+      ))
+    : {};
+  const historySeasons = seasonHistory.seasons ?? [];
+  const historyRecords = seasonHistory.records ?? {};
+
   const schools = new Map<string, School>();
   const players: Player[] = [];
   const ratings: Rating[] = [];
@@ -630,6 +668,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
             rank: row.on3.rank,
             rating: row.on3.rating ?? null,
             orgKey: row.on3.org_key ?? null,
+            slug: row.on3.slug ?? null,
           }
         : null,
       maxprepsNational: row.maxpreps_national?.rank != null
@@ -643,6 +682,15 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       sosGames: row.sos_games ?? null,
       sosLabel: row.sos_label ?? null,
       scheduleGames: row.schedule_games ?? null,
+      seasonHistory: (() => {
+        const raw = historyRecords[cid] ?? historyRecords[row.id];
+        if (!raw) return null;
+        const seasons = historySeasons.length ? historySeasons : Object.keys(raw).sort().reverse();
+        const rows = seasons
+          .map((s) => parseSeasonRecord(s, raw[s]))
+          .filter((r): r is SeasonRecord => r != null);
+        return rows.length ? rows : null;
+      })(),
     };
     schools.set(school.id, school);
 

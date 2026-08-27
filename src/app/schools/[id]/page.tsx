@@ -4,9 +4,16 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { RecruitList } from "@/components/recruit-list";
 import { SchoolScheduleTable } from "@/components/school-schedule";
+import { SeasonHistory } from "@/components/season-history";
 import { StrengthExplainButton } from "@/components/strength-explain";
 import { StrengthScore } from "@/components/strength-score";
-import { loadDataset, playersAtSchool, maxprepsScheduleUrl, scheduleForSchool } from "@/lib/data";
+import {
+  loadDataset,
+  playersAtSchool,
+  maxprepsScheduleUrl,
+  on3ScheduleUrl,
+  scheduleForSchool,
+} from "@/lib/data";
 import { formatLocation, formatTalent } from "@/lib/format";
 import { officialStars, badgeStars, playerPoints, ratingsBySource } from "@/lib/ranking";
 import type { RatedPlayer } from "@/lib/types";
@@ -67,6 +74,7 @@ export default async function SchoolPage({
   const recruitCount = school.recruitCount != null ? school.recruitCount : players.length;
   const schedule = scheduleForSchool(dataset, school.id);
   const scheduleUrl = maxprepsScheduleUrl(school.maxpreps, schedule);
+  const on3Url = on3ScheduleUrl(school.on3);
   const on3 = school.on3;
   const mpRank = school.maxprepsNational?.rank;
   const dctfRank = school.dctf?.rank;
@@ -91,6 +99,14 @@ export default async function SchoolPage({
         {formatLocation(school.city, school.state, school.zip)}
         {school.address ? ` · ${school.address}` : ""}
       </p>
+      {school.mapped === false ? (
+        <p className="mt-4 rounded-lg border border-dashed border-amber-400/30 bg-[#17233d] px-4 py-3 text-sm text-zinc-300">
+          No recruiting data on file for this school. FridayRadar tracks 2027+ recruits rated by
+          247Sports, On3/Rivals, or ESPN, and this program doesn&apos;t currently have any in that
+          pool — talent, strength, and recruit counts below are genuinely 0, not missing data. It
+          shows up here because it&apos;s a real opponent on a tracked team&apos;s schedule.
+        </p>
+      ) : null}
       <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <Stat label="2027+ recruits">{recruitCount}</Stat>
         <Stat label="Talent score">
@@ -138,7 +154,7 @@ export default async function SchoolPage({
         </Stat>
         <Stat label="Zip">{school.zip ?? "—"}</Stat>
       </dl>
-      {school.maxpreps?.canonicalUrl || scheduleUrl ? (
+      {school.maxpreps?.canonicalUrl || scheduleUrl || on3Url ? (
         <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           {school.maxpreps?.canonicalUrl ? (
             <a
@@ -160,7 +176,28 @@ export default async function SchoolPage({
               MaxPreps schedule
             </a>
           ) : null}
+          {on3Url ? (
+            <a
+              href={on3Url}
+              className="text-amber-300/90 hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              On3 schedule &amp; win probability
+            </a>
+          ) : null}
         </p>
+      ) : null}
+      {school.seasonHistory?.length ? (
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold text-zinc-50">Recent seasons</h2>
+          <p className="mt-1 text-sm text-zinc-400">
+            Overall win-loss record per season, from MaxPreps team standings.
+          </p>
+          <div className="mt-4">
+            <SeasonHistory seasons={school.seasonHistory} />
+          </div>
+        </section>
       ) : null}
       <div className="mt-8">
         <RecruitList players={players} ratings={dataset.ratings} />

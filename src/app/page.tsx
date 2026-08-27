@@ -7,8 +7,15 @@ import { coordsForZip } from "@/lib/geo";
 
 const PAGE_SIZE = 100;
 
-function buildQuery(opts: { state?: string; zip?: string; sort?: string; page?: number }) {
+function buildQuery(opts: {
+  state?: string;
+  zip?: string;
+  sort?: string;
+  q?: string;
+  page?: number;
+}) {
   const p = new URLSearchParams();
+  if (opts.q) p.set("q", opts.q);
   if (opts.state) p.set("state", opts.state);
   if (opts.zip) p.set("zip", opts.zip);
   if (opts.sort && opts.sort !== "talent") p.set("sort", opts.sort);
@@ -20,10 +27,17 @@ function buildQuery(opts: { state?: string; zip?: string; sort?: string; page?: 
 export default async function RankingsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ state?: string; zip?: string; sort?: string; page?: string }>;
+  searchParams: Promise<{
+    state?: string;
+    zip?: string;
+    sort?: string;
+    q?: string;
+    page?: string;
+  }>;
 }) {
   const params = await searchParams;
   const state = typeof params.state === "string" ? params.state : undefined;
+  const q = typeof params.q === "string" ? params.q.trim().slice(0, 80) : undefined;
   const zip = typeof params.zip === "string" ? params.zip.replace(/\D/g, "").slice(0, 5) : undefined;
   const sort =
     params.sort === "count" || params.sort === "strength" ? params.sort : "talent";
@@ -35,7 +49,10 @@ export default async function RankingsPage({
     state: state || undefined,
     zip: zipOk ? zip : undefined,
     sort,
+    q: q || undefined,
+    includeUnranked: true,
   });
+  const withData = rows.filter((r) => r.school.mapped !== false).length;
   const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const safePage = Math.min(page, pages);
   const slice = rows.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
@@ -52,10 +69,21 @@ export default async function RankingsPage({
           </h1>
         </div>
         <p className="font-mono text-sm text-zinc-400">
-          {rows.length.toLocaleString()} programs · as of {dataset.meta.as_of}
+          {rows.length.toLocaleString()} programs ·{" "}
+          <span className="text-zinc-300">{withData.toLocaleString()}</span> with recruiting
+          data · as of {dataset.meta.as_of}
         </p>
       </div>
-      <FilterBar action="/" state={state} zip={zip} sort={sort} />
+      <FilterBar action="/" state={state} zip={zip} sort={sort} q={q} />
+      {q ? (
+        <p className="mt-3 text-sm text-zinc-400">
+          {rows.length.toLocaleString()} result{rows.length === 1 ? "" : "s"} for{" "}
+          <span className="text-zinc-100">&ldquo;{q}&rdquo;</span>
+          <Link href={buildQuery({ state, zip, sort })} className="ml-3 text-amber-300 hover:underline">
+            Clear search
+          </Link>
+        </p>
+      ) : null}
       {zipError ? (
         <p className="mt-3 text-sm text-rose-300">
           Zip {zip} is not in the centroid file, so the radius filter was ignored.
@@ -84,7 +112,7 @@ export default async function RankingsPage({
         <nav className="mt-6 flex items-center justify-between gap-3 text-sm text-zinc-400">
           {safePage > 1 ? (
             <Link
-              href={buildQuery({ state, zip, sort, page: safePage - 1 })}
+              href={buildQuery({ state, zip, sort, q, page: safePage - 1 })}
               className="rounded-md border border-amber-400/35 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
             >
               Previous
@@ -97,7 +125,7 @@ export default async function RankingsPage({
           </span>
           {safePage < pages ? (
             <Link
-              href={buildQuery({ state, zip, sort, page: safePage + 1 })}
+              href={buildQuery({ state, zip, sort, q, page: safePage + 1 })}
               className="rounded-md border border-amber-400/35 px-3 py-1.5 text-zinc-200 hover:text-amber-300"
             >
               Next
