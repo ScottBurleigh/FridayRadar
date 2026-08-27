@@ -77,7 +77,7 @@ See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games-t
 
 Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (**196** two-sided games, ranked by geometric mean; all have `venue.zip`).
 
-Verified Hudl athlete profiles live in `site-data/hudl.json` (347 payload rows / 337 unique recruits; unmatched skipped). Davion Jones (Hough) and the St. Peter’s Prep Woodward twins are intentionally unlinked. Re-apply with `python3 scripts/apply-hudl.py` then `npm run import:site`. Do not invent Hudl URLs.
+Verified Hudl athlete profiles join from `site-data/hudl-map.tsv` (`id`, `school_id`, `hudl_athlete_id`) and optional team pages from `site-data/hudl-teams.tsv`. Payload `id` is a Scout UUID; apply/import strip existing Hudl then overlay. Missing map ids omit the chip. Re-apply with `python3 scripts/apply-hudl.py` then `npm run import:site`. Do not invent Hudl URLs.
 
 School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 

@@ -444,6 +444,7 @@ function parseHometown(text: string | null | undefined): { city: string | null; 
 
 type HudlFile = {
   players?: {
+    id?: string;
     recruit_id?: string;
     hudl_url?: string;
     hudl_athlete_id?: string;
@@ -451,22 +452,91 @@ type HudlFile = {
   schools?: { school_id?: string; hudl_team_url?: string }[];
 };
 
+type HudlMapRow = { id: string; school_id: string; hudl_athlete_id: string };
+type HudlTeamRow = { school_id: string; hudl_team_url: string };
+
+function firstExisting(paths: string[]): string | null {
+  return paths.find((p) => existsSync(p)) ?? null;
+}
+
 function hudlFilePath(importDir: string): string | null {
-  const candidates = [
+  return firstExisting([
     join(ROOT, "site-data/hudl.json"),
     join(importDir, "hudl.json"),
     join(ROOT, "data/import/hudl.json"),
-  ];
-  return candidates.find((p) => existsSync(p)) ?? null;
+  ]);
 }
 
-/** Overlay verified Hudl athlete/team URLs. Never invents missing profiles. */
+function parseTsv(text: string, expected: string[]): Record<string, string>[] {
+  const lines = text.split(/\r?\n/).filter((line) => line.length > 0);
+  if (!lines.length) return [];
+  const header = lines[0].split("\t");
+  if (header.length !== expected.length || expected.some((h, i) => header[i] !== h)) {
+    throw new Error(`Hudl TSV header must be ${expected.join("\t")}`);
+  }
+  const rows: Record<string, string>[] = [];
+  for (const line of lines.slice(1)) {
+    const cols = line.split("\t");
+    const row: Record<string, string> = {};
+    let any = false;
+    expected.forEach((key, i) => {
+      const v = (cols[i] || "").trim();
+      row[key] = v;
+      if (v) any = true;
+    });
+    if (any) rows.push(row);
+  }
+  return rows;
+}
+
+async function readHudlSidecar(importDir: string): Promise<{
+  map: HudlMapRow[];
+  teams: HudlTeamRow[];
+  uuidIndex: Map<string, string[]>;
+}> {
+  const mapPath = firstExisting([
+    join(ROOT, "site-data/hudl-map.tsv"),
+    join(importDir, "hudl-map.tsv"),
+    join(ROOT, "data/import/hudl-map.tsv"),
+  ]);
+  const teamPath = firstExisting([
+    join(ROOT, "site-data/hudl-teams.tsv"),
+    join(importDir, "hudl-teams.tsv"),
+    join(ROOT, "data/import/hudl-teams.tsv"),
+  ]);
+  const map = mapPath
+    ? (parseTsv(await readFile(mapPath, "utf8"), ["id", "school_id", "hudl_athlete_id"]) as HudlMapRow[])
+    : [];
+  const teams = teamPath
+    ? (parseTsv(await readFile(teamPath, "utf8"), ["school_id", "hudl_team_url"]) as HudlTeamRow[])
+    : [];
+  const uuidIndex = new Map<string, string[]>();
+  const hudlPath = hudlFilePath(importDir);
+  if (hudlPath) {
+    const doc = await readJson<HudlFile>(hudlPath);
+    for (const row of doc.players || []) {
+      const uid = (row.id || "").trim();
+      const rid = (row.recruit_id || "").trim();
+      if (!uid || !rid) continue;
+      const list = uuidIndex.get(uid) ?? [];
+      if (!list.includes(rid)) list.push(rid);
+      uuidIndex.set(uid, list);
+    }
+  }
+  return { map, teams, uuidIndex };
+}
+
+function stampHudl(player: Player, hid: string, url: string) {
+  player.source_ids = { ...player.source_ids, hudl: hid };
+  player.profile_urls = { ...player.profile_urls, hudl: url };
+}
+
+/** Overlay verified Hudl athlete/team URLs from TSV sidecars. Never invents missing profiles. */
 function applyHudlOverlay(
-  doc: HudlFile | null,
+  sidecar: { map: HudlMapRow[]; teams: HudlTeamRow[]; uuidIndex: Map<string, string[]> },
   schools: Map<string, School>,
   players: Player[],
 ): { athletes: number; teams: number } {
-  if (!doc) return { athletes: 0, teams: 0 };
   const byId = new Map(players.map((p) => [p.id, p]));
   for (const player of players) {
     if (player.profile_urls?.hudl) {
@@ -483,24 +553,31 @@ function applyHudlOverlay(
   for (const school of schools.values()) {
     school.hudlTeamUrl = null;
   }
-  const seen = new Set<string>();
-  for (const row of doc.players || []) {
-    const rid = row.recruit_id;
-    const url = (row.hudl_url || "").trim();
-    const hid = row.hudl_athlete_id ? String(row.hudl_athlete_id) : "";
-    if (!rid || !url || !hid || seen.has(rid)) continue;
-    const player = byId.get(rid);
-    if (!player) continue;
-    seen.add(rid);
-    player.source_ids = { ...player.source_ids, hudl: hid };
-    player.profile_urls = { ...player.profile_urls, hudl: url };
+  const seen = new Map<string, string>();
+  for (const row of sidecar.map) {
+    const hid = (row.hudl_athlete_id || "").trim();
+    const payloadId = (row.id || "").trim();
+    if (!payloadId || !/^\d+$/.test(hid)) continue;
+    const url = `https://www.hudl.com/profile/${hid}`;
+    const rids = new Set<string>();
+    if (byId.has(payloadId)) rids.add(payloadId);
+    for (const rid of sidecar.uuidIndex.get(payloadId) || []) rids.add(rid);
+    for (const rid of rids) {
+      const player = byId.get(rid);
+      if (!player) continue;
+      const prev = seen.get(rid);
+      if (prev && prev !== hid) continue;
+      seen.set(rid, hid);
+      stampHudl(player, hid, url);
+    }
   }
   let teams = 0;
-  for (const row of doc.schools || []) {
+  for (const row of sidecar.teams) {
     const sid = row.school_id ? canonicalSchoolId(row.school_id) : "";
     const url = (row.hudl_team_url || "").trim();
     const school = sid ? schools.get(sid) : undefined;
-    if (!school || !url) continue;
+    if (!school || !url.includes("boys-varsity-football")) continue;
+    if (!url.startsWith("https://fan.hudl.com/")) continue;
     school.hudlTeamUrl = url;
     teams += 1;
   }
@@ -761,9 +838,8 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     }
   }
 
-  const hudlPath = hudlFilePath(dir);
-  const hudlDoc = hudlPath ? await readJson<HudlFile>(hudlPath) : null;
-  const hudlCounts = applyHudlOverlay(hudlDoc, schools, players);
+  const hudlSidecar = await readHudlSidecar(dir);
+  const hudlCounts = applyHudlOverlay(hudlSidecar, schools, players);
 
   const games: Game[] = [];
   for (const g of gamesFile.games || []) {
@@ -862,8 +938,8 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       label: "Hudl public profiles (verified batch)",
       status: hudlCounts.athletes ? "live-partial" : "blocked",
       detail: hudlCounts.athletes
-        ? `${hudlCounts.athletes} verified Hudl athlete profiles (On3 embed matches only; unmatched skipped). ${hudlCounts.teams} public team pages. Missing Hudl is omitted, never a dead link.`
-        : "Hudl overlay was not loaded.",
+        ? `${hudlCounts.athletes} verified Hudl athlete profiles from hudl-map.tsv (unmatched skipped). ${hudlCounts.teams} public team pages from hudl-teams.tsv. Missing Hudl is omitted, never a dead link.`
+        : "Hudl sidecar is header-only or unmatched (0 joined athletes). Missing Hudl is omitted, never a dead link.",
       counts: { athletes: hudlCounts.athletes, teams: hudlCounts.teams },
     },
     {

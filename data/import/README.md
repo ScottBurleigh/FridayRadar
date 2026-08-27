@@ -49,9 +49,9 @@ Venue: `venue {city,state,zip,name,source}`. Home games use the home school (`so
 
 Scout already scored the frozen 2027/2028 ingest (247Sports composite + On3/Rivals + ESPN). Nested `recruits` on `schools.json` are those rows. Raw copies remain under `data/raw/{espn,247,on3}/{year}.json`. **Do not re-run 247 Load More** (it 406s). The importer never invents recruit names.
 
-### `hudl.json`
+### `hudl-map.tsv` / `hudl-teams.tsv`
 
-Verified public Hudl batch only (347 payload rows / 337 unique FridayRadar recruits). Payload player rows join to FridayRadar `247-*` recruit ids via the public Hudl profile name. Davion Jones at Hough and the St. Peter’s Prep Woodward twins are omitted on purpose. 41 top-school `hudl_team_url` values are fan.hudl.com boys-varsity-football pages. Missing Hudl is omitted. `python3 scripts/apply-hudl.py` writes this file and merges onto `schools.json`; the importer overlays it again so a Scout recompile does not invent or drop URLs.
+Sidecar join only. `hudl-map.tsv` columns: `id` (Scout payload UUID), `school_id`, `hudl_athlete_id`. `hudl-teams.tsv` columns: `school_id`, `hudl_team_url` (fan.hudl.com boys-varsity-football). Apply/import strip existing Hudl athlete urls/ids first, then overlay. Duplicate payload rows that share an athlete id both get the chip. Unmatched ids are omitted. `python3 scripts/apply-hudl.py` writes derived `hudl.json` and merges onto `schools.json`; the importer joins the TSV sidecars again so a Scout recompile does not invent URLs.
 
 ## Official talent
 
