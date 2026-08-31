@@ -54,7 +54,7 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
           </TableHeader>
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={row.game.id} className="border-white/8 hover:bg-amber-400/5">
+              <TableRow key={row.game.id} className="border-white/12 hover:bg-amber-400/8">
                 <TableCell className="text-zinc-400">{row.rank}</TableCell>
                 <TableCell className="whitespace-nowrap font-sans text-zinc-300">
                   {formatKickoff(row.game.kickoff, row.game.is_time_tba)}
@@ -85,7 +85,7 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
         {rows.map((row) => (
           <li
             key={row.game.id}
-            className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-3"
+            className="rounded-xl border border-amber-400/30 bg-[#17233d] p-3"
           >
             <div className="flex items-baseline justify-between gap-3 text-xs">
               <span className="font-mono text-zinc-400">#{row.rank}</span>

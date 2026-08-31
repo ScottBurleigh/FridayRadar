@@ -43,15 +43,31 @@ MAXPREPS_N = 100
 DCTF_N = 25
 DCTF_BONUS_MAX = 10.0
 
+RAW_HISTORY = ROOT / "data/raw/maxpreps" / "season-history.json"
+SEASON_RE = re.compile(r"^\d\d-\d\d$")
+RECORD_RE = re.compile(r"^(\d+)-(\d+)(?:-(\d+))?$")
+# Recency weights, newest completed season first.
+SEASON_DECAY = [1.0, 0.75, 0.55, 0.4, 0.3]
+# Full-swing adjustment needs roughly two full seasons of games on file.
+SUCCESS_FULL_CONFIDENCE_GAMES = 22
+# Max points recent form may move team_strength, in either direction.
+SUCCESS_ADJ_MAX = 8.0
+
 STRENGTH_NOTE = (
     "team_strength is the mean of talent_norm (100 × talent / board max; IMG = 100 "
     "on talent only) and ranking_norm. ranking_norm is the mean of whichever of "
-    "on3_norm (On3 1000-team compositeScore min–max onto 0–100) and maxpreps_norm "
-    "(100 × (N+1−rank)/N on the 100-team MaxPreps national computer board) exist. "
-    "Unranked boards are omitted, never 0. Texas 6A DCTF Top 25 then adds "
-    "10 × (26−rank)/25 (#1 +10.00, #25 +0.40) and the result is clamped 0–100. "
-    "SOS is the mean of known opponents’ team_strength (unknown omitted; never "
-    "raw On3 compositeScore)."
+    "on3_norm (100 × (N+1−rank)/N on the 1000-team On3 national board) and "
+    "maxpreps_norm (100 × (N+1−rank)/N on the 100-team MaxPreps national computer "
+    "board) exist — both rank-based; On3's raw compositeScore only spans ~79–91 "
+    "across all 1000 teams, so min–max on the raw score wildly overweighted tiny "
+    "rating gaps near the top and is not used. Unranked boards are omitted, never "
+    "0. Texas 6A DCTF Top 25 then adds 10 × (26−rank)/25 (#1 +10.00, #25 +0.40). "
+    "Recent form then adjusts by up to ±8: a recency-weighted win rate over the "
+    "last five MaxPreps seasons, centred on .500 and shrunk toward 0 when few "
+    "games are on file. It is an adjustment rather than a blend term because raw "
+    "win rate ignores schedule quality; schools with no history on file are not "
+    "adjusted at all. The result is clamped 0–100. SOS is the mean of known "
+    "opponents’ team_strength (unknown omitted; never raw On3 compositeScore)."
 )
 
 
@@ -278,15 +294,19 @@ def talent_norm_map(schools: list[dict]) -> dict[str, float]:
     return out
 
 
-def on3_rating_norm(rating: float, rmin: float, rmax: float) -> float:
-    """Scale On3 compositeScore onto 0–100 (board max → 100, board min → 0).
+def on3_rank_norm(rank: int, n: int) -> float:
+    """Rank 1 = 100, rank N = ~0. Mirrors maxpreps_rank_norm.
+
+    On3's raw compositeScore only spans ~79–91 across the full 1000-team
+    board, so min–max normalizing the raw rating (the old approach) turned a
+    handful of raw points near the top into a 0–100-scale swing — e.g. rank
+    #8 vs #32 (both top 3.2% nationally) came out ~98 vs ~59. Rank position
+    is the honest signal On3 itself is publishing; use it directly, the same
+    way the MaxPreps board term already does.
 
     This is the On3 *term* of ranking_norm, never the SOS value itself.
     """
-    if rmax <= rmin:
-        return 100.0
-    val = 100.0 * (float(rating) - rmin) / (rmax - rmin)
-    return round(max(0.0, min(100.0, val)), 2)
+    return round(max(0.0, min(100.0, 100.0 * (n + 1 - int(rank)) / n)), 2)
 
 
 def maxpreps_rank_norm(rank: int, n: int = MAXPREPS_N) -> float:
@@ -297,6 +317,73 @@ def maxpreps_rank_norm(rank: int, n: int = MAXPREPS_N) -> float:
 def dctf_bonus(rank: int, n: int = DCTF_N, cap: float = DCTF_BONUS_MAX) -> float:
     """#1 +10.00, #25 +0.40. Unranked Texas get 0 extra, not a penalty."""
     return round(cap * (n + 1 - int(rank)) / n, 2)
+
+
+def load_season_history() -> dict[str, dict[str, str]]:
+    """school_id -> {season: 'W-L' | 'W-L-T'} from fetch-season-history.py."""
+    if not RAW_HISTORY.exists():
+        return {}
+    try:
+        return json.loads(RAW_HISTORY.read_text()).get("records", {}) or {}
+    except Exception:
+        return {}
+
+
+def recent_success(history: dict[str, str] | None) -> dict | None:
+    """Recency-weighted win rate over recent seasons, as a bounded adjustment.
+
+    Deliberately an *adjustment*, not a co-equal blend term. Raw win rate is
+    not comparable across programs: a 12-0 record against weak opposition is
+    not evidence of an elite roster, and letting win% carry a third of the
+    score would vault small unbeaten schools past loaded ones. On3 and
+    MaxPreps national ranks already fold in results *with* strength-of-
+    schedule adjustment, and they stay the primary results signal; this term
+    exists mainly for the ~1,000 schools on neither board, where it is the
+    only on-field signal available.
+
+    Each game is weighted by how recent its season is, so a 14-1 season
+    outweighs a 1-0 in-progress one without special-casing. `confidence`
+    shrinks the adjustment toward 0 when few games are on file, so one
+    partial season never swings the full range. Missing history returns
+    None and the term is omitted — never treated as 0-0 or as a penalty.
+    """
+    if not history:
+        return None
+    seasons = sorted(
+        (s for s in history if SEASON_RE.match(s)),
+        key=lambda s: int(s.split("-")[0]),
+        reverse=True,
+    )
+    num = 0.0  # weighted wins
+    den = 0.0  # weighted games
+    games_total = 0
+    used: list[str] = []
+    for i, season in enumerate(seasons):
+        m = RECORD_RE.match((history.get(season) or "").strip())
+        if not m:
+            continue
+        wins, losses = int(m.group(1)), int(m.group(2))
+        ties = int(m.group(3)) if m.group(3) else 0
+        games = wins + losses + ties
+        if games <= 0:
+            continue  # 0-0 = season not started; not a loss
+        w = SEASON_DECAY[i] if i < len(SEASON_DECAY) else SEASON_DECAY[-1]
+        num += w * (wins + 0.5 * ties)
+        den += w * games
+        games_total += games
+        used.append(season)
+    if den <= 0:
+        return None
+    pct = num / den
+    confidence = min(1.0, games_total / SUCCESS_FULL_CONFIDENCE_GAMES)
+    adj = SUCCESS_ADJ_MAX * (2.0 * pct - 1.0) * confidence
+    return {
+        "win_pct": round(pct, 4),
+        "games": games_total,
+        "seasons": used,
+        "confidence": round(confidence, 3),
+        "adj": round(adj, 2),
+    }
 
 
 def mean_present(vals: list[float | None]) -> float | None:
@@ -961,9 +1048,7 @@ def apply_strength(
     joined_dctf: dict[str, int] | None = None,
 ) -> None:
     tnorm = talent_norm_map(schools)
-    ratings = [float(t["rating"]) for t in on3_teams if t.get("rating") is not None]
-    rmin = min(ratings) if ratings else 0.0
-    rmax = max(ratings) if ratings else 100.0
+    n_on3 = len(on3_teams) or 1
     max_t = max(
         (float(s["talent_score"]) for s in schools if s.get("talent_score") is not None),
         default=0.0,
@@ -974,13 +1059,14 @@ def apply_strength(
     )
     joined_mp = joined_mp or {}
     joined_dctf = joined_dctf or {}
+    history = load_season_history()
     for s in schools:
         sid = s["id"]
         tn = tnorm.get(sid)
         on3 = joined_on3.get(sid)
         on3n = None
-        if on3 and on3.get("rating") is not None:
-            on3n = on3_rating_norm(on3["rating"], rmin, rmax)
+        if on3 and on3.get("rank") is not None:
+            on3n = on3_rank_norm(on3["rank"], n_on3)
         mp_rank = joined_mp.get(sid)
         mpn = maxpreps_rank_norm(mp_rank) if mp_rank is not None else None
         ranking_norm = mean_present([on3n, mpn])
@@ -989,15 +1075,19 @@ def apply_strength(
         bonus = 0.0
         if dctf_rank is not None and (s.get("state") or "").upper() == "TX":
             bonus = dctf_bonus(dctf_rank)
+        success = recent_success(history.get(sid))
+        success_adj = success["adj"] if success else 0.0
         st = blended
         if st is not None:
-            st = round(max(0.0, min(100.0, st + bonus)), 2)
+            st = round(max(0.0, min(100.0, st + bonus + success_adj)), 2)
         s["team_strength"] = st
         if on3:
             s["on3"] = {
                 "rank": on3["rank"],
                 "rating": round(on3["rating"], 3) if on3.get("rating") is not None else None,
                 "org_key": on3.get("org_key"),
+                # On3 team URLs are /high-school/{slug}-{org_key}/ — stored, never guessed.
+                "slug": on3.get("slug"),
             }
         else:
             s.pop("on3", None)
@@ -1020,8 +1110,7 @@ def apply_strength(
         if on3n is not None and on3:
             bd["on3_rank"] = on3["rank"]
             bd["on3_rating"] = round(on3["rating"], 3) if on3.get("rating") is not None else None
-            bd["on3_min"] = round(rmin, 3)
-            bd["on3_max"] = round(rmax, 3)
+            bd["on3_n"] = n_on3
             bd["on3_norm"] = on3n
         if mpn is not None:
             bd["maxpreps_rank"] = int(mp_rank)
@@ -1030,6 +1119,12 @@ def apply_strength(
             bd["ranking_norm"] = round(ranking_norm, 2)
         if blended is not None:
             bd["blended"] = round(blended, 2)
+        if success is not None:
+            bd["success_win_pct"] = success["win_pct"]
+            bd["success_games"] = success["games"]
+            bd["success_seasons"] = len(success["seasons"])
+            bd["success_confidence"] = success["confidence"]
+            bd["success_adj"] = success["adj"]
         if dctf_rank is not None and (s.get("state") or "").upper() == "TX":
             bd["dctf_rank"] = int(dctf_rank)
         s["strength_breakdown"] = {k: v for k, v in bd.items() if v is not None or k in ("bonus", "team_strength")}

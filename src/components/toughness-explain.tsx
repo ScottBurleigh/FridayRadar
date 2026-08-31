@@ -3,6 +3,7 @@ import { Info, XIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ToughnessIcon } from "@/lib/types";
+import { TOUGHNESS_LABEL } from "@/lib/toughness";
 
 function n(value: number | null | undefined): string {
   if (value == null || Number.isNaN(value)) return "—";
@@ -17,7 +18,7 @@ function Formula({ children }: { children: string }) {
 }
 
 const PANEL =
-  "relative w-[min(32rem,calc(100%-2rem))] max-h-[min(36rem,85vh)] overflow-y-auto rounded-xl bg-[#121c2e] p-4 text-zinc-100 shadow-xl ring-1 ring-amber-400/25 [&::backdrop]:bg-[#0a1220]/75";
+  "relative w-[min(32rem,calc(100%-2rem))] max-h-[min(36rem,85vh)] overflow-y-auto rounded-xl bg-[#17233d] p-4 text-zinc-100 shadow-xl ring-1 ring-amber-400/25 [&::backdrop]:bg-[#0a1220]/75";
 
 const PANEL_POS = {
   position: "fixed",
@@ -29,11 +30,7 @@ const PANEL_POS = {
 } as const;
 
 const LABEL: Record<ToughnessIcon, string> = {
-  much_harder: "mismatch-hard",
-  harder: "lean-hard",
-  even: "toss-up",
-  easier: "lean-easy",
-  much_easier: "mismatch-easy",
+  ...TOUGHNESS_LABEL,
   unknown: "unknown",
 };
 
@@ -63,11 +60,11 @@ function Scale() {
         Opponent strength minus this school. Missing opponent strength is unknown, never 0.
       </p>
       <Formula>{"unknown  opponent has no team_strength"}</Formula>
-      <Formula>{"≥ 20     mismatch-hard"}</Formula>
-      <Formula>{"≥ 8      lean-hard"}</Formula>
+      <Formula>{"≥ 20     heavy underdog"}</Formula>
+      <Formula>{"≥ 8      underdog"}</Formula>
       <Formula>{"> −8     toss-up"}</Formula>
-      <Formula>{"> −20    lean-easy"}</Formula>
-      <Formula>{"else     mismatch-easy"}</Formula>
+      <Formula>{"> −20    favored"}</Formula>
+      <Formula>{"else     heavy favorite"}</Formula>
     </section>
   );
 }

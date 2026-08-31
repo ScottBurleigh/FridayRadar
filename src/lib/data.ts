@@ -8,15 +8,17 @@ import type {
   Player,
   Rating,
   School,
+  ScheduleGame,
   SchoolSchedule,
 } from "./types";
-import { competitiveTalent, rankSchools, ratingsBySource } from "./ranking";
+import { competitiveTalent, normalizeSchoolName, rankSchools, ratingsBySource, slugify } from "./ranking";
 import { schoolWithinZipRadius, venueWithinZipRadius } from "./geo";
 import { profileLinksForPlayer } from "./profile-links";
 
 export const loadDataset = cache((): FridayRadarDataset => {
   const path = join(process.cwd(), "data", "fridayradar.json");
-  return JSON.parse(readFileSync(path, "utf8")) as FridayRadarDataset;
+  const raw = JSON.parse(readFileSync(path, "utf8")) as FridayRadarDataset;
+  return withUnrankedOpponents(raw);
 });
 
 export function schoolMap(dataset: FridayRadarDataset): Map<string, School> {
@@ -48,6 +50,223 @@ export function scheduleForSchool(
   schoolId: string,
 ): SchoolSchedule | null {
   return dataset.schedules?.[schoolId] ?? null;
+}
+
+/** On3 team schedule URL, built from the stored slug + orgKey. Never guessed. */
+export function on3ScheduleUrl(on3: School["on3"] | null | undefined): string | null {
+  const slug = on3?.slug?.trim();
+  const orgKey = on3?.orgKey;
+  if (!slug || orgKey == null) return null;
+  return `https://www.on3.com/high-school/${slug}-${orgKey}/football/schedule/`;
+}
+
+/**
+ * Best-effort schedule opponent → school page link. Prefers the ingest's own
+ * siteId match; falls back to a same-state normalized-name match (e.g. a
+ * schedule opponent listed as "Lake Ridge" against a tracked "Mansfield Lake
+ * Ridge") only when it's unique — ambiguous or unmatched opponents render as
+ * plain text rather than risk linking the wrong school.
+ */
+export function resolveOpponentHref(
+  dataset: FridayRadarDataset,
+  opponent: { name: string; city: string | null; state: string | null; siteId: string | null },
+): string | null {
+  const schools = schoolMap(dataset);
+  if (opponent.siteId && schools.has(opponent.siteId)) {
+    return `/schools/${opponent.siteId}`;
+  }
+  if (!opponent.name || !opponent.state) return null;
+  const nn = normalizeSchoolName(opponent.name);
+  if (!nn) return null;
+  const state = opponent.state.toUpperCase();
+  const candidates = dataset.schools.filter((s) => {
+    if (s.state !== state) return false;
+    const sn = normalizeSchoolName(s.name);
+    return sn === nn || sn.endsWith(` ${nn}`) || sn.startsWith(`${nn} `);
+  });
+  if (candidates.length === 1) return `/schools/${candidates[0].id}`;
+  if (candidates.length > 1 && opponent.city) {
+    const cityNorm = opponent.city.trim().toLowerCase();
+    const cityMatches = candidates.filter((s) => s.city?.trim().toLowerCase() === cityNorm);
+    if (cityMatches.length === 1) return `/schools/${cityMatches[0].id}`;
+  }
+  return null;
+}
+
+type NameIndexEntry = { school: School; nn: string };
+
+/** Same-state normalized-name index, for bulk opponent matching (see resolveOpponentHref). */
+function buildStateNameIndex(schools: School[]): Map<string, NameIndexEntry[]> {
+  const idx = new Map<string, NameIndexEntry[]>();
+  for (const school of schools) {
+    const nn = normalizeSchoolName(school.name);
+    const list = idx.get(school.state);
+    const entry: NameIndexEntry = { school, nn };
+    if (list) list.push(entry);
+    else idx.set(school.state, [entry]);
+  }
+  return idx;
+}
+
+function matchesTrackedSchool(
+  idx: Map<string, NameIndexEntry[]>,
+  opponent: { name: string; city: string | null; state: string },
+): boolean {
+  const nn = normalizeSchoolName(opponent.name);
+  if (!nn) return false;
+  const state = opponent.state.toUpperCase();
+  const list = idx.get(state) ?? [];
+  const candidates = list.filter(
+    (e) => e.nn === nn || e.nn.endsWith(` ${nn}`) || e.nn.startsWith(`${nn} `),
+  );
+  if (candidates.length === 1) return true;
+  if (candidates.length > 1 && opponent.city) {
+    const cityNorm = opponent.city.trim().toLowerCase();
+    const cityMatches = candidates.filter((c) => c.school.city?.trim().toLowerCase() === cityNorm);
+    if (cityMatches.length === 1) return true;
+  }
+  return false;
+}
+
+function unrankedSchoolId(name: string, city: string | null, state: string): string {
+  const parts = [state, city, name].filter((p): p is string => Boolean(p && p.trim()));
+  return `unranked-${slugify(parts.join(" "))}`;
+}
+
+function flipResult(result: string | null): string | null {
+  if (!result) return result;
+  const r = result.trim().toUpperCase();
+  if (r === "W") return "L";
+  if (r === "L") return "W";
+  return result;
+}
+
+type UnrankedGroup = {
+  name: string;
+  city: string | null;
+  state: string;
+  occurrences: Array<{ trackedId: string; g: ScheduleGame }>;
+};
+
+/**
+ * Every school with recruits is already in dataset.schools; this fills in
+ * the ones that only ever show up as a schedule opponent (a real MaxPreps
+ * team with a real schedule, just no rated 2027+ recruit). Talent, strength,
+ * and recruit counts are all 0 by construction — they aren't computed from
+ * anything, there's simply no recruiting data on file. Never generated for
+ * an opponent that already matches a tracked school by name.
+ */
+function withUnrankedOpponents(dataset: FridayRadarDataset): FridayRadarDataset {
+  const trackedIdx = buildStateNameIndex(dataset.schools);
+  const trackedById = schoolMap(dataset);
+  const groups = new Map<string, UnrankedGroup>();
+
+  for (const [trackedId, schedule] of Object.entries(dataset.schedules ?? {})) {
+    for (const g of schedule.games) {
+      const opp = g.opponent;
+      if (!opp?.name || !opp.state) continue;
+      if (isPlaceholderName(opp.name)) continue;
+      if (opp.siteId && trackedById.has(opp.siteId)) continue;
+      if (matchesTrackedSchool(trackedIdx, { name: opp.name, city: opp.city, state: opp.state })) continue;
+      const nn = normalizeSchoolName(opp.name);
+      if (!nn) continue;
+      const cityKey = (opp.city ?? "").trim().toLowerCase();
+      const key = `${opp.state.toUpperCase()}|${cityKey}|${nn}`;
+      const group = groups.get(key);
+      if (group) group.occurrences.push({ trackedId, g });
+      else groups.set(key, { name: opp.name, city: opp.city, state: opp.state.toUpperCase(), occurrences: [{ trackedId, g }] });
+    }
+  }
+
+  if (!groups.size) return dataset;
+
+  const schools: School[] = [];
+  const schedules: Record<string, SchoolSchedule> = {};
+
+  for (const group of groups.values()) {
+    const id = unrankedSchoolId(group.name, group.city, group.state);
+
+    const games: ScheduleGame[] = group.occurrences
+      .map(({ trackedId, g }): ScheduleGame | null => {
+        const tracked = trackedById.get(trackedId);
+        if (!tracked) return null;
+        const homeAway: ScheduleGame["homeAway"] =
+          g.homeAway === "home" ? "away" : g.homeAway === "away" ? "home" : "neutral";
+        return {
+          contestId: g.contestId,
+          date: g.date,
+          kickoff: g.kickoff,
+          homeAway,
+          location: g.location,
+          opponent: {
+            name: tracked.name,
+            city: tracked.city || null,
+            state: tracked.state || null,
+            maxprepsId: null,
+            siteId: tracked.id,
+            teamStrength: tracked.teamStrength ?? null,
+          },
+          result: flipResult(g.result),
+          score: g.oppScore,
+          oppScore: g.score,
+          maxprepsGameUrl: g.maxprepsGameUrl,
+          toughnessIcon: "unknown",
+        };
+      })
+      .filter((g): g is ScheduleGame => g != null)
+      .sort((a, b) => (a.date ?? "9999").localeCompare(b.date ?? "9999"));
+
+    const knownOppStrengths = games
+      .map((g) => g.opponent.teamStrength)
+      .filter((v): v is number => v != null);
+    const sos = knownOppStrengths.length
+      ? Math.round((knownOppStrengths.reduce((a, b) => a + b, 0) / knownOppStrengths.length) * 100) / 100
+      : null;
+    const season = dataset.schedules?.[group.occurrences[0].trackedId]?.season ?? "";
+
+    schools.push({
+      id,
+      name: group.name,
+      name_normalized: normalizeSchoolName(group.name),
+      aliases: [],
+      mascot: null,
+      city: group.city ?? "",
+      state: group.state,
+      zip: null,
+      address: null,
+      lat: null,
+      lng: null,
+      type: null,
+      maxpreps: null,
+      ids_247: { high_school_id: null },
+      talentScore: 0,
+      recruitCount: 0,
+      stars5: 0,
+      stars4: 0,
+      stars3: 0,
+      mapped: false,
+      teamStrength: 0,
+      sos,
+      sosLabel: null,
+      sosGames: knownOppStrengths.length,
+    });
+
+    schedules[id] = {
+      schoolId: id,
+      season,
+      teamStrength: 0,
+      scheduleUrl: null,
+      sos,
+      sosGames: knownOppStrengths.length,
+      games,
+    };
+  }
+
+  return {
+    ...dataset,
+    schools: [...dataset.schools, ...schools],
+    schedules: { ...(dataset.schedules ?? {}), ...schedules },
+  };
 }
 
 function profileUrlForPlayer(
@@ -92,9 +311,47 @@ export function inlineRecruitsForSchools(
   return out;
 }
 
+/**
+ * Name search across a school's name and its stored aliases.
+ *
+ * Matches on the raw string *and* the normalized one, because
+ * normalizeSchoolName() strips "high school"/"prep"/punctuation: that makes
+ * "st johns" find "St. John's", but it also reduces a query like "high" to an
+ * empty string, which would otherwise match every school. Raw substring is
+ * kept as the fallback so those queries still behave.
+ */
+/**
+ * Substring match that must begin at a word boundary.
+ *
+ * Plain `includes` is too loose here: "st johns" would match "weST JOHNSton".
+ * Anchoring to a word start keeps prefix search ("duncanv" → Duncanville)
+ * while dropping matches that land mid-word.
+ */
+function containsAtWordStart(haystack: string, needle: string): boolean {
+  if (!needle) return false;
+  return haystack.startsWith(needle) || haystack.includes(` ${needle}`);
+}
+
+export function schoolMatchesQuery(school: School, rawQuery: string, normQuery: string): boolean {
+  const candidates = [school.name, ...(school.aliases ?? [])].filter(Boolean);
+  for (const candidate of candidates) {
+    if (containsAtWordStart(candidate.toLowerCase(), rawQuery)) return true;
+    if (normQuery && containsAtWordStart(normalizeSchoolName(candidate), normQuery)) return true;
+  }
+  return false;
+}
+
 export function filteredRankings(
   dataset: FridayRadarDataset,
-  opts: { state?: string; zip?: string; sort?: "talent" | "count" | "strength" },
+  opts: {
+    state?: string;
+    zip?: string;
+    sort?: "talent" | "count" | "strength";
+    /** Free-text school name search. */
+    q?: string;
+    /** Include schedule-only schools with no recruiting data. */
+    includeUnranked?: boolean;
+  },
 ) {
   let schools = dataset.schools;
   if (opts.state) {
@@ -102,9 +359,22 @@ export function filteredRankings(
     schools = schools.filter((s) => s.state === st);
   }
   if (opts.zip) {
+    // Schedule-only schools have no zip or coords, so a radius filter can
+    // never confirm them — they drop out rather than being assumed nearby.
     schools = schools.filter((s) => schoolWithinZipRadius(s, opts.zip!));
   }
-  return rankSchools(schools, dataset.players, dataset.ratings, opts.sort ?? "strength");
+  const raw = (opts.q ?? "").trim().toLowerCase();
+  if (raw) {
+    const norm = normalizeSchoolName(raw);
+    schools = schools.filter((s) => schoolMatchesQuery(s, raw, norm));
+  }
+  return rankSchools(
+    schools,
+    dataset.players,
+    dataset.ratings,
+    opts.sort ?? "strength",
+    opts.includeUnranked ?? false,
+  );
 }
 
 export function mondayOf(date: Date): Date {
@@ -144,7 +414,7 @@ function kickoffDate(iso: string | null): string | null {
   return iso.slice(0, 10);
 }
 
-function isPlaceholderName(name: string | undefined): boolean {
+function isPlaceholderName(name: string | undefined | null): boolean {
   if (!name?.trim()) return true;
   const n = name.trim();
   if (/varsity opponent/i.test(n)) return true;
@@ -162,16 +432,158 @@ function schoolTalent(school: School | undefined, talentById: Map<string, { tale
   return { talent: row?.talentScore ?? 0, recruits: row?.recruitCount ?? 0 };
 }
 
+function isoDate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+/** "Allen, TX" (always the real game site, home or away) → { city, state }. */
+function parseLocation(location: string | null): { city: string | null; state: string | null } {
+  if (!location) return { city: null, state: null };
+  const parts = location.split(",").map((s) => s.trim()).filter(Boolean);
+  if (parts.length >= 2) return { city: parts[0], state: parts[parts.length - 1] };
+  if (parts.length === 1) return { city: parts[0], state: null };
+  return { city: null, state: null };
+}
+
+/** MaxPreps stamps unknown kickoff times as midnight; treat those as TBA. */
+function isTbaKickoff(kickoff: string | null): boolean {
+  if (!kickoff) return true;
+  return /T00:00:00(\.\d+)?$/.test(kickoff);
+}
+
+type ResolvedContest = { homeId: string; awayId: string; g: ScheduleGame };
+
+/**
+ * Every real contest appears on up to two schedules (one per participating
+ * school), each stamped with the same contestId. Dedupe on that id, and
+ * prefer the "home" row to resolve which side is which; both sides are
+ * dropped unless the opponent is itself a tracked school (siteId resolves),
+ * matching the "omit one-sided" rule the old Matchup-week board used.
+ */
+function dedupedContests(
+  dataset: FridayRadarDataset,
+  weekStart: string,
+  weekEnd: string,
+): ResolvedContest[] {
+  const schedules = dataset.schedules ?? {};
+  const schools = schoolMap(dataset);
+  const byContest = new Map<string, Array<{ ownerId: string; g: ScheduleGame }>>();
+
+  for (const [ownerId, schedule] of Object.entries(schedules)) {
+    for (const g of schedule.games) {
+      const day = kickoffDate(g.kickoff) ?? g.date;
+      if (!day || day < weekStart || day > weekEnd) continue;
+      if (isPlaceholderName(g.opponent?.name)) continue;
+      if (!g.opponent?.siteId || !schools.has(g.opponent.siteId)) continue;
+      const key = g.contestId ?? `${day}|${[ownerId, g.opponent.siteId].sort().join("|")}`;
+      const list = byContest.get(key);
+      if (list) list.push({ ownerId, g });
+      else byContest.set(key, [{ ownerId, g }]);
+    }
+  }
+
+  const out: ResolvedContest[] = [];
+  for (const rows of byContest.values()) {
+    const homeRow = rows.find((r) => r.g.homeAway === "home");
+    const awayRow = rows.find((r) => r.g.homeAway === "away");
+    let homeId: string | null = null;
+    let awayId: string | null = null;
+    let chosen: ScheduleGame;
+    if (homeRow) {
+      homeId = homeRow.ownerId;
+      awayId = homeRow.g.opponent.siteId ?? awayRow?.ownerId ?? null;
+      chosen = homeRow.g;
+    } else if (awayRow) {
+      awayId = awayRow.ownerId;
+      homeId = awayRow.g.opponent.siteId ?? null;
+      chosen = awayRow.g;
+    } else {
+      const first = rows[0];
+      awayId = first.ownerId;
+      homeId = first.g.opponent.siteId ?? null;
+      chosen = first.g;
+    }
+    if (!homeId || !awayId || homeId === awayId) continue;
+    if (!schools.has(homeId) || !schools.has(awayId)) continue;
+    out.push({ homeId, awayId, g: chosen });
+  }
+  return out;
+}
+
+function buildScheduleGame(contest: ResolvedContest): Game {
+  const { g } = contest;
+  const { city, state } = parseLocation(g.location);
+  return {
+    id: g.contestId ?? `${contest.homeId}-${contest.awayId}-${g.date ?? ""}`,
+    season: "",
+    kickoff: g.kickoff,
+    home_school_id: contest.homeId,
+    away_school_id: contest.awayId,
+    home_score: null,
+    away_score: null,
+    is_gow: false,
+    game_url: g.maxprepsGameUrl,
+    city,
+    state,
+    zip: null,
+    lat: null,
+    lng: null,
+    venue: null,
+    two_sided_talent: null,
+    is_time_tba: isTbaKickoff(g.kickoff),
+    home_away_type: g.homeAway === "neutral" ? 2 : 0,
+  };
+}
+
+/** Min/max date (within the dataset's season year) across every loaded schedule. */
+function scheduleSeasonRange(dataset: FridayRadarDataset, seasonYear: string): { start: string; end: string } | null {
+  let min: string | null = null;
+  let max: string | null = null;
+  for (const schedule of Object.values(dataset.schedules ?? {})) {
+    for (const g of schedule.games) {
+      const day = kickoffDate(g.kickoff) ?? g.date;
+      if (!day || !day.startsWith(seasonYear)) continue;
+      if (!min || day < min) min = day;
+      if (!max || day > max) max = day;
+    }
+  }
+  if (!min || !max) return null;
+  return { start: min, end: max };
+}
+
 export function gamesOfTheWeek(
   dataset: FridayRadarDataset,
-  opts: { state?: string; zip?: string; now?: Date } = {},
-): { weekStart: Date | null; weekLabel: string; games: RankedGame[]; emptyReason: string | null } {
+  opts: { state?: string; zip?: string; now?: Date; weekOffset?: number } = {},
+): {
+  weekStart: Date | null;
+  weekLabel: string;
+  games: RankedGame[];
+  emptyReason: string | null;
+  weekOffset: number;
+  loadedWeekLabel: string;
+} {
   const rankings = rankSchools(dataset.schools, dataset.players, dataset.ratings, "talent");
   const talentById = new Map(rankings.map((r) => [r.school.id, r]));
   const schools = schoolMap(dataset);
 
-  const week = dataset.meta.matchup_week ?? DEFAULT_MATCHUP_WEEK;
-  const weekStart = new Date(`${week.start}T00:00:00.000Z`);
+  const anchorWeek = dataset.meta.matchup_week ?? DEFAULT_MATCHUP_WEEK;
+  const weekOffset = Number.isFinite(opts.weekOffset) ? Math.trunc(opts.weekOffset!) : 0;
+  const spanDays = Math.round(
+    (new Date(`${anchorWeek.end}T00:00:00.000Z`).getTime() -
+      new Date(`${anchorWeek.start}T00:00:00.000Z`).getTime()) /
+      86_400_000,
+  );
+  const baseStart = new Date(`${anchorWeek.start}T00:00:00.000Z`);
+  const weekStart = addDays(baseStart, weekOffset * 7);
+  const weekEndDate = addDays(weekStart, spanDays);
+  const week = { start: isoDate(weekStart), end: isoDate(weekEndDate) };
+
+  const seasonYear = anchorWeek.start.slice(0, 4);
+  const seasonRange = scheduleSeasonRange(dataset, seasonYear);
+  const loadedWeekLabel = seasonRange
+    ? `${seasonRange.start} – ${seasonRange.end}`
+    : `${anchorWeek.start} – ${anchorWeek.end}`;
+  const inSeason = !seasonRange || (week.start <= seasonRange.end && week.end >= seasonRange.start);
 
   const matchesVenue = (game: Game) => {
     const venueState = game.venue?.state || game.state;
@@ -185,61 +597,18 @@ export function gamesOfTheWeek(
     return true;
   };
 
-  const usable = dataset.games.filter((g) => {
-    const home = schools.get(g.home_school_id);
-    const away = schools.get(g.away_school_id);
-    if (isPlaceholderName(home?.name) || isPlaceholderName(away?.name)) return false;
-    if (!home && !away) return false;
-    const day = kickoffDate(g.kickoff);
-    if (!day || day < week.start || day > week.end) return false;
-    if (opts.state || opts.zip) return matchesVenue(g);
-    return true;
-  });
+  const contests = dedupedContests(dataset, week.start, week.end);
 
-  if (usable.length === 0) {
-    return {
-      weekStart,
-      weekLabel: `${week.start} – ${week.end}`,
-      games: [],
-      emptyReason: dataset.games.length
-        ? "No two-sided games in the Matchup week slate match these venue filters."
-        : "The Matchup MaxPreps week slate is not loaded.",
-    };
-  }
-
-  const placeholder = (id: string): School => ({
-    id,
-    name: "Unmapped opponent",
-    name_normalized: "unmapped opponent",
-    aliases: [],
-    mascot: null,
-    city: "",
-    state: "",
-    zip: null,
-    address: null,
-    lat: null,
-    lng: null,
-    type: "unmapped",
-    maxpreps: null,
-    ids_247: { high_school_id: null },
-    talentScore: 0,
-    recruitCount: 0,
-    mapped: false,
-  });
-
-  const ranked: RankedGame[] = usable
+  const ranked: RankedGame[] = contests
+    .map((contest) => buildScheduleGame(contest))
+    .filter((game) => !(opts.state || opts.zip) || matchesVenue(game))
     .map((game) => {
-      const home = schools.get(game.home_school_id) ?? placeholder(game.home_school_id);
-      const away = schools.get(game.away_school_id) ?? placeholder(game.away_school_id);
+      const home = schools.get(game.home_school_id)!;
+      const away = schools.get(game.away_school_id)!;
       const homeStats = schoolTalent(home, talentById);
       const awayStats = schoolTalent(away, talentById);
-      const homeMapped = home.mapped !== false;
-      const awayMapped = away.mapped !== false;
       const combined = Math.round((homeStats.talent + awayStats.talent) * 100) / 100;
-      const competitive =
-        game.two_sided_talent != null && game.two_sided_talent > 0
-          ? game.two_sided_talent
-          : competitiveTalent(homeStats.talent, awayStats.talent);
+      const competitive = competitiveTalent(homeStats.talent, awayStats.talent);
       return {
         game,
         home,
@@ -251,11 +620,11 @@ export function gamesOfTheWeek(
         combined,
         competitive,
         rank: 0,
-        homeMapped,
-        awayMapped,
+        homeMapped: true,
+        awayMapped: true,
       };
     })
-    .filter((row) => row.homeMapped && row.awayMapped && row.competitive > 0)
+    .filter((row) => row.competitive > 0)
     .sort(
       (a, b) =>
         b.competitive - a.competitive ||
@@ -268,9 +637,13 @@ export function gamesOfTheWeek(
   return {
     weekStart,
     weekLabel: `${week.start} – ${week.end}`,
+    weekOffset,
+    loadedWeekLabel,
     games: ranked,
     emptyReason: ranked.length
       ? null
-      : "No two-sided games in the Matchup week slate match these venue filters.",
+      : !inSeason
+        ? `This week falls outside the loaded season schedule (${loadedWeekLabel}).`
+        : "No two-sided games with a tracked opponent are scheduled this week — filters still apply, and bye weeks happen.",
   };
 }

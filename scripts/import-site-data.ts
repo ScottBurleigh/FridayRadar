@@ -28,6 +28,7 @@ import type {
   School,
   SchoolSchedule,
   ScheduleGame,
+  SeasonRecord,
   SourceStatus,
   StrengthBreakdown,
   ToughnessIcon,
@@ -46,7 +47,11 @@ const CANONICAL_SCHOOL_ID: Record<string, string> = {
   "nv-na-mater-academy-east-las-vegas": "nv-las-vegas-mater-academy-east",
   "al-na-mcgill-toolen-catholic-high-school": "al-mobile-mcgill-toolen",
   "mi-na-saint-mary-s-preparatory-school": "mi-orchard-lake-orchard-lake-st-mary-s",
-  "tx-na-the-woodlands-college-park-high-school": "tx-the-woodlands-college-park",
+  // NOTE: "tx-na-the-woodlands-college-park-high-school" was once aliased onto
+  // tx-the-woodlands-college-park. That was wrong — ESPN files The Woodlands HS
+  // recruits under College Park's name, but they are two separate schools in
+  // the same town (MaxPreps a9887370… vs 06029cb1…). The record is now stored
+  // with its real identity as tx-the-woodlands-the-woodlands; do not re-add it.
   "eur-na-nfl-academy": "en-london-nfl-academy",
   "tx-arlington-summit-high-school": "tx-arlington-mansfield-summit",
   "oh-warren-warren-g-harding-high-school": "oh-warren-harding",
@@ -143,6 +148,7 @@ type SiteSchool = {
     rank?: number;
     rating?: number | null;
     org_key?: string | number | null;
+    slug?: string | null;
   } | null;
   maxpreps_national?: { rank?: number } | null;
   dctf?: { rank?: number; board?: string | null } | null;
@@ -153,8 +159,7 @@ type SiteSchool = {
     talent_norm?: number | null;
     on3_rank?: number | null;
     on3_rating?: number | null;
-    on3_min?: number | null;
-    on3_max?: number | null;
+    on3_n?: number | null;
     on3_norm?: number | null;
     maxpreps_rank?: number | null;
     maxpreps_norm?: number | null;
@@ -162,6 +167,11 @@ type SiteSchool = {
     blended?: number | null;
     dctf_rank?: number | null;
     bonus?: number | null;
+    success_win_pct?: number | null;
+    success_games?: number | null;
+    success_seasons?: number | null;
+    success_confidence?: number | null;
+    success_adj?: number | null;
     team_strength?: number | null;
   } | null;
   sos?: number | null;
@@ -387,6 +397,19 @@ function siteMaxPreps(mp: SiteSchool["maxpreps"]): School["maxpreps"] {
   };
 }
 
+/** "11-2" / "11-2-1" -> a typed SeasonRecord. Malformed strings are dropped. */
+function parseSeasonRecord(season: string, raw: string | undefined): SeasonRecord | null {
+  const m = (raw ?? "").trim().match(/^(\d+)-(\d+)(?:-(\d+))?$/);
+  if (!m) return null;
+  return {
+    season,
+    wins: Number(m[1]),
+    losses: Number(m[2]),
+    ties: m[3] ? Number(m[3]) : 0,
+    record: raw!.trim(),
+  };
+}
+
 function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown | null {
   if (!raw) return null;
   const bd: StrengthBreakdown = {
@@ -396,8 +419,7 @@ function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown
     talentNorm: raw.talent_norm ?? null,
     on3Rank: raw.on3_rank ?? null,
     on3Rating: raw.on3_rating ?? null,
-    on3Min: raw.on3_min ?? null,
-    on3Max: raw.on3_max ?? null,
+    on3N: raw.on3_n ?? null,
     on3Norm: raw.on3_norm ?? null,
     maxprepsRank: raw.maxpreps_rank ?? null,
     maxprepsNorm: raw.maxpreps_norm ?? null,
@@ -405,6 +427,11 @@ function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown
     blended: raw.blended ?? null,
     dctfRank: raw.dctf_rank ?? null,
     bonus: raw.bonus ?? null,
+    successWinPct: raw.success_win_pct ?? null,
+    successGames: raw.success_games ?? null,
+    successSeasons: raw.success_seasons ?? null,
+    successConfidence: raw.success_confidence ?? null,
+    successAdj: raw.success_adj ?? null,
     teamStrength: raw.team_strength ?? null,
   };
   const has =
@@ -738,6 +765,15 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     ? await readJson<Record<string, SiteSchedule>>(schedulesPath)
     : {};
 
+  const historyPath = join(ROOT, "data/raw/maxpreps/season-history.json");
+  const seasonHistory = existsSync(historyPath)
+    ? (await readJson<{ seasons?: string[]; records?: Record<string, Record<string, string>> }>(
+        historyPath,
+      ))
+    : {};
+  const historySeasons = seasonHistory.seasons ?? [];
+  const historyRecords = seasonHistory.records ?? {};
+
   const schools = new Map<string, School>();
   const players: Player[] = [];
   const ratings: Rating[] = [];
@@ -783,6 +819,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
             rank: row.on3.rank,
             rating: row.on3.rating ?? null,
             orgKey: row.on3.org_key ?? null,
+            slug: row.on3.slug ?? null,
           }
         : null,
       maxprepsNational: row.maxpreps_national?.rank != null
@@ -796,6 +833,15 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       sosGames: row.sos_games ?? null,
       sosLabel: row.sos_label ?? null,
       scheduleGames: row.schedule_games ?? null,
+      seasonHistory: (() => {
+        const raw = historyRecords[cid] ?? historyRecords[row.id];
+        if (!raw) return null;
+        const seasons = historySeasons.length ? historySeasons : Object.keys(raw).sort().reverse();
+        const rows = seasons
+          .map((s) => parseSeasonRecord(s, raw[s]))
+          .filter((r): r is SeasonRecord => r != null);
+        return rows.length ? rows : null;
+      })(),
     };
     schools.set(school.id, school);
 
@@ -921,9 +967,9 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     },
     {
       id: "matchup",
-      label: "Matchup MaxPreps week slate",
+      label: "Games of the week",
       status: "live",
-      detail: `Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} from games-top213.json (${games.length} two-sided games). Ranked by geometric mean of home/away talent; combined talent is display only. Venue state/zip, not either school. Never games.json.`,
+      detail: `/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules (dedup by contestId, both sides must be tracked schools), ranked by geometric mean of home/away talent; combined talent is display only. Venue state/zip, not either school. Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} is the default week shown.`,
       counts: { games: games.length },
     },
     {
@@ -981,10 +1027,10 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
         "School talentScore is the Scout precomputed sum of 2027+ player points.",
         String(
           summary.team_strength_note ??
-            "Team strength is the mean of talent_norm and ranking_norm (On3 min–max and MaxPreps rank curve). Texas 6A DCTF Top 25 adds a bonus then clamps 0–100. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
+            "Team strength is the mean of talent_norm and ranking_norm (On3 and MaxPreps rank curves — both rank-based, never raw rating min–max). Texas 6A DCTF Top 25 adds a bonus then clamps 0–100. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
         ),
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
-        "Matchup week is 2026-08-26 through 2026-08-29. /games ranks two-sided talent as √(home × away); combined talent is display + tie-break. Filters use the game venue.",
+        "/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules, ranked by geometric mean of home/away talent (√(home × away)); combined talent is display + tie-break. Filters use the game venue.",
         String(summary.note ?? "Canonical v1: 1,554 schools / 2,986 players when the full Scout dump is imported."),
       ],
       matchup_week: {

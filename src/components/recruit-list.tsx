@@ -22,7 +22,7 @@ export function RecruitList({
 }) {
   if (!players.length) {
     return (
-      <div className="rounded-xl border border-dashed border-amber-400/25 bg-[#121c2e] px-6 py-12 text-center text-zinc-400">
+      <div className="rounded-xl border border-dashed border-amber-400/35 bg-[#17233d] px-6 py-12 text-center text-zinc-400">
         No 2027-or-later recruits are on file for this school.
       </div>
     );
@@ -49,7 +49,7 @@ export function RecruitList({
               return (
                 <li
                   key={p.id}
-                  className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-4"
+                  className="rounded-xl border border-amber-400/30 bg-[#17233d] p-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
@@ -95,7 +95,7 @@ export function RecruitList({
                       return (
                         <div
                           key={src}
-                          className="rounded-lg border border-amber-400/20 bg-[#0d1628] px-3 py-2 text-xs"
+                          className="rounded-lg border border-amber-400/30 bg-[#0f1a2e] px-3 py-2 text-xs"
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-zinc-400">{sourceLabel(src)}</span>

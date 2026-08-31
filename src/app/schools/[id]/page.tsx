@@ -4,10 +4,18 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { RecruitList } from "@/components/recruit-list";
 import { SchoolScheduleTable } from "@/components/school-schedule";
+import { SeasonHistory } from "@/components/season-history";
 import { StrengthExplainButton } from "@/components/strength-explain";
-import { loadDataset, playersAtSchool, maxprepsScheduleUrl, scheduleForSchool } from "@/lib/data";
-import { formatLocation, formatStrength } from "@/lib/format";
+import { StrengthScore } from "@/components/strength-score";
 import { TalentGrade } from "@/components/talent-explain";
+import {
+  loadDataset,
+  playersAtSchool,
+  maxprepsScheduleUrl,
+  on3ScheduleUrl,
+  scheduleForSchool,
+} from "@/lib/data";
+import { formatLocation } from "@/lib/format";
 import { officialStars, badgeStars, playerPoints, ratingsBySource } from "@/lib/ranking";
 import type { RatedPlayer } from "@/lib/types";
 
@@ -29,7 +37,7 @@ function Stat({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-amber-400/20 bg-[#121c2e] p-3">
+    <div className="rounded-xl border border-amber-400/30 bg-[#17233d] p-3">
       <dt className="text-xs uppercase tracking-wide text-zinc-300">{label}</dt>
       <dd className="mt-1 font-mono text-xl text-zinc-50">{children}</dd>
     </div>
@@ -67,6 +75,7 @@ export default async function SchoolPage({
   const recruitCount = school.recruitCount != null ? school.recruitCount : players.length;
   const schedule = scheduleForSchool(dataset, school.id);
   const scheduleUrl = maxprepsScheduleUrl(school.maxpreps, schedule);
+  const on3Url = on3ScheduleUrl(school.on3);
   const on3 = school.on3;
   const mpRank = school.maxprepsNational?.rank;
   const dctfRank = school.dctf?.rank;
@@ -91,6 +100,14 @@ export default async function SchoolPage({
         {formatLocation(school.city, school.state, school.zip)}
         {school.address ? ` · ${school.address}` : ""}
       </p>
+      {school.mapped === false ? (
+        <p className="mt-4 rounded-lg border border-dashed border-amber-400/30 bg-[#17233d] px-4 py-3 text-sm text-zinc-300">
+          No recruiting data on file for this school. FridayRadar tracks 2027+ recruits rated by
+          247Sports, On3/Rivals, or ESPN, and this program doesn&apos;t currently have any in that
+          pool — talent, strength, and recruit counts below are genuinely 0, not missing data. It
+          shows up here because it&apos;s a real opponent on a tracked team&apos;s schedule.
+        </p>
+      ) : null}
       <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <Stat label="2027+ recruits">{recruitCount}</Stat>
         <Stat label="Talent">
@@ -103,7 +120,7 @@ export default async function SchoolPage({
         </Stat>
         <Stat label="Team strength">
           <span className="inline-flex items-center gap-1">
-            <span className="text-amber-200">{formatStrength(school.teamStrength)}</span>
+            <StrengthScore value={school.teamStrength} showLabel />
             <StrengthExplainButton
               schoolName={school.name}
               breakdown={school.strengthBreakdown}
@@ -117,11 +134,11 @@ export default async function SchoolPage({
               <span>
                 #{on3.rank}
                 {on3.rating != null ? (
-                  <span className="ml-2 text-sm font-normal text-zinc-500">{on3.rating}</span>
+                  <span className="ml-2 text-sm font-normal text-zinc-400">{on3.rating}</span>
                 ) : null}
               </span>
             ) : (
-              <span className="text-zinc-500">Unranked</span>
+              <span className="text-zinc-400">Unranked</span>
             )}
             {mpRank != null ? (
               <span className="text-base font-normal text-zinc-300">MaxPreps #{mpRank}</span>
@@ -132,22 +149,18 @@ export default async function SchoolPage({
           </span>
         </Stat>
         <Stat label="Strength of schedule">
-          {school.sos != null ? (
-            <>
-              {formatStrength(school.sos)}
-              {school.sosLabel ? (
-                <span className="ml-2 text-sm font-normal capitalize text-zinc-400">
-                  {school.sosLabel}
-                </span>
-              ) : null}
-            </>
-          ) : (
-            <span className="text-zinc-500">—</span>
-          )}
+          <span className="inline-flex items-center gap-1">
+            <StrengthScore value={school.sos} />
+            {school.sosLabel ? (
+              <span className="text-sm font-normal capitalize text-zinc-400">
+                {school.sosLabel}
+              </span>
+            ) : null}
+          </span>
         </Stat>
         <Stat label="Zip">{school.zip ?? "—"}</Stat>
       </dl>
-      {school.maxpreps?.canonicalUrl || scheduleUrl || school.hudlTeamUrl ? (
+      {school.maxpreps?.canonicalUrl || scheduleUrl || on3Url || school.hudlTeamUrl ? (
         <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           {school.maxpreps?.canonicalUrl ? (
             <a
@@ -169,6 +182,16 @@ export default async function SchoolPage({
               MaxPreps schedule
             </a>
           ) : null}
+          {on3Url ? (
+            <a
+              href={on3Url}
+              className="text-amber-300/90 hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              On3 schedule &amp; win probability
+            </a>
+          ) : null}
           {school.hudlTeamUrl ? (
             <a
               href={school.hudlTeamUrl}
@@ -180,6 +203,17 @@ export default async function SchoolPage({
             </a>
           ) : null}
         </p>
+      ) : null}
+      {school.seasonHistory?.length ? (
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold text-zinc-50">Recent seasons</h2>
+          <p className="mt-1 text-sm text-zinc-400">
+            Overall win-loss record per season, from MaxPreps team standings.
+          </p>
+          <div className="mt-4">
+            <SeasonHistory seasons={school.seasonHistory} />
+          </div>
+        </section>
       ) : null}
       <div className="mt-8">
         <RecruitList players={players} ratings={dataset.ratings} />

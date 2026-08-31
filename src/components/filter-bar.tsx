@@ -8,7 +8,9 @@ export function FilterBar({
   state,
   zip,
   sort,
+  q,
   showSort = true,
+  showSearch = true,
   stateLabel = "State",
   zipLabel = "Zip (≈25 miles)",
 }: {
@@ -16,7 +18,9 @@ export function FilterBar({
   state?: string;
   zip?: string;
   sort?: string;
+  q?: string;
   showSort?: boolean;
+  showSearch?: boolean;
   stateLabel?: string;
   zipLabel?: string;
 }) {
@@ -24,8 +28,26 @@ export function FilterBar({
     <form
       action={action}
       method="get"
-      className="flex flex-col gap-3 rounded-xl border border-amber-400/25 bg-[#121c2e] p-3 sm:flex-row sm:flex-wrap sm:items-end"
+      className="flex flex-col gap-3 rounded-xl border border-amber-400/35 bg-[#17233d] p-3 sm:flex-row sm:flex-wrap sm:items-end"
     >
+      {showSearch ? (
+        <div className="min-w-52 flex-[2]">
+          <Label
+            htmlFor="q"
+            className="text-xs font-medium uppercase tracking-wide text-zinc-100"
+          >
+            School name
+          </Label>
+          <Input
+            id="q"
+            name="q"
+            type="search"
+            placeholder="Search by school name"
+            defaultValue={q ?? ""}
+            className="mt-1 border-amber-200/45 bg-[#0f1a2e] text-zinc-50 placeholder:text-zinc-400"
+          />
+        </div>
+      ) : null}
       <div className="min-w-40 flex-1">
         <Label htmlFor="state" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
           {stateLabel}
@@ -36,11 +58,11 @@ export function FilterBar({
           defaultValue={state ?? ""}
           className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
         >
-          <option value="" className="bg-[#0d1628] text-zinc-50">
+          <option value="" className="bg-[#0f1a2e] text-zinc-50">
             All states
           </option>
           {US_STATES.map((s) => (
-            <option key={s.code} value={s.code} className="bg-[#0d1628] text-zinc-50">
+            <option key={s.code} value={s.code} className="bg-[#0f1a2e] text-zinc-50">
               {s.name}
             </option>
           ))}
@@ -58,7 +80,7 @@ export function FilterBar({
           maxLength={5}
           placeholder="30518"
           defaultValue={zip ?? ""}
-          className="mt-1 border-amber-200/45 bg-[#0d1628] text-zinc-50 placeholder:text-zinc-400"
+          className="mt-1 border-amber-200/45 bg-[#0f1a2e] text-zinc-50 placeholder:text-zinc-400"
         />
       </div>
       {showSort ? (
@@ -72,13 +94,14 @@ export function FilterBar({
             defaultValue={sort === "count" || sort === "talent" ? sort : "strength"}
             className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
           >
-            <option value="strength" className="bg-[#0d1628] text-zinc-50">
+            <option value="strength" className="bg-[#0f1a2e] text-zinc-50">
               Team strength
             </option>
-            <option value="talent" className="bg-[#0d1628] text-zinc-50">
+            <option value="talent" className="bg-[#0f1a2e] text-zinc-50">
               Talent
             </option>
-            <option value="count" className="bg-[#0d1628] text-zinc-50">
+            <option value="count" className="bg-[#0f1a2e] text-zinc-50">
+
               Recruit count
             </option>
           </select>
