@@ -17,7 +17,7 @@ Requires Node 22+ and Python 3. The compiled dataset ships in `data/fridayradar.
 
 - **Rankings (home)** — programs sorted by **team strength** (default), talent, or recruit count. The Talent cell is a letter grade; the numeric talent total and the grade cutoffs are in the hover/popover. Star columns are labeled 5-star / 4-star / 3-star. The table also shows strength of schedule (mean of this season’s opponents’ team strength, with a tough/average/light label). Missing SOS is an em dash, not zero. Filters: US state, zip code (≈25-mile haversine). The chevron next to a school name expands **every** 2027+ recruit on that roster (name, position, stars, and spaced 247 · On3 · ESPN · Hudl chips when those URLs exist). The school name still opens `/schools/[id]`.
 - **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank). A profile-links row under each recruit shows **247 · On3 · ESPN · Hudl** only when that URL is on file — missing Hudl is omitted, not a dead chip. Talent is the same letter grade as the rankings table (numeric total in the popover). Team strength, On3 national rank (only when joined), MaxPreps national computer rank when joined (e.g. MaxPreps #4), DCTF #N for Texas 6A Top 25, and strength of schedule sit in the header. Verified Hudl team pages (fan.hudl.com boys-varsity-football) sit next to the MaxPreps schedule link when known. Under recruits, the MaxPreps 26-27 football schedule is a table (date, opponent, site, result, toughness icon/label) when `schedules.json` has a row for that school — omitted entirely if not. MaxPreps schedule link when `schoolId` and a stored `scheduleUrl` exist (from the school row or the schedule dump). Unknown toughness is skipped, not shown as a fake icon.
-- **Games of the week** — Matchup MaxPreps slate for **2026-08-26 through 2026-08-29**, ranked by **geometric mean** of home and away Scout talent (`√(home × away)`). Combined talent is still shown on each row and is the tie-break. Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state.
+- **Games of the week** — two-sided matchups derived live from MaxPreps **26-27** `schedules.json`, ranked by **geometric mean** of home and away Scout talent (`√(home × away)`). Combined talent is still shown on each row and is the tie-break. Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state. The default week shown is the Matchup slice in `games-top213.json` (**2026-08-26 through 2026-08-29**).
 
 ## Ranking math
 
@@ -62,7 +62,12 @@ Canonical v1 is **Scout + Matchup on disk**, not a live 247 scrape (Load More 40
 npm run import:site
 python3 scripts/fill-missing-zips.py   # MaxPreps / Census / public geocode for missing zips (never invents)
 npm run rebuild:games                  # refresh venue = contest site or HOME school
-npm run build:strength                 # On3 national board + MaxPreps 26-27 schedules → strength / SOS / toughness
+python3 scripts/fetch-season-history.py --refresh-current
+  # MaxPreps standings: only /26-27/, /24-25/, /23-24/ (never /22-23/ — robots)
+python3 scripts/build-strength-and-schedules.py --full-fetch
+  # live On3 2026 national composite (1000) + MaxPreps 26-27 schedules (no HTML cache)
+  # writes site-data/schedules.json {as_of, season, schools} and site-data/schools-crosswalk.json
+npx tsx scripts/import-site-data.ts
 ```
 
 Or rebuild from the frozen ingest already in this repo (never re-pages 247):
@@ -96,7 +101,8 @@ If a source blocks (247Sports Load More has returned HTTP 406 from this environm
 Stored in `data/fridayradar.json`:
 
 - **School** — `id` (slug, e.g. `fl-bradenton-img-academy`), `name`, `name_normalized`, `aliases`, `mascot`, `city`, `state`, `zip`, `address`, `lat`, `lng`, `type`, `maxpreps {schoolId, canonicalUrl, formattedName, scheduleUrl}`, `ids_247.high_school_id`, optional Scout `talentScore` / `recruitCount`, `teamStrength`, `hudlTeamUrl` (fan.hudl.com boys-varsity-football when verified), `on3 {rank, rating, orgKey}`, `sos` / `sosLabel`, `mapped`
-- **SchoolSchedule** — keyed by school id in `schedules`; `season` (`26-27`), games with date, opponent, home/away/neutral, result, `toughnessIcon`
+- **SchoolSchedule** — `site-data/schedules.json` is `{as_of, season:"26-27", schools:{id: row}}`; each row has games with date, opponent, home/away/neutral, result, `toughnessIcon`. Import unwraps the wrapper.
+- **schools-crosswalk.json** — one record per FridayRadar school: `names[]`, city, state, zip, `sources.{fridayradar,maxpreps,on3,hudl,247,espn}` (IDs actually held, never invented), `match_status` linked|partial|unmatched|ambiguous.
 - **Player** — `id`, `full_name`, `class_year`, `position`, `height`, `weight`, `hometown_city`, `hometown_state`, `high_school_id` (school slug), `college_commit`, `source_ids {247sports_player_id, on3_rivals_id, espn_id, hudl}`, optional `profile_urls {247sports_composite, on3_rivals, espn, hudl}`. Hudl athlete URLs are only the verified batch in `site-data/hudl.json` (never invented).
 - **Rating** — `player_id`, `source` (`247sports` | `247sports_composite` | `on3_rivals` | `on3_industry` | `espn`), `class_year`, `as_of`, `national_rank`, `position_rank`, `state_rank`, `stars`, `rating`, `position`, `high_school_name_raw`, `profile_url`
 - **Game** — `id` (MaxPreps contestId), `season`, `kickoff`, `home_school_id`, `away_school_id`, `home_score`, `away_score`, `is_gow`, `game_url`, venue `city` / `state` / `zip` / `lat` / `lng` plus `venue {city,state,zip,name,source}`, `two_sided_talent`, `home_away_type` (0 home, 2 neutral)

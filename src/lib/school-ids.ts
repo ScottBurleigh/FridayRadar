@@ -34,6 +34,10 @@ const CANONICAL_SCHOOL_ID: Record<string, string> = {
   "il-east-saint-louis-east-saint-louis": "il-east-st-louis-east-st-louis",
   "ca-bellflower-saint-john-bosco": "ca-bellflower-st-john-bosco",
   "fl-jacksonville-bolles-school": "fl-jacksonville-the-bolles-school",
+  // Hudl TSV school_id aliases (verified fan.hudl.com team URLs). Unique names.
+  "dc-washington-saint-johns-college": "dc-washington-st-john-s-college",
+  "nj-montvale-saint-joseph-regional": "nj-montvale-st-joseph-regional",
+  // Do NOT alias ca-san-mateo-junipero-serra onto Gardena Serra — different cities.
 };
 
 export function canonicalSchoolId(id: string | undefined | null): string {

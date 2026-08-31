@@ -65,14 +65,24 @@ def prior_season(season: str) -> str:
 
 
 def http_get(url: str, timeout: int = 25) -> tuple[int, str]:
-    req = urllib.request.Request(url, headers=UA)
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return resp.status, resp.read().decode("utf-8", "replace")
-    except urllib.error.HTTPError as e:
-        return e.code, ""
-    except Exception:
-        return 0, ""
+    for attempt in range(6):
+        req = urllib.request.Request(url, headers=UA)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.status, resp.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                ra = e.headers.get("Retry-After")
+                try:
+                    wait = float(ra) if ra else min(32.0, 2 ** (attempt + 1))
+                except ValueError:
+                    wait = min(32.0, 2 ** (attempt + 1))
+                time.sleep(wait)
+                continue
+            return e.code, ""
+        except Exception:
+            time.sleep(0.5 * (attempt + 1))
+    return 0, ""
 
 
 def school_root(school: dict) -> str | None:
@@ -120,13 +130,31 @@ def parse_records(html: str) -> tuple[str | None, str | None]:
     return pick("standingsData"), pick("lastYearStandingsData")
 
 
-def fetch_school(school: dict) -> tuple[str, dict[str, str]]:
+def seasons_to_fetch(found: dict[str, str], *, refresh_current: bool) -> list[str]:
+    """Only allowed season paths. Never /22-23/ or older (robots)."""
+    need: list[str] = []
+    if refresh_current or "26-27" not in found:
+        need.append("26-27")
+    if "24-25" not in found or "23-24" not in found:
+        need.append("24-25")
+    if "23-24" not in found or "22-23" not in found:
+        need.append("23-24")
+    out: list[str] = []
+    for season in FETCH_SEASONS:
+        if season in need and season not in out:
+            out.append(season)
+    return out
+
+
+def fetch_school(
+    school: dict, existing: dict[str, str] | None = None, *, refresh_current: bool = False
+) -> tuple[str, dict[str, str]]:
     sid = school["id"]
     root = school_root(school)
     if not root:
-        return sid, {}
-    found: dict[str, str] = {}
-    for season in FETCH_SEASONS:
+        return sid, dict(existing or {})
+    found: dict[str, str] = dict(existing or {})
+    for season in seasons_to_fetch(found, refresh_current=refresh_current):
         url = f"{root}football/{season}/schedule/"
         status, html = http_get(url)
         time.sleep(SLEEP)
@@ -134,11 +162,16 @@ def fetch_school(school: dict) -> tuple[str, dict[str, str]]:
             continue
         cur, prev = parse_records(html)
         if cur:
-            found.setdefault(season, cur)
+            found[season] = cur
         if prev:
-            found.setdefault(prior_season(season), prev)
-        if all(s in found for s in WANT_SEASONS):
-            break
+            prior = prior_season(season)
+            if season == "26-27" or prior not in found:
+                found[prior] = prev
+        if all(s in found for s in WANT_SEASONS) and not (
+            refresh_current and season != "26-27"
+        ):
+            if not refresh_current or "26-27" in found:
+                break
     return sid, {s: found[s] for s in WANT_SEASONS if s in found}
 
 
@@ -153,14 +186,27 @@ def main() -> int:
             out = {}
 
     limit = None
+    refresh_current = "--refresh-current" in sys.argv
     for i, a in enumerate(sys.argv):
         if a == "--limit" and i + 1 < len(sys.argv):
             limit = int(sys.argv[i + 1])
 
-    todo = [s for s in schools if school_root(s) and not out.get(s["id"])]
+    todo = []
+    for s in schools:
+        if not school_root(s):
+            continue
+        rec = out.get(s["id"]) or {}
+        if refresh_current:
+            todo.append(s)
+        elif not rec or any(season not in rec for season in WANT_SEASONS):
+            todo.append(s)
     if limit:
         todo = todo[:limit]
-    print(f"{len(schools)} schools, {len(out)} already cached, fetching {len(todo)}", flush=True)
+    print(
+        f"{len(schools)} schools, {len(out)} already cached, fetching {len(todo)}"
+        f"{' (refresh 26-27)' if refresh_current else ''}",
+        flush=True,
+    )
 
     def flush() -> None:
         OUT.write_text(
@@ -177,7 +223,12 @@ def main() -> int:
 
     done = 0
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        futs = {pool.submit(fetch_school, s): s["id"] for s in todo}
+        futs = {
+            pool.submit(
+                fetch_school, s, out.get(s["id"]) or {}, refresh_current=refresh_current
+            ): s["id"]
+            for s in todo
+        }
         for fut in as_completed(futs):
             done += 1
             try:

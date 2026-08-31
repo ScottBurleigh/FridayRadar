@@ -723,9 +723,20 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
     : {};
 
   const schedulesPath = join(dir, "schedules.json");
-  const siteSchedules = existsSync(schedulesPath)
-    ? await readJson<Record<string, SiteSchedule>>(schedulesPath)
+  const siteSchedulesRaw = existsSync(schedulesPath)
+    ? await readJson<
+        | Record<string, SiteSchedule>
+        | { as_of?: string; season?: string; schools: Record<string, SiteSchedule> }
+      >(schedulesPath)
     : {};
+  const siteSchedules: Record<string, SiteSchedule> =
+    siteSchedulesRaw &&
+    typeof siteSchedulesRaw === "object" &&
+    "schools" in siteSchedulesRaw &&
+    siteSchedulesRaw.schools &&
+    ("as_of" in siteSchedulesRaw || "season" in siteSchedulesRaw)
+      ? siteSchedulesRaw.schools
+      : (siteSchedulesRaw as Record<string, SiteSchedule>);
 
   const historyPath = join(ROOT, "data/raw/maxpreps/season-history.json");
   const seasonHistory = existsSync(historyPath)

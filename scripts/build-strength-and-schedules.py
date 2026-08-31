@@ -17,6 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +27,9 @@ RAW_ON3 = ROOT / "data/raw/on3" / "national-2026.json"
 RAW_MP = ROOT / "data/raw/maxpreps" / "national-rankings.json"
 RAW_DCTF = ROOT / "data/raw/dctf" / "6a-top25-week1.json"
 CACHE = Path("/tmp/fridayradar-sched-cache")
+# Live restamp must not replay Aug 25 HTML. --full-fetch sets this False.
+USE_HTTP_CACHE = True
+AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 UA = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -82,7 +86,7 @@ def http_get(url: str, timeout: int = 20, headers: dict | None = None) -> tuple[
     key = hashlib.sha1(url.encode()).hexdigest()
     CACHE.mkdir(parents=True, exist_ok=True)
     cp = CACHE / f"{key}.json"
-    if cp.exists():
+    if USE_HTTP_CACHE and cp.exists():
         try:
             rec = json.loads(cp.read_text())
         except json.JSONDecodeError:
@@ -91,7 +95,7 @@ def http_get(url: str, timeout: int = 20, headers: dict | None = None) -> tuple[
             return 200, rec["body"]
     req = urllib.request.Request(url, headers=headers or UA)
     body, status = "", 0
-    for attempt in range(3):
+    for attempt in range(6):
         try:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 body = resp.read().decode("utf-8", "replace")
@@ -100,6 +104,14 @@ def http_get(url: str, timeout: int = 20, headers: dict | None = None) -> tuple[
         except urllib.error.HTTPError as e:
             body = e.read().decode("utf-8", "replace") if e.fp else ""
             status = e.code
+            if status == 429:
+                ra = e.headers.get("Retry-After")
+                try:
+                    wait = float(ra) if ra else min(32.0, 2 ** (attempt + 1))
+                except ValueError:
+                    wait = min(32.0, 2 ** (attempt + 1))
+                time.sleep(wait)
+                continue
             if status in (404, 403, 410):
                 break
         except Exception:
@@ -107,7 +119,7 @@ def http_get(url: str, timeout: int = 20, headers: dict | None = None) -> tuple[
         time.sleep(0.35 * (attempt + 1))
     if status == 200 and body:
         cp.write_text(json.dumps({"status": 200, "body": body}))
-    time.sleep(0.03)
+    time.sleep(0.12 if (headers or {}) == HTML_UA else 0.03)
     return status, body if status == 200 else ""
 
 
@@ -127,8 +139,8 @@ def norm_name(name: str) -> str:
     return re.sub(r"\s+", " ", n).strip()
 
 
-def fetch_on3() -> list[dict]:
-    if RAW_ON3.exists():
+def fetch_on3(*, force: bool = False) -> list[dict]:
+    if not force and RAW_ON3.exists():
         data = json.loads(RAW_ON3.read_text())
         if len(data.get("teams") or []) >= 900:
             print(f"on3 cache {len(data['teams'])} teams")
@@ -137,7 +149,13 @@ def fetch_on3() -> list[dict]:
     seen = set()
     for page in range(1, 41):
         q = urllib.parse.urlencode(
-            {"sportKey": 1, "orgType": "HighSchool", "year": 2026, "page": page}
+            {
+                "sportKey": 1,
+                "orgType": "HighSchool",
+                "year": 2026,
+                "page": page,
+                "pageSize": 25,
+            }
         )
         url = "https://api.on3.com/rdb/v1/organization-composite-rankings?" + q
         status, body = http_get(url, timeout=25)
@@ -145,7 +163,11 @@ def fetch_on3() -> list[dict]:
             print(f"on3 page {page} fail {status}")
             continue
         payload = json.loads(body)
-        for row in payload.get("list") or []:
+        page_rows = payload.get("list") or []
+        if not page_rows:
+            print(f"on3 page {page} empty, stopping")
+            break
+        for row in page_rows:
             org = row.get("organization") or {}
             city = row.get("city") or {}
             st = (row.get("state") or {}).get("abbreviation") or (city.get("state") or {}).get(
@@ -172,6 +194,8 @@ def fetch_on3() -> list[dict]:
             seen.add(k)
             teams.append(rec)
         print(f"on3 page {page} total {len(teams)}", flush=True)
+        if len(teams) >= 1000:
+            break
     RAW_ON3.parent.mkdir(parents=True, exist_ok=True)
     RAW_ON3.write_text(
         json.dumps({"year": 2026, "source": "on3_composite_national", "count": len(teams), "teams": teams})
@@ -181,101 +205,146 @@ def fetch_on3() -> list[dict]:
 
 
 def norm_city(city: str) -> str:
-    n = (city or "").lower().replace("saint ", "st ")
+    n = (city or "").lower().replace("saint ", "st ").replace("st. ", "st ")
     n = re.sub(r"[^a-z0-9]+", " ", n)
     return re.sub(r"\s+", " ", n).strip()
 
 
-def _tokens(name: str) -> set[str]:
-    return {t for t in norm_name(name).split() if t}
+def on3_norm_name(name: str) -> str:
+    """St./Saint, C.E./CE, High School/HS — never a unique identity by itself."""
+    n = norm_name(name)
+    n = n.replace("saint ", "st ")
+    n = re.sub(r"\bc e\b", "ce", n)
+    if n == "king panthers":
+        n = "ce king"
+    return n
 
 
-def _accept_on3_school(team: dict, school: dict) -> bool:
-    """Name+city identity only. Ambiguous or empty names are not joined."""
-    tn = _tokens(team.get("name") or "")
-    sn = _tokens(school.get("name_normalized") or school.get("name") or "")
+# City pairs that are the same program on On3 vs FridayRadar. Name must still match.
+ON3_CITY_ALIASES: dict[tuple[str, str], set[str]] = {
+    ("GA", "milton"): {"alpharetta", "milton"},
+    ("GA", "alpharetta"): {"alpharetta", "milton"},
+    ("GA", "norman park"): {"moultrie", "norman park"},
+    ("GA", "moultrie"): {"moultrie", "norman park"},
+    ("MI", "west bloomfield"): {"orchard lake", "west bloomfield"},
+    ("MI", "orchard lake"): {"orchard lake", "west bloomfield"},
+}
+
+
+def cities_compatible(team_city: str, school_city: str, state: str) -> bool:
+    tc, sc = norm_city(team_city), norm_city(school_city)
+    if not tc or not sc:
+        return False
+    if tc == sc or tc in sc or sc in tc:
+        return True
+    allowed = ON3_CITY_ALIASES.get(((state or "").upper(), tc), set())
+    return sc in allowed
+
+
+def names_compatible(team_name: str, school_name: str) -> bool:
+    tn = set(on3_norm_name(team_name).split())
+    sn = set(on3_norm_name(school_name).split())
     if not tn or not sn:
         return False
-    if tn == sn or tn <= sn or sn <= tn:
+    if tn == sn:
         return True
-    city = _tokens(school.get("city") or "") | _tokens(team.get("city") or "")
-    if sn == tn | city or tn == sn | city:
+    shorter, longer = (tn, sn) if len(tn) <= len(sn) else (sn, tn)
+    # One-token subset is too loose (King ≠ every King). Need 2+ shared tokens.
+    if len(shorter) >= 2 and shorter <= longer:
         return True
     return False
 
 
+def _tokens(name: str) -> set[str]:
+    return {t for t in on3_norm_name(name).split() if t}
+
+
+def _accept_on3_school(team: dict, school: dict) -> bool:
+    """Name + city + ST. Ambiguous or empty names are not joined.
+
+    Gardena Serra must not inherit San Mateo Serra's On3 rank: same name, different city.
+    """
+    st_t = (team.get("state") or "").upper()
+    st_s = (school.get("state") or "").upper()
+    if not st_t or st_t != st_s:
+        return False
+    school_name = school.get("name") or school.get("name_normalized") or ""
+    if not names_compatible(team.get("name") or "", school_name) and not names_compatible(
+        team.get("full_name") or "", school.get("name") or ""
+    ):
+        return False
+    if not cities_compatible(team.get("city") or "", school.get("city") or "", st_t):
+        return False
+    return True
+
+
+# join_on3 writes school ids skipped because several FR rows matched one On3 team.
+ON3_AMBIGUOUS_IDS: set[str] = set()
+
+
 def join_on3(schools: list[dict], teams: list[dict]) -> dict[str, dict]:
-    by_st_name: dict[tuple[str, str], list[dict]] = {}
-    by_name: dict[str, list[dict]] = {}
-    by_st_city: dict[tuple[str, str], list[dict]] = {}
-    for s in schools:
-        nn = s.get("name_normalized") or norm_name(s["name"])
-        s["name_normalized"] = nn
-        st = (s.get("state") or "").upper()
-        by_st_name.setdefault((st, nn), []).append(s)
-        by_name.setdefault(nn, []).append(s)
-        city = norm_city(s.get("city") or "")
-        if st and city:
-            by_st_city.setdefault((st, city), []).append(s)
+    """Org_key first (only when city+ST still line up), then conservative name+city+ST."""
+    ON3_AMBIGUOUS_IDS.clear()
+    by_org: dict = {}
+    for t in teams:
+        ok = t.get("org_key")
+        if ok is not None:
+            by_org[ok] = t
     matched: dict[str, dict] = {}
     used_org: set = set()
+    used_school: set[str] = set()
 
     def take(school: dict, team: dict) -> None:
         prev = matched.get(school["id"])
         if prev and prev["rank"] < team["rank"]:
             return
         matched[school["id"]] = team
+        used_school.add(school["id"])
         if team.get("org_key") is not None:
             used_org.add(team["org_key"])
 
-    for t in teams:
-        nn = norm_name(t["name"] or "")
-        st = (t.get("state") or "").upper()
-        hits = by_st_name.get((st, nn)) or []
+    # 1) Stored On3 org_key, trusted only when the live team is still this campus.
+    #    Name can differ (On3 'Centennial' vs 'Corona Centennial'); city+ST cannot
+    #    (Gardena Serra must not keep San Mateo Serra's org_key).
+    for s in schools:
+        ok = (s.get("on3") or {}).get("org_key")
+        if ok is None:
+            continue
+        team = by_org.get(ok)
+        if not team:
+            continue
+        st_t = (team.get("state") or "").upper()
+        st_s = (s.get("state") or "").upper()
+        if st_t and st_t == st_s and cities_compatible(team.get("city") or "", s.get("city") or "", st_t):
+            take(s, team)
+
+    # 2) Conservative name + city + ST. Skip when several schools or several teams hit.
+    unmatched_teams = [t for t in teams if t.get("org_key") not in used_org]
+    unmatched_schools = [s for s in schools if s["id"] not in used_school]
+    for t in unmatched_teams:
+        hits = [s for s in unmatched_schools if _accept_on3_school(t, s)]
+        if len(hits) > 1:
+            for s in hits:
+                ON3_AMBIGUOUS_IDS.add(s["id"])
+            continue
         if len(hits) != 1:
-            city = norm_city(t.get("city") or "")
-            city_hits = [
-                s
-                for s in hits
-                if city
-                and (
-                    city in norm_city(s.get("city") or "")
-                    or norm_city(s.get("city") or "") in city
-                )
-            ]
-            if len(city_hits) == 1:
-                hits = city_hits
-            elif len(hits) != 1:
-                nat = by_name.get(nn) or []
-                if st:
-                    nat = [s for s in nat if (s.get("state") or "").upper() == st]
-                hits = nat if len(nat) == 1 else []
-        if len(hits) == 1:
-            take(hits[0], t)
-
-    # One extra unique city-prefix (e.g. On3 'Centennial' / Corona → Corona Centennial).
-    # Rank order; stop after the first unique hit so the join stays at 532, not 573.
-    for t in sorted(teams, key=lambda x: x["rank"]):
-        if t.get("org_key") in used_org:
             continue
-        st = (t.get("state") or "").upper()
-        city = norm_city(t.get("city") or "")
-        tn = norm_name(t["name"] or "")
-        if not st or not city or not tn:
-            continue
-        cands = [
-            s
-            for s in by_st_city.get((st, city), [])
-            if s["id"] not in matched
-            and (
-                (s.get("name_normalized") or norm_name(s["name"])) == f"{city} {tn}".strip()
-                or (s.get("name_normalized") or norm_name(s["name"])).endswith(" " + tn)
-            )
+        school = hits[0]
+        reverse = [
+            other
+            for other in unmatched_teams
+            if other is not t and _accept_on3_school(other, school)
         ]
-        if len(cands) == 1:
-            take(cands[0], t)
-            break
+        if reverse:
+            ON3_AMBIGUOUS_IDS.add(school["id"])
+            continue
+        take(school, t)
+        unmatched_schools = [s for s in unmatched_schools if s["id"] not in used_school]
 
+    print(
+        f"on3 join {len(matched)} schools, skipped ambiguous {len(ON3_AMBIGUOUS_IDS)}",
+        flush=True,
+    )
     return matched
 
 
@@ -516,7 +585,6 @@ CANONICAL_SCHOOL_IDS = {
     "nv-na-mater-academy-east-las-vegas": "nv-las-vegas-mater-academy-east",
     "al-na-mcgill-toolen-catholic-high-school": "al-mobile-mcgill-toolen",
     "mi-na-saint-mary-s-preparatory-school": "mi-orchard-lake-orchard-lake-st-mary-s",
-    "tx-na-the-woodlands-college-park-high-school": "tx-the-woodlands-college-park",
     "eur-na-nfl-academy": "en-london-nfl-academy",
     "tx-arlington-summit-high-school": "tx-arlington-mansfield-summit",
     "oh-warren-warren-g-harding-high-school": "oh-warren-harding",
@@ -527,6 +595,17 @@ CANONICAL_SCHOOL_IDS = {
     "al-montgomery-the-montgomery-academy": "al-montgomery-montgomery-academy",
     "tx-houston-c-e-king-high-school": "tx-houston-c-e-king",
     "ga-grayson-grayson": "ga-loganville-grayson",
+    "md-baltimore-saint-frances-academy": "md-baltimore-st-frances-academy",
+    "va-springfield-saint-james": "va-springfield-the-st-james",
+    "nj-jersey-city-saint-peters-prep": "nj-jersey-city-st-peter-s-prep",
+    "il-east-saint-louis-east-saint-louis": "il-east-st-louis-east-st-louis",
+    "ca-bellflower-saint-john-bosco": "ca-bellflower-st-john-bosco",
+    "fl-jacksonville-bolles-school": "fl-jacksonville-the-bolles-school",
+    "dc-washington-saint-johns-college": "dc-washington-st-john-s-college",
+    "nj-montvale-saint-joseph-regional": "nj-montvale-st-joseph-regional",
+    # Do not alias tx-na-the-woodlands-college-park-high-school onto College Park —
+    # The Woodlands HS (tx-the-woodlands-the-woodlands) is a different campus.
+    # Do not alias ca-san-mateo-junipero-serra onto Gardena Serra.
 }
 
 # Duplicates, wrong MaxPreps ids, or no 26-27 varsity slate. Do not attach
@@ -1139,7 +1218,7 @@ def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
             continue
         row["team_strength"] = school.get("team_strength")
         row["season"] = SEASON
-        row["as_of"] = "2026-08-25T21:22:57Z"
+        row["as_of"] = AS_OF
         kept = []
         for g in row.get("games") or []:
             opp = g.get("opponent") or {}
@@ -1312,6 +1391,114 @@ def slice_v1_games(schools: list[dict], limit: int = 196) -> int:
     return len(picked)
 
 
+def load_schedules() -> dict[str, dict]:
+    raw = json.loads((SITE / "schedules.json").read_text())
+    if (
+        isinstance(raw, dict)
+        and isinstance(raw.get("schools"), dict)
+        and ("as_of" in raw or "season" in raw)
+    ):
+        return raw["schools"]
+    return raw
+
+
+HUDL_ORG_RE = re.compile(r"/organization/(\d+)/")
+
+
+def load_hudl_team_ids() -> dict[str, str]:
+    """school_id → Hudl organization id from hudl-teams.tsv. Never invents URLs."""
+    path = SITE / "hudl-teams.tsv"
+    out: dict[str, str] = {}
+    if not path.exists():
+        return out
+    lines = path.read_text().splitlines()
+    if not lines:
+        return out
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        parts = line.split("\t")
+        if len(parts) < 2:
+            continue
+        sid, url = parts[0].strip(), parts[1].strip()
+        if not sid or not url.startswith("https://fan.hudl.com/"):
+            continue
+        cid = canonical_school_id(sid)
+        m = HUDL_ORG_RE.search(url)
+        if not m:
+            continue
+        out[cid] = m.group(1)
+        if cid != sid:
+            out[sid] = m.group(1)
+    return out
+
+
+def write_crosswalk(schools: list[dict], joined_on3: dict[str, dict]) -> None:
+    """One record per FridayRadar school. IDs only when actually held — no invented GUIDs."""
+    hudl_ids = load_hudl_team_ids()
+    school_ids = {s["id"] for s in schools}
+    rows: dict[str, dict] = {}
+    for s in schools:
+        sid = s["id"]
+        names: list[str] = []
+        for n in (
+            s.get("name"),
+            *(s.get("aliases") or []),
+            (s.get("maxpreps") or {}).get("formattedName"),
+        ):
+            if n and n not in names:
+                names.append(n)
+        mp_id = (s.get("maxpreps") or {}).get("schoolId") or None
+        on3 = joined_on3.get(sid) or s.get("on3") or {}
+        on3_key = on3.get("org_key") if on3.get("rank") is not None else None
+        if sid not in joined_on3:
+            on3_key = None
+        hs_247 = (s.get("ids_247") or {}).get("high_school_id") or None
+        hudl = hudl_ids.get(sid) if sid in school_ids else None
+        sources = {
+            "fridayradar": sid,
+            "maxpreps": mp_id,
+            "on3": on3_key,
+            "hudl": hudl,
+            "247": hs_247,
+            "espn": None,
+        }
+        n_ext = sum(1 for k, v in sources.items() if k != "fridayradar" and v is not None)
+        if sid in ON3_AMBIGUOUS_IDS and sid not in joined_on3:
+            status = "ambiguous"
+        elif n_ext >= 2:
+            status = "linked"
+        elif n_ext == 1:
+            status = "partial"
+        else:
+            status = "unmatched"
+        rows[sid] = {
+            "names": names,
+            "city": s.get("city") or "",
+            "state": (s.get("state") or "").upper(),
+            "zip": s.get("zip") or s.get("zip5") or None,
+            "sources": sources,
+            "match_status": status,
+        }
+    payload = {
+        "as_of": AS_OF,
+        "count": len(rows),
+        "schools": rows,
+    }
+    raw = json.dumps(payload)
+    for dest in (SITE, IMPORT):
+        dest.mkdir(parents=True, exist_ok=True)
+        (dest / "schools-crosswalk.json").write_text(raw)
+    linked = sum(1 for r in rows.values() if r["match_status"] == "linked")
+    partial = sum(1 for r in rows.values() if r["match_status"] == "partial")
+    unmatched = sum(1 for r in rows.values() if r["match_status"] == "unmatched")
+    amb = sum(1 for r in rows.values() if r["match_status"] == "ambiguous")
+    print(
+        f"crosswalk {len(rows)} linked={linked} partial={partial} unmatched={unmatched} ambiguous={amb}",
+        flush=True,
+    )
+
+
 def write_board(
     schools: list[dict],
     schedules: dict[str, dict],
@@ -1321,17 +1508,27 @@ def write_board(
     mp_joined: int = 0,
     n_dctf: int = 0,
     dctf_joined: int = 0,
+    joined_on3: dict[str, dict] | None = None,
 ) -> None:
     payload_schools = json.dumps(schools)
+    wrapped = {"as_of": AS_OF, "season": SEASON, "schools": schedules}
+    payload_sched = json.dumps(wrapped)
     for dest in (SITE, IMPORT):
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "schools.json").write_text(payload_schools)
-        (dest / "schedules.json").write_text(json.dumps(schedules))
+        (dest / "schedules.json").write_text(payload_sched)
     summary_path = SITE / "schools.summary.json"
     summary = json.loads(summary_path.read_text()) if summary_path.exists() else {}
     n_games = len(json.loads((SITE / "games-top213.json").read_text()).get("games") or [])
+    n_played = 0
+    for row in schedules.values():
+        for g in row.get("games") or []:
+            if g.get("result") in ("W", "L", "T") or g.get("score") is not None:
+                n_played += 1
     summary.update(
         {
+            "as_of": AS_OF,
+            "season": SEASON,
             "on3_national": n_on3,
             "on3_joined": joined,
             "maxpreps_national": n_mp,
@@ -1339,6 +1536,8 @@ def write_board(
             "dctf_6a": n_dctf,
             "dctf_joined": dctf_joined,
             "schedules": len(schedules),
+            "schedule_games": sum(len(r.get("games") or []) for r in schedules.values()),
+            "schedule_played": n_played,
             "with_zip": sum(1 for s in schools if s.get("zip")),
             "v1_games": n_games,
             "v1_both_sides": n_games,
@@ -1349,12 +1548,14 @@ def write_board(
                 "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. "
                 f"v1 /games is games-top213.json ({n_games} two-sided games, 0 partial) "
                 "for 2026-08-26..2026-08-29 ranked by geometric mean of home/away talent. "
-                "Never load games.json."
+                "Never load games.json. "
+                f"MaxPreps 26-27 schedules restamped {AS_OF}."
             ),
         }
     )
     summary_path.write_text(json.dumps(summary, indent=2))
     (IMPORT / "schools.summary.json").write_text(json.dumps(summary, indent=2))
+    write_crosswalk(schools, joined_on3 or {})
 
 
 def attach_schedule_row(
@@ -1396,7 +1597,7 @@ def attach_schedule_row(
     return {
         "school_id": school["id"],
         "season": SEASON,
-        "as_of": "2026-08-25T21:22:57Z",
+        "as_of": AS_OF,
         "team_strength": school.get("team_strength"),
         "schedule_url": sched_url,
         "sos": sos,
@@ -1491,13 +1692,15 @@ def fill_missing_schedules(schools: list[dict], schedules: dict[str, dict]) -> i
 
 def restamp_from_disk(*, fill_missing: bool = False) -> int:
     """Recompute 0–100 strength + SOS from on-disk schedules. Optionally fill gaps."""
+    global AS_OF
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     schools = json.loads((SITE / "schools.json").read_text())
-    schedules = json.loads((SITE / "schedules.json").read_text())
+    schedules = load_schedules()
     collapse_canonical_ids(schools, schedules)
     fill_published_week_zips(schools)
     if fill_missing:
         fill_missing_schedules(schools, schedules)
-    on3_teams = fetch_on3()
+    on3_teams = fetch_on3(force=not USE_HTTP_CACHE)
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
     joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
@@ -1514,6 +1717,7 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
         mp_joined=len(joined_mp),
         n_dctf=DCTF_N,
         dctf_joined=len(joined_dctf),
+        joined_on3=joined,
     )
     img = next((s for s in schools if s["id"] == "fl-bradenton-img-academy"), {})
     print(
@@ -1540,11 +1744,21 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
 
 
 def main() -> int:
+    """Live MaxPreps 26-27 + On3 national restamp. Does not read the Aug 25 HTML cache."""
+    global USE_HTTP_CACHE, AS_OF
+    USE_HTTP_CACHE = False
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    print(f"full-fetch as_of {AS_OF} cache={USE_HTTP_CACHE}", flush=True)
+
     schools = json.loads((SITE / "schools.json").read_text())
-    on3_teams = fetch_on3()
+    schedules: dict[str, dict] = {}
+    collapse_canonical_ids(schools, schedules)
+    fill_published_week_zips(schools)
+
+    on3_teams = fetch_on3(force=True)
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
-    joined_mp, _mp = join_site_rank_board(schools, RAW_MP)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
     joined_dctf, _dctf = join_site_rank_board(schools, RAW_DCTF)
     print(f"on3 joined {len(joined)} / {n_on3} onto {len(schools)} schools")
     print(f"maxpreps national joined {len(joined_mp)} dctf joined {len(joined_dctf)}")
@@ -1553,6 +1767,7 @@ def main() -> int:
     by_id = {s["id"]: s for s in schools}
 
     occupied = occupied_schedule_paths(schools, {})
+    fetched: dict[str, tuple[list[dict], str | None]] = {}
 
     def run_fetch(batch: list[dict], search: bool) -> None:
         if not batch:
@@ -1574,18 +1789,21 @@ def main() -> int:
                 fetched[sid] = (games, page_url)
                 if games and page_url:
                     occupied.add(urllib.parse.urlparse(page_url).path.rstrip("/").lower())
-                if done % 50 == 0:
+                if done % 50 == 0 or done == len(batch):
                     ok = sum(1 for g, _ in fetched.values() if g)
                     print(f"  {done}/{len(batch)} fetched {ok}", flush=True)
 
-    schedules: dict[str, dict] = {}
     want = [
         s
         for s in schools
-        if (s.get("maxpreps") or {}).get("schoolId") or (s.get("maxpreps") or {}).get("canonicalUrl")
+        if s["id"] not in SKIP_SCHEDULE_IDS
+        and (
+            stored_schedule_url(s)
+            or (s.get("maxpreps") or {}).get("scheduleUrl")
+            or (s.get("maxpreps") or {}).get("footballUrl")
+        )
     ]
     print(f"fetching schedules for {len(want)} schools", flush=True)
-    fetched: dict[str, tuple[list[dict], str | None]] = {}
     run_fetch(want, search=False)
     miss = [s for s in want if not fetched.get(s["id"], ([], None))[0]]
     print(f"pass1 {sum(1 for g,_ in fetched.values() if g)} miss {len(miss)}", flush=True)
@@ -1598,37 +1816,21 @@ def main() -> int:
             continue
         schedules[s["id"]] = attach_schedule_row(s, games, page_url, by_mp, by_st_nn)
 
-    sos_vals = sorted(s["sos"] for s in schools if s.get("sos") is not None and (s.get("sos_games") or 0) >= 2)
-    p25 = sos_vals[len(sos_vals) // 4] if sos_vals else 0
-    p75 = sos_vals[(3 * len(sos_vals)) // 4] if sos_vals else 100
-    for s in schools:
-        if s.get("sos") is None:
-            s["sos_label"] = None
-        else:
-            s["sos_label"] = sos_label(s["sos"], p25, p75)
-
-    payload_schools = json.dumps(schools)
-    for dest in (SITE, IMPORT):
-        dest.mkdir(parents=True, exist_ok=True)
-        (dest / "schools.json").write_text(payload_schools)
-    (SITE / "schedules.json").write_text(json.dumps(schedules))
-    (IMPORT / "schedules.json").write_text(json.dumps(schedules))
-
-    summary_path = SITE / "schools.summary.json"
-    summary = json.loads(summary_path.read_text()) if summary_path.exists() else {}
-    img = by_id.get("fl-bradenton-img-academy") or {}
-    summary.update(
-        {
-            "on3_national": n_on3,
-            "on3_joined": len(joined),
-            "schedules": len(schedules),
-            "with_zip": sum(1 for s in schools if s.get("zip")),
-            "team_strength_note": STRENGTH_NOTE,
-        }
+    restamp_schedules(schools, schedules)
+    n_games = slice_v1_games(schools, 196)
+    write_board(
+        schools,
+        schedules,
+        n_on3,
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+        joined_on3=joined,
     )
-    summary_path.write_text(json.dumps(summary, indent=2))
-    (IMPORT / "schools.summary.json").write_text(json.dumps(summary, indent=2))
-
+    img = by_id.get("fl-bradenton-img-academy") or {}
+    n_games_sched = sum(len(r.get("games") or []) for r in schedules.values())
     print(
         "IMG strength",
         img.get("team_strength"),
@@ -1641,7 +1843,10 @@ def main() -> int:
         "zip",
         img.get("zip"),
     )
-    print(f"schedules {len(schedules)} on3_joined {len(joined)} missing zip {sum(1 for s in schools if not s.get('zip'))}")
+    print(
+        f"schedules {len(schedules)} games {n_games_sched} on3_joined {len(joined)} "
+        f"gow {n_games} missing zip {sum(1 for s in schools if not s.get('zip'))}"
+    )
     return 0
 
 
