@@ -12,14 +12,18 @@
   "v1_partial": 0,
   "canonical_schools": 1554,
   "canonical_players": 2986,
-  "note": "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. v1 /games is games-top213.json (196 two-sided games, 0 partial) for 2026-08-26..2026-08-29 ranked by geometric mean of home/away talent. Never load games.json.",
+  "note": "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. v1 /games is games-top213.json (196 two-sided games, 0 partial) for 2026-08-26..2026-08-29 ranked by geometric mean of home/away talent. Never load games.json. MaxPreps 26-27 schedules restamped 2026-08-31T19:16:05Z.",
   "rank_by": "two_sided_talent",
   "on3_national": 1000,
-  "on3_joined": 533,
-  "schedules": 1120,
+  "on3_joined": 555,
+  "schedules": 1110,
   "team_strength_note": "team_strength is the mean of talent_norm (100 \u00d7 talent / board max; IMG = 100 on talent only) and ranking_norm. ranking_norm is the mean of whichever of on3_norm (100 \u00d7 (N+1\u2212rank)/N on the 1000-team On3 national board) and maxpreps_norm (100 \u00d7 (N+1\u2212rank)/N on the 100-team MaxPreps national computer board) exist \u2014 both rank-based; On3's raw compositeScore only spans ~79\u201391 across all 1000 teams, so min\u2013max on the raw score wildly overweighted tiny rating gaps near the top and is not used. Unranked boards are omitted, never 0. Texas 6A DCTF Top 25 then adds 10 \u00d7 (26\u2212rank)/25 (#1 +10.00, #25 +0.40). Recent form then adjusts by up to \u00b18: a recency-weighted win rate over the last five MaxPreps seasons, centred on .500 and shrunk toward 0 when few games are on file. It is an adjustment rather than a blend term because raw win rate ignores schedule quality; schools with no history on file are not adjusted at all. The result is clamped 0\u2013100. SOS is the mean of known opponents\u2019 team_strength (unknown omitted; never raw On3 compositeScore).",
   "maxpreps_national": 100,
-  "maxpreps_joined": 87,
+  "maxpreps_joined": 88,
   "dctf_6a": 25,
-  "dctf_joined": 23
+  "dctf_joined": 23,
+  "as_of": "2026-08-31T19:16:05Z",
+  "season": "26-27",
+  "schedule_games": 10734,
+  "schedule_played": 1775
 }
