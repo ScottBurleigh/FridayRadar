@@ -1,4 +1,30 @@
+import type { MouseEventHandler, ReactNode } from "react";
 import type { ProfileLink } from "@/lib/types";
+
+/** School-page / rankings Hudl team chip. Only render when a verified URL exists. */
+export function HudlTeamLink({
+  href,
+  children = "Hudl",
+  className = "",
+  onClick,
+}: {
+  href: string;
+  children?: ReactNode;
+  className?: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className={`text-amber-300/90 hover:underline ${className}`.trim()}
+      onClick={onClick}
+    >
+      {children}
+    </a>
+  );
+}
 
 export function ProfileLinks({
   links,

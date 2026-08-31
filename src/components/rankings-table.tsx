@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { ProfileLinks } from "@/components/profile-links";
+import { HudlTeamLink, ProfileLinks } from "@/components/profile-links";
 import type { InlineRecruit, SchoolRankingRow, SosLabel } from "@/lib/types";
 import { formatTalent } from "@/lib/format";
 import { StrengthExplainButton } from "@/components/strength-explain";
@@ -89,11 +89,13 @@ function SchoolRosterCell({
   name,
   mascot,
   recruits,
+  hudlTeamUrl,
 }: {
   href: string;
   name: string;
   mascot: string | null;
   recruits: InlineRecruit[];
+  hudlTeamUrl?: string | null;
 }) {
   return (
     <details name="rankings-roster" className="group w-full">
@@ -104,14 +106,25 @@ function SchoolRosterCell({
         >
           <ChevronRight className="size-3.5 transition-transform group-open:rotate-90" />
         </span>
-        <Link
-          href={href}
-          className="pt-0.5 font-sans font-medium text-zinc-100 hover:text-amber-300"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {name}
-          {mascot ? <span className="ml-2 font-normal text-zinc-400">{mascot}</span> : null}
-        </Link>
+        <span className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 pt-0.5">
+          <Link
+            href={href}
+            className="font-sans font-medium text-zinc-100 hover:text-amber-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {name}
+            {mascot ? <span className="ml-2 font-normal text-zinc-400">{mascot}</span> : null}
+          </Link>
+          {hudlTeamUrl ? (
+            <HudlTeamLink
+              href={hudlTeamUrl}
+              className="text-xs"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Hudl
+            </HudlTeamLink>
+          ) : null}
+        </span>
       </summary>
       <div className="mt-2 ml-7 max-h-[min(28rem,70vh)] overflow-y-auto whitespace-normal border-t border-amber-400/30 pt-2">
         <p className="mb-2 font-sans text-xs text-zinc-400">
@@ -211,6 +224,7 @@ export function RankingsTable({
                       name={row.school.name}
                       mascot={row.school.mascot}
                       recruits={recruits}
+                      hudlTeamUrl={row.school.hudlTeamUrl}
                     />
                   </td>
                   <td className="p-2 align-top font-sans whitespace-nowrap text-zinc-300">
@@ -285,6 +299,7 @@ export function RankingsTable({
                     name={row.school.name}
                     mascot={row.school.mascot}
                     recruits={recruits}
+                    hudlTeamUrl={row.school.hudlTeamUrl}
                   />
                 </div>
               </div>

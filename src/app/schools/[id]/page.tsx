@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { HudlTeamLink } from "@/components/profile-links";
 import { RecruitList } from "@/components/recruit-list";
 import { SchoolScheduleTable } from "@/components/school-schedule";
 import { SeasonHistory } from "@/components/season-history";
@@ -193,14 +194,7 @@ export default async function SchoolPage({
             </a>
           ) : null}
           {school.hudlTeamUrl ? (
-            <a
-              href={school.hudlTeamUrl}
-              className="text-amber-300/90 hover:underline"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Hudl team
-            </a>
+            <HudlTeamLink href={school.hudlTeamUrl}>Hudl team</HudlTeamLink>
           ) : null}
         </p>
       ) : null}
