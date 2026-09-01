@@ -5,6 +5,7 @@ import { loadDataset, resolveOpponentHref } from "@/lib/data";
 import { formatGameResult, formatScheduleDate, siteLabel } from "@/lib/format";
 import { TOUGHNESS_DESCRIPTION, TOUGHNESS_SHORT } from "@/lib/toughness";
 import { GameToughnessButton, ToughnessExplainButton } from "@/components/toughness-explain";
+import { WatchLinks } from "@/components/profile-links";
 
 const TOUGHNESS: Record<Exclude<ToughnessIcon, "unknown">, { className: string; Icon: typeof Equal }> = {
   much_easier: { className: "text-emerald-400", Icon: ChevronsDown },
@@ -44,6 +45,7 @@ export function SchoolScheduleTable({
 }) {
   if (!schedule.games.length) return null;
   const dataset = loadDataset();
+  const showWatch = schedule.games.some((g) => g.texanLiveUrl || g.nfhsUrl);
 
   return (
     <div>
@@ -55,6 +57,7 @@ export function SchoolScheduleTable({
               <th className="h-10 px-3 font-medium">Opponent</th>
               <th className="h-10 px-3 font-medium">Site</th>
               <th className="h-10 px-3 font-medium">Result</th>
+              {showWatch ? <th className="h-10 px-3 font-medium">Watch</th> : null}
               <th className="h-10 px-3 text-center font-medium">
                 <span className="inline-flex items-center justify-center gap-0.5">
                   Tough
@@ -103,6 +106,11 @@ export function SchoolScheduleTable({
                       formatGameResult(g.result, g.score, g.oppScore)
                     )}
                   </td>
+                  {showWatch ? (
+                    <td className="px-3 py-2 font-sans">
+                      <WatchLinks texanLiveUrl={g.texanLiveUrl} nfhsUrl={g.nfhsUrl} />
+                    </td>
+                  ) : null}
                   <td className="px-3 py-2 text-center">
                     {g.toughnessIcon === "unknown" ? null : (
                       <GameToughnessButton

@@ -224,6 +224,10 @@ export type ScheduleGame = {
   oppScore: number | null;
   maxprepsGameUrl: string | null;
   toughnessIcon: ToughnessIcon;
+  /** Texan Live event page when the contest is in broadcast-games.tsv. Never invented. */
+  texanLiveUrl?: string | null;
+  /** NFHS Network event page when the contest is in broadcast-games.tsv. Never invented. */
+  nfhsUrl?: string | null;
 };
 
 export type SchoolSchedule = {

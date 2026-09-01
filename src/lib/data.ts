@@ -14,12 +14,13 @@ import type {
 import { competitiveTalent, normalizeSchoolName, rankSchools, ratingsBySource, slugify } from "./ranking";
 import { schoolWithinZipRadius, venueWithinZipRadius } from "./geo";
 import { applyHudlTeamOverlay } from "./hudl-teams";
+import { applyBroadcastOverlay } from "./broadcast-games";
 import { profileLinksForPlayer } from "./profile-links";
 
 export const loadDataset = cache((): FridayRadarDataset => {
   const path = join(process.cwd(), "data", "fridayradar.json");
   const raw = JSON.parse(readFileSync(path, "utf8")) as FridayRadarDataset;
-  return applyHudlTeamOverlay(withUnrankedOpponents(raw));
+  return applyBroadcastOverlay(applyHudlTeamOverlay(withUnrankedOpponents(raw)));
 });
 
 export function schoolMap(dataset: FridayRadarDataset): Map<string, School> {

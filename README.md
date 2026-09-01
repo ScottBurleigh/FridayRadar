@@ -84,6 +84,8 @@ Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live u
 
 Verified Hudl athlete profiles join from `site-data/hudl-map.tsv` (`id`, `school_id`, `hudl_athlete_id`) and optional team pages from `site-data/hudl-teams.tsv`. Payload `id` is a Scout UUID; apply/import strip existing Hudl then overlay. Missing map ids omit the chip. Re-apply with `python3 scripts/apply-hudl.py` then `npm run import:site`. Do not invent Hudl URLs.
 
+Verified Texan Live / NFHS watch pages join from `site-data/broadcast-games.tsv` on `contest_id` only (a contest may have both sources). The overlay stamps every school schedule row sharing that contestId — home and away pages, not only the TSV `school_id` column. Unmatched contests omit the chip. Do not invent watch URLs.
+
 School ids are slugs (`fl-bradenton-img-academy`). Game ids are MaxPreps `contestId`.
 
 ## Source URLs

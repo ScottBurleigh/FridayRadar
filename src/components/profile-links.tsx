@@ -26,6 +26,38 @@ export function HudlTeamLink({
   );
 }
 
+/** Texan Live / NFHS chips. Only render when a verified URL exists. */
+export function WatchLinks({
+  texanLiveUrl,
+  nfhsUrl,
+  className = "",
+}: {
+  texanLiveUrl?: string | null;
+  nfhsUrl?: string | null;
+  className?: string;
+}) {
+  const links: { label: string; href: string }[] = [];
+  if (texanLiveUrl) links.push({ label: "Texan Live", href: texanLiveUrl });
+  if (nfhsUrl) links.push({ label: "NFHS", href: nfhsUrl });
+  if (!links.length) return null;
+  return (
+    <span className={`inline-flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs ${className}`.trim()}>
+      {links.map((link, i) => (
+        <span key={link.label} className="inline-flex items-center gap-x-2">
+          {i > 0 ? (
+            <span className="select-none text-zinc-500" aria-hidden="true">
+              ·
+            </span>
+          ) : null}
+          <HudlTeamLink href={link.href} className="text-xs">
+            {link.label}
+          </HudlTeamLink>
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export function ProfileLinks({
   links,
   className = "",

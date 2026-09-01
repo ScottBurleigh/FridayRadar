@@ -53,6 +53,10 @@ Scout already scored the frozen 2027/2028 ingest (247Sports composite + On3/Riva
 
 Sidecar join only. `hudl-map.tsv` columns: `id` (Scout payload UUID), `school_id`, `hudl_athlete_id`. `hudl-teams.tsv` columns: `school_id`, `hudl_team_url` (fan.hudl.com boys-varsity-football). Apply/import strip existing Hudl athlete urls/ids first, then overlay. Duplicate payload rows that share an athlete id both get the chip. Unmatched ids are omitted. `python3 scripts/apply-hudl.py` writes derived `hudl.json` and merges onto `schools.json`; the importer joins the TSV sidecars again so a Scout recompile does not invent URLs.
 
+### `broadcast-games.tsv`
+
+Sidecar join on `contest_id` only. Columns: `contest_id`, `school_id`, `date`, `home_name`, `away_name`, `source` (`texanlive` | `nfhs`), `url`. A contest may have both sources. Overlay stamps every school schedule row with that contestId (home and away), not only the TSV `school_id`. Unmatched contests omit the chip. Never invent a URL.
+
 ## Official talent
 
 Average available stars across `247sports_composite`, `on3_rivals` (else `on3_industry`, never both), ESPN. Interpolate onto 5=98, 4=85, 3=70, 2=55, 1=40, listed=25. School talent = sum of 2027+ points.
