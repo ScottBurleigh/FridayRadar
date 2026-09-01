@@ -213,6 +213,7 @@ function withUnrankedOpponents(dataset: FridayRadarDataset): FridayRadarDataset 
           oppScore: g.score,
           maxprepsGameUrl: g.maxprepsGameUrl,
           toughnessIcon: "unknown",
+          winProb: g.winProb ?? null,
         };
       })
       .filter((g): g is ScheduleGame => g != null)

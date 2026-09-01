@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ChevronsDown, ChevronDown, Equal, ChevronUp, ChevronsUp } from "lucide-react";
 import type { SchoolSchedule, ToughnessIcon } from "@/lib/types";
 import { loadDataset, resolveOpponentHref } from "@/lib/data";
-import { formatGameResult, formatScheduleDate, siteLabel } from "@/lib/format";
+import { formatGameResult, formatScheduleDate, formatWinPct, siteLabel } from "@/lib/format";
 import { TOUGHNESS_DESCRIPTION, TOUGHNESS_SHORT } from "@/lib/toughness";
 import { GameToughnessButton, ToughnessExplainButton } from "@/components/toughness-explain";
 import { WatchLinks } from "@/components/profile-links";
@@ -46,6 +46,8 @@ export function SchoolScheduleTable({
   if (!schedule.games.length) return null;
   const dataset = loadDataset();
   const showWatch = schedule.games.some((g) => g.texanLiveUrl || g.nfhsUrl);
+  const showWinPct = schedule.games.some((g) => g.winProb != null);
+  const fromOn3 = schedule.scheduleSource === "on3";
 
   return (
     <div>
@@ -57,6 +59,7 @@ export function SchoolScheduleTable({
               <th className="h-10 px-3 font-medium">Opponent</th>
               <th className="h-10 px-3 font-medium">Site</th>
               <th className="h-10 px-3 font-medium">Result</th>
+              {showWinPct ? <th className="h-10 px-3 font-medium">Win%</th> : null}
               {showWatch ? <th className="h-10 px-3 font-medium">Watch</th> : null}
               <th className="h-10 px-3 text-center font-medium">
                 <span className="inline-flex items-center justify-center gap-0.5">
@@ -106,6 +109,11 @@ export function SchoolScheduleTable({
                       formatGameResult(g.result, g.score, g.oppScore)
                     )}
                   </td>
+                  {showWinPct ? (
+                    <td className="px-3 py-2 text-zinc-300">
+                      {formatWinPct(g.winProb) ?? "—"}
+                    </td>
+                  ) : null}
                   {showWatch ? (
                     <td className="px-3 py-2 font-sans">
                       <WatchLinks texanLiveUrl={g.texanLiveUrl} nfhsUrl={g.nfhsUrl} />
@@ -150,6 +158,9 @@ export function SchoolScheduleTable({
       <p className="mt-1 text-xs text-zinc-400">
         Icons compare this team&apos;s strength to the opponent&apos;s. Unmapped opponents
         (no team_strength) skip SOS and show no toughness icon.
+        {fromOn3
+          ? " Slate is from On3 (no MaxPreps schedule on file). Win% is On3's listed probability when present."
+          : null}
       </p>
     </div>
   );

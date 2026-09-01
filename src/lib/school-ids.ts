@@ -37,6 +37,29 @@ const CANONICAL_SCHOOL_ID: Record<string, string> = {
   // Hudl TSV school_id aliases (verified fan.hudl.com team URLs). Unique names.
   "dc-washington-saint-johns-college": "dc-washington-st-john-s-college",
   "nj-montvale-saint-joseph-regional": "nj-montvale-st-joseph-regional",
+  // Gap-fill TSV id → existing board row. Do not invent a school.
+  "pa-haverford-haverford-school": "pa-haverford-the-haverford-school",
+  "fl-miami-carol-city": "fl-opa-locka-miami-carol-city",
+  "oh-warren-warren-g-harding": "oh-warren-harding",
+  "al-hoover-spain-park": "al-birmingham-spain-park",
+  "al-birmingham-a-h-parker": "al-birmingham-parker",
+  "nc-haw-river-southeast-alamance": "nc-graham-southeast-alamance",
+  "tx-arlington-mansfield-timberview": "tx-mansfield-mansfield-timberview",
+  "md-forestville-bishop-mcnamara": "md-district-heights-bishop-mcnamara",
+  "ca-fresno-clovis-west": "ca-hanford-clovis-west",
+  "tx-iowa-colony-iowa-colony": "tx-rosharon-iowa-colony",
+  "tx-woodlands-woodlands-college-park": "tx-the-woodlands-college-park",
+  "nj-lawrenceville-lawrenceville-school": "nj-lawrenceville-the-lawrenceville-school",
+  "hi-kapaa-kapaa": "hi-kapa-a-kapa-a",
+  "ny-melville-saint-anthonys": "ny-long-island-city-st-anthony-s",
+  "az-glendale-sandra-day-oconnor": "az-glendale-sandra-day-o-connor",
+  "ca-mountain-view-saint-francis": "ca-mountain-view-st-francis",
+  "il-chicago-saint-rita-of-cascia": "il-chicago-st-rita-of-cascia",
+  "la-covington-saint-pauls": "la-covington-st-paul-s",
+  "la-new-orleans-john-curtis": "la-river-ridge-john-curtis",
+  "ma-danvers-saint-johns-prep": "ma-danvers-st-john-s-prep",
+  "mo-saint-louis-christian-brothers-college": "mo-st-louis-christian-brothers-college",
+  "mo-saint-louis-de-smet-jesuit": "mo-st-louis-de-smet-jesuit",
   // Do NOT alias ca-san-mateo-junipero-serra onto Gardena Serra — different cities.
 };
 

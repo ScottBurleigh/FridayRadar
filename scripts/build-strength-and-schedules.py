@@ -603,9 +603,32 @@ CANONICAL_SCHOOL_IDS = {
     "fl-jacksonville-bolles-school": "fl-jacksonville-the-bolles-school",
     "dc-washington-saint-johns-college": "dc-washington-st-john-s-college",
     "nj-montvale-saint-joseph-regional": "nj-montvale-st-joseph-regional",
-    # Do not alias tx-na-the-woodlands-college-park-high-school onto College Park —
-    # The Woodlands HS (tx-the-woodlands-the-woodlands) is a different campus.
+    "pa-haverford-haverford-school": "pa-haverford-the-haverford-school",
+    "fl-miami-carol-city": "fl-opa-locka-miami-carol-city",
+    "oh-warren-warren-g-harding": "oh-warren-harding",
+    "al-hoover-spain-park": "al-birmingham-spain-park",
+    "al-birmingham-a-h-parker": "al-birmingham-parker",
+    "nc-haw-river-southeast-alamance": "nc-graham-southeast-alamance",
+    "tx-arlington-mansfield-timberview": "tx-mansfield-mansfield-timberview",
+    "md-forestville-bishop-mcnamara": "md-district-heights-bishop-mcnamara",
+    "ca-fresno-clovis-west": "ca-hanford-clovis-west",
+    "tx-iowa-colony-iowa-colony": "tx-rosharon-iowa-colony",
+    "tx-woodlands-woodlands-college-park": "tx-the-woodlands-college-park",
+    "nj-lawrenceville-lawrenceville-school": "nj-lawrenceville-the-lawrenceville-school",
+    "hi-kapaa-kapaa": "hi-kapa-a-kapa-a",
+    "ny-melville-saint-anthonys": "ny-long-island-city-st-anthony-s",
+    "az-glendale-sandra-day-oconnor": "az-glendale-sandra-day-o-connor",
+    "ca-mountain-view-saint-francis": "ca-mountain-view-st-francis",
+    "il-chicago-saint-rita-of-cascia": "il-chicago-st-rita-of-cascia",
+    "la-covington-saint-pauls": "la-covington-st-paul-s",
+    "la-new-orleans-john-curtis": "la-river-ridge-john-curtis",
+    "ma-danvers-saint-johns-prep": "ma-danvers-st-john-s-prep",
+    "mo-saint-louis-christian-brothers-college": "mo-st-louis-christian-brothers-college",
+    "mo-saint-louis-de-smet-jesuit": "mo-st-louis-de-smet-jesuit",
+    # Do not alias The Woodlands HS onto College Park — different campuses.
     # Do not alias ca-san-mateo-junipero-serra onto Gardena Serra.
+    # Do not alias ga-conyers-heritage onto ga-ringgold-heritage — different cities.
+    # Do not alias ca-stockton-edison onto Huntington Beach Edison.
 }
 
 # Duplicates, wrong MaxPreps ids, or no 26-27 varsity slate. Do not attach
@@ -1246,6 +1269,9 @@ def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
         school["sos"] = sos
         school["sos_games"] = len(known)
         school["schedule_games"] = len(row.get("games") or [])
+        if not row.get("schedule_source"):
+            url = (row.get("schedule_url") or "")
+            row["schedule_source"] = "on3" if "on3.com" in url else "maxpreps"
     sos_vals = sorted(
         s["sos"] for s in schools if s.get("sos") is not None and (s.get("sos_games") or 0) >= 2
     )
@@ -1564,11 +1590,14 @@ def attach_schedule_row(
     page_url: str | None,
     by_mp: dict,
     by_st_nn: dict,
+    *,
+    source: str = "maxpreps",
 ) -> dict:
     mp = school.get("maxpreps") or {}
-    sched_url = mp.get("scheduleUrl") or page_url
-    if page_url and not mp.get("scheduleUrl"):
-        mp["scheduleUrl"] = page_url
+    sched_url = page_url or mp.get("scheduleUrl")
+    if source == "maxpreps" and sched_url and str(sched_url).startswith("https://www.maxpreps.com/"):
+        sched_url = to_schedule_url(sched_url)
+        mp["scheduleUrl"] = sched_url
         school["maxpreps"] = mp
     kept = []
     for g in games:
@@ -1600,10 +1629,425 @@ def attach_schedule_row(
         "as_of": AS_OF,
         "team_strength": school.get("team_strength"),
         "schedule_url": sched_url,
+        "schedule_source": source,
         "sos": sos,
         "sos_games": len(known),
         "games": kept,
     }
+
+
+GAP_TSV = SITE / "maxpreps-gap-resolutions.tsv"
+ON3_SCHED_HEADERS = {
+    "User-Agent": UA["User-Agent"],
+    "Accept": "application/json",
+    "Origin": "https://www.on3.com",
+    "Referer": "https://www.on3.com/",
+}
+
+
+def load_gap_resolutions() -> list[dict]:
+    """Verified MaxPreps schedule URLs only. Never invent a path."""
+    path = GAP_TSV if GAP_TSV.exists() else IMPORT / "maxpreps-gap-resolutions.tsv"
+    if not path.exists():
+        return []
+    lines = path.read_text().splitlines()
+    if not lines:
+        return []
+    header = lines[0].split("\t")
+    if header[:5] != ["fr_school_id", "maxpreps_url", "school_id", "method", "games_count"]:
+        print(f"gap TSV bad header {header[:5]}", flush=True)
+        return []
+    rows = []
+    seen = set()
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        cols = line.split("\t")
+        if len(cols) < 5:
+            continue
+        sid = (cols[0] or "").strip()
+        url = (cols[1] or "").strip()
+        mp_id = (cols[2] or "").strip()
+        method = (cols[3] or "").strip()
+        if not sid or not url:
+            continue
+        if not url.startswith("https://www.maxpreps.com/") or "/football/schedule" not in url:
+            print(f"  skip non-maxpreps URL {sid}", flush=True)
+            continue
+        url = to_schedule_url(url)
+        key = (canonical_school_id(sid), url)
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(
+            {
+                "fr_school_id": sid,
+                "maxpreps_url": url,
+                "school_id": mp_id,
+                "method": method,
+            }
+        )
+    return rows
+
+
+def stamp_maxpreps_from_gap(school: dict, url: str, mp_id: str) -> None:
+    """Write verified MaxPreps ids/URLs onto the school. Do not invent slugs."""
+    mp = dict(school.get("maxpreps") or {})
+    if mp_id:
+        mp["schoolId"] = mp_id
+    mp["scheduleUrl"] = url
+    path = urllib.parse.urlparse(url).path.rstrip("/")
+    path = re.sub(r"/football/schedule$", "", path)
+    if path and not mp.get("canonicalUrl"):
+        mp["canonicalUrl"] = "https://www.maxpreps.com" + path + "/"
+    if path and not mp.get("footballUrl"):
+        mp["footballUrl"] = "https://www.maxpreps.com" + path + "/football/"
+    school["maxpreps"] = mp
+
+
+def apply_maxpreps_gapfill(schools: list[dict], schedules: dict[str, dict]) -> int:
+    """Fetch TSV MaxPreps URLs live. Existing MaxPreps stays unless this TSV row hits that school.
+
+    Overwrites an On3 fallback for the same school. Skips TSV ids with no board row
+    (never invent a school). Does not steal another school's MaxPreps UUID.
+    """
+    rows = load_gap_resolutions()
+    by_id = {s["id"]: s for s in schools}
+    uuid_owner: dict[str, str] = {}
+    for s in schools:
+        uid = ((s.get("maxpreps") or {}).get("schoolId") or "").lower()
+        if uid:
+            uuid_owner.setdefault(uid, s["id"])
+    print(f"gapfill TSV {len(rows)} verified MaxPreps URLs", flush=True)
+    if not rows:
+        return 0
+    by_mp, by_st_nn = opponent_indexes(schools)
+    added = 0
+    skipped = 0
+    for rec in rows:
+        raw_id = rec["fr_school_id"]
+        sid = canonical_school_id(raw_id)
+        school = by_id.get(sid)
+        if not school:
+            print(f"  skip unknown school {raw_id}", flush=True)
+            skipped += 1
+            continue
+        if sid in SKIP_SCHEDULE_IDS:
+            print(f"  skip alias/skip-list {sid}", flush=True)
+            skipped += 1
+            continue
+        mp_id = rec["school_id"]
+        owner = uuid_owner.get(mp_id.lower()) if mp_id else None
+        if owner and owner != sid:
+            print(f"  skip uuid owned by {owner} not {sid}", flush=True)
+            skipped += 1
+            continue
+        existing = schedules.get(sid)
+        existing_src = (existing or {}).get("schedule_source") or (
+            "maxpreps" if existing else None
+        )
+        url = rec["maxpreps_url"]
+        stamp_maxpreps_from_gap(school, url, mp_id)
+        hit = fetch_schedule_html(url, school, trust=True)
+        if not hit:
+            print(f"  fetch miss {sid} {url}", flush=True)
+            skipped += 1
+            continue
+        games, page_url = hit
+        if not games:
+            print(f"  empty contests {sid}", flush=True)
+            skipped += 1
+            continue
+        if mp_id:
+            uuid_owner[mp_id.lower()] = sid
+        schedules[sid] = attach_schedule_row(
+            school, games, page_url or url, by_mp, by_st_nn, source="maxpreps"
+        )
+        added += 1
+        print(f"  maxpreps {sid} {len(games)} games (was {existing_src})", flush=True)
+    print(f"gapfill attached {added} MaxPreps slates, skipped {skipped}", flush=True)
+    return added
+
+
+def _on3_org_name(org: dict | None) -> str:
+    if not isinstance(org, dict):
+        return ""
+    return (org.get("name") or org.get("fullName") or "").strip()
+
+
+def parse_on3_schedule(payload: dict, org_key) -> list[dict]:
+    """Map On3 v2 organization schedule rows. Scores only when final. Never invent opponents."""
+    games = []
+    seen = set()
+    for it in payload.get("list") or []:
+        if not isinstance(it, dict):
+            continue
+        home = bool(it.get("currentOrgIsHome"))
+        opp_org = it.get("opponentOrganization") or (
+            it.get("awayTeamOrganization") if home else it.get("homeTeamOrganization")
+        )
+        opp_name = _on3_org_name(opp_org)
+        if not opp_name or skip_opponent_name(opp_name):
+            continue
+        cid = it.get("key")
+        key = f"on3-{cid}" if cid is not None else None
+        if key and key in seen:
+            continue
+        if key:
+            seen.add(key)
+        ts = it.get("startDateUtc")
+        date = None
+        kickoff = None
+        if isinstance(ts, (int, float)) and ts > 0:
+            dt = datetime.fromtimestamp(int(ts), tz=timezone.utc)
+            date = dt.strftime("%Y-%m-%d")
+            if it.get("startTime") and str(it.get("startTime")).upper() != "TBD":
+                kickoff = dt.strftime("%Y-%m-%dT%H:%M:%S")
+        elif isinstance(it.get("startDate"), str) and it["startDate"].strip():
+            # On3 lists M/D without year; the request year is 2026.
+            try:
+                md = datetime.strptime(it["startDate"].strip(), "%m/%d")
+                date = f"2026-{md.month:02d}-{md.day:02d}"
+            except ValueError:
+                date = None
+        site = "home" if home else "away"
+        loc = ", ".join(x for x in (it.get("city"), (it.get("state") or "").upper()[:2]) if x) or None
+        is_final = bool(it.get("isFinal")) or str(it.get("status") or "").upper() == "COMPLETED"
+        us_score = it.get("homeTeamScore") if home else it.get("awayTeamScore")
+        opp_score = it.get("awayTeamScore") if home else it.get("homeTeamScore")
+        if not isinstance(us_score, (int, float)):
+            us_score = None
+        if not isinstance(opp_score, (int, float)):
+            opp_score = None
+        result = None
+        if is_final and us_score is not None and opp_score is not None:
+            if it.get("currentOrgIsWinner") is True or us_score > opp_score:
+                result = "W"
+            elif it.get("currentOrgIsWinner") is False or us_score < opp_score:
+                result = "L"
+            else:
+                result = "T"
+        elif not is_final:
+            us_score = None
+            opp_score = None
+        wp = it.get("homeTeamWinProbability") if home else it.get("awayTeamWinProbability")
+        if not isinstance(wp, (int, float)):
+            wp = None
+        slug = (opp_org or {}).get("slug") if isinstance(opp_org, dict) else None
+        games.append(
+            {
+                "contest_id": key,
+                "date": date,
+                "kickoff": kickoff,
+                "home_away": site,
+                "location": loc,
+                "opponent": {
+                    "name": opp_name,
+                    "city": None,
+                    "state": None,
+                    "maxpreps_id": None,
+                    "site_id": None,
+                    "team_strength": None,
+                    "on3_org_key": (opp_org or {}).get("key") if isinstance(opp_org, dict) else None,
+                    "on3_slug": slug,
+                },
+                "result": result,
+                "score": us_score if is_final else None,
+                "opp_score": opp_score if is_final else None,
+                "maxpreps_game_url": None,
+                "toughness_icon": "unknown",
+                "win_prob": round(float(wp), 6) if wp is not None else None,
+            }
+        )
+    games.sort(key=lambda g: g.get("date") or "9999")
+    return games
+
+
+def fetch_on3_schedule(org_key) -> list[dict]:
+    """GET On3 org schedule for 2026. Never invent a URL or opponent."""
+    if org_key is None or org_key == "":
+        return []
+    games: list[dict] = []
+    page = 1
+    while page <= 8:
+        q = urllib.parse.urlencode({"sportKey": 1, "year": 2026, "page": page})
+        url = f"https://api.on3.com/rdb/v2/organizations/{org_key}/schedule?{q}"
+        status, body = http_get(url, timeout=25, headers=ON3_SCHED_HEADERS)
+        if status != 200 or not body:
+            print(f"  on3 schedule fail {org_key} page {page} {status}", flush=True)
+            break
+        try:
+            payload = json.loads(body)
+        except json.JSONDecodeError:
+            break
+        chunk = parse_on3_schedule(payload, org_key)
+        games.extend(chunk)
+        pag = payload.get("pagination") or {}
+        count = pag.get("pageCount") or 1
+        if page >= count or not (payload.get("list") or []):
+            break
+        page += 1
+    return games
+
+
+def load_on3_gap() -> list[dict]:
+    """Verified On3 schedule pages only. Never invent a URL."""
+    path = SITE / "on3-gap-schedules.tsv"
+    if not path.exists():
+        path = IMPORT / "on3-gap-schedules.tsv"
+    if not path.exists():
+        return []
+    lines = path.read_text().splitlines()
+    if not lines:
+        return []
+    header = lines[0].split("\t")
+    if header[:4] != ["fr_school_id", "org_key", "slug", "url"]:
+        print(f"on3 gap TSV bad header {header[:4]}", flush=True)
+        return []
+    rows = []
+    seen = set()
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        cols = line.split("\t")
+        if len(cols) < 4:
+            continue
+        sid = (cols[0] or "").strip()
+        org = (cols[1] or "").strip()
+        slug = (cols[2] or "").strip()
+        url = (cols[3] or "").strip()
+        if not sid or not org or not url:
+            continue
+        if not url.startswith("https://www.on3.com/high-school/"):
+            print(f"  skip non-on3 URL {sid}", flush=True)
+            continue
+        key = canonical_school_id(sid)
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append({"fr_school_id": sid, "org_key": org, "slug": slug, "url": url})
+    return rows
+
+
+def has_maxpreps_slate(row: dict | None) -> bool:
+    if not row:
+        return False
+    src = row.get("schedule_source")
+    if src == "maxpreps":
+        return True
+    if src == "on3":
+        return False
+    url = (row.get("schedule_url") or "")
+    return "maxpreps.com" in url
+
+
+def apply_on3_fallback(schools: list[dict], schedules: dict[str, dict]) -> int:
+    """On3 2026 slate from the TSV, only when that school still has no MaxPreps."""
+    rows = load_on3_gap()
+    by_id = {s["id"]: s for s in schools}
+    print(f"on3-fallback TSV {len(rows)} verified org schedules", flush=True)
+    work: list[tuple[dict, dict]] = []
+    skipped = 0
+    for rec in rows:
+        sid = canonical_school_id(rec["fr_school_id"])
+        school = by_id.get(sid)
+        if not school:
+            print(f"  skip unknown school {rec['fr_school_id']}", flush=True)
+            skipped += 1
+            continue
+        if sid in SKIP_SCHEDULE_IDS:
+            print(f"  skip alias/skip-list {sid}", flush=True)
+            skipped += 1
+            continue
+        if has_maxpreps_slate(schedules.get(sid)):
+            skipped += 1
+            continue
+        work.append((school, rec))
+    print(f"on3-fallback fetching {len(work)} (skipped {skipped} unknown/maxpreps)", flush=True)
+    if not work:
+        return 0
+    by_mp, by_st_nn = opponent_indexes(schools)
+    added = 0
+    fetched: dict[str, list[dict]] = {}
+
+    def one(item: tuple[dict, dict]) -> tuple[str, list[dict]]:
+        school, rec = item
+        return school["id"], fetch_on3_schedule(rec["org_key"])
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        futs = {pool.submit(one, item): item[0]["id"] for item in work}
+        done = 0
+        for fut in as_completed(futs):
+            done += 1
+            try:
+                sid, games = fut.result()
+            except Exception as e:
+                print(f"  on3 fail {futs[fut]}: {e}", flush=True)
+                continue
+            fetched[sid] = games
+            if done % 10 == 0 or done == len(work):
+                ok = sum(1 for g in fetched.values() if g)
+                print(f"  on3 {done}/{len(work)} fetched {ok}", flush=True)
+    for school, rec in work:
+        sid = school["id"]
+        if has_maxpreps_slate(schedules.get(sid)):
+            continue
+        games = fetched.get(sid) or []
+        if not games:
+            print(f"  on3 empty {sid}", flush=True)
+            continue
+        schedules[sid] = attach_schedule_row(
+            school, games, rec["url"], by_mp, by_st_nn, source="on3"
+        )
+        added += 1
+    print(f"on3-fallback attached {added} slates (schedules now {len(schedules)})", flush=True)
+    return added
+
+
+def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
+    """Merge verified MaxPreps TSV (and optional On3 fallback) onto on-disk schedules."""
+    global USE_HTTP_CACHE, AS_OF
+    USE_HTTP_CACHE = False
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    print(f"gapfill as_of {AS_OF} on3_fallback={on3_fallback}", flush=True)
+    schools = json.loads((SITE / "schools.json").read_text())
+    schedules = load_schedules()
+    collapse_canonical_ids(schools, schedules)
+    fill_published_week_zips(schools)
+    apply_maxpreps_gapfill(schools, schedules)
+    if on3_fallback:
+        apply_on3_fallback(schools, schedules)
+    on3_teams = fetch_on3(force=False)
+    n_on3 = len(on3_teams)
+    joined = join_on3(schools, on3_teams)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
+    restamp_schedules(schools, schedules)
+    n_games = slice_v1_games(schools, 196)
+    write_board(
+        schools,
+        schedules,
+        n_on3,
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+        joined_on3=joined,
+    )
+    dest = IMPORT / "maxpreps-gap-resolutions.tsv"
+    if GAP_TSV.exists():
+        dest.write_text(GAP_TSV.read_text())
+    on3_tsv = SITE / "on3-gap-schedules.tsv"
+    if on3_tsv.exists():
+        (IMPORT / "on3-gap-schedules.tsv").write_text(on3_tsv.read_text())
+    print(
+        f"gapfill done schedules {len(schedules)} games "
+        f"{sum(len(r.get('games') or []) for r in schedules.values())} gow {n_games}",
+        flush=True,
+    )
+    return 0
 
 
 def occupied_schedule_paths(schools: list[dict], schedules: dict[str, dict]) -> set[str]:
@@ -1851,6 +2295,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    if "--gapfill" in sys.argv:
+        raise SystemExit(gapfill_from_tsv(on3_fallback="--on3-fallback" in sys.argv))
     if "--full-fetch" in sys.argv:
         raise SystemExit(main())
     fill = "--fill-missing" in sys.argv

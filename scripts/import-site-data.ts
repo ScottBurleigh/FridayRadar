@@ -214,6 +214,7 @@ type SiteScheduleGame = {
   opp_score?: number | null;
   maxpreps_game_url?: string | null;
   toughness_icon?: string;
+  win_prob?: number | null;
 };
 
 type SiteSchedule = {
@@ -221,6 +222,7 @@ type SiteSchedule = {
   season?: string;
   team_strength?: number | null;
   schedule_url?: string | null;
+  schedule_source?: "maxpreps" | "on3" | string | null;
   sos?: number | null;
   sos_games?: number | null;
   games?: SiteScheduleGame[];
@@ -289,13 +291,16 @@ function mapSchedule(id: string, row: SiteSchedule): SchoolSchedule {
       oppScore: g.opp_score ?? null,
       maxprepsGameUrl: g.maxpreps_game_url ?? null,
       toughnessIcon: asToughness(g.toughness_icon),
+      winProb: typeof g.win_prob === "number" ? g.win_prob : null,
     });
   }
+  const source = row.schedule_source === "on3" ? "on3" : row.schedule_source === "maxpreps" ? "maxpreps" : null;
   return {
     schoolId: row.school_id || id,
     season: row.season || "26-27",
     teamStrength: row.team_strength ?? null,
     scheduleUrl: row.schedule_url ?? null,
+    scheduleSource: source ?? (row.schedule_url?.includes("on3.com") ? "on3" : "maxpreps"),
     sos: row.sos ?? null,
     sosGames: row.sos_games ?? 0,
     games,

@@ -228,6 +228,8 @@ export type ScheduleGame = {
   texanLiveUrl?: string | null;
   /** NFHS Network event page when the contest is in broadcast-games.tsv. Never invented. */
   nfhsUrl?: string | null;
+  /** On3 win probability 0–1 when the slate is from On3. Absent on MaxPreps rows. */
+  winProb?: number | null;
 };
 
 export type SchoolSchedule = {
@@ -235,6 +237,8 @@ export type SchoolSchedule = {
   season: string;
   teamStrength: number | null;
   scheduleUrl: string | null;
+  /** maxpreps when the slate is from MaxPreps; on3 only when no MaxPreps exists. */
+  scheduleSource?: "maxpreps" | "on3" | null;
   sos: number | null;
   sosGames: number;
   games: ScheduleGame[];

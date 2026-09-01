@@ -218,8 +218,9 @@ export default async function SchoolPage({
             {schedule.season} football schedule
           </h2>
           <p className="mt-1 text-sm text-zinc-400">
-            MaxPreps 26-27 contests for this team. Deleted rows and Varsity Opponent placeholders
-            are omitted. Toughness is this team versus the opponent, not combined talent.
+            {schedule.scheduleSource === "on3"
+              ? "On3 2026 contests for this team — no MaxPreps slate on file. Win% is On3's listed win probability when present. Deleted rows and Varsity Opponent placeholders are omitted."
+              : "MaxPreps 26-27 contests for this team. Deleted rows and Varsity Opponent placeholders are omitted. Toughness is this team versus the opponent, not combined talent."}
           </p>
           <div className="mt-4">
             <SchoolScheduleTable schedule={schedule} schoolName={school.name} />

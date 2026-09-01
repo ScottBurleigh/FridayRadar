@@ -95,6 +95,13 @@ export function formatGameResult(
   return "—";
 }
 
+export function formatWinPct(p: number | null | undefined): string | null {
+  if (p == null || Number.isNaN(p)) return null;
+  const pct = p <= 1 ? p * 100 : p;
+  if (pct < 0 || pct > 100) return null;
+  return `${Math.round(pct)}%`;
+}
+
 export function siteLabel(homeAway: string): string {
   if (homeAway === "away") return "Away";
   if (homeAway === "neutral") return "Neutral";
