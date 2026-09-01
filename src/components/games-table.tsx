@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { RankedGame } from "@/lib/data";
-import { formatKickoff, formatTalent } from "@/lib/format";
+import { formatGameResult, formatKickoff, formatTalent } from "@/lib/format";
 import type { Game, School } from "@/lib/types";
 
 function SchoolName({ school, mapped }: { school: School; mapped: boolean }) {
@@ -48,6 +48,12 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
               <TableHead className="text-zinc-300">Matchup</TableHead>
               <TableHead className="text-right text-zinc-300">Away rec / talent</TableHead>
               <TableHead className="text-right text-zinc-300">Home rec / talent</TableHead>
+              <TableHead className="text-right text-zinc-300">
+                Score
+                <span className="block text-[10px] font-normal uppercase tracking-wide text-zinc-500">
+                  away–home
+                </span>
+              </TableHead>
               <TableHead className="text-right text-zinc-300">Combined</TableHead>
               <TableHead className="text-zinc-300">Site</TableHead>
             </TableRow>
@@ -69,6 +75,9 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
                 </TableCell>
                 <TableCell className="text-right text-zinc-300">
                   {row.homeRecruits} / {formatTalent(row.homeTalent)}
+                </TableCell>
+                <TableCell className="text-right font-sans text-zinc-100">
+                  {formatGameResult(null, row.game.away_score, row.game.home_score)}
                 </TableCell>
                 <TableCell className="text-right font-semibold text-amber-200">
                   {formatTalent(row.combined)}
@@ -98,6 +107,14 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
               <span className="px-2 text-zinc-600">@</span>
               <SchoolName school={row.home} mapped={row.homeMapped} />
             </p>
+            {formatGameResult(null, row.game.away_score, row.game.home_score) !== "—" ? (
+              <p className="mt-1 font-mono text-sm text-amber-200">
+                {formatGameResult(null, row.game.away_score, row.game.home_score)}
+                <span className="ml-2 text-[10px] font-sans uppercase tracking-wide text-zinc-500">
+                  away–home
+                </span>
+              </p>
+            ) : null}
             <p className="mt-1 text-sm text-zinc-400">
               {venueLabel(row.game)}
             </p>

@@ -511,17 +511,33 @@ function dedupedContests(
   return out;
 }
 
+function scoresFromScheduleView(g: ScheduleGame): {
+  home_score: number | null;
+  away_score: number | null;
+} {
+  /** Home row: this school's score is home. Away/neutral-as-away: this school's score is away.
+   * Never invent: missing schedule scores stay null.
+   */
+  const ours = g.score ?? null;
+  const theirs = g.oppScore ?? null;
+  if (g.homeAway === "home") {
+    return { home_score: ours, away_score: theirs };
+  }
+  return { home_score: theirs, away_score: ours };
+}
+
 function buildScheduleGame(contest: ResolvedContest): Game {
   const { g } = contest;
   const { city, state } = parseLocation(g.location);
+  const { home_score, away_score } = scoresFromScheduleView(g);
   return {
     id: g.contestId ?? `${contest.homeId}-${contest.awayId}-${g.date ?? ""}`,
     season: "",
     kickoff: g.kickoff,
     home_school_id: contest.homeId,
     away_school_id: contest.awayId,
-    home_score: null,
-    away_score: null,
+    home_score,
+    away_score,
     is_gow: false,
     game_url: g.maxprepsGameUrl,
     city,
