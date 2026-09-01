@@ -226,6 +226,27 @@ type SiteSchedule = {
   games?: SiteScheduleGame[];
 };
 
+/** Wrapped dump from build-strength-and-schedules.py: `{ as_of, season, schools }`. */
+type SiteScheduleDump = {
+  as_of?: string;
+  season?: string;
+  schools: Record<string, SiteSchedule>;
+};
+
+function isSiteScheduleDump(raw: unknown): raw is SiteScheduleDump {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return false;
+  const rec = raw as Record<string, unknown>;
+  if (!("as_of" in rec || "season" in rec)) return false;
+  const schools = rec.schools;
+  return !!schools && typeof schools === "object" && !Array.isArray(schools);
+}
+
+function siteScheduleMap(
+  raw: Record<string, SiteSchedule> | SiteScheduleDump,
+): Record<string, SiteSchedule> {
+  return isSiteScheduleDump(raw) ? raw.schools : raw;
+}
+
 const TOUGHNESS = new Set<ToughnessIcon>([
   "much_harder",
   "harder",
@@ -724,19 +745,9 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
 
   const schedulesPath = join(dir, "schedules.json");
   const siteSchedulesRaw = existsSync(schedulesPath)
-    ? await readJson<
-        | Record<string, SiteSchedule>
-        | { as_of?: string; season?: string; schools: Record<string, SiteSchedule> }
-      >(schedulesPath)
-    : {};
-  const siteSchedules: Record<string, SiteSchedule> =
-    siteSchedulesRaw &&
-    typeof siteSchedulesRaw === "object" &&
-    "schools" in siteSchedulesRaw &&
-    siteSchedulesRaw.schools &&
-    ("as_of" in siteSchedulesRaw || "season" in siteSchedulesRaw)
-      ? siteSchedulesRaw.schools
-      : (siteSchedulesRaw as Record<string, SiteSchedule>);
+    ? await readJson<Record<string, SiteSchedule> | SiteScheduleDump>(schedulesPath)
+    : ({} as Record<string, SiteSchedule>);
+  const siteSchedules: Record<string, SiteSchedule> = siteScheduleMap(siteSchedulesRaw);
 
   const historyPath = join(ROOT, "data/raw/maxpreps/season-history.json");
   const seasonHistory = existsSync(historyPath)
