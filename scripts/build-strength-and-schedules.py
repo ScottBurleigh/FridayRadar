@@ -1727,6 +1727,7 @@ def attach_schedule_row(
 
 GAP_TSV = SITE / "maxpreps-gap-resolutions.tsv"
 MISSING_TSV = SITE / "maxpreps-missing-schedules.tsv"
+ON3_EMPTY_TSV = SITE / "on3-empty-fills.tsv"
 ON3_SCHED_HEADERS = {
     "User-Agent": UA["User-Agent"],
     "Accept": "application/json",
@@ -1870,7 +1871,9 @@ def fill_on3_from_crosswalk(schools: list[dict], on3_teams: list[dict]) -> int:
     return n
 
 
-def stamp_maxpreps_from_gap(school: dict, url: str, mp_id: str) -> None:
+def stamp_maxpreps_from_gap(
+    school: dict, url: str, mp_id: str, *, overwrite_urls: bool = False
+) -> None:
     """Write verified MaxPreps ids/URLs onto the school. Do not invent slugs."""
     mp = dict(school.get("maxpreps") or {})
     if mp_id:
@@ -1878,9 +1881,9 @@ def stamp_maxpreps_from_gap(school: dict, url: str, mp_id: str) -> None:
     mp["scheduleUrl"] = url
     path = urllib.parse.urlparse(url).path.rstrip("/")
     path = re.sub(r"/football/schedule$", "", path)
-    if path and not mp.get("canonicalUrl"):
+    if path and (overwrite_urls or not mp.get("canonicalUrl")):
         mp["canonicalUrl"] = "https://www.maxpreps.com" + path + "/"
-    if path and not mp.get("footballUrl"):
+    if path and (overwrite_urls or not mp.get("footballUrl")):
         mp["footballUrl"] = "https://www.maxpreps.com" + path + "/football/"
     school["maxpreps"] = mp
 
@@ -2245,6 +2248,226 @@ def apply_on3_fallback(schools: list[dict], schedules: dict[str, dict]) -> int:
     return added
 
 
+def stored_on3_schedule_url(school: dict) -> str | None:
+    """On3 schedule URL from stored slug + org_key. Never guessed."""
+    on3 = school.get("on3") or {}
+    slug = (on3.get("slug") or "").strip()
+    org = on3.get("org_key")
+    if not slug or org is None or slug.startswith("-"):
+        return None
+    return f"https://www.on3.com/high-school/{slug}-{org}/football/schedule/"
+
+
+def load_on3_empty_fills() -> list[dict]:
+    """Explicit On3-empty board rows: MaxPreps slate or On3 API. Never invent URLs."""
+    path = ON3_EMPTY_TSV
+    if not path.exists():
+        path = IMPORT / "on3-empty-fills.tsv"
+    if not path.exists():
+        return []
+    lines = path.read_text().splitlines()
+    if not lines:
+        return []
+    header = [h.strip() for h in lines[0].split("\t")]
+    want = ["fr_school_id", "source", "maxpreps_url", "school_id", "on3_org"]
+    if header[:5] != want:
+        print(f"on3-empty TSV bad header {header[:5]}", flush=True)
+        return []
+    rows = []
+    seen = set()
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        cols = line.split("\t")
+        while len(cols) < 5:
+            cols.append("")
+        sid = (cols[0] or "").strip()
+        source = (cols[1] or "").strip().lower()
+        url = (cols[2] or "").strip()
+        mp_id = (cols[3] or "").strip()
+        org = (cols[4] or "").strip()
+        if not sid or source not in ("maxpreps", "on3"):
+            continue
+        if url:
+            if not url.startswith("https://www.maxpreps.com/") or "/football/schedule" not in url:
+                print(f"  skip non-maxpreps URL {sid}", flush=True)
+                continue
+            url = to_schedule_url(url)
+        elif source == "maxpreps":
+            print(f"  skip maxpreps row with no URL {sid}", flush=True)
+            continue
+        key = canonical_school_id(sid)
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(
+            {
+                "fr_school_id": sid,
+                "source": source,
+                "maxpreps_url": url,
+                "school_id": mp_id,
+                "on3_org": org,
+            }
+        )
+    return rows
+
+
+def fill_on3_empty_schools(schools: list[dict], schedules: dict[str, dict]) -> int:
+    """Fill On3-linked board rows that still have no slate.
+
+    MaxPreps URLs are fetched live under the empty id (sibling UUID reuse is
+    intentional). Cannon/Papillion use the On3 2026 API; Cannon also keeps a
+    MaxPreps link. Do not invent opponents, scores, or MaxPreps paths.
+    """
+    rows = load_on3_empty_fills()
+    by_id = {s["id"]: s for s in schools}
+    print(f"on3-empty TSV {len(rows)} rows", flush=True)
+    if not rows:
+        return 0
+    by_mp, by_st_nn = opponent_indexes(schools)
+    mp_work: list[tuple[dict, dict]] = []
+    on3_work: list[tuple[dict, dict]] = []
+    skipped = 0
+    for rec in rows:
+        sid = canonical_school_id(rec["fr_school_id"])
+        school = by_id.get(sid)
+        if not school:
+            print(f"  skip unknown school {rec['fr_school_id']}", flush=True)
+            skipped += 1
+            continue
+        if rec["source"] == "maxpreps":
+            mp_work.append((school, rec))
+        else:
+            on3_work.append((school, rec))
+
+    added = 0
+    fetched_mp: dict[str, tuple] = {}
+
+    def fetch_mp(item: tuple[dict, dict]):
+        school, rec = item
+        stamp_maxpreps_from_gap(
+            school, rec["maxpreps_url"], rec["school_id"], overwrite_urls=True
+        )
+        return school["id"], fetch_schedule_html(rec["maxpreps_url"], school, trust=True)
+
+    if mp_work:
+        with ThreadPoolExecutor(max_workers=5) as pool:
+            futs = {pool.submit(fetch_mp, item): item[0]["id"] for item in mp_work}
+            for fut in as_completed(futs):
+                try:
+                    sid, hit = fut.result()
+                except Exception as e:
+                    print(f"  maxpreps fail {futs[fut]}: {e}", flush=True)
+                    continue
+                fetched_mp[sid] = hit
+
+    for school, rec in mp_work:
+        sid = school["id"]
+        hit = fetched_mp.get(sid)
+        if not hit:
+            print(f"  fetch miss {sid} {rec['maxpreps_url']}", flush=True)
+            skipped += 1
+            continue
+        games, page_url = hit
+        if not games:
+            print(f"  empty contests {sid}", flush=True)
+            skipped += 1
+            continue
+        school.pop("_page_maxpreps_id", None)
+        schedules[sid] = attach_schedule_row(
+            school, games, page_url or rec["maxpreps_url"], by_mp, by_st_nn, source="maxpreps"
+        )
+        added += 1
+        print(f"  maxpreps {sid} {len(games)} games", flush=True)
+
+    fetched_on3: dict[str, list[dict]] = {}
+
+    def fetch_on3_one(item: tuple[dict, dict]):
+        school, rec = item
+        org = rec["on3_org"] or (school.get("on3") or {}).get("org_key")
+        return school["id"], fetch_on3_schedule(org)
+
+    if on3_work:
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futs = {pool.submit(fetch_on3_one, item): item[0]["id"] for item in on3_work}
+            for fut in as_completed(futs):
+                try:
+                    sid, games = fut.result()
+                except Exception as e:
+                    print(f"  on3 fail {futs[fut]}: {e}", flush=True)
+                    continue
+                fetched_on3[sid] = games
+
+    for school, rec in on3_work:
+        sid = school["id"]
+        if rec["maxpreps_url"]:
+            stamp_maxpreps_from_gap(
+                school, rec["maxpreps_url"], rec["school_id"], overwrite_urls=True
+            )
+        games = fetched_on3.get(sid) or []
+        if not games:
+            print(f"  on3 empty {sid}", flush=True)
+            skipped += 1
+            continue
+        page_url = stored_on3_schedule_url(school)
+        if not page_url:
+            print(f"  on3 no stored slug/url {sid}", flush=True)
+            skipped += 1
+            continue
+        schedules[sid] = attach_schedule_row(
+            school, games, page_url, by_mp, by_st_nn, source="on3"
+        )
+        added += 1
+        print(f"  on3 {sid} {len(games)} games", flush=True)
+
+    print(
+        f"on3-empty attached {added} slates, skipped {skipped} (schedules now {len(schedules)})",
+        flush=True,
+    )
+    return added
+
+
+def fill_on3_empty_from_tsv() -> int:
+    """Merge the On3-empty TSV onto on-disk schedules. Does not re-fetch the board."""
+    global USE_HTTP_CACHE, AS_OF
+    USE_HTTP_CACHE = False
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    print(f"on3-empty fill as_of {AS_OF}", flush=True)
+    schools = json.loads((SITE / "schools.json").read_text())
+    schedules = load_schedules()
+    collapse_canonical_ids(schools, schedules)
+    fill_published_week_zips(schools)
+    fill_on3_empty_schools(schools, schedules)
+    on3_teams = fetch_on3(force=False)
+    n_on3 = len(on3_teams)
+    joined = join_on3(schools, on3_teams)
+    fill_on3_from_crosswalk(schools, on3_teams)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
+    restamp_schedules(schools, schedules)
+    n_games = slice_v1_games(schools, 196)
+    write_board(
+        schools,
+        schedules,
+        n_on3,
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+        joined_on3=joined,
+    )
+    if ON3_EMPTY_TSV.exists():
+        (IMPORT / "on3-empty-fills.tsv").write_text(ON3_EMPTY_TSV.read_text())
+    print(
+        f"on3-empty done schedules {len(schedules)} games "
+        f"{sum(len(r.get('games') or []) for r in schedules.values())} gow {n_games}",
+        flush=True,
+    )
+    return 0
+
+
 def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
     """Merge verified MaxPreps TSV (and optional On3 fallback) onto on-disk schedules."""
     global USE_HTTP_CACHE, AS_OF
@@ -2258,6 +2481,7 @@ def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
     apply_maxpreps_gapfill(schools, schedules)
     if on3_fallback:
         apply_on3_fallback(schools, schedules)
+    fill_on3_empty_schools(schools, schedules)
     on3_teams = fetch_on3(force=False)
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
@@ -2286,6 +2510,8 @@ def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
     on3_tsv = SITE / "on3-gap-schedules.tsv"
     if on3_tsv.exists():
         (IMPORT / "on3-gap-schedules.tsv").write_text(on3_tsv.read_text())
+    if ON3_EMPTY_TSV.exists():
+        (IMPORT / "on3-empty-fills.tsv").write_text(ON3_EMPTY_TSV.read_text())
     print(
         f"gapfill done schedules {len(schedules)} games "
         f"{sum(len(r.get('games') or []) for r in schedules.values())} gow {n_games}",
@@ -2540,6 +2766,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    if "--fill-on3-empty" in sys.argv:
+        raise SystemExit(fill_on3_empty_from_tsv())
     if "--gapfill" in sys.argv:
         raise SystemExit(gapfill_from_tsv(on3_fallback="--on3-fallback" in sys.argv))
     if "--full-fetch" in sys.argv:
