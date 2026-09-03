@@ -625,6 +625,82 @@ CANONICAL_SCHOOL_IDS = {
     "ma-danvers-saint-johns-prep": "ma-danvers-st-john-s-prep",
     "mo-saint-louis-christian-brothers-college": "mo-st-louis-christian-brothers-college",
     "mo-saint-louis-de-smet-jesuit": "mo-st-louis-de-smet-jesuit",
+    "al-fairhope-saint-michael-catholic": "al-fairhope-st-michael-catholic",
+    "al-odenville-saint-clair-county": "al-odenville-st-clair-county",
+    "al-prichard-vigor": "al-mobile-vigor",
+    "tx-colony-colony": "tx-the-colony-the-colony",
+    "tx-waco-robinson": "tx-robinson-robinson",
+    "tx-woodlands-college-park": "tx-the-woodlands-college-park",
+    "tx-arlington-martin": "tx-arlington-arlington-martin",
+    "tx-houston-cypress-falls": "tx-houston-cy-falls",
+    "ca-bellflower-crean-lutheran": "ca-irvine-crean-lutheran",
+    "ca-downey-saint-pius-x-saint-matthias-academy": "ca-downey-st-pius-x-st-matthias-academy",
+    "ca-inglewood-inglewood": "ca-los-angeles-inglewood",
+    "ca-long-beach-long-beach-polytechnic": "ca-long-beach-long-beach-poly",
+    "ca-oneals-minarets": "ca-o-neals-minarets",
+    "ca-san-diego-saint-augustine": "ca-san-diego-st-augustine",
+    "ca-santa-monica-saint-monica-catholic": "ca-santa-monica-st-monica-catholic",
+    "ca-stockton-saint-marys": "ca-stockton-st-mary-s",
+    "ca-ventura-saint-bonaventure": "ca-ventura-st-bonaventure",
+    "ct-oakdale-saint-thomas-more": "ct-oakdale-st-thomas-more",
+    "ct-trumbull-saint-joseph": "ct-trumbull-st-joseph",
+    "fl-boca-raton-saint-andrews": "fl-boca-raton-saint-andrew-s",
+    "fl-fort-pierce-vero-beach": "fl-vero-beach-vero-beach",
+    "fl-lake-minneola-first-academy": "fl-orlando-the-first-academy",
+    "fl-miami-columbus": "fl-miami-miami-columbus",
+    "fl-miami-miami-carol-city": "fl-opa-locka-miami-carol-city",
+    "fl-miramar-saint-thomas-aquinas": "fl-fort-lauderdale-saint-thomas-aquinas",
+    "fl-orlando-first-academy": "fl-orlando-the-first-academy",
+    "fl-pembroke-pines-chaminade-madonna": "fl-hollywood-chaminade-madonna",
+    "fl-saint-petersburg-gibbs": "fl-st-petersburg-gibbs",
+    "fl-saint-petersburg-northside-christian": "fl-st-petersburg-northside-christian",
+    "fl-tampa-armwood": "fl-seffner-armwood",
+    "fl-villages-villages-charter": "fl-the-villages-the-villages-charter",
+    "ga-atlanta-creekside": "ga-fairburn-creekside",
+    "ga-atlanta-douglas-county": "ga-douglasville-douglas-county",
+    "ga-college-park-woodward-academy": "ga-atlanta-woodward-academy",
+    "ga-roswell-blessed-trinity": "ga-roswell-blessed-trinity-catholic",
+    "ga-warner-robins-houston-county": "ga-macon-houston-county",
+    "hi-honolulu-saint-louis": "hi-honolulu-st-louis-school",
+    "hi-honolulu-saint-louis-school": "hi-honolulu-st-louis-school",
+    "il-chicago-saint-patrick": "il-chicago-st-patrick",
+    "il-evergreen-park-saint-laurence": "il-evergreen-park-st-laurence",
+    "il-lombard-montini-catholic": "il-arlington-heights-montini-catholic",
+    "il-oak-lawn-brother-rice": "il-chicago-brother-rice",
+    "il-saint-joseph-saint-joseph-ogden": "il-st-joseph-st-joseph-ogden",
+    "la-cecilia-cecilia": "la-carencro-cecilia",
+    "la-new-orleans-saint-augustine": "la-new-orleans-st-augustine",
+    "la-saint-francisville-west-feliciana": "la-st-francisville-west-feliciana",
+    "ma-reading-tabor-academy": "ma-marion-tabor-academy",
+    "md-baltimore-saint-pauls-school": "md-baltimore-st-paul-s-school",
+    "mo-kansas-city-saint-pius-x": "mo-kansas-city-st-pius-x",
+    "mo-lees-summit-lees-summit-north": "mo-lee-s-summit-lee-s-summit-north",
+    "mo-lees-summit-lees-summit-west": "mo-lee-s-summit-lee-s-summit-west",
+    "mo-saint-louis-cardinal-ritter-college-prep": "mo-st-louis-cardinal-ritter-college-prep",
+    "mo-saint-louis-ladue-horton-watkins": "mo-st-louis-ladue-horton-watkins",
+    "mo-saint-louis-lindbergh": "mo-st-louis-lindbergh",
+    "mo-saint-louis-ritenour": "mo-st-louis-ritenour",
+    "ms-diberville-diberville": "ms-d-iberville-d-iberville",
+    "ms-tigers-winona-winona": "ms-winona-winona",
+    "nc-saint-pauls-saint-pauls": "nc-st-pauls-st-pauls",
+    "ne-hastings-saint-cecilia": "ne-hastings-st-cecilia",
+    "nj-richland-saint-augustine-prep": "nj-richland-st-augustine-prep",
+    "ny-hamburg-saint-francis": "ny-hamburg-st-francis",
+    "ny-long-island-city-saint-anthonys": "ny-long-island-city-st-anthony-s",
+    "oh-cincinnati-saint-xavier": "oh-cincinnati-st-xavier",
+    "oh-cleveland-saint-ignatius": "oh-cleveland-st-ignatius",
+    "oh-cleveland-villa-angela-saint-joseph": "oh-cleveland-villa-angela-st-joseph",
+    "oh-columbus-saint-francis-de-sales": "oh-columbus-st-francis-de-sales",
+    "oh-lakewood-saint-edward": "oh-lakewood-st-edward",
+    "oh-massillon-washington": "oh-massillon-massillon-washington",
+    "oh-saint-clairsville-saint-clairsville": "oh-st-clairsville-st-clairsville",
+    "pa-philadelphia-la-salle-college": "pa-wyndmoor-la-salle-college",
+    "pa-philadelphia-saint-josephs-prep": "pa-philadelphia-st-joseph-s-prep",
+    "pa-springfield-cardinal-ohara": "pa-springfield-cardinal-o-hara",
+    "pa-upper-saint-clair-upper-saint-clair": "pa-upper-st-clair-upper-st-clair",
+    "sc-saint-stephen-timberland": "sc-st-stephen-timberland",
+    "va-suffolk-kings-fork": "va-suffolk-king-s-fork",
+    "wa-seattle-odea": "wa-seattle-o-dea",
     # Do not alias The Woodlands HS onto College Park — different campuses.
     # Do not alias ca-san-mateo-junipero-serra onto Gardena Serra.
     # Do not alias ga-conyers-heritage onto ga-ringgold-heritage — different cities.
@@ -898,6 +974,9 @@ def fetch_schedule_html(
     games, page_url = parse_contests(pp, page_mp, url)
     if not games:
         return None
+    live_id = page_maxpreps_school_id(pp, page_url or url)
+    if live_id:
+        school["_page_maxpreps_id"] = live_id
     return games, page_url or url
 
 
@@ -1192,7 +1271,17 @@ def apply_strength(
                 "slug": on3.get("slug"),
             }
         else:
-            s.pop("on3", None)
+            stored = s.get("on3") or {}
+            if stored.get("org_key") is not None and stored.get("slug"):
+                rating = stored.get("rating")
+                s["on3"] = {
+                    "rank": stored.get("rank"),
+                    "rating": round(rating, 3) if isinstance(rating, (int, float)) else None,
+                    "org_key": stored.get("org_key"),
+                    "slug": stored.get("slug"),
+                }
+            else:
+                s.pop("on3", None)
         if mp_rank is not None:
             s["maxpreps_national"] = {"rank": int(mp_rank)}
         else:
@@ -1476,9 +1565,7 @@ def write_crosswalk(schools: list[dict], joined_on3: dict[str, dict]) -> None:
                 names.append(n)
         mp_id = (s.get("maxpreps") or {}).get("schoolId") or None
         on3 = joined_on3.get(sid) or s.get("on3") or {}
-        on3_key = on3.get("org_key") if on3.get("rank") is not None else None
-        if sid not in joined_on3:
-            on3_key = None
+        on3_key = on3.get("org_key")
         hs_247 = (s.get("ids_247") or {}).get("high_school_id") or None
         hudl = hudl_ids.get(sid) if sid in school_ids else None
         sources = {
@@ -1536,6 +1623,8 @@ def write_board(
     dctf_joined: int = 0,
     joined_on3: dict[str, dict] | None = None,
 ) -> None:
+    for s in schools:
+        s.pop("_page_maxpreps_id", None)
     payload_schools = json.dumps(schools)
     wrapped = {"as_of": AS_OF, "season": SEASON, "schools": schedules}
     payload_sched = json.dumps(wrapped)
@@ -1637,6 +1726,7 @@ def attach_schedule_row(
 
 
 GAP_TSV = SITE / "maxpreps-gap-resolutions.tsv"
+MISSING_TSV = SITE / "maxpreps-missing-schedules.tsv"
 ON3_SCHED_HEADERS = {
     "User-Agent": UA["User-Agent"],
     "Accept": "application/json",
@@ -1645,30 +1735,38 @@ ON3_SCHED_HEADERS = {
 }
 
 
-def load_gap_resolutions() -> list[dict]:
-    """Verified MaxPreps schedule URLs only. Never invent a path."""
-    path = GAP_TSV if GAP_TSV.exists() else IMPORT / "maxpreps-gap-resolutions.tsv"
+def _parse_maxpreps_gap_tsv(path: Path) -> list[dict]:
+    """Verified MaxPreps schedule URLs only. Never invent a path.
+
+    Accepts the 5-column gap-resolutions header (school_id, method) and the
+    3-column missing-schedules header (fr_school_id, maxpreps_url, games_count).
+    """
     if not path.exists():
         return []
     lines = path.read_text().splitlines()
     if not lines:
         return []
-    header = lines[0].split("\t")
-    if header[:5] != ["fr_school_id", "maxpreps_url", "school_id", "method", "games_count"]:
-        print(f"gap TSV bad header {header[:5]}", flush=True)
+    header = [h.strip() for h in lines[0].split("\t")]
+    try:
+        i_id = header.index("fr_school_id")
+        i_url = header.index("maxpreps_url")
+    except ValueError:
+        print(f"gap TSV bad header {path.name} {header[:5]}", flush=True)
         return []
+    i_sid = header.index("school_id") if "school_id" in header else None
+    i_method = header.index("method") if "method" in header else None
     rows = []
     seen = set()
     for line in lines[1:]:
         if not line.strip():
             continue
         cols = line.split("\t")
-        if len(cols) < 5:
+        if max(i_id, i_url) >= len(cols):
             continue
-        sid = (cols[0] or "").strip()
-        url = (cols[1] or "").strip()
-        mp_id = (cols[2] or "").strip()
-        method = (cols[3] or "").strip()
+        sid = (cols[i_id] or "").strip()
+        url = (cols[i_url] or "").strip()
+        mp_id = (cols[i_sid] or "").strip() if i_sid is not None and i_sid < len(cols) else ""
+        method = (cols[i_method] or "").strip() if i_method is not None and i_method < len(cols) else ""
         if not sid or not url:
             continue
         if not url.startswith("https://www.maxpreps.com/") or "/football/schedule" not in url:
@@ -1688,6 +1786,88 @@ def load_gap_resolutions() -> list[dict]:
             }
         )
     return rows
+
+
+def load_gap_resolutions() -> list[dict]:
+    """Verified MaxPreps schedule URLs only. Never invent a path."""
+    rows = []
+    seen = set()
+    seen_names: set[str] = set()
+    for path in (
+        GAP_TSV,
+        MISSING_TSV,
+        IMPORT / "maxpreps-gap-resolutions.tsv",
+        IMPORT / "maxpreps-missing-schedules.tsv",
+    ):
+        if not path.exists() or path.name in seen_names:
+            continue
+        seen_names.add(path.name)
+        for rec in _parse_maxpreps_gap_tsv(path):
+            key = (canonical_school_id(rec["fr_school_id"]), rec["maxpreps_url"])
+            if key in seen:
+                continue
+            seen.add(key)
+            rows.append(rec)
+    return rows
+
+
+def page_maxpreps_school_id(pp: dict, page_url: str | None) -> str | None:
+    """MaxPreps UUID for the team on this schedule page. Never guessed."""
+    team_root = _page_team_root(page_url)
+    if not team_root:
+        return None
+    root = pp.get("pageProps") or pp
+    for row in root.get("contests") or []:
+        if not isinstance(row, list) or not row:
+            continue
+        teams = row[0] if isinstance(row[0], list) else []
+        for t in teams:
+            if not isinstance(t, list):
+                continue
+            parsed = parse_team(t)
+            if not parsed:
+                continue
+            u = (parsed.get("url") or "").lower()
+            if team_root in u and parsed.get("mp_id"):
+                return parsed["mp_id"]
+    return None
+
+
+def fill_on3_from_crosswalk(schools: list[dict], on3_teams: list[dict]) -> int:
+    """If school.on3 is null, copy org_key from the crosswalk and slug from the
+    On3 national payload for that key. Never invent a slug.
+    """
+    cw_path = SITE / "schools-crosswalk.json"
+    if not cw_path.exists():
+        cw_path = IMPORT / "schools-crosswalk.json"
+    cw = {}
+    if cw_path.exists():
+        cw = json.loads(cw_path.read_text()).get("schools") or {}
+    by_org = {t.get("org_key"): t for t in on3_teams if t.get("org_key") is not None}
+    n = 0
+    for s in schools:
+        stored = s.get("on3") or {}
+        if stored.get("org_key") is not None and stored.get("slug"):
+            continue
+        sid = s["id"]
+        org = stored.get("org_key")
+        if org is None:
+            org = ((cw.get(sid) or {}).get("sources") or {}).get("on3")
+        if org is None:
+            continue
+        team = by_org.get(org)
+        slug = stored.get("slug") or ((team or {}).get("slug") if team else None)
+        if not slug:
+            continue
+        s["on3"] = {
+            "org_key": org,
+            "slug": slug,
+            "rank": (team or {}).get("rank") if team else stored.get("rank"),
+            "rating": (team or {}).get("rating") if team else stored.get("rating"),
+        }
+        n += 1
+    print(f"on3 crosswalk-link fill {n} schools", flush=True)
+    return n
 
 
 def stamp_maxpreps_from_gap(school: dict, url: str, mp_id: str) -> None:
@@ -1721,9 +1901,14 @@ def apply_maxpreps_gapfill(schools: list[dict], schedules: dict[str, dict]) -> i
     print(f"gapfill TSV {len(rows)} verified MaxPreps URLs", flush=True)
     if not rows:
         return 0
+    priority = "tx-missouri-city-fort-bend-ridge-point"
+    rows.sort(key=lambda r: 0 if canonical_school_id(r["fr_school_id"]) == priority else 1)
     by_mp, by_st_nn = opponent_indexes(schools)
     added = 0
     skipped = 0
+    kept = 0
+    work: list[tuple[dict, dict, str, str, str | None]] = []
+    seen_sid: set[str] = set()
     for rec in rows:
         raw_id = rec["fr_school_id"]
         sid = canonical_school_id(raw_id)
@@ -1736,28 +1921,46 @@ def apply_maxpreps_gapfill(schools: list[dict], schedules: dict[str, dict]) -> i
             print(f"  skip alias/skip-list {sid}", flush=True)
             skipped += 1
             continue
-        mp_id = rec["school_id"]
-        owner = uuid_owner.get(mp_id.lower()) if mp_id else None
-        if owner and owner != sid:
-            print(f"  skip uuid owned by {owner} not {sid}", flush=True)
-            skipped += 1
+        if sid in seen_sid:
             continue
+        seen_sid.add(sid)
         existing = schedules.get(sid)
         existing_src = (existing or {}).get("schedule_source") or (
             "maxpreps" if existing else None
         )
+        if has_maxpreps_slate(existing):
+            kept += 1
+            continue
+        mp_id = rec["school_id"]
+        owner = uuid_owner.get(mp_id.lower()) if mp_id else None
+        if owner and owner != sid:
+            print(f"  omit uuid owned by {owner} not {sid}", flush=True)
+            mp_id = ""
         url = rec["maxpreps_url"]
-        stamp_maxpreps_from_gap(school, url, mp_id)
-        hit = fetch_schedule_html(url, school, trust=True)
+        work.append((school, rec, url, mp_id, existing_src))
+
+    def attach_hit(school: dict, url: str, mp_id: str, hit, existing_src: str | None) -> bool:
+        nonlocal added, skipped
+        sid = school["id"]
         if not hit:
             print(f"  fetch miss {sid} {url}", flush=True)
             skipped += 1
-            continue
+            return False
         games, page_url = hit
         if not games:
             print(f"  empty contests {sid}", flush=True)
             skipped += 1
-            continue
+            return False
+        live_id = school.pop("_page_maxpreps_id", None)
+        if not mp_id and live_id:
+            owner = uuid_owner.get(live_id.lower())
+            if owner and owner != sid:
+                print(f"  omit live uuid owned by {owner} not {sid}", flush=True)
+            else:
+                mp_id = live_id
+                stamp_maxpreps_from_gap(school, page_url or url, mp_id)
+        else:
+            school.pop("_page_maxpreps_id", None)
         if mp_id:
             uuid_owner[mp_id.lower()] = sid
         schedules[sid] = attach_schedule_row(
@@ -1765,7 +1968,45 @@ def apply_maxpreps_gapfill(schools: list[dict], schedules: dict[str, dict]) -> i
         )
         added += 1
         print(f"  maxpreps {sid} {len(games)} games (was {existing_src})", flush=True)
-    print(f"gapfill attached {added} MaxPreps slates, skipped {skipped}", flush=True)
+        return True
+
+    # Ridge Point first so the school page table can be verified before the rest.
+    rest = []
+    for item in work:
+        school, rec, url, mp_id, existing_src = item
+        stamp_maxpreps_from_gap(school, url, mp_id)
+        if school["id"] == priority:
+            attach_hit(school, url, mp_id, fetch_schedule_html(url, school, trust=True), existing_src)
+        else:
+            rest.append(item)
+
+    def one(item: tuple[dict, dict, str, str, str | None]):
+        school, rec, url, mp_id, existing_src = item
+        return school["id"], fetch_schedule_html(url, school, trust=True)
+
+    fetched: dict[str, tuple] = {}
+    if rest:
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            futs = {pool.submit(one, item): item[0]["id"] for item in rest}
+            done = 0
+            for fut in as_completed(futs):
+                done += 1
+                try:
+                    sid, hit = fut.result()
+                except Exception as e:
+                    print(f"  fetch fail {futs[fut]}: {e}", flush=True)
+                    continue
+                fetched[sid] = hit
+                if done % 25 == 0 or done == len(rest):
+                    print(f"  fetched {done}/{len(rest)}", flush=True)
+        by_work = {item[0]["id"]: item for item in rest}
+        for sid, item in by_work.items():
+            school, rec, url, mp_id, existing_src = item
+            attach_hit(school, url, mp_id, fetched.get(sid), existing_src)
+    print(
+        f"gapfill attached {added} MaxPreps slates, kept {kept} existing, skipped {skipped}",
+        flush=True,
+    )
     return added
 
 
@@ -2020,6 +2261,7 @@ def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
     on3_teams = fetch_on3(force=False)
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
+    fill_on3_from_crosswalk(schools, on3_teams)
     joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
     joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
@@ -2039,6 +2281,8 @@ def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
     dest = IMPORT / "maxpreps-gap-resolutions.tsv"
     if GAP_TSV.exists():
         dest.write_text(GAP_TSV.read_text())
+    if MISSING_TSV.exists():
+        (IMPORT / "maxpreps-missing-schedules.tsv").write_text(MISSING_TSV.read_text())
     on3_tsv = SITE / "on3-gap-schedules.tsv"
     if on3_tsv.exists():
         (IMPORT / "on3-gap-schedules.tsv").write_text(on3_tsv.read_text())
@@ -2147,6 +2391,7 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
     on3_teams = fetch_on3(force=not USE_HTTP_CACHE)
     n_on3 = len(on3_teams)
     joined = join_on3(schools, on3_teams)
+    fill_on3_from_crosswalk(schools, on3_teams)
     joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
     joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)

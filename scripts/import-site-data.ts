@@ -373,6 +373,18 @@ function footballSeasonFromGames(file: SiteGamesFile): string {
   return "26-27";
 }
 
+function siteOn3(raw: SiteSchool["on3"]): School["on3"] {
+  const orgKey = raw?.org_key ?? null;
+  const slug = (raw?.slug || "").trim() || null;
+  if (orgKey == null || !slug) return null;
+  return {
+    rank: raw?.rank ?? null,
+    rating: raw?.rating ?? null,
+    orgKey,
+    slug,
+  };
+}
+
 function siteMaxPreps(mp: SiteSchool["maxpreps"]): School["maxpreps"] {
   if (!mp?.schoolId) return null;
   const schedule = (mp.scheduleUrl || "").trim();
@@ -803,14 +815,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       mapped: row.mapped !== false,
       teamStrength: row.team_strength ?? null,
       hudlTeamUrl: row.hudl_team_url ?? null,
-      on3: row.on3?.rank != null
-        ? {
-            rank: row.on3.rank,
-            rating: row.on3.rating ?? null,
-            orgKey: row.on3.org_key ?? null,
-            slug: row.on3.slug ?? null,
-          }
-        : null,
+      on3: siteOn3(row.on3),
       maxprepsNational: row.maxpreps_national?.rank != null
         ? { rank: row.maxpreps_national.rank }
         : null,

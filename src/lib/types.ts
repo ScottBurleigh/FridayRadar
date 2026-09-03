@@ -67,7 +67,7 @@ export type School = {
   /** Public fan.hudl.com boys-varsity-football page when verified. Never invented. */
   hudlTeamUrl?: string | null;
   on3?: {
-    rank: number;
+    rank?: number | null;
     rating: number | null;
     orgKey?: string | number | null;
     slug?: string | null;
