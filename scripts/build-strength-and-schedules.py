@@ -17,7 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +30,8 @@ CACHE = Path("/tmp/fridayradar-sched-cache")
 # Live restamp must not replay Aug 25 HTML. --full-fetch sets this False.
 USE_HTTP_CACHE = True
 AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+# school_id -> "W-L" captured from a live MaxPreps schedule page (26-27 standings).
+PAGE_STANDINGS: dict[str, str] = {}
 UA = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -158,7 +160,16 @@ def fetch_on3(*, force: bool = False) -> list[dict]:
             }
         )
         url = "https://api.on3.com/rdb/v1/organization-composite-rankings?" + q
-        status, body = http_get(url, timeout=25)
+        status, body = http_get(
+            url,
+            timeout=25,
+            headers={
+                "User-Agent": UA["User-Agent"],
+                "Accept": "application/json, text/plain, */*",
+                "Origin": "https://www.on3.com",
+                "Referer": "https://www.on3.com/",
+            },
+        )
         if status != 200 or not body:
             print(f"on3 page {page} fail {status}")
             continue
@@ -945,6 +956,17 @@ def page_matches_school(pp: dict, school: dict) -> bool:
     return False
 
 
+def parse_standings_26_27(pp: dict) -> str | None:
+    """Overall W-L from the schedule page's standingsData. Never invented."""
+    tc = pp.get("teamContext") or {}
+    node = tc.get("standingsData") or {}
+    overall = node.get("overallStanding") or {}
+    rec = overall.get("overallWinLossTies")
+    if isinstance(rec, str) and RECORD_RE.match(rec.strip()):
+        return rec.strip()
+    return None
+
+
 def fetch_schedule_html(
     url: str, school: dict, *, trust: bool = False
 ) -> tuple[list[dict], str | None] | None:
@@ -968,6 +990,9 @@ def fetch_schedule_html(
             )
     if not pp:
         return None
+    rec = parse_standings_26_27(pp)
+    if rec and school.get("id"):
+        PAGE_STANDINGS[school["id"]] = rec
     if not trust and not page_matches_school(pp, school):
         return None
     page_mp = ((school.get("maxpreps") or {}).get("schoolId") or "").lower() or None
@@ -1634,7 +1659,10 @@ def write_board(
         (dest / "schedules.json").write_text(payload_sched)
     summary_path = SITE / "schools.summary.json"
     summary = json.loads(summary_path.read_text()) if summary_path.exists() else {}
-    n_games = len(json.loads((SITE / "games-top213.json").read_text()).get("games") or [])
+    gow = json.loads((SITE / "games-top213.json").read_text()) if (SITE / "games-top213.json").exists() else {}
+    n_games = len(gow.get("games") or [])
+    week_start = gow.get("week_start") or "2026-08-26"
+    week_end = gow.get("week_end") or "2026-08-29"
     n_played = 0
     for row in schedules.values():
         for g in row.get("games") or []:
@@ -1662,7 +1690,7 @@ def write_board(
             "note": (
                 "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. "
                 f"v1 /games is games-top213.json ({n_games} two-sided games, 0 partial) "
-                "for 2026-08-26..2026-08-29 ranked by geometric mean of home/away talent. "
+                f"for {week_start}..{week_end} ranked by geometric mean of home/away talent. "
                 "Never load games.json. "
                 f"MaxPreps 26-27 schedules restamped {AS_OF}."
             ),
@@ -2604,6 +2632,402 @@ def fill_missing_schedules(schools: list[dict], schedules: dict[str, dict]) -> i
     return added
 
 
+def scored_game_count(schedules: dict[str, dict]) -> int:
+    n = 0
+    for row in schedules.values():
+        for g in row.get("games") or []:
+            if g.get("result") in ("W", "L", "T") or g.get("score") is not None:
+                n += 1
+    return n
+
+
+def current_gow_week(today: date | None = None) -> tuple[str, str]:
+    """Wed–Sat window aligned to the original Matchup week 2026-08-26..29."""
+    today = today or datetime.now(timezone.utc).date()
+    anchor = date(2026, 8, 26)
+    weeks = (today - anchor).days // 7
+    start = anchor + timedelta(days=weeks * 7)
+    end = start + timedelta(days=3)
+    return start.isoformat(), end.isoformat()
+
+
+def merge_standings_into_history(captured: dict[str, str]) -> int:
+    """Write live 26-27 W-L onto season-history.json. Other seasons stay as stored."""
+    if not captured:
+        return 0
+    payload = {}
+    if RAW_HISTORY.exists():
+        try:
+            payload = json.loads(RAW_HISTORY.read_text())
+        except json.JSONDecodeError:
+            payload = {}
+    records = dict(payload.get("records") or {})
+    n = 0
+    for sid, rec in captured.items():
+        row = dict(records.get(sid) or {})
+        if row.get("26-27") != rec:
+            n += 1
+        row["26-27"] = rec
+        records[sid] = row
+    payload["source"] = payload.get("source") or "maxpreps_team_schedule_standings"
+    payload["seasons"] = payload.get("seasons") or ["26-27", "25-26", "24-25", "23-24", "22-23"]
+    payload["count"] = len(records)
+    payload["records"] = records
+    RAW_HISTORY.parent.mkdir(parents=True, exist_ok=True)
+    RAW_HISTORY.write_text(json.dumps(payload, indent=0))
+    print(f"season-history 26-27 updated {n} / captured {len(captured)}", flush=True)
+    return n
+
+
+def rebuild_gow_from_schedules(
+    schools: list[dict],
+    schedules: dict[str, dict],
+    week_start: str,
+    week_end: str,
+    limit: int = 196,
+) -> int:
+    """Two-sided week slate from refreshed schedules. Never invents opponents or scores."""
+    by_id = {s["id"]: s for s in schools}
+    centroids = {}
+    if (ROOT / "data/zip-centroids.json").exists():
+        centroids = json.loads((ROOT / "data/zip-centroids.json").read_text())
+    by_contest: dict[str, list[tuple[str, dict]]] = {}
+    for sid, row in schedules.items():
+        if sid not in by_id:
+            continue
+        for g in row.get("games") or []:
+            day = (g.get("date") or (g.get("kickoff") or "")[:10] or "")
+            if not day or day < week_start or day > week_end:
+                continue
+            opp = g.get("opponent") or {}
+            if skip_opponent_name(opp.get("name")):
+                continue
+            oid = opp.get("site_id")
+            if not oid or oid not in by_id:
+                continue
+            key = g.get("contest_id") or f"{day}|{'|'.join(sorted([sid, oid]))}"
+            by_contest.setdefault(key, []).append((sid, g))
+
+    built: list[dict] = []
+    for key, rows in by_contest.items():
+        home_row = next((r for r in rows if r[1].get("home_away") == "home"), None)
+        away_row = next((r for r in rows if r[1].get("home_away") == "away"), None)
+        if home_row:
+            home_id = home_row[0]
+            away_id = (home_row[1].get("opponent") or {}).get("site_id") or (
+                away_row[0] if away_row else None
+            )
+            chosen = home_row[1]
+        elif away_row:
+            away_id = away_row[0]
+            home_id = (away_row[1].get("opponent") or {}).get("site_id")
+            chosen = away_row[1]
+        else:
+            first = rows[0]
+            away_id = first[0]
+            home_id = (first[1].get("opponent") or {}).get("site_id")
+            chosen = first[1]
+        if not home_id or not away_id or home_id == away_id:
+            continue
+        home_sch = by_id.get(home_id)
+        away_sch = by_id.get(away_id)
+        if not home_sch or not away_sch:
+            continue
+        ht = float(home_sch.get("talent_score") or 0)
+        at = float(away_sch.get("talent_score") or 0)
+        if ht <= 0 or at <= 0:
+            continue
+        ha = chosen.get("home_away")
+        ours = chosen.get("score")
+        theirs = chosen.get("opp_score")
+        if ha == "home":
+            home_score, away_score = ours, theirs
+        else:
+            home_score, away_score = theirs, ours
+        kick = chosen.get("kickoff")
+        tba = not kick or bool(re.search(r"T00:00:00", str(kick)))
+        loc = chosen.get("location") or ""
+        loc_city = loc_state = None
+        if isinstance(loc, str) and loc.strip():
+            parts = [p.strip() for p in loc.split(",") if p.strip()]
+            if len(parts) >= 2:
+                loc_city, loc_state = parts[0], parts[-1]
+            elif parts:
+                loc_city = parts[0]
+        is_neutral = ha == "neutral"
+        home_side = {
+            "maxpreps_id": ((home_sch.get("maxpreps") or {}).get("schoolId")),
+            "site_id": home_id,
+            "name": home_sch.get("name"),
+            "city": home_sch.get("city"),
+            "state": home_sch.get("state"),
+            "zip": home_sch.get("zip"),
+            "talent_score": home_sch.get("talent_score") or 0,
+            "mapped": True,
+        }
+        away_side = {
+            "maxpreps_id": ((away_sch.get("maxpreps") or {}).get("schoolId")),
+            "site_id": away_id,
+            "name": away_sch.get("name"),
+            "city": away_sch.get("city"),
+            "state": away_sch.get("state"),
+            "zip": away_sch.get("zip"),
+            "talent_score": away_sch.get("talent_score") or 0,
+            "mapped": True,
+        }
+        game = {
+            "contest_id": chosen.get("contest_id") or key,
+            "maxpreps_game_url": chosen.get("maxpreps_game_url"),
+            "kickoff_local": kick,
+            "is_neutral": is_neutral,
+            "home": home_side,
+            "away": away_side,
+            "combined_talent": round(ht + at, 2),
+            "two_sided_talent": round((ht * at) ** 0.5, 2),
+            "mapped_sides": 2,
+            "home_score": home_score,
+            "away_score": away_score,
+            "is_time_tba": tba,
+            "venue": {
+                "city": loc_city or home_sch.get("city"),
+                "state": loc_state or home_sch.get("state"),
+                "zip": None,
+                "lat": home_sch.get("lat") if not is_neutral else None,
+                "lng": home_sch.get("lng") if not is_neutral else None,
+                "name": home_sch.get("name"),
+                "source": "home_school",
+            },
+            "location": loc or None,
+        }
+        stamp_venue_zip(game, by_id, centroids)
+        if not (game.get("venue") or {}).get("zip"):
+            continue
+        built.append(game)
+
+    built.sort(
+        key=lambda g: (
+            -(g.get("two_sided_talent") or 0),
+            -(g.get("combined_talent") or 0),
+            (g.get("home") or {}).get("name") or "",
+            (g.get("away") or {}).get("name") or "",
+        )
+    )
+    picked = built[:limit]
+    payload = {
+        "week_start": week_start,
+        "week_end": week_end,
+        "rank_by": "two_sided_talent",
+        "games": picked,
+    }
+    raw = json.dumps(payload)
+    for dest in (SITE, IMPORT):
+        dest.mkdir(parents=True, exist_ok=True)
+        (dest / "games-top213.json").write_text(raw)
+    print(
+        f"gow {week_start}..{week_end} two-sided {len(built)} wrote {len(picked)}",
+        flush=True,
+    )
+    return len(picked)
+
+
+def refresh_existing_maxpreps(
+    schools: list[dict], schedules: dict[str, dict]
+) -> tuple[int, int, list[str]]:
+    """Refetch live MaxPreps 26-27 pages for schools that already have a MaxPreps URL.
+
+    Keeps the on-disk row when the live fetch is empty or fails. Does not search
+    for new schools. Replacing an On3 slate requires at least 2 live MaxPreps games.
+    """
+    by_id = {s["id"]: s for s in schools}
+    by_mp, by_st_nn = opponent_indexes(schools)
+    work: list[tuple[dict, str]] = []
+    seen: set[str] = set()
+    for sid, row in list(schedules.items()):
+        if sid in SKIP_SCHEDULE_IDS:
+            continue
+        school = by_id.get(sid)
+        if not school:
+            continue
+        url = stored_schedule_url(school)
+        row_url = (row.get("schedule_url") or "").strip()
+        if not url and row_url.startswith("https://www.maxpreps.com/"):
+            url = to_schedule_url(row_url)
+        if not url:
+            continue
+        if sid in seen:
+            continue
+        seen.add(sid)
+        work.append((school, url))
+    print(f"week-refresh MaxPreps fetching {len(work)} known URLs", flush=True)
+    fetched: dict[str, tuple[list[dict], str | None]] = {}
+
+    def one(item: tuple[dict, str]):
+        school, url = item
+        return school["id"], fetch_schedule_html(url, school, trust=True)
+
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        futs = {pool.submit(one, item): item[0]["id"] for item in work}
+        done = 0
+        for fut in as_completed(futs):
+            done += 1
+            try:
+                sid, hit = fut.result()
+            except Exception as e:
+                print(f"  maxpreps fail {futs[fut]}: {e}", flush=True)
+                continue
+            if hit:
+                fetched[sid] = hit
+            if done % 50 == 0 or done == len(work):
+                print(f"  maxpreps {done}/{len(work)} ok {len(fetched)}", flush=True)
+
+    attached = 0
+    kept = 0
+    failures: list[str] = []
+    for school, url in work:
+        sid = school["id"]
+        hit = fetched.get(sid)
+        existing = schedules.get(sid)
+        existing_src = (existing or {}).get("schedule_source")
+        if not hit or not hit[0]:
+            kept += 1
+            failures.append(sid)
+            continue
+        games, page_url = hit
+        if existing_src == "on3" and len(games) < 2:
+            print(f"  keep on3 {sid} maxpreps only {len(games)} games", flush=True)
+            kept += 1
+            continue
+        school.pop("_page_maxpreps_id", None)
+        schedules[sid] = attach_schedule_row(
+            school, games, page_url or url, by_mp, by_st_nn, source="maxpreps"
+        )
+        attached += 1
+    print(
+        f"week-refresh MaxPreps attached {attached} kept {kept} (schedules {len(schedules)})",
+        flush=True,
+    )
+    return attached, kept, failures
+
+
+def refresh_existing_on3(
+    schools: list[dict], schedules: dict[str, dict]
+) -> tuple[int, int]:
+    """Refetch On3 2026 slates for rows that are still On3-primary."""
+    by_id = {s["id"]: s for s in schools}
+    by_mp, by_st_nn = opponent_indexes(schools)
+    work: list[dict] = []
+    for sid, row in list(schedules.items()):
+        if sid in SKIP_SCHEDULE_IDS:
+            continue
+        if has_maxpreps_slate(row):
+            continue
+        school = by_id.get(sid)
+        if not school:
+            continue
+        org = (school.get("on3") or {}).get("org_key")
+        if org is None:
+            continue
+        work.append(school)
+    print(f"week-refresh On3 fetching {len(work)} org schedules", flush=True)
+    fetched: dict[str, list[dict]] = {}
+
+    def one(school: dict):
+        org = (school.get("on3") or {}).get("org_key")
+        return school["id"], fetch_on3_schedule(org)
+
+    if work:
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            futs = {pool.submit(one, s): s["id"] for s in work}
+            done = 0
+            for fut in as_completed(futs):
+                done += 1
+                try:
+                    sid, games = fut.result()
+                except Exception as e:
+                    print(f"  on3 fail {futs[fut]}: {e}", flush=True)
+                    continue
+                fetched[sid] = games
+                if done % 10 == 0 or done == len(work):
+                    ok = sum(1 for g in fetched.values() if g)
+                    print(f"  on3 {done}/{len(work)} ok {ok}", flush=True)
+
+    attached = 0
+    kept = 0
+    for school in work:
+        sid = school["id"]
+        games = fetched.get(sid) or []
+        if not games:
+            kept += 1
+            continue
+        page_url = stored_on3_schedule_url(school) or (schedules.get(sid) or {}).get(
+            "schedule_url"
+        )
+        schedules[sid] = attach_schedule_row(
+            school, games, page_url, by_mp, by_st_nn, source="on3"
+        )
+        attached += 1
+    print(f"week-refresh On3 attached {attached} kept {kept}", flush=True)
+    return attached, kept
+
+
+def week_refresh() -> int:
+    """Live scores + On3 ranks for schools that already have a schedule. No new schools."""
+    global USE_HTTP_CACHE, AS_OF, PAGE_STANDINGS
+    USE_HTTP_CACHE = False
+    PAGE_STANDINGS = {}
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    week_start, week_end = current_gow_week()
+    print(f"week-refresh as_of {AS_OF} gow {week_start}..{week_end}", flush=True)
+    schools = json.loads((SITE / "schools.json").read_text())
+    schedules = load_schedules()
+    before_n = len(schedules)
+    before_scored = scored_game_count(schedules)
+    old_ranks = {s["id"]: (s.get("on3") or {}).get("rank") for s in schools}
+    collapse_canonical_ids(schools, schedules)
+    fill_published_week_zips(schools)
+    mp_attached, mp_kept, mp_fail = refresh_existing_maxpreps(schools, schedules)
+    on3_attached, on3_kept = refresh_existing_on3(schools, schedules)
+    merge_standings_into_history(PAGE_STANDINGS)
+    on3_teams = fetch_on3(force=True)
+    n_on3 = len(on3_teams)
+    joined = join_on3(schools, on3_teams)
+    fill_on3_from_crosswalk(schools, on3_teams)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
+    restamp_schedules(schools, schedules)
+    n_gow = rebuild_gow_from_schedules(schools, schedules, week_start, week_end, 196)
+    write_board(
+        schools,
+        schedules,
+        n_on3,
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+        joined_on3=joined,
+    )
+    after_scored = scored_game_count(schedules)
+    rank_changed = 0
+    for s in schools:
+        new_r = (s.get("on3") or {}).get("rank")
+        old_r = old_ranks.get(s["id"])
+        if new_r != old_r:
+            rank_changed += 1
+    print(
+        f"week-refresh done schedules {before_n}->{len(schedules)} "
+        f"maxpreps_pages {mp_attached} kept {mp_kept} fail {len(mp_fail)} "
+        f"on3_sched {on3_attached} kept {on3_kept} "
+        f"scored {before_scored}->{after_scored} (+{after_scored - before_scored}) "
+        f"on3_joined {len(joined)} rank_changed {rank_changed} gow {n_gow}",
+        flush=True,
+    )
+    if mp_fail:
+        print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate)", flush=True)
+    return 0
+
+
 def restamp_from_disk(*, fill_missing: bool = False) -> int:
     """Recompute 0–100 strength + SOS from on-disk schedules. Optionally fill gaps."""
     global AS_OF
@@ -2766,6 +3190,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    if "--week-refresh" in sys.argv:
+        raise SystemExit(week_refresh())
     if "--fill-on3-empty" in sys.argv:
         raise SystemExit(fill_on3_empty_from_tsv())
     if "--gapfill" in sys.argv:
