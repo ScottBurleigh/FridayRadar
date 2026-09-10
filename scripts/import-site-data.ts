@@ -6,8 +6,9 @@
  *   1) site-data/{schools,schools.summary,games-top213}.json
  *   2) data/import/{schools,schools.summary,games-top213}.json
  *
- * v1 /games is site-data/games-top213.json only (two-sided week
- * 2026-08-26..29, ranked by geometric mean). Never load games.json.
+ * v1 /games derives two-sided contests live from schedules.json
+ * (sorted by calendar day, then geometric mean). games-top213.json
+ * supplies the default week window. Never load games.json.
  *
  * Nested school.recruits become Player + Rating rows. Do not invent names.
  * Unmapped Matchup opponents become placeholder schools (mapped: false) so
@@ -963,7 +964,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       id: "matchup",
       label: "Games of the week",
       status: "live",
-      detail: `/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules (dedup by contestId, both sides must be tracked schools), ranked by geometric mean of home/away talent; combined talent is display only. Venue state/zip, not either school. Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} is the default week shown.`,
+      detail: `/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules (dedup by contestId, both sides must be tracked schools), listed by calendar day then geometric mean of home/away talent; combined talent is display + within-day tie-break. Venue state/zip, not either school. Week ${gamesFile.week_start ?? "2026-08-26"} through ${gamesFile.week_end ?? "2026-08-29"} is the default week shown.`,
       counts: { games: games.length },
     },
     {
@@ -1024,7 +1025,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
             "Team strength is the mean of talent_norm and ranking_norm (On3 and MaxPreps rank curves — both rank-based, never raw rating min–max). Texas 6A DCTF Top 25 adds a bonus then clamps 0–100. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
         ),
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
-        "/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules, ranked by geometric mean of home/away talent (√(home × away)); combined talent is display + tie-break. Filters use the game venue.",
+        "/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules, listed by calendar day then geometric mean of home/away talent (√(home × away)); combined talent is display + within-day tie-break. Filters use the game venue and keep this order.",
         String(summary.note ?? "Canonical v1: 1,554 schools / 2,986 players when the full Scout dump is imported."),
       ],
       matchup_week: {

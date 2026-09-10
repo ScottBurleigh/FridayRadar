@@ -35,11 +35,11 @@ MaxPreps **26-27** football schedules keyed by FridayRadar school id. Built by `
 
 The importer copies this into `data/fridayradar.json` as `schedules`. SOS on each school is the mean of known opponents’ `team_strength` (talent share blended with On3 min–max and MaxPreps national computer rank; Texas 6A DCTF Top 25 bonus then clamp 0–100). It is never raw On3 `compositeScore`. Skip unmapped opponents. Missing SOS is an em dash, not zero.
 
-### `games-top213.json` (v1 `/games`)
+### `games-top213.json` (default week window)
 
-Matchup week **2026-08-26 through 2026-08-29**. This is the only games file the importer loads: **196 two-sided games** (`rank_by: two_sided_talent`). Do **not** load `games.json`.
+The live `/games` page derives two-sided contests from `schedules.json` and sorts by **calendar day, then √(home × away)**. This file supplies the default week window and a capped Matchup slice (`rank_by: day_then_two_sided_talent`). Do **not** load `games.json`.
 
-Unknown / empty / Varsity Opponent names are dropped. St. Frances @ DeLand is not in this slice (DeLand is unmapped). Rank key is **√(home × away)**; combined talent is still on each row (Cornerstone Christian @ IMG 2418.49).
+Unknown / empty / Varsity Opponent names are dropped. St. Frances @ DeLand is not in this slice (DeLand is unmapped). Strength key is **√(home × away)**; combined talent is still on each row (Cornerstone Christian @ IMG 2418.49) and is the within-day tie-break.
 
 Venue: `venue {city,state,zip,name,source}`. Home games use the home school (`source: home_school`). Neutral sites use contest/site location only. Mater Dei @ Orem is Utah / 84097, not California. Missing venue state is unmatched for the state filter.
 

@@ -8,8 +8,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { RankedGame } from "@/lib/data";
-import { formatGameResult, formatKickoff, formatTalent } from "@/lib/format";
+import { formatGameDay, formatGameResult, formatKickoff, formatTalent } from "@/lib/format";
 import type { Game, School } from "@/lib/types";
+
+function calendarDay(kickoff: string | null): string {
+  return kickoff?.slice(0, 10) ?? "9999-99-99";
+}
+
+function groupRowsByDay(rows: RankedGame[]): Array<{ day: string; label: string; rows: RankedGame[] }> {
+  const groups: Array<{ day: string; label: string; rows: RankedGame[] }> = [];
+  for (const row of rows) {
+    const day = calendarDay(row.game.kickoff);
+    const last = groups[groups.length - 1];
+    if (last && last.day === day) {
+      last.rows.push(row);
+    } else {
+      groups.push({ day, label: formatGameDay(row.game.kickoff), rows: [row] });
+    }
+  }
+  return groups;
+}
 
 function SchoolName({ school, mapped }: { school: School; mapped: boolean }) {
   if (!mapped) {
@@ -37,6 +55,7 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
   if (!rows.length) {
     return null;
   }
+  const groups = groupRowsByDay(rows);
   return (
     <>
       <div className="hidden lg:block">
@@ -59,7 +78,19 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rows.map((row) => (
+            {groups.flatMap((group) => [
+              <TableRow key={`day-${group.day}`} className="border-white/10 hover:bg-transparent">
+                <TableCell
+                  colSpan={8}
+                  className="bg-amber-400/8 pt-4 pb-1 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300"
+                >
+                  {group.label}
+                  <span className="ml-2 font-normal tracking-normal text-zinc-500">
+                    {group.rows.length} {group.rows.length === 1 ? "game" : "games"}
+                  </span>
+                </TableCell>
+              </TableRow>,
+              ...group.rows.map((row) => (
               <TableRow key={row.game.id} className="border-white/12 hover:bg-amber-400/8">
                 <TableCell className="text-zinc-400">{row.rank}</TableCell>
                 <TableCell className="whitespace-nowrap font-sans text-zinc-300">
@@ -86,46 +117,59 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
                   {venueLabel(row.game)}
                 </TableCell>
               </TableRow>
-            ))}
+              )),
+            ])}
           </TableBody>
         </Table>
       </div>
-      <ul className="space-y-2 lg:hidden">
-        {rows.map((row) => (
-          <li
-            key={row.game.id}
-            className="rounded-xl border border-amber-400/30 bg-[#17233d] p-3"
-          >
-            <div className="flex items-baseline justify-between gap-3 text-xs">
-              <span className="font-mono text-zinc-400">#{row.rank}</span>
-              <span className="text-zinc-400">
-                {formatKickoff(row.game.kickoff, row.game.is_time_tba)}
+      <div className="space-y-5 lg:hidden">
+        {groups.map((group) => (
+          <section key={`m-${group.day}`}>
+            <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300">
+              {group.label}
+              <span className="ml-2 font-normal tracking-normal text-zinc-500">
+                {group.rows.length} {group.rows.length === 1 ? "game" : "games"}
               </span>
-            </div>
-            <p className="mt-2 text-zinc-100">
-              <SchoolName school={row.away} mapped={row.awayMapped} />
-              <span className="px-2 text-zinc-600">@</span>
-              <SchoolName school={row.home} mapped={row.homeMapped} />
-            </p>
-            {formatGameResult(null, row.game.away_score, row.game.home_score) !== "—" ? (
-              <p className="mt-1 font-mono text-sm text-amber-200">
-                {formatGameResult(null, row.game.away_score, row.game.home_score)}
-                <span className="ml-2 text-[10px] font-sans uppercase tracking-wide text-zinc-500">
-                  away–home
-                </span>
-              </p>
-            ) : null}
-            <p className="mt-1 text-sm text-zinc-400">
-              {venueLabel(row.game)}
-            </p>
-            <p className="mt-2 font-mono text-xs text-zinc-400">
-              Away {row.awayRecruits}/{formatTalent(row.awayTalent)} · Home {row.homeRecruits}/
-              {formatTalent(row.homeTalent)} · Combined{" "}
-              <span className="text-amber-200">{formatTalent(row.combined)}</span>
-            </p>
-          </li>
+            </h2>
+            <ul className="space-y-2">
+              {group.rows.map((row) => (
+                <li
+                  key={row.game.id}
+                  className="rounded-xl border border-amber-400/30 bg-[#17233d] p-3"
+                >
+                  <div className="flex items-baseline justify-between gap-3 text-xs">
+                    <span className="font-mono text-zinc-400">#{row.rank}</span>
+                    <span className="text-zinc-400">
+                      {formatKickoff(row.game.kickoff, row.game.is_time_tba)}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-zinc-100">
+                    <SchoolName school={row.away} mapped={row.awayMapped} />
+                    <span className="px-2 text-zinc-600">@</span>
+                    <SchoolName school={row.home} mapped={row.homeMapped} />
+                  </p>
+                  {formatGameResult(null, row.game.away_score, row.game.home_score) !== "—" ? (
+                    <p className="mt-1 font-mono text-sm text-amber-200">
+                      {formatGameResult(null, row.game.away_score, row.game.home_score)}
+                      <span className="ml-2 text-[10px] font-sans uppercase tracking-wide text-zinc-500">
+                        away–home
+                      </span>
+                    </p>
+                  ) : null}
+                  <p className="mt-1 text-sm text-zinc-400">
+                    {venueLabel(row.game)}
+                  </p>
+                  <p className="mt-2 font-mono text-xs text-zinc-400">
+                    Away {row.awayRecruits}/{formatTalent(row.awayTalent)} · Home {row.homeRecruits}/
+                    {formatTalent(row.homeTalent)} · Combined{" "}
+                    <span className="text-amber-200">{formatTalent(row.combined)}</span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
         ))}
-      </ul>
+      </div>
     </>
   );
 }

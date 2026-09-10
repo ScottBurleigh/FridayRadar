@@ -40,13 +40,13 @@ export default async function GamesPage({
     <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
       <div className="mb-6">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-amber-400/80">
-          Competitive two-sided talent
+          By day, then matchup strength
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight text-zinc-50">
           Games of the week
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-zinc-300">
-          Ranked by geometric mean of home and away Scout talent (√(home × away)); combined talent is shown on each row and breaks ties. Played games show the MaxPreps score as away–home (never invented). Games missing talent on either side are omitted. State and zip filters follow the game venue, not either school&apos;s home state.
+          Listed by calendar day (chronological kickoff date), then by geometric mean of home and away Scout talent (√(home × away)). Combined talent is shown on each row and breaks ties within a day. Played games show the MaxPreps score as away–home (never invented). Games missing talent on either side are omitted. State and zip filters follow the game venue, not either school&apos;s home state, and keep this same day-then-strength order.
         </p>
       </div>
       <FilterBar

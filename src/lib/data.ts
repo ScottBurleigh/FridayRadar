@@ -644,13 +644,17 @@ export function gamesOfTheWeek(
       };
     })
     .filter((row) => row.competitive > 0)
-    .sort(
-      (a, b) =>
+    .sort((a, b) => {
+      const dayA = kickoffDate(a.game.kickoff) ?? "9999-99-99";
+      const dayB = kickoffDate(b.game.kickoff) ?? "9999-99-99";
+      return (
+        dayA.localeCompare(dayB) ||
         b.competitive - a.competitive ||
         b.combined - a.combined ||
         a.home.name.localeCompare(b.home.name) ||
-        a.away.name.localeCompare(b.away.name),
-    )
+        a.away.name.localeCompare(b.away.name)
+      );
+    })
     .map((row, i) => ({ ...row, rank: i + 1 }));
 
   return {

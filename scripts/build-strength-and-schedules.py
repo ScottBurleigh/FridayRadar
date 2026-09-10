@@ -1490,18 +1490,25 @@ def stamp_venue_zip(game: dict, by_id: dict, centroids: dict) -> None:
     game["venue"] = venue
 
 
+def gow_day_key(game: dict) -> str:
+    raw = str(game.get("kickoff_local") or game.get("date") or "")
+    day = raw[:10]
+    return day if len(day) == 10 and day[0].isdigit() else "9999-99-99"
+
+
+def gow_strength_key(game: dict) -> tuple:
+    return (
+        -(game.get("two_sided_talent") or 0),
+        -(game.get("combined_talent") or 0),
+        (game.get("home") or {}).get("name") or "",
+        (game.get("away") or {}).get("name") or "",
+    )
+
+
 def slice_v1_games(schools: list[dict], limit: int = 196) -> int:
     payload = load_week_games_payload()
     games = payload.get("games") or []
-    games = sorted(
-        games,
-        key=lambda g: (
-            -(g.get("two_sided_talent") or 0),
-            -(g.get("combined_talent") or 0),
-            (g.get("home") or {}).get("name") or "",
-            (g.get("away") or {}).get("name") or "",
-        ),
-    )
+    games = sorted(games, key=gow_strength_key)
     by_id = {s["id"]: s for s in schools}
     centroids = {}
     if (ROOT / "data/zip-centroids.json").exists():
@@ -1522,8 +1529,9 @@ def slice_v1_games(schools: list[dict], limit: int = 196) -> int:
         picked.append(g)
         if len(picked) == limit:
             break
+    picked.sort(key=lambda g: (gow_day_key(g),) + gow_strength_key(g))
     payload["games"] = picked
-    payload["rank_by"] = "two_sided_talent"
+    payload["rank_by"] = "day_then_two_sided_talent"
     raw = json.dumps(payload)
     for dest in (SITE, IMPORT):
         dest.mkdir(parents=True, exist_ok=True)
@@ -1685,12 +1693,13 @@ def write_board(
             "v1_games": n_games,
             "v1_both_sides": n_games,
             "v1_partial": 0,
-            "rank_by": "two_sided_talent",
+            "rank_by": "day_then_two_sided_talent",
             "team_strength_note": STRENGTH_NOTE,
             "note": (
                 "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. "
-                f"v1 /games is games-top213.json ({n_games} two-sided games, 0 partial) "
-                f"for {week_start}..{week_end} ranked by geometric mean of home/away talent. "
+                f"v1 /games lists two-sided schedule contests for {week_start}..{week_end} "
+                "by calendar day, then geometric mean of home/away talent. "
+                f"games-top213.json is a {n_games}-game Matchup slice (0 partial). "
                 "Never load games.json. "
                 f"MaxPreps 26-27 schedules restamped {AS_OF}."
             ),
@@ -2828,19 +2837,13 @@ def rebuild_gow_from_schedules(
             continue
         built.append(game)
 
-    built.sort(
-        key=lambda g: (
-            -(g.get("two_sided_talent") or 0),
-            -(g.get("combined_talent") or 0),
-            (g.get("home") or {}).get("name") or "",
-            (g.get("away") or {}).get("name") or "",
-        )
-    )
+    built.sort(key=gow_strength_key)
     picked = built[:limit]
+    picked.sort(key=lambda g: (gow_day_key(g),) + gow_strength_key(g))
     payload = {
         "week_start": week_start,
         "week_end": week_end,
-        "rank_by": "two_sided_talent",
+        "rank_by": "day_then_two_sided_talent",
         "games": picked,
     }
     raw = json.dumps(payload)

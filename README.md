@@ -17,7 +17,7 @@ Requires Node 22+ and Python 3. The compiled dataset ships in `data/fridayradar.
 
 - **Rankings (home)** — programs sorted by **team strength** (default), talent, or recruit count. The Talent cell is a letter grade; the numeric talent total and the grade cutoffs are in the hover/popover. Star columns are labeled 5-star / 4-star / 3-star. The table also shows strength of schedule (mean of this season’s opponents’ team strength, with a tough/average/light label). Missing SOS is an em dash, not zero. Filters: US state, zip code (≈25-mile haversine). The chevron next to a school name expands **every** 2027+ recruit on that roster (name, position, stars, and spaced 247 · On3 · ESPN · Hudl chips when those URLs exist). The school name still opens `/schools/[id]`.
 - **School drill-down** — 2027 / 2028 / 2029+ recruits with 247Sports, On3/Rivals, and ESPN ratings (stars, numeric rating/composite, national rank). A profile-links row under each recruit shows **247 · On3 · ESPN · Hudl** only when that URL is on file — missing Hudl is omitted, not a dead chip. Talent is the same letter grade as the rankings table (numeric total in the popover). Team strength, On3 national rank (only when joined), MaxPreps national computer rank when joined (e.g. MaxPreps #4), DCTF #N for Texas 6A Top 25, and strength of schedule sit in the header. Verified Hudl team pages (fan.hudl.com boys-varsity-football) sit next to the MaxPreps schedule link when known. Under recruits, the MaxPreps 26-27 football schedule is a table (date, opponent, site, result, toughness icon/label) when `schedules.json` has a row for that school — omitted entirely if not. MaxPreps schedule link when `schoolId` and a stored `scheduleUrl` exist (from the school row or the schedule dump). Unknown toughness is skipped, not shown as a fake icon.
-- **Games of the week** — two-sided matchups derived live from MaxPreps **26-27** `schedules.json`, ranked by **geometric mean** of home and away Scout talent (`√(home × away)`). Combined talent is still shown on each row and is the tie-break. Played games copy scores from the schedule row (away–home box; never invented). Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state. The default week shown is the Matchup slice in `games-top213.json` (**2026-08-26 through 2026-08-29**).
+- **Games of the week** — two-sided matchups derived live from MaxPreps **26-27** `schedules.json`, listed by **calendar day** (chronological kickoff date), then by **geometric mean** of home and away Scout talent (`√(home × away)`). Combined talent is still shown on each row and is the within-day tie-break. Played games copy scores from the schedule row (away–home box; never invented). Games missing talent on either side (unmapped / 0) are omitted. State and zip filters use the **game venue** (home school for home games; contest site for neutrals), not either roster’s home state, and keep this same day-then-strength order. The default week window comes from `games-top213.json`.
 
 ## Ranking math
 
@@ -50,7 +50,7 @@ Eligible: `class_year >= 2027`. Never 2026 or earlier.
 
 **Star badge counts** on the rankings table = composite stars rounded to the nearest star.
 
-**Games of the week rank** = geometric mean `√(home talent × away talent)`. Combined talent (home + away) is shown on each row and used only as a tie-break. Games with missing talent on either side are omitted so a superteam vs a cupcake cannot sit above two loaded programs. State/zip filters use the venue (home campus for home games; contest site for neutrals).
+**Games of the week sort** = calendar day of the kickoff, then geometric mean `√(home talent × away talent)` (stronger matchups first within that day). Combined talent (home + away) is shown on each row and used only as a within-day tie-break. Games with missing talent on either side are omitted so a superteam vs a cupcake cannot sit above two loaded programs. State/zip filters use the venue (home campus for home games; contest site for neutrals) and do not re-sort.
 
 ESPN 300 star images are mapped from grade: 90+=5, 80–89=4, then 70–79=3, 60–69=2, 50–59=1.
 
@@ -76,11 +76,11 @@ Or rebuild from the frozen ingest already in this repo (never re-pages 247):
 npm run compile:scout
 ```
 
-v1 `/games` reads **`site-data/games-top213.json` only** — two-sided Matchup games for 2026-08-26..29 (`rank_by: two_sided_talent`). Do **not** load `games.json`.
+v1 `/games` derives the week list live from `schedules.json` (two-sided, venue-filtered) and sorts by **calendar day, then two-sided talent**. `games-top213.json` supplies the default week window (`rank_by: day_then_two_sided_talent`). Do **not** load `games.json`.
 
 See `data/import/README.md` for `schools.json`, `schools.summary.json`, `games-top213.json`, and how frozen 2027/2028 ingest players nest on school rows.
 
-Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` is **`games-top213.json`** (**196** two-sided games, ranked by geometric mean; all have `venue.zip`).
+Do **not** re-run `npm run ingest:247`. Frozen 2027/2028 composite copies live under `data/raw/247/`. Canonical v1: **1,554 schools / 2,986 players**. `/games` lists every two-sided scheduled contest in the current week window, ordered by day then geometric mean. `games-top213.json` remains a capped Matchup slice (all have `venue.zip`).
 
 Verified Hudl athlete profiles join from `site-data/hudl-map.tsv` (`id`, `school_id`, `hudl_athlete_id`) and optional team pages from `site-data/hudl-teams.tsv`. Payload `id` is a Scout UUID; apply/import strip existing Hudl then overlay. Missing map ids omit the chip. Re-apply with `python3 scripts/apply-hudl.py` then `npm run import:site`. Do not invent Hudl URLs.
 
@@ -109,6 +109,6 @@ Stored in `data/fridayradar.json`:
 - **Rating** — `player_id`, `source` (`247sports` | `247sports_composite` | `on3_rivals` | `on3_industry` | `espn`), `class_year`, `as_of`, `national_rank`, `position_rank`, `state_rank`, `stars`, `rating`, `position`, `high_school_name_raw`, `profile_url`
 - **Game** — `id` (MaxPreps contestId), `season`, `kickoff`, `home_school_id`, `away_school_id`, `home_score`, `away_score`, `is_gow`, `game_url`, venue `city` / `state` / `zip` / `lat` / `lng` plus `venue {city,state,zip,name,source}`, `two_sided_talent`, `home_away_type` (0 home, 2 neutral)
 
-**Games rank key:** geometric mean `√(home talent × away talent)`. Combined (home + away) is the displayed number and the tie-break. Cornerstone Christian @ IMG stays on the board with combined 2418.49 but ranks below two loaded programs (Mater Dei @ Orem, Sierra Canyon @ Chaminade-Madonna).
+**Games sort key:** calendar day, then geometric mean `√(home talent × away talent)`. Combined (home + away) is the displayed number and the within-day tie-break. Cornerstone Christian @ IMG stays on the board with combined 2418.49 but, on the same day, ranks below two loaded programs (Mater Dei @ Orem, Sierra Canyon @ Chaminade-Madonna).
 
 Zip filter: input zip → centroid in `data/zip-centroids.json` → haversine ≤ 25 miles. Rankings measure distance to the **school**. `/games` measures distance to the **venue** only. Missing venue state/coords leaves the game unmatched for that filter — it is not treated as both teams’ states.

@@ -147,6 +147,20 @@ export function siteLabel(homeAway: string): string {
   return "Home";
 }
 
+export function formatGameDay(iso: string | null): string {
+  if (!iso) return "Date TBD";
+  const naive = naiveIsoParts(iso);
+  if (naive) return formatWallDate(naive.year, naive.month, naive.day);
+  const d = new Date(iso.length <= 10 ? `${iso}T12:00:00-04:00` : iso);
+  if (Number.isNaN(d.getTime())) return "Date TBD";
+  return d.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "America/New_York",
+  });
+}
+
 export function formatKickoff(iso: string | null, tba: boolean): string {
   if (!iso) return "TBD";
   const naive = naiveIsoParts(iso);
