@@ -68,9 +68,48 @@ export function strengthTier(n: number | null | undefined): StrengthTier | null 
   return tier;
 }
 
+/** Naive MaxPreps/On3 ISO (`2026-09-10T18:30:00`) is venue-local wall clock, not UTC. */
+const NAIVE_ISO = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::(\d{2}))?)?$/;
+
+function formatWallDate(year: number, month: number, day: number): string {
+  const d = new Date(Date.UTC(year, month - 1, day, 12));
+  return d.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function formatWallTime(hour: number, minute: number): string {
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const hr = hour % 12 || 12;
+  return `${hr}:${String(minute).padStart(2, "0")} ${ampm}`;
+}
+
+function naiveIsoParts(raw: string) {
+  const m = NAIVE_ISO.exec(raw.trim());
+  if (!m) return null;
+  return {
+    year: Number(m[1]),
+    month: Number(m[2]),
+    day: Number(m[3]),
+    hour: m[4] != null ? Number(m[4]) : null,
+    minute: m[5] != null ? Number(m[5]) : null,
+  };
+}
+
 export function formatScheduleDate(isoDate: string | null, kickoff: string | null): string {
   const raw = kickoff || isoDate;
   if (!raw) return "TBD";
+  const naive = naiveIsoParts(raw);
+  if (naive) {
+    const date = formatWallDate(naive.year, naive.month, naive.day);
+    if (naive.hour == null || (naive.hour === 0 && (naive.minute ?? 0) === 0)) {
+      return date;
+    }
+    return `${date} · ${formatWallTime(naive.hour, naive.minute ?? 0)}`;
+  }
   const d = new Date(raw.length <= 10 ? `${raw}T12:00:00-04:00` : raw);
   if (Number.isNaN(d.getTime())) return isoDate || "TBD";
   return d.toLocaleDateString("en-US", {
@@ -110,6 +149,14 @@ export function siteLabel(homeAway: string): string {
 
 export function formatKickoff(iso: string | null, tba: boolean): string {
   if (!iso) return "TBD";
+  const naive = naiveIsoParts(iso);
+  if (naive) {
+    const date = formatWallDate(naive.year, naive.month, naive.day);
+    if (tba || naive.hour == null || (naive.hour === 0 && (naive.minute ?? 0) === 0)) {
+      return `${date} · TBD`;
+    }
+    return `${date} · ${formatWallTime(naive.hour, naive.minute ?? 0)}`;
+  }
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "TBD";
   const date = d.toLocaleDateString("en-US", {

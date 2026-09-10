@@ -12,7 +12,7 @@
   "v1_partial": 0,
   "canonical_schools": 1554,
   "canonical_players": 2986,
-  "note": "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. v1 /games is games-top213.json (196 two-sided games, 0 partial) for 2026-09-09..2026-09-12 ranked by geometric mean of home/away talent. Never load games.json. MaxPreps 26-27 schedules restamped 2026-09-09T02:10:21Z.",
+  "note": "Scout 247+Rivals+ESPN 2027/2028 frozen ingest. v1 /games is games-top213.json (196 two-sided games, 0 partial) for 2026-09-10..2026-09-13 ranked by geometric mean of home/away talent. Never load games.json. MaxPreps 26-27 schedules restamped 2026-09-10T18:34:59Z.",
   "rank_by": "two_sided_talent",
   "on3_national": 1000,
   "on3_joined": 557,
@@ -22,8 +22,8 @@
   "maxpreps_joined": 88,
   "dctf_6a": 25,
   "dctf_joined": 23,
-  "as_of": "2026-09-09T02:10:21Z",
+  "as_of": "2026-09-10T18:34:59Z",
   "season": "26-27",
-  "schedule_games": 13726,
-  "schedule_played": 3373
+  "schedule_games": 13748,
+  "schedule_played": 3383
 }

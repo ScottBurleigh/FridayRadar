@@ -2047,6 +2047,26 @@ def _on3_org_name(org: dict | None) -> str:
     return (org.get("name") or org.get("fullName") or "").strip()
 
 
+def _parse_on3_clock(raw: str) -> tuple[int, int] | None:
+    """Parse On3 startTime like '7:30 PM'. TBD/empty is not a time."""
+    s = (raw or "").strip()
+    if not s or s.upper() == "TBD":
+        return None
+    m = re.match(r"^(\d{1,2}):(\d{2})\s*([AP]M)$", s, re.I)
+    if not m:
+        return None
+    hour = int(m.group(1))
+    minute = int(m.group(2))
+    ampm = m.group(3).upper()
+    if hour == 12:
+        hour = 0 if ampm == "AM" else 12
+    elif ampm == "PM":
+        hour += 12
+    if hour > 23 or minute > 59:
+        return None
+    return hour, minute
+
+
 def parse_on3_schedule(payload: dict, org_key) -> list[dict]:
     """Map On3 v2 organization schedule rows. Scores only when final. Never invent opponents."""
     games = []
@@ -2067,21 +2087,20 @@ def parse_on3_schedule(payload: dict, org_key) -> list[dict]:
             continue
         if key:
             seen.add(key)
-        ts = it.get("startDateUtc")
         date = None
-        kickoff = None
-        if isinstance(ts, (int, float)) and ts > 0:
-            dt = datetime.fromtimestamp(int(ts), tz=timezone.utc)
-            date = dt.strftime("%Y-%m-%d")
-            if it.get("startTime") and str(it.get("startTime")).upper() != "TBD":
-                kickoff = dt.strftime("%Y-%m-%dT%H:%M:%S")
-        elif isinstance(it.get("startDate"), str) and it["startDate"].strip():
-            # On3 lists M/D without year; the request year is 2026.
+        if isinstance(it.get("startDate"), str) and it["startDate"].strip():
             try:
                 md = datetime.strptime(it["startDate"].strip(), "%m/%d")
                 date = f"2026-{md.month:02d}-{md.day:02d}"
             except ValueError:
                 date = None
+        ts = it.get("startDateUtc")
+        if not date and isinstance(ts, (int, float)) and ts > 0:
+            date = datetime.fromtimestamp(int(ts), tz=timezone.utc).strftime("%Y-%m-%d")
+        clock = _parse_on3_clock(str(it.get("startTime") or ""))
+        kickoff = None
+        if date and clock:
+            kickoff = f"{date}T{clock[0]:02d}:{clock[1]:02d}:00"
         site = "home" if home else "away"
         loc = ", ".join(x for x in (it.get("city"), (it.get("state") or "").upper()[:2]) if x) or None
         is_final = bool(it.get("isFinal")) or str(it.get("status") or "").upper() == "COMPLETED"
@@ -2642,11 +2661,16 @@ def scored_game_count(schedules: dict[str, dict]) -> int:
 
 
 def current_gow_week(today: date | None = None) -> tuple[str, str]:
-    """Wed–Sat window aligned to the original Matchup week 2026-08-26..29."""
+    """Thu–Sun window containing today (or the next Thu if Mon–Wed).
+
+    Tonight 2026-09-10 CT is Thursday, so this is 2026-09-10..2026-09-13.
+    """
     today = today or datetime.now(timezone.utc).date()
-    anchor = date(2026, 8, 26)
-    weeks = (today - anchor).days // 7
-    start = anchor + timedelta(days=weeks * 7)
+    weekday = today.weekday()  # Mon=0 … Sun=6
+    if weekday < 3:
+        start = today + timedelta(days=(3 - weekday))
+    else:
+        start = today - timedelta(days=(weekday - 3))
     end = start + timedelta(days=3)
     return start.isoformat(), end.isoformat()
 
@@ -3024,7 +3048,33 @@ def week_refresh() -> int:
         flush=True,
     )
     if mp_fail:
-        print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate)", flush=True)
+        print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
+    for day in ("2026-09-10", "2026-09-11", "2026-09-12"):
+        n = timed = 0
+        for row in schedules.values():
+            for g in row.get("games") or []:
+                if g.get("date") != day:
+                    continue
+                n += 1
+                k = g.get("kickoff") or ""
+                if "T" in k and "T00:00:00" not in k:
+                    timed += 1
+        print(f"  {day} games {n} with_time {timed}", flush=True)
+    rp = schedules.get("tx-missouri-city-fort-bend-ridge-point") or {}
+    for g in rp.get("games") or []:
+        opp = ((g.get("opponent") or {}).get("name") or "")
+        if "bridgeland" in opp.lower() or g.get("date") == "2026-09-10":
+            print(
+                "ridge-point",
+                g.get("date"),
+                g.get("kickoff"),
+                g.get("home_away"),
+                opp,
+                g.get("result"),
+                g.get("score"),
+                g.get("opp_score"),
+                flush=True,
+            )
     return 0
 
 
