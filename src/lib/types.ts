@@ -255,6 +255,8 @@ export type SchoolRankingRow = {
   teamStrength: number | null;
   sos: number | null;
   sosLabel: "tough" | "average" | "light" | null;
+  /** Current-season W-L(-T) for display next to the name. Null when none is on file. */
+  currentRecord: string | null;
 };
 
 export type RatedPlayer = Player & {

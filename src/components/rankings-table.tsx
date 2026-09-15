@@ -88,12 +88,14 @@ function SchoolRosterCell({
   href,
   name,
   mascot,
+  record,
   recruits,
   hudlTeamUrl,
 }: {
   href: string;
   name: string;
   mascot: string | null;
+  record?: string | null;
   recruits: InlineRecruit[];
   hudlTeamUrl?: string | null;
 }) {
@@ -115,6 +117,9 @@ function SchoolRosterCell({
             {name}
             {mascot ? <span className="ml-2 font-normal text-zinc-400">{mascot}</span> : null}
           </Link>
+          {record ? (
+            <span className="font-mono text-xs tabular-nums text-zinc-400">({record})</span>
+          ) : null}
           {hudlTeamUrl ? (
             <HudlTeamLink
               href={hudlTeamUrl}
@@ -223,6 +228,7 @@ export function RankingsTable({
                       href={`/schools/${row.school.id}`}
                       name={row.school.name}
                       mascot={row.school.mascot}
+                      record={row.currentRecord}
                       recruits={recruits}
                       hudlTeamUrl={row.school.hudlTeamUrl}
                     />
@@ -298,6 +304,7 @@ export function RankingsTable({
                     href={`/schools/${row.school.id}`}
                     name={row.school.name}
                     mascot={row.school.mascot}
+                    record={row.currentRecord}
                     recruits={recruits}
                     hudlTeamUrl={row.school.hudlTeamUrl}
                   />

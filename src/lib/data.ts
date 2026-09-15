@@ -16,6 +16,7 @@ import { schoolWithinZipRadius, venueWithinZipRadius } from "./geo";
 import { applyHudlTeamOverlay } from "./hudl-teams";
 import { applyBroadcastOverlay } from "./broadcast-games";
 import { profileLinksForPlayer } from "./profile-links";
+import { currentSeasonRecord } from "./records";
 
 export const loadDataset = cache((): FridayRadarDataset => {
   const path = join(process.cwd(), "data", "fridayradar.json");
@@ -377,7 +378,10 @@ export function filteredRankings(
     dataset.ratings,
     opts.sort ?? "strength",
     opts.includeUnranked ?? false,
-  );
+  ).map((row) => ({
+    ...row,
+    currentRecord: currentSeasonRecord(row.school, dataset.schedules?.[row.school.id]),
+  }));
 }
 
 export function mondayOf(date: Date): Date {

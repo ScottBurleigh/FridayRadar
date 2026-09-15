@@ -238,6 +238,7 @@ export function rankSchools(
         teamStrength: school.teamStrength ?? null,
         sos: school.sos ?? null,
         sosLabel: school.sosLabel ?? null,
+        currentRecord: null,
       };
     })
     .filter(
