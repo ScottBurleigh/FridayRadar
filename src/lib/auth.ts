@@ -12,7 +12,7 @@
  * SITE_AUTH_PASSWORD / SITE_AUTH_SECRET before deploying anywhere public.
  */
 const FALLBACK_USER = "fridayradar";
-const FALLBACK_PASSWORD = "friday-night-lights";
+const FALLBACK_PASSWORD = "football";
 const FALLBACK_SECRET = "fridayradar-dev-signing-key-change-me";
 
 const EXPECTED_USER = process.env.SITE_AUTH_USER || FALLBACK_USER;
