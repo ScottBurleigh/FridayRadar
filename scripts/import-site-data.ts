@@ -128,6 +128,11 @@ type SiteSchool = {
     maxpreps_norm?: number | null;
     ranking_norm?: number | null;
     blended?: number | null;
+    prior?: number | null;
+    sos?: number | null;
+    sos_weight?: number | null;
+    talent_weight?: number | null;
+    ranking_weight?: number | null;
     dctf_rank?: number | null;
     bonus?: number | null;
     success_win_pct?: number | null;
@@ -426,6 +431,11 @@ function siteBreakdown(raw: SiteSchool["strength_breakdown"]): StrengthBreakdown
     maxprepsNorm: raw.maxpreps_norm ?? null,
     rankingNorm: raw.ranking_norm ?? null,
     blended: raw.blended ?? null,
+    prior: raw.prior ?? null,
+    sos: raw.sos ?? null,
+    sosWeight: raw.sos_weight ?? null,
+    talentWeight: raw.talent_weight ?? null,
+    rankingWeight: raw.ranking_weight ?? null,
     dctfRank: raw.dctf_rank ?? null,
     bonus: raw.bonus ?? null,
     successWinPct: raw.success_win_pct ?? null,
@@ -989,7 +999,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       status: Number(summary.maxpreps_national ?? 0) >= 100 ? "live" : "blocked",
       detail:
         Number(summary.maxpreps_joined ?? 0)
-          ? `MaxPreps 100-team national computer board (not editorial Top 25), as of 2026-08-24; joined ${summary.maxpreps_joined} PrepTalent schools by site_id. Unranked omitted, never 0.`
+          ? `MaxPreps 100-team national computer board (not editorial Top 25), as of ${summary.maxpreps_as_of ?? summary.as_of ?? "live"}; joined ${summary.maxpreps_joined} PrepTalent schools by MaxPreps schoolId. Unranked omitted, never 0.`
           : "MaxPreps national computer board was not joined.",
       counts: {
         national: Number(summary.maxpreps_national ?? 0),
@@ -1002,7 +1012,9 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
       status: Number(summary.dctf_joined ?? 0) >= 20 ? "live" : "blocked",
       detail:
         Number(summary.dctf_joined ?? 0)
-          ? `Week 1 AP/DCTX 6A Top 25 (2026-08-24); joined ${summary.dctf_joined} Texas schools by site_id. Bonus 10 × (26−rank)/25 after the talent/On3/MaxPreps blend; unranked Texas get 0 extra.`
+          ? `${
+              summary.dctf_week != null ? `Week ${summary.dctf_week} ` : "Current "
+            }DCTF 6A Top 25 (${summary.dctf_as_of ?? "live"}); joined ${summary.dctf_joined} Texas schools by name. Bonus 10 × (26−rank)/25 after the talent/rank prior; unranked Texas get 0 extra.`
           : "DCTF 6A Top 25 was not joined.",
       counts: {
         board: Number(summary.dctf_6a ?? 0),
@@ -1022,7 +1034,7 @@ export async function importSiteData(): Promise<FridayRadarDataset> {
         "School talentScore is the Scout precomputed sum of 2027+ player points.",
         String(
           summary.team_strength_note ??
-            "Team strength is the mean of talent_norm and ranking_norm (On3 and MaxPreps rank curves — both rank-based, never raw rating min–max). Texas 6A DCTF Top 25 adds a bonus then clamps 0–100. SOS is the mean of known opponents’ team_strength — never raw On3 compositeScore.",
+            "Team strength is 30% talent_norm + 70% ranking_norm (On3/MaxPreps rank curves) when both exist, plus DCTF and recent form, then 75/25 with opponent SOS. Missing boards and missing SOS are skipped, never zero.",
         ),
         "Player composite = average of 247sports_composite, on3_rivals (else on3_industry, never both), and ESPN.",
         "/games derives every week's two-sided matchups live from the MaxPreps 26-27 schedules, listed by calendar day then geometric mean of home/away talent (√(home × away)); combined talent is display + within-day tie-break. Filters use the game venue and keep this order.",

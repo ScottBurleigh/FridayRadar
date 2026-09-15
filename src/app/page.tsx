@@ -68,11 +68,11 @@ export default async function RankingsPage({
             Program rankings
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-zinc-300">
-            High schools ranked by team strength by default: talent share versus the
-            board max, mixed with On3 and MaxPreps national computer ranks when those
-            boards list the school. Texas 6A DCTF Top 25 adds a bonus. Talent is a
-            letter grade (open it for the numeric total). Sort by talent or recruit
-            count if you want the raw roster instead.
+            High schools ranked by team strength by default: national ranks carry more
+            weight than recruit-volume talent, and this season’s opponent strength is
+            part of the number (not only the SOS column). Texas 6A DCTF Top 25 adds a
+            bonus. Talent is a letter grade (open it for the numeric total). Sort by
+            talent or recruit count if you want the raw roster instead.
           </p>
 
         </div>

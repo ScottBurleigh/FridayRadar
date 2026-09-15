@@ -207,7 +207,7 @@ export function RankingsTable({
               <th className="h-10 w-28 px-2 text-right font-medium text-zinc-300">Strength</th>
               <th
                 className="h-10 w-24 px-2 text-right font-medium text-zinc-300"
-                title="Mean of this season’s MaxPreps opponents’ team strength"
+                title="Mean of this season’s MaxPreps opponents’ prior strength (before SOS is folded into team strength)"
               >
                 SOS
               </th>

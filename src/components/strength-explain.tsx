@@ -55,11 +55,15 @@ export function StrengthExplainButton({
   const blendParts: string[] = [];
   if (breakdown.talentNorm != null) blendParts.push(n(breakdown.talentNorm));
   if (breakdown.rankingNorm != null) blendParts.push(n(breakdown.rankingNorm));
+  const tw = breakdown.talentWeight;
+  const rw = breakdown.rankingWeight;
   const blendLine =
     breakdown.blended != null && blendParts.length
       ? blendParts.length === 1
-        ? `blended = ${blendParts[0]}`
-        : `blended = (${blendParts.join(" + ")}) / ${blendParts.length} = ${n(breakdown.blended)}`
+        ? `prior_blend = ${blendParts[0]}`
+        : tw != null && rw != null && breakdown.talentNorm != null && breakdown.rankingNorm != null
+          ? `prior_blend = ${tw} × ${n(breakdown.talentNorm)} + ${rw} × ${n(breakdown.rankingNorm)} = ${n(breakdown.blended)}`
+          : `prior_blend = (${blendParts.join(" + ")}) / ${blendParts.length} = ${n(breakdown.blended)}`
       : null;
 
   const dctf = breakdown.dctfRank != null;
@@ -74,7 +78,10 @@ export function StrengthExplainButton({
     ? `recent_form = 8 × (2 × ${n(breakdown.successWinPct)} − 1) × ${n(breakdown.successConfidence)} = ${successAdj >= 0 ? "+" : ""}${n(successAdj)}`
     : null;
   const result = breakdown.teamStrength ?? teamStrength;
-  const blendedShown = breakdown.blended ?? result;
+  const prior = breakdown.prior;
+  const sos = breakdown.sos;
+  const sosW = breakdown.sosWeight;
+  const blendedShown = breakdown.blended ?? prior ?? result;
   const label = `How ${schoolName} team strength is calculated`;
 
   return (
@@ -120,8 +127,9 @@ export function StrengthExplainButton({
         </button>
         <h2 className="pr-8 text-base font-medium text-zinc-50">{schoolName} team strength</h2>
         <p className="mt-2 text-sm text-zinc-400">
-          Recruit talent mixed with national rankings when this school is on those boards.
-          Missing boards are skipped, not counted as zero.
+          National ranks carry more weight than recruit-volume talent. Opponent strength
+          (SOS) is folded into this number, not only shown as a column. Missing boards
+          and missing SOS are skipped, not counted as zero.
         </p>
         <div className="mt-4 space-y-4 text-sm">
           {talentLine ? (
@@ -176,7 +184,8 @@ export function StrengthExplainButton({
             <section>
               <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">Blend</h3>
               <p className="mt-1 text-zinc-300">
-                Mean of talent and the ranking average, using only the pieces this school has.
+                When both talent and rankings exist, talent is 30% and ranks are 70%. If
+                only one piece exists, it is 100% of this step.
               </p>
               <Formula>{blendLine}</Formula>
             </section>
@@ -207,10 +216,28 @@ export function StrengthExplainButton({
           </section>
           <section>
             <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
-              Team strength
+              Prior
             </h3>
-            <p className="mt-1 text-zinc-300">Clamped to 0–100. This is the number on the page.</p>
-            <Formula>{`team_strength = clamp(${n(blendedShown)} + ${n(bonus)} + ${n(successAdj ?? 0)}, 0, 100) = ${n(result)}`}</Formula>
+            <p className="mt-1 text-zinc-300">
+              Blend plus DCTF bonus plus recent form, clamped 0–100, before schedule
+              strength is mixed in.
+            </p>
+            <Formula>{`prior = clamp(${n(blendedShown)} + ${n(bonus)} + ${n(successAdj ?? 0)}, 0, 100) = ${n(prior ?? result)}`}</Formula>
+          </section>
+          <section>
+            <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-300">
+              Strength of schedule
+            </h3>
+            <p className="mt-1 text-zinc-300">
+              {sos != null && sosW != null
+                ? `Mean of this season’s opponents’ prior. Folded in at ${(sosW * 100).toFixed(0)}%.`
+                : "No mapped opponents with a prior, so SOS is skipped — not a penalty."}
+            </p>
+            <Formula>
+              {sos != null && sosW != null && prior != null
+                ? `team_strength = ${(1 - sosW).toFixed(2)} × ${n(prior)} + ${sosW.toFixed(2)} × ${n(sos)} = ${n(result)}`
+                : `team_strength = prior = ${n(result)}`}
+            </Formula>
           </section>
         </div>
       </div>

@@ -25,10 +25,18 @@ SITE = ROOT / "site-data"
 IMPORT = ROOT / "data/import"
 RAW_ON3 = ROOT / "data/raw/on3" / "national-2026.json"
 RAW_MP = ROOT / "data/raw/maxpreps" / "national-rankings.json"
-RAW_DCTF = ROOT / "data/raw/dctf" / "6a-top25-week1.json"
+RAW_DCTF = ROOT / "data/raw/dctf" / "6a-top25.json"
+RAW_DCTF_STALE_WEEK1 = ROOT / "data/raw/dctf" / "6a-top25-week1.json"
 CACHE = Path("/tmp/fridayradar-sched-cache")
-# Live restamp must not replay Aug 25 HTML. --full-fetch sets this False.
+# Live restamp must not replay Aug 25 HTML. Rank refresh and --full-fetch set this False.
 USE_HTTP_CACHE = True
+MAXPREPS_RANKINGS_PAGES = 4
+MAXPREPS_RANKINGS_URL = "https://www.maxpreps.com/football/rankings/{page}/"
+DCTF_RANKINGS_URL = "https://www.texasfootball.com/rankings/"
+DCTF_WEEK_ARTICLE_FALLBACK = (
+    "https://www.texasfootball.com/article/2026/09/14/"
+    "official-txhsfb-ap-week-4-rankings-powered-by-dctx"
+)
 AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 # school_id -> "W-L" captured from a live MaxPreps schedule page (26-27 standings).
 PAGE_STANDINGS: dict[str, str] = {}
@@ -59,21 +67,28 @@ SUCCESS_FULL_CONFIDENCE_GAMES = 22
 # Max points recent form may move team_strength, in either direction.
 SUCCESS_ADJ_MAX = 8.0
 
+# Prior (talent vs ranking) then SOS. Talent is a minority share so prospect
+# volume does not dominate; ranking boards and schedule context carry more.
+TALENT_BLEND_WEIGHT = 0.30
+RANKING_BLEND_WEIGHT = 0.70
+SOS_BLEND_WEIGHT = 0.25
+
 STRENGTH_NOTE = (
-    "team_strength is the mean of talent_norm (100 × talent / board max; IMG = 100 "
-    "on talent only) and ranking_norm. ranking_norm is the mean of whichever of "
-    "on3_norm (100 × (N+1−rank)/N on the 1000-team On3 national board) and "
-    "maxpreps_norm (100 × (N+1−rank)/N on the 100-team MaxPreps national computer "
-    "board) exist — both rank-based; On3's raw compositeScore only spans ~79–91 "
-    "across all 1000 teams, so min–max on the raw score wildly overweighted tiny "
-    "rating gaps near the top and is not used. Unranked boards are omitted, never "
-    "0. Texas 6A DCTF Top 25 then adds 10 × (26−rank)/25 (#1 +10.00, #25 +0.40). "
-    "Recent form then adjusts by up to ±8: a recency-weighted win rate over the "
-    "last five MaxPreps seasons, centred on .500 and shrunk toward 0 when few "
-    "games are on file. It is an adjustment rather than a blend term because raw "
-    "win rate ignores schedule quality; schools with no history on file are not "
-    "adjusted at all. The result is clamped 0–100. SOS is the mean of known "
-    "opponents’ team_strength (unknown omitted; never raw On3 compositeScore)."
+    "team_strength is a two-pass score. Pass 1 (prior): when both talent_norm "
+    f"and ranking_norm exist, prior blend is {TALENT_BLEND_WEIGHT:.0%} talent_norm "
+    f"+ {RANKING_BLEND_WEIGHT:.0%} ranking_norm (not a 50/50 mean). talent_norm is "
+    "100 × talent / board max (IMG = 100 on talent only). ranking_norm is the mean "
+    "of whichever of on3_norm (100 × (N+1−rank)/N on the 1000-team On3 national "
+    "board) and maxpreps_norm (100 × (N+1−rank)/N on the 100-team MaxPreps national "
+    "computer board) exist — both rank-based; On3's raw compositeScore is not used. "
+    "Unranked boards are omitted, never 0. If only one of talent or ranking exists, "
+    "that term is 100% of the prior blend. Texas 6A DCTF Top 25 then adds "
+    "10 × (26−rank)/25 (#1 +10.00, #25 +0.40). Recent form then adjusts by up to ±8. "
+    "Pass 2: SOS is the mean of this season’s opponents’ *prior* (unknown opponents "
+    "omitted, never 0). When SOS exists, "
+    f"team_strength = {1 - SOS_BLEND_WEIGHT:.0%} × prior + {SOS_BLEND_WEIGHT:.0%} × SOS; "
+    "missing SOS leaves prior unchanged — not a penalty. Clamped 0–100. A hard "
+    "schedule raises the number; a soft one lowers it."
 )
 
 
@@ -84,11 +99,17 @@ HTML_UA = {
 }
 
 
-def http_get(url: str, timeout: int = 20, headers: dict | None = None) -> tuple[int, str]:
+def http_get(
+    url: str,
+    timeout: int = 20,
+    headers: dict | None = None,
+    *,
+    force: bool = False,
+) -> tuple[int, str]:
     key = hashlib.sha1(url.encode()).hexdigest()
     CACHE.mkdir(parents=True, exist_ok=True)
     cp = CACHE / f"{key}.json"
-    if USE_HTTP_CACHE and cp.exists():
+    if USE_HTTP_CACHE and not force and cp.exists():
         try:
             rec = json.loads(cp.read_text())
         except json.JSONDecodeError:
@@ -169,6 +190,7 @@ def fetch_on3(*, force: bool = False) -> list[dict]:
                 "Origin": "https://www.on3.com",
                 "Referer": "https://www.on3.com/",
             },
+            force=force,
         )
         if status != 200 or not body:
             print(f"on3 page {page} fail {status}")
@@ -473,6 +495,22 @@ def mean_present(vals: list[float | None]) -> float | None:
     return sum(xs) / len(xs)
 
 
+def prior_blend(talent_norm: float | None, ranking_norm: float | None) -> float | None:
+    """Talent is a minority share when rankings exist. Missing boards are skipped."""
+    if talent_norm is not None and ranking_norm is not None:
+        return (
+            TALENT_BLEND_WEIGHT * float(talent_norm)
+            + RANKING_BLEND_WEIGHT * float(ranking_norm)
+        )
+    return mean_present([talent_norm, ranking_norm])
+
+
+def clamp_score(value: float | None) -> float | None:
+    if value is None:
+        return None
+    return round(max(0.0, min(100.0, float(value))), 2)
+
+
 def resolve_rank_site_id(raw: str | None, aliases: dict[str, str], school_ids: set[str]) -> str | None:
     """Join on site_id. St./Saint aliases only; never invent a missing school."""
     sid = (raw or "").strip()
@@ -489,21 +527,355 @@ def join_site_rank_board(schools: list[dict], path: Path) -> tuple[dict[str, int
     payload = json.loads(path.read_text()) if path.exists() else {}
     school_ids = {s["id"] for s in schools}
     aliases = dict(payload.get("site_id_aliases") or {})
+    by_mp_uuid: dict[str, str] = {}
+    for s in schools:
+        mid = ((s.get("maxpreps") or {}).get("schoolId") or "").strip().lower()
+        if mid:
+            by_mp_uuid[mid] = s["id"]
     out: dict[str, int] = {}
     unresolved = []
     for row in payload.get("teams") or []:
         rank = row.get("rank")
         resolved = resolve_rank_site_id(row.get("site_id"), aliases, school_ids)
+        if resolved is None:
+            mid = str(row.get("school_id") or row.get("schoolId") or "").strip().lower()
+            if mid:
+                sid = by_mp_uuid.get(mid)
+                if sid:
+                    sid = CANONICAL_SCHOOL_IDS.get(sid, sid)
+                    if sid in school_ids:
+                        resolved = sid
         if rank is None or resolved is None:
-            if row.get("site_id"):
-                unresolved.append((row.get("site_id"), rank))
+            if row.get("site_id") or row.get("school_id") or row.get("name"):
+                unresolved.append((row.get("site_id") or row.get("name"), rank))
             continue
         if resolved in out:
             continue
         out[resolved] = int(rank)
     if unresolved:
-        print(f"rank board {path.name} unresolved {unresolved}", flush=True)
+        print(f"rank board {path.name} unresolved {len(unresolved)} (skipped, not invented)", flush=True)
     return out, payload
+
+
+NEXT_DATA_RE = re.compile(
+    r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>',
+    re.S,
+)
+
+# City/prefix names DCTF prints that are the same campus as our stored name.
+# Never maps onto a school that is not already in FridayRadar.
+DCTF_NAME_ALIASES = {
+    "cypress ranch": "cy ranch",
+    "galena park north shore": "north shore",
+    "sheldon ce king": "ce king",
+    "alvin shadow creek": "shadow creek",
+    "humble atascocita": "atascocita",
+    "humble summer creek": "summer creek",
+}
+
+
+def apply_dctf_aliases(name: str) -> str:
+    n = on3_norm_name(name)
+    for src, dest in sorted(DCTF_NAME_ALIASES.items(), key=lambda kv: -len(kv[0])):
+        n = re.sub(rf"\b{re.escape(src)}\b", dest, n)
+    return re.sub(r"\s+", " ", n).strip()
+
+
+def match_dctf_school(dctf_name: str, tx_schools: list[dict]) -> dict | None:
+    """Conservative name join. Ambiguous or missing → skip, never invent."""
+    needle = apply_dctf_aliases(dctf_name)
+    if not needle:
+        return None
+    padded = f" {needle} "
+    hits: list[tuple[int, dict]] = []
+    for s in tx_schools:
+        sn = apply_dctf_aliases(s.get("name") or "")
+        if not sn:
+            continue
+        if padded.find(f" {sn} ") >= 0:
+            hits.append((len(sn.split()), s))
+    if not hits:
+        return None
+    best_len = max(h[0] for h in hits)
+    best = [s for n, s in hits if n == best_len]
+    if len(best) != 1:
+        return None
+    return best[0]
+
+
+def parse_maxpreps_rankings_html(html: str) -> tuple[list[dict], dict]:
+    m = NEXT_DATA_RE.search(html or "")
+    if not m:
+        return [], {}
+    try:
+        data = json.loads(m.group(1))
+    except json.JSONDecodeError:
+        return [], {}
+    rd = ((data.get("props") or {}).get("pageProps") or {}).get("rankingsListData") or {}
+    rows = []
+    for row in rd.get("rankings") or []:
+        rank = row.get("rank")
+        school_id = row.get("schoolId")
+        if rank is None or not school_id:
+            continue
+        rows.append(
+            {
+                "rank": int(rank),
+                "school_id": str(school_id),
+                "name": row.get("schoolName"),
+                "formatted_name": row.get("schoolFormattedName"),
+                "state": (row.get("stateCode") or "").upper()[:2] or None,
+                "team_link": row.get("teamLink"),
+                "record": row.get("overall"),
+            }
+        )
+    meta = {
+        "last_updated": rd.get("lastUpdated"),
+        "total_count": rd.get("totalCount"),
+        "season": rd.get("season") or rd.get("sportSeasonName"),
+    }
+    return rows, meta
+
+
+def fetch_maxpreps_national(schools: list[dict], *, force: bool = False) -> dict:
+    """Live 100-team MaxPreps national computer board. Join by schoolId UUID only."""
+    if not force and RAW_MP.exists():
+        try:
+            cached = json.loads(RAW_MP.read_text())
+        except json.JSONDecodeError:
+            cached = {}
+        n = len(cached.get("teams") or []) + len(cached.get("skipped") or [])
+        if n >= 90:
+            print(f"maxpreps national cache {n} rows as_of {cached.get('as_of')}", flush=True)
+            return cached
+    by_uuid: dict[str, dict] = {}
+    for s in schools:
+        mid = ((s.get("maxpreps") or {}).get("schoolId") or "").strip().lower()
+        if mid:
+            by_uuid[mid] = s
+    rows: list[dict] = []
+    seen_ids: set[str] = set()
+    seen_ranks: set[int] = set()
+    last_updated = None
+    total_count = None
+    for page in range(1, MAXPREPS_RANKINGS_PAGES + 1):
+        url = MAXPREPS_RANKINGS_URL.format(page=page)
+        status, html = http_get(url, timeout=30, headers=HTML_UA, force=True)
+        if status != 200 or not html:
+            print(f"maxpreps rankings page {page} fail {status}", flush=True)
+            continue
+        page_rows, meta = parse_maxpreps_rankings_html(html)
+        last_updated = meta.get("last_updated") or last_updated
+        total_count = meta.get("total_count") or total_count
+        for row in page_rows:
+            sid = row["school_id"].lower()
+            if sid in seen_ids or int(row["rank"]) in seen_ranks:
+                continue
+            seen_ids.add(sid)
+            seen_ranks.add(int(row["rank"]))
+            rows.append(row)
+        print(f"maxpreps rankings page {page} +{len(page_rows)} total {len(rows)}", flush=True)
+    if len(rows) < 90:
+        raise RuntimeError(f"MaxPreps national board too small ({len(rows)}); refusing to invent ranks")
+    teams = []
+    skipped = []
+    for row in sorted(rows, key=lambda r: int(r["rank"])):
+        school = by_uuid.get(row["school_id"].lower())
+        if not school:
+            skipped.append(
+                {
+                    "rank": int(row["rank"]),
+                    "name": row.get("name"),
+                    "school_id": row["school_id"],
+                    "state": row.get("state"),
+                }
+            )
+            continue
+        site_id = CANONICAL_SCHOOL_IDS.get(school["id"], school["id"])
+        teams.append(
+            {
+                "rank": int(row["rank"]),
+                "site_id": site_id,
+                "school_id": row["school_id"],
+                "name": school.get("name") or row.get("name"),
+                "state": school.get("state") or row.get("state"),
+            }
+        )
+    as_of = None
+    if last_updated:
+        as_of = str(last_updated)[:10]
+    payload = {
+        "as_of": as_of or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "n": int(total_count or len(rows)),
+        "source": "MaxPreps national computer rankings (not editorial Top 25)",
+        "source_url": MAXPREPS_RANKINGS_URL.format(page=1),
+        "last_updated": last_updated,
+        "joined": len(teams),
+        "skipped": skipped,
+        "teams": teams,
+    }
+    RAW_MP.parent.mkdir(parents=True, exist_ok=True)
+    RAW_MP.write_text(json.dumps(payload, indent=2) + "\n")
+    print(
+        f"wrote {RAW_MP} board {payload['n']} joined {len(teams)} skipped {len(skipped)} as_of {payload['as_of']}",
+        flush=True,
+    )
+    return payload
+
+
+def parse_dctf_live_grid(html: str) -> list[dict]:
+    """Class 6A tab on texasfootball.com/rankings (c-member-grid)."""
+    start = re.search(r"<h3[^>]*>\s*Class\s*6A\s*</h3>", html or "", re.I)
+    chunk = (html or "")[start.end() :] if start else (html or "")
+    stop = re.search(r"<h3[^>]*>\s*Class\s*5A", chunk, re.I)
+    if stop:
+        chunk = chunk[: stop.start()]
+    rows = []
+    seen: set[int] = set()
+    for m in re.finditer(
+        r'c-member-grid-rank rank-size">\s*(\d+)\.\s*</span>.*?c-member-grid-team-logo.*?</span>\s*([^<]+)',
+        chunk,
+        re.I | re.S,
+    ):
+        rank = int(m.group(1))
+        name = re.sub(r"\s+", " ", m.group(2)).strip()
+        if rank in seen or not (1 <= rank <= DCTF_N) or not name:
+            continue
+        seen.add(rank)
+        rows.append({"rank": rank, "name": name})
+        if len(rows) >= DCTF_N:
+            break
+    return rows
+
+
+def parse_dctf_article_table(html: str) -> list[dict]:
+    """Week-N article HTML tables: CLASS 6A until CLASS 5A."""
+    block_m = re.search(
+        r"CLASS\s*6A(?P<body>.*?)(?:CLASS\s*5A|CLASS\s*4A)",
+        html or "",
+        re.I | re.S,
+    )
+    if not block_m:
+        return []
+    rows = []
+    for m in re.finditer(
+        r"<th[^>]*>\s*(\d+)\s*</th>\s*<td[^>]*>\s*([^<]+?)\s*</td>",
+        block_m.group("body"),
+        re.I,
+    ):
+        rank = int(m.group(1))
+        raw = re.sub(r"\s+", " ", m.group(2)).strip()
+        name = re.sub(r"\s*\([^)]*\)\s*$", "", raw).strip()
+        if 1 <= rank <= DCTF_N and name:
+            rows.append({"rank": rank, "name": name})
+    return rows
+
+
+def fetch_dctf_6a(schools: list[dict], *, force: bool = False) -> dict:
+    """Live Dave Campbell’s 6A Top 25. Skip unmatched names; never invent ranks."""
+    if not force and RAW_DCTF.exists():
+        try:
+            cached = json.loads(RAW_DCTF.read_text())
+        except json.JSONDecodeError:
+            cached = {}
+        if len(cached.get("teams") or []) >= 20:
+            print(f"dctf cache {len(cached['teams'])} as_of {cached.get('as_of')}", flush=True)
+            return cached
+    status, html = http_get(DCTF_RANKINGS_URL, timeout=30, headers=HTML_UA, force=True)
+    source_url = DCTF_RANKINGS_URL
+    week = None
+    rows = parse_dctf_live_grid(html) if status == 200 and html else []
+    if len(rows) < 20:
+        print(f"dctf live grid {len(rows)} rows, trying week article", flush=True)
+        st2, article = http_get(DCTF_WEEK_ARTICLE_FALLBACK, timeout=30, headers=HTML_UA, force=True)
+        if st2 == 200 and article:
+            rows = parse_dctf_article_table(article)
+            source_url = DCTF_WEEK_ARTICLE_FALLBACK
+            wm = re.search(r"Week\s+(\d+)", article, re.I)
+            if wm:
+                week = int(wm.group(1))
+    else:
+        # Live board is current; week number comes from the published week article
+        # title — never guessed from Last Week column values.
+        st2, article = http_get(DCTF_WEEK_ARTICLE_FALLBACK, timeout=30, headers=HTML_UA, force=True)
+        if st2 == 200 and article:
+            wm = re.search(r"Week\s+(\d+)", article, re.I)
+            if wm:
+                week = int(wm.group(1))
+    if len(rows) < 20:
+        raise RuntimeError(f"DCTF 6A Top 25 too small ({len(rows)}); refusing to invent ranks")
+    by_rank: dict[int, dict] = {}
+    for row in rows:
+        by_rank.setdefault(int(row["rank"]), row)
+    ranked = [by_rank[k] for k in sorted(by_rank) if 1 <= k <= DCTF_N]
+    tx_schools = [
+        s
+        for s in schools
+        if (s.get("state") or "").upper() == "TX" and s["id"] not in CANONICAL_SCHOOL_IDS
+    ]
+    teams = []
+    skipped = []
+    for row in ranked:
+        hit = match_dctf_school(row["name"], tx_schools)
+        if not hit:
+            skipped.append({"rank": int(row["rank"]), "name": row["name"]})
+            continue
+        site_id = CANONICAL_SCHOOL_IDS.get(hit["id"], hit["id"])
+        teams.append(
+            {
+                "rank": int(row["rank"]),
+                "site_id": site_id,
+                "name": hit.get("name"),
+                "dctf_name": row["name"],
+            }
+        )
+    as_of = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    payload = {
+        "as_of": as_of,
+        "week": week,
+        "board": "6A",
+        "source": "Dave Campbell's Texas Football current 6A Top 25",
+        "source_url": source_url,
+        "joined": len(teams),
+        "skipped": skipped,
+        "teams": teams,
+    }
+    RAW_DCTF.parent.mkdir(parents=True, exist_ok=True)
+    RAW_DCTF.write_text(json.dumps(payload, indent=2) + "\n")
+    if RAW_DCTF_STALE_WEEK1.exists():
+        RAW_DCTF_STALE_WEEK1.unlink()
+        print(f"removed stale {RAW_DCTF_STALE_WEEK1}", flush=True)
+    print(
+        f"wrote {RAW_DCTF} week {week} joined {len(teams)} skipped {len(skipped)} as_of {as_of}",
+        flush=True,
+    )
+    for skip in skipped:
+        print(f"  dctf skip #{skip['rank']} {skip['name']}", flush=True)
+    return payload
+
+
+def refresh_and_join_ranks(
+    schools: list[dict],
+    *,
+    force: bool = True,
+    fill_crosswalk: bool = True,
+) -> tuple[list[dict], dict[str, dict], dict[str, int], dict, dict[str, int], dict]:
+    """Force-refresh On3 + MaxPreps national + DCTF 6A, then join. Never invents ranks."""
+    on3_teams = fetch_on3(force=force)
+    joined_on3 = join_on3(schools, on3_teams)
+    if fill_crosswalk:
+        fill_on3_from_crosswalk(schools, on3_teams)
+    mp_payload = fetch_maxpreps_national(schools, force=force)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    dctf_payload = fetch_dctf_6a(schools, force=force)
+    joined_dctf, dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    print(
+        f"rank refresh on3 {len(on3_teams)} joined {len(joined_on3)} "
+        f"maxpreps {mp_payload.get('n')} joined {len(joined_mp)} "
+        f"dctf {len(dctf_payload.get('teams') or [])} joined {len(joined_dctf)}",
+        flush=True,
+    )
+    return on3_teams, joined_on3, joined_mp, mp_payload, joined_dctf, dctf_payload
 
 
 def skip_opponent_name(name: str | None) -> bool:
@@ -1276,17 +1648,18 @@ def apply_strength(
         mp_rank = joined_mp.get(sid)
         mpn = maxpreps_rank_norm(mp_rank) if mp_rank is not None else None
         ranking_norm = mean_present([on3n, mpn])
-        blended = mean_present([tn, ranking_norm])
+        blended = prior_blend(tn, ranking_norm)
         dctf_rank = joined_dctf.get(sid)
         bonus = 0.0
         if dctf_rank is not None and (s.get("state") or "").upper() == "TX":
             bonus = dctf_bonus(dctf_rank)
         success = recent_success(history.get(sid))
         success_adj = success["adj"] if success else 0.0
-        st = blended
-        if st is not None:
-            st = round(max(0.0, min(100.0, st + bonus + success_adj)), 2)
-        s["team_strength"] = st
+        prior = blended
+        if prior is not None:
+            prior = clamp_score(prior + bonus + success_adj)
+        s["_prior"] = prior
+        s["team_strength"] = prior
         if on3:
             s["on3"] = {
                 "rank": on3["rank"],
@@ -1321,8 +1694,16 @@ def apply_strength(
             "talent_max_name": max_name,
             "talent_norm": tn,
             "bonus": round(bonus, 2),
-            "team_strength": st,
+            "prior": prior,
+            "team_strength": prior,
         }
+        if tn is not None and ranking_norm is not None:
+            bd["talent_weight"] = TALENT_BLEND_WEIGHT
+            bd["ranking_weight"] = RANKING_BLEND_WEIGHT
+        elif tn is not None:
+            bd["talent_weight"] = 1.0
+        elif ranking_norm is not None:
+            bd["ranking_weight"] = 1.0
         if on3n is not None and on3:
             bd["on3_rank"] = on3["rank"]
             bd["on3_rating"] = round(on3["rating"], 3) if on3.get("rating") is not None else None
@@ -1343,20 +1724,25 @@ def apply_strength(
             bd["success_adj"] = success["adj"]
         if dctf_rank is not None and (s.get("state") or "").upper() == "TX":
             bd["dctf_rank"] = int(dctf_rank)
-        s["strength_breakdown"] = {k: v for k, v in bd.items() if v is not None or k in ("bonus", "team_strength")}
+        s["strength_breakdown"] = {k: v for k, v in bd.items() if v is not None or k in ("bonus", "team_strength", "prior")}
 
 
 def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
     by_mp, by_st_nn = opponent_indexes(schools)
     by_id = {s["id"]: s for s in schools}
+    for s in schools:
+        s["sos"] = None
+        s["sos_games"] = None
+        s["sos_label"] = None
+        s["schedule_games"] = None
     for sid, row in schedules.items():
         school = by_id.get(sid)
         if not school:
             continue
-        row["team_strength"] = school.get("team_strength")
         row["season"] = SEASON
         row["as_of"] = AS_OF
         kept = []
+        known_priors: list[float] = []
         for g in row.get("games") or []:
             opp = g.get("opponent") or {}
             if skip_opponent_name(opp.get("name")):
@@ -1364,28 +1750,63 @@ def restamp_schedules(schools: list[dict], schedules: dict[str, dict]) -> None:
             hit = match_opponent(by_mp, by_st_nn, opp)
             if hit:
                 opp["site_id"] = hit["id"]
-                opp["team_strength"] = hit.get("team_strength")
+                prior = hit.get("_prior")
+                if prior is not None:
+                    known_priors.append(float(prior))
             else:
                 opp["site_id"] = None
+            g["opponent"] = opp
+            kept.append(g)
+        row["games"] = kept
+        sos = round(sum(known_priors) / len(known_priors), 2) if known_priors else None
+        row["sos"] = sos
+        row["sos_games"] = len(known_priors)
+        school["sos"] = sos
+        school["sos_games"] = len(known_priors)
+        school["schedule_games"] = len(row.get("games") or [])
+        if not row.get("schedule_source"):
+            url = row.get("schedule_url") or ""
+            row["schedule_source"] = "on3" if "on3.com" in url else "maxpreps"
+
+    for s in schools:
+        prior = s.get("_prior")
+        sos = s.get("sos")
+        if prior is None:
+            continue
+        if sos is not None:
+            st = clamp_score((1.0 - SOS_BLEND_WEIGHT) * float(prior) + SOS_BLEND_WEIGHT * float(sos))
+            sos_w = SOS_BLEND_WEIGHT
+        else:
+            st = clamp_score(prior)
+            sos_w = None
+        s["team_strength"] = st
+        bd = dict(s.get("strength_breakdown") or {})
+        bd["prior"] = round(float(prior), 2)
+        bd["team_strength"] = st
+        if sos is not None:
+            bd["sos"] = sos
+            bd["sos_weight"] = sos_w
+        else:
+            bd.pop("sos", None)
+            bd.pop("sos_weight", None)
+        s["strength_breakdown"] = bd
+
+    for sid, row in schedules.items():
+        school = by_id.get(sid)
+        if not school:
+            continue
+        row["team_strength"] = school.get("team_strength")
+        row["sos"] = school.get("sos")
+        for g in row.get("games") or []:
+            opp = g.get("opponent") or {}
+            hit = by_id.get(opp.get("site_id") or "")
+            if hit:
+                opp["team_strength"] = hit.get("team_strength")
+            else:
                 opp["team_strength"] = None
             g["opponent"] = opp
             g["toughness_icon"] = toughness_icon(school.get("team_strength"), opp.get("team_strength"))
-            kept.append(g)
-        row["games"] = kept
-        known = [
-            g["opponent"]["team_strength"]
-            for g in row.get("games") or []
-            if g.get("opponent") and g["opponent"].get("team_strength") is not None
-        ]
-        sos = round(sum(known) / len(known), 2) if known else None
-        row["sos"] = sos
-        row["sos_games"] = len(known)
-        school["sos"] = sos
-        school["sos_games"] = len(known)
-        school["schedule_games"] = len(row.get("games") or [])
-        if not row.get("schedule_source"):
-            url = (row.get("schedule_url") or "")
-            row["schedule_source"] = "on3" if "on3.com" in url else "maxpreps"
+
     sos_vals = sorted(
         s["sos"] for s in schools if s.get("sos") is not None and (s.get("sos_games") or 0) >= 2
     )
@@ -1655,9 +2076,12 @@ def write_board(
     n_dctf: int = 0,
     dctf_joined: int = 0,
     joined_on3: dict[str, dict] | None = None,
+    mp_payload: dict | None = None,
+    dctf_payload: dict | None = None,
 ) -> None:
     for s in schools:
         s.pop("_page_maxpreps_id", None)
+        s.pop("_prior", None)
     payload_schools = json.dumps(schools)
     wrapped = {"as_of": AS_OF, "season": SEASON, "schools": schedules}
     payload_sched = json.dumps(wrapped)
@@ -1686,6 +2110,11 @@ def write_board(
             "maxpreps_joined": mp_joined,
             "dctf_6a": n_dctf,
             "dctf_joined": dctf_joined,
+            "maxpreps_as_of": (mp_payload or {}).get("as_of"),
+            "maxpreps_source_url": (mp_payload or {}).get("source_url"),
+            "dctf_as_of": (dctf_payload or {}).get("as_of"),
+            "dctf_week": (dctf_payload or {}).get("week"),
+            "dctf_source_url": (dctf_payload or {}).get("source_url"),
             "schedules": len(schedules),
             "schedule_games": sum(len(r.get("games") or []) for r in schedules.values()),
             "schedule_played": n_played,
@@ -2494,12 +2923,10 @@ def fill_on3_empty_from_tsv() -> int:
     collapse_canonical_ids(schools, schedules)
     fill_published_week_zips(schools)
     fill_on3_empty_schools(schools, schedules)
-    on3_teams = fetch_on3(force=False)
+    on3_teams, joined, joined_mp, mp_payload, joined_dctf, dctf_payload = refresh_and_join_ranks(
+        schools, force=True
+    )
     n_on3 = len(on3_teams)
-    joined = join_on3(schools, on3_teams)
-    fill_on3_from_crosswalk(schools, on3_teams)
-    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
-    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
     restamp_schedules(schools, schedules)
     n_games = slice_v1_games(schools, 196)
@@ -2513,6 +2940,8 @@ def fill_on3_empty_from_tsv() -> int:
         n_dctf=DCTF_N,
         dctf_joined=len(joined_dctf),
         joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
     )
     if ON3_EMPTY_TSV.exists():
         (IMPORT / "on3-empty-fills.tsv").write_text(ON3_EMPTY_TSV.read_text())
@@ -2538,12 +2967,10 @@ def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
     if on3_fallback:
         apply_on3_fallback(schools, schedules)
     fill_on3_empty_schools(schools, schedules)
-    on3_teams = fetch_on3(force=False)
+    on3_teams, joined, joined_mp, mp_payload, joined_dctf, dctf_payload = refresh_and_join_ranks(
+        schools, force=True
+    )
     n_on3 = len(on3_teams)
-    joined = join_on3(schools, on3_teams)
-    fill_on3_from_crosswalk(schools, on3_teams)
-    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
-    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
     restamp_schedules(schools, schedules)
     n_games = slice_v1_games(schools, 196)
@@ -2557,6 +2984,8 @@ def gapfill_from_tsv(*, on3_fallback: bool = False) -> int:
         n_dctf=DCTF_N,
         dctf_joined=len(joined_dctf),
         joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
     )
     dest = IMPORT / "maxpreps-gap-resolutions.tsv"
     if GAP_TSV.exists():
@@ -3015,12 +3444,10 @@ def week_refresh() -> int:
     mp_attached, mp_kept, mp_fail = refresh_existing_maxpreps(schools, schedules)
     on3_attached, on3_kept = refresh_existing_on3(schools, schedules)
     merge_standings_into_history(PAGE_STANDINGS)
-    on3_teams = fetch_on3(force=True)
+    on3_teams, joined, joined_mp, mp_payload, joined_dctf, dctf_payload = refresh_and_join_ranks(
+        schools, force=True
+    )
     n_on3 = len(on3_teams)
-    joined = join_on3(schools, on3_teams)
-    fill_on3_from_crosswalk(schools, on3_teams)
-    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
-    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
     restamp_schedules(schools, schedules)
     n_gow = rebuild_gow_from_schedules(schools, schedules, week_start, week_end, 196)
@@ -3034,6 +3461,8 @@ def week_refresh() -> int:
         n_dctf=DCTF_N,
         dctf_joined=len(joined_dctf),
         joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
     )
     after_scored = scored_game_count(schedules)
     rank_changed = 0
@@ -3081,21 +3510,21 @@ def week_refresh() -> int:
 
 
 def restamp_from_disk(*, fill_missing: bool = False) -> int:
-    """Recompute 0–100 strength + SOS from on-disk schedules. Optionally fill gaps."""
-    global AS_OF
+    """Force-refresh On3/MaxPreps/DCTF boards, then recompute strength + SOS."""
+    global USE_HTTP_CACHE, AS_OF
+    USE_HTTP_CACHE = False
     AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    print(f"restamp as_of {AS_OF} cache={USE_HTTP_CACHE}", flush=True)
     schools = json.loads((SITE / "schools.json").read_text())
     schedules = load_schedules()
     collapse_canonical_ids(schools, schedules)
     fill_published_week_zips(schools)
     if fill_missing:
         fill_missing_schedules(schools, schedules)
-    on3_teams = fetch_on3(force=not USE_HTTP_CACHE)
+    on3_teams, joined, joined_mp, mp_payload, joined_dctf, dctf_payload = refresh_and_join_ranks(
+        schools, force=True
+    )
     n_on3 = len(on3_teams)
-    joined = join_on3(schools, on3_teams)
-    fill_on3_from_crosswalk(schools, on3_teams)
-    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
-    joined_dctf, _dctf_payload = join_site_rank_board(schools, RAW_DCTF)
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
     restamp_schedules(schools, schedules)
     n_games = slice_v1_games(schools, 196)
@@ -3109,6 +3538,8 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
         n_dctf=DCTF_N,
         dctf_joined=len(joined_dctf),
         joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
     )
     img = next((s for s in schools if s["id"] == "fl-bradenton-img-academy"), {})
     print(
@@ -3146,11 +3577,10 @@ def main() -> int:
     collapse_canonical_ids(schools, schedules)
     fill_published_week_zips(schools)
 
-    on3_teams = fetch_on3(force=True)
+    on3_teams, joined, joined_mp, mp_payload, joined_dctf, dctf_payload = refresh_and_join_ranks(
+        schools, force=True, fill_crosswalk=True
+    )
     n_on3 = len(on3_teams)
-    joined = join_on3(schools, on3_teams)
-    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
-    joined_dctf, _dctf = join_site_rank_board(schools, RAW_DCTF)
     print(f"on3 joined {len(joined)} / {n_on3} onto {len(schools)} schools")
     print(f"maxpreps national joined {len(joined_mp)} dctf joined {len(joined_dctf)}")
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
@@ -3219,6 +3649,8 @@ def main() -> int:
         n_dctf=DCTF_N,
         dctf_joined=len(joined_dctf),
         joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
     )
     img = by_id.get("fl-bradenton-img-academy") or {}
     n_games_sched = sum(len(r.get("games") or []) for r in schedules.values())

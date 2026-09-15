@@ -26,6 +26,13 @@ export type StrengthBreakdown = {
   maxprepsNorm?: number | null;
   rankingNorm?: number | null;
   blended?: number | null;
+  /** Pass-1 strength after DCTF + recent form, before SOS. */
+  prior?: number | null;
+  /** Mean of opponents’ prior. Folded into team_strength when present. */
+  sos?: number | null;
+  sosWeight?: number | null;
+  talentWeight?: number | null;
+  rankingWeight?: number | null;
   dctfRank?: number | null;
   bonus?: number | null;
   /** Recency-weighted win rate over recent seasons, 0–1. */
@@ -62,7 +69,7 @@ export type School = {
   stars3?: number | null;
   /** false = Matchup opponent with no Scout roster (one-sided talent). */
   mapped?: boolean;
-  /** 0–100 talent share blended with On3 / MaxPreps ranks, plus DCTF 6A bonus in Texas. */
+  /** 0–100: 30/70 talent vs ranks (when both exist), DCTF + form, then 75/25 SOS. */
   teamStrength?: number | null;
   /** Public fan.hudl.com boys-varsity-football page when verified. Never invented. */
   hudlTeamUrl?: string | null;
