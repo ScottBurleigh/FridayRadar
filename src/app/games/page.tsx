@@ -46,7 +46,7 @@ export default async function GamesPage({
           Games of the week
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-zinc-300">
-          Listed by calendar day (chronological kickoff date), then by geometric mean of home and away Scout talent (√(home × away)). Combined talent is shown on each row and breaks ties within a day. Played games show the MaxPreps score as away–home (never invented). Games missing talent on either side are omitted. State and zip filters follow the game venue, not either school&apos;s home state, and keep this same day-then-strength order.
+          Listed by calendar day (chronological kickoff date), then by geometric mean of home and away Scout talent (√(home × away)). Combined talent is shown on each row and breaks ties within a day. Each school name shows the current-season MaxPreps W–L (e.g. (3-0)) when a record is on file — never invented; missing records are omitted, not 0-0. Played games show the MaxPreps score as away–home (never invented). Games missing talent on either side are omitted. State and zip filters follow the game venue, not either school&apos;s home state, and keep this same day-then-strength order.
         </p>
       </div>
       <FilterBar

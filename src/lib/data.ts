@@ -412,6 +412,9 @@ export type RankedGame = {
   rank: number;
   homeMapped: boolean;
   awayMapped: boolean;
+  /** Current-season MaxPreps W–L when on file. Never invented; omit when missing. */
+  homeRecord: string | null;
+  awayRecord: string | null;
 };
 
 const DEFAULT_MATCHUP_WEEK = { start: "2026-08-26", end: "2026-08-29" };
@@ -645,6 +648,8 @@ export function gamesOfTheWeek(
         rank: 0,
         homeMapped: true,
         awayMapped: true,
+        homeRecord: currentSeasonRecord(home, dataset.schedules?.[home.id]),
+        awayRecord: currentSeasonRecord(away, dataset.schedules?.[away.id]),
       };
     })
     .filter((row) => row.competitive > 0)

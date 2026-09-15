@@ -29,14 +29,33 @@ function groupRowsByDay(rows: RankedGame[]): Array<{ day: string; label: string;
   return groups;
 }
 
-function SchoolName({ school, mapped }: { school: School; mapped: boolean }) {
+function SchoolName({
+  school,
+  mapped,
+  record,
+}: {
+  school: School;
+  mapped: boolean;
+  record?: string | null;
+}) {
+  const rec = record ? (
+    <span className="font-mono text-xs tabular-nums text-zinc-400">({record})</span>
+  ) : null;
   if (!mapped) {
-    return <span className="text-zinc-300">{school.name}</span>;
+    return (
+      <span className="inline-flex flex-wrap items-baseline gap-x-1.5 text-zinc-300">
+        {school.name}
+        {rec}
+      </span>
+    );
   }
   return (
-    <Link href={`/schools/${school.id}`} className="text-zinc-100 hover:text-amber-300">
-      {school.name}
-    </Link>
+    <span className="inline-flex flex-wrap items-baseline gap-x-1.5">
+      <Link href={`/schools/${school.id}`} className="text-zinc-100 hover:text-amber-300">
+        {school.name}
+      </Link>
+      {rec}
+    </span>
   );
 }
 
@@ -97,9 +116,9 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
                   {formatKickoff(row.game.kickoff, row.game.is_time_tba)}
                 </TableCell>
                 <TableCell className="font-sans">
-                  <SchoolName school={row.away} mapped={row.awayMapped} />
+                  <SchoolName school={row.away} mapped={row.awayMapped} record={row.awayRecord} />
                   <span className="px-2 text-zinc-600">@</span>
-                  <SchoolName school={row.home} mapped={row.homeMapped} />
+                  <SchoolName school={row.home} mapped={row.homeMapped} record={row.homeRecord} />
                 </TableCell>
                 <TableCell className="text-right text-zinc-300">
                   {row.awayRecruits} / {formatTalent(row.awayTalent)}
@@ -144,9 +163,9 @@ export function GamesTable({ rows }: { rows: RankedGame[] }) {
                     </span>
                   </div>
                   <p className="mt-2 text-zinc-100">
-                    <SchoolName school={row.away} mapped={row.awayMapped} />
+                    <SchoolName school={row.away} mapped={row.awayMapped} record={row.awayRecord} />
                     <span className="px-2 text-zinc-600">@</span>
-                    <SchoolName school={row.home} mapped={row.homeMapped} />
+                    <SchoolName school={row.home} mapped={row.homeMapped} record={row.homeRecord} />
                   </p>
                   {formatGameResult(null, row.game.away_score, row.game.home_score) !== "—" ? (
                     <p className="mt-1 font-mono text-sm text-amber-200">
