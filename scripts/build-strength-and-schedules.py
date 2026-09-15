@@ -2672,7 +2672,7 @@ def scored_game_count(schedules: dict[str, dict]) -> int:
 def current_gow_week(today: date | None = None) -> tuple[str, str]:
     """Thu–Sun window containing today (or the next Thu if Mon–Wed).
 
-    Tonight 2026-09-10 CT is Thursday, so this is 2026-09-10..2026-09-13.
+    Tuesday 2026-09-15 → next Thursday, 2026-09-17..2026-09-20.
     """
     today = today or datetime.now(timezone.utc).date()
     weekday = today.weekday()  # Mon=0 … Sun=6
@@ -3052,7 +3052,7 @@ def week_refresh() -> int:
     )
     if mp_fail:
         print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
-    for day in ("2026-09-10", "2026-09-11", "2026-09-12"):
+    for day in ("2026-09-10", "2026-09-11", "2026-09-12", "2026-09-17", "2026-09-18", "2026-09-19"):
         n = timed = 0
         for row in schedules.values():
             for g in row.get("games") or []:
@@ -3066,18 +3066,17 @@ def week_refresh() -> int:
     rp = schedules.get("tx-missouri-city-fort-bend-ridge-point") or {}
     for g in rp.get("games") or []:
         opp = ((g.get("opponent") or {}).get("name") or "")
-        if "bridgeland" in opp.lower() or g.get("date") == "2026-09-10":
-            print(
-                "ridge-point",
-                g.get("date"),
-                g.get("kickoff"),
-                g.get("home_away"),
-                opp,
-                g.get("result"),
-                g.get("score"),
-                g.get("opp_score"),
-                flush=True,
-            )
+        print(
+            "ridge-point",
+            g.get("date"),
+            g.get("kickoff"),
+            g.get("home_away"),
+            opp,
+            g.get("result"),
+            g.get("score"),
+            g.get("opp_score"),
+            flush=True,
+        )
     return 0
 
 
