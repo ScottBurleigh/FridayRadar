@@ -1,14 +1,14 @@
 {
-  "as_of": "2026-09-15",
-  "week": 4,
+  "as_of": "2026-09-21",
+  "week": 5,
   "board": "6A",
   "source": "Dave Campbell's Texas Football current 6A Top 25",
   "source_url": "https://www.texasfootball.com/rankings/",
   "joined": 24,
   "skipped": [
     {
-      "rank": 12,
-      "name": "Lake Travis Cavaliers"
+      "rank": 24,
+      "name": "Deer Park Deer"
     }
   ],
   "teams": [
@@ -79,82 +79,82 @@
       "dctf_name": "Denton Guyer Wildcats"
     },
     {
-      "rank": 13,
+      "rank": 12,
       "site_id": "tx-pearland-shadow-creek",
       "name": "Shadow Creek",
       "dctf_name": "Alvin Shadow Creek Sharks"
     },
     {
-      "rank": 14,
+      "rank": 13,
       "site_id": "tx-lewisville-lewisville",
       "name": "Lewisville",
       "dctf_name": "Lewisville Fighting Farmers"
     },
     {
-      "rank": 15,
+      "rank": 14,
       "site_id": "tx-humble-atascocita",
       "name": "Atascocita",
       "dctf_name": "Humble Atascocita Eagles"
     },
     {
-      "rank": 16,
+      "rank": 15,
       "site_id": "tx-longview-longview",
       "name": "Longview",
       "dctf_name": "Longview Lobos"
     },
     {
-      "rank": 17,
+      "rank": 16,
       "site_id": "tx-pearland-pearland",
       "name": "Pearland",
       "dctf_name": "Pearland Oilers"
     },
     {
-      "rank": 18,
-      "site_id": "tx-prosper-prosper",
-      "name": "Prosper",
-      "dctf_name": "Prosper Eagles"
-    },
-    {
-      "rank": 19,
+      "rank": 17,
       "site_id": "tx-willis-willis",
       "name": "Willis",
       "dctf_name": "Willis Wildkats"
     },
     {
-      "rank": 20,
-      "site_id": "tx-austin-austin-westlake",
-      "name": "Austin Westlake",
-      "dctf_name": "Austin Westlake Chaparrals"
-    },
-    {
-      "rank": 21,
+      "rank": 18,
       "site_id": "tx-cypress-cy-fair",
       "name": "Cy-Fair",
       "dctf_name": "Cy-Fair Bobcats"
     },
     {
-      "rank": 22,
+      "rank": 19,
       "site_id": "tx-manvel-manvel",
       "name": "Manvel",
       "dctf_name": "Manvel Mavericks"
     },
     {
-      "rank": 23,
-      "site_id": "tx-duncanville-duncanville",
-      "name": "Duncanville",
-      "dctf_name": "Duncanville Panthers"
+      "rank": 20,
+      "site_id": "tx-cibolo-cibolo-steele",
+      "name": "Cibolo Steele",
+      "dctf_name": "Cibolo Steele Knights"
     },
     {
-      "rank": 24,
+      "rank": 21,
       "site_id": "tx-humble-summer-creek",
       "name": "Summer Creek",
       "dctf_name": "Humble Summer Creek Bulldogs"
     },
     {
+      "rank": 22,
+      "site_id": "tx-houston-cy-falls",
+      "name": "Cy Falls",
+      "dctf_name": "Cypress Falls Eagles"
+    },
+    {
+      "rank": 23,
+      "site_id": "tx-prosper-prosper",
+      "name": "Prosper",
+      "dctf_name": "Prosper Eagles"
+    },
+    {
       "rank": 25,
-      "site_id": "tx-cibolo-cibolo-steele",
-      "name": "Cibolo Steele",
-      "dctf_name": "Cibolo Steele Knights"
+      "site_id": "tx-austin-austin-westlake",
+      "name": "Austin Westlake",
+      "dctf_name": "Austin Westlake Chaparrals"
     }
   ]
 }

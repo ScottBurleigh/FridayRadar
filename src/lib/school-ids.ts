@@ -68,6 +68,8 @@ const CANONICAL_SCHOOL_ID: Record<string, string> = {
   "tx-woodlands-college-park": "tx-the-woodlands-college-park",
   "tx-arlington-martin": "tx-arlington-arlington-martin",
   "tx-houston-cypress-falls": "tx-houston-cy-falls",
+  // Same campus as Cy Falls (9811 Huffmeister). Do not keep a second 6A row.
+  "tx-houston-cypress-falls-high-school": "tx-houston-cy-falls",
   "ca-bellflower-crean-lutheran": "ca-irvine-crean-lutheran",
   "ca-downey-saint-pius-x-saint-matthias-academy": "ca-downey-st-pius-x-st-matthias-academy",
   "ca-inglewood-inglewood": "ca-los-angeles-inglewood",

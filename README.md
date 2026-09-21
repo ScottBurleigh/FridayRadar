@@ -64,6 +64,11 @@ python3 scripts/fill-missing-zips.py   # MaxPreps / Census / public geocode for 
 npm run rebuild:games                  # refresh venue = contest site or HOME school
 python3 scripts/fetch-season-history.py --refresh-current
   # MaxPreps standings: only /26-27/, /24-25/, /23-24/ (never /22-23/ — robots)
+python3 scripts/build-strength-and-schedules.py --week-refresh
+  # live MaxPreps 26-27 scores for known schedule URLs + On3-primary fallback
+  # + force-refresh On3/MaxPreps/DCTF boards, restamp strength, rebuild GOTW
+python3 scripts/build-strength-and-schedules.py --week-restamp
+  # reuse on-disk schedules and On3/MaxPreps boards; force DCTF; restamp GOTW
 python3 scripts/build-strength-and-schedules.py --full-fetch
   # live On3 2026 national composite (1000) + MaxPreps national computer (pages 1–4)
   # + DCTF current 6A Top 25 from texasfootball.com/rankings + MaxPreps 26-27 schedules

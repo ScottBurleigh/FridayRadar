@@ -33,10 +33,15 @@ USE_HTTP_CACHE = True
 MAXPREPS_RANKINGS_PAGES = 4
 MAXPREPS_RANKINGS_URL = "https://www.maxpreps.com/football/rankings/{page}/"
 DCTF_RANKINGS_URL = "https://www.texasfootball.com/rankings/"
-DCTF_WEEK_ARTICLE_FALLBACK = (
+# Newest published week article first. Live /rankings is the board; week
+# number comes from the article title, never from the Last Week column.
+DCTF_WEEK_ARTICLE_FALLBACKS = (
+    "https://www.texasfootball.com/article/2026/09/21/"
+    "official-txhsfb-ap-week-5-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/09/14/"
-    "official-txhsfb-ap-week-4-rankings-powered-by-dctx"
+    "official-txhsfb-ap-week-4-rankings-powered-by-dctx",
 )
+DCTF_WEEK_ARTICLE_FALLBACK = DCTF_WEEK_ARTICLE_FALLBACKS[0]
 AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 # school_id -> "W-L" captured from a live MaxPreps schedule page (26-27 standings).
 PAGE_STANDINGS: dict[str, str] = {}
@@ -566,6 +571,7 @@ NEXT_DATA_RE = re.compile(
 # Never maps onto a school that is not already in FridayRadar.
 DCTF_NAME_ALIASES = {
     "cypress ranch": "cy ranch",
+    "cypress falls": "cy falls",
     "galena park north shore": "north shore",
     "sheldon ce king": "ce king",
     "alvin shadow creek": "shadow creek",
@@ -771,6 +777,28 @@ def parse_dctf_article_table(html: str) -> list[dict]:
     return rows
 
 
+def dctf_week_from_html(html: str) -> int | None:
+    """Week number from the article title, never the Last Week / Week N column."""
+    m = re.search(r"OFFICIAL\s+TXHSFB\s+AP\s+Week\s+(\d+)", html or "", re.I)
+    if m:
+        return int(m.group(1))
+    m = re.search(r"Week\s+(\d+)\s+Rankings\s+Powered", html or "", re.I)
+    if m:
+        return int(m.group(1))
+    return None
+
+
+def fetch_newest_dctf_week_article() -> tuple[str, str, int | None]:
+    for url in DCTF_WEEK_ARTICLE_FALLBACKS:
+        st, article = http_get(url, timeout=30, headers=HTML_UA, force=True)
+        if st != 200 or not article:
+            continue
+        week = dctf_week_from_html(article)
+        if week is not None:
+            return article, url, week
+    return "", "", None
+
+
 def fetch_dctf_6a(schools: list[dict], *, force: bool = False) -> dict:
     """Live Dave Campbell’s 6A Top 25. Skip unmatched names; never invent ranks."""
     if not force and RAW_DCTF.exists():
@@ -785,23 +813,13 @@ def fetch_dctf_6a(schools: list[dict], *, force: bool = False) -> dict:
     source_url = DCTF_RANKINGS_URL
     week = None
     rows = parse_dctf_live_grid(html) if status == 200 and html else []
+    article, art_url, art_week = fetch_newest_dctf_week_article()
+    week = art_week
     if len(rows) < 20:
         print(f"dctf live grid {len(rows)} rows, trying week article", flush=True)
-        st2, article = http_get(DCTF_WEEK_ARTICLE_FALLBACK, timeout=30, headers=HTML_UA, force=True)
-        if st2 == 200 and article:
+        if article:
             rows = parse_dctf_article_table(article)
-            source_url = DCTF_WEEK_ARTICLE_FALLBACK
-            wm = re.search(r"Week\s+(\d+)", article, re.I)
-            if wm:
-                week = int(wm.group(1))
-    else:
-        # Live board is current; week number comes from the published week article
-        # title — never guessed from Last Week column values.
-        st2, article = http_get(DCTF_WEEK_ARTICLE_FALLBACK, timeout=30, headers=HTML_UA, force=True)
-        if st2 == 200 and article:
-            wm = re.search(r"Week\s+(\d+)", article, re.I)
-            if wm:
-                week = int(wm.group(1))
+            source_url = art_url or source_url
     if len(rows) < 20:
         raise RuntimeError(f"DCTF 6A Top 25 too small ({len(rows)}); refusing to invent ranks")
     by_rank: dict[int, dict] = {}
@@ -1016,6 +1034,8 @@ CANONICAL_SCHOOL_IDS = {
     "tx-woodlands-college-park": "tx-the-woodlands-college-park",
     "tx-arlington-martin": "tx-arlington-arlington-martin",
     "tx-houston-cypress-falls": "tx-houston-cy-falls",
+    # Same campus as Cy Falls (9811 Huffmeister, golden-eagles MaxPreps URL).
+    "tx-houston-cypress-falls-high-school": "tx-houston-cy-falls",
     "ca-bellflower-crean-lutheran": "ca-irvine-crean-lutheran",
     "ca-downey-saint-pius-x-saint-matthias-academy": "ca-downey-st-pius-x-st-matthias-academy",
     "ca-inglewood-inglewood": "ca-los-angeles-inglewood",
@@ -1531,6 +1551,7 @@ def collapse_canonical_ids(schools: list[dict], schedules: dict[str, dict]) -> N
         merged[dest] = row
     schedules.clear()
     schedules.update(merged)
+    merge_canonical_history()
     print(f"canonical collapse renamed {renamed} schools, schedules now {len(schedules)} (dropped {dropped} alias rows)")
 
     games_path = SITE / "games-top213.json"
@@ -3113,6 +3134,36 @@ def current_gow_week(today: date | None = None) -> tuple[str, str]:
     return start.isoformat(), end.isoformat()
 
 
+def merge_canonical_history() -> int:
+    """Copy missing season W–L from alias ids onto the canonical campus. Never invent."""
+    if not RAW_HISTORY.exists():
+        return 0
+    try:
+        payload = json.loads(RAW_HISTORY.read_text())
+    except json.JSONDecodeError:
+        return 0
+    records = dict(payload.get("records") or {})
+    n = 0
+    for src_id, dest_id in CANONICAL_SCHOOL_IDS.items():
+        src_row = records.get(src_id)
+        if not src_row:
+            continue
+        dest_row = dict(records.get(dest_id) or {})
+        for season, rec in src_row.items():
+            if not rec or dest_row.get(season):
+                continue
+            dest_row[season] = rec
+            n += 1
+        if dest_row:
+            records[dest_id] = dest_row
+    if n:
+        payload["records"] = records
+        payload["count"] = len(records)
+        RAW_HISTORY.write_text(json.dumps(payload, indent=0))
+        print(f"season-history canonical fill {n} missing seasons", flush=True)
+    return n
+
+
 def merge_standings_into_history(captured: dict[str, str]) -> int:
     """Write live 26-27 W-L onto season-history.json. Other seasons stay as stored."""
     if not captured:
@@ -3481,7 +3532,15 @@ def week_refresh() -> int:
     )
     if mp_fail:
         print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
-    for day in ("2026-09-10", "2026-09-11", "2026-09-12", "2026-09-17", "2026-09-18", "2026-09-19"):
+    for day in (
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+    ):
         n = timed = 0
         for row in schedules.values():
             for g in row.get("games") or []:
@@ -3492,6 +3551,74 @@ def week_refresh() -> int:
                 if "T" in k and "T00:00:00" not in k:
                     timed += 1
         print(f"  {day} games {n} with_time {timed}", flush=True)
+    rp = schedules.get("tx-missouri-city-fort-bend-ridge-point") or {}
+    for g in rp.get("games") or []:
+        opp = ((g.get("opponent") or {}).get("name") or "")
+        print(
+            "ridge-point",
+            g.get("date"),
+            g.get("kickoff"),
+            g.get("home_away"),
+            opp,
+            g.get("result"),
+            g.get("score"),
+            g.get("opp_score"),
+            flush=True,
+        )
+    return 0
+
+
+def week_restamp() -> int:
+    """Restamp strength + GOTW from on-disk schedules. Force DCTF; reuse On3/MaxPreps boards."""
+    global USE_HTTP_CACHE, AS_OF
+    USE_HTTP_CACHE = False
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    week_start, week_end = current_gow_week()
+    print(f"week-restamp as_of {AS_OF} gow {week_start}..{week_end}", flush=True)
+    schools = json.loads((SITE / "schools.json").read_text())
+    schedules = load_schedules()
+    collapse_canonical_ids(schools, schedules)
+    fill_published_week_zips(schools)
+    on3_teams = fetch_on3(force=False)
+    joined = join_on3(schools, on3_teams)
+    fill_on3_from_crosswalk(schools, on3_teams)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    dctf_payload = fetch_dctf_6a(schools, force=True)
+    joined_dctf, dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    print(
+        f"week-restamp ranks on3 {len(on3_teams)} joined {len(joined)} "
+        f"maxpreps {mp_payload.get('n')} joined {len(joined_mp)} "
+        f"dctf week {dctf_payload.get('week')} joined {len(joined_dctf)}",
+        flush=True,
+    )
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
+    restamp_schedules(schools, schedules)
+    n_gow = rebuild_gow_from_schedules(schools, schedules, week_start, week_end, 196)
+    write_board(
+        schools,
+        schedules,
+        len(on3_teams),
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+        joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
+    )
+    cy = next((s for s in schools if s["id"] == "tx-houston-cy-falls"), {})
+    print(
+        "cy-falls strength",
+        cy.get("team_strength"),
+        "dctf",
+        cy.get("dctf"),
+        "on3",
+        cy.get("on3"),
+        "gow",
+        n_gow,
+        flush=True,
+    )
     rp = schedules.get("tx-missouri-city-fort-bend-ridge-point") or {}
     for g in rp.get("games") or []:
         opp = ((g.get("opponent") or {}).get("name") or "")
@@ -3527,7 +3654,8 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
     n_on3 = len(on3_teams)
     apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
     restamp_schedules(schools, schedules)
-    n_games = slice_v1_games(schools, 196)
+    week_start, week_end = current_gow_week()
+    n_games = rebuild_gow_from_schedules(schools, schedules, week_start, week_end, 196)
     write_board(
         schools,
         schedules,
@@ -3676,6 +3804,8 @@ def main() -> int:
 if __name__ == "__main__":
     if "--week-refresh" in sys.argv:
         raise SystemExit(week_refresh())
+    if "--week-restamp" in sys.argv:
+        raise SystemExit(week_restamp())
     if "--fill-on3-empty" in sys.argv:
         raise SystemExit(fill_on3_empty_from_tsv())
     if "--gapfill" in sys.argv:
