@@ -69,6 +69,8 @@ python3 scripts/build-strength-and-schedules.py --week-refresh
   # + force-refresh On3/MaxPreps/DCTF boards, restamp strength, rebuild GOTW
 python3 scripts/build-strength-and-schedules.py --week-restamp
   # reuse on-disk schedules and On3/MaxPreps boards; force DCTF; restamp GOTW
+python3 scripts/build-strength-and-schedules.py --restamp-strength
+  # recompute team_strength from current 26-27 results even if ranking boards are unchanged
 python3 scripts/build-strength-and-schedules.py --full-fetch
   # live On3 2026 national composite (1000) + MaxPreps national computer (pages 1–4)
   # + DCTF current 6A Top 25 from texasfootball.com/rankings + MaxPreps 26-27 schedules

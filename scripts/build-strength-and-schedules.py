@@ -3164,6 +3164,53 @@ def merge_canonical_history() -> int:
     return n
 
 
+def record_from_schedule_games(games: list[dict]) -> str | None:
+    """W-L[-T] from stored results only. Scores without a result are skipped."""
+    wins = losses = ties = 0
+    n = 0
+    for g in games or []:
+        r = g.get("result")
+        if r == "W":
+            wins += 1
+        elif r == "L":
+            losses += 1
+        elif r == "T":
+            ties += 1
+        else:
+            continue
+        n += 1
+    if n <= 0:
+        return None
+    return f"{wins}-{losses}-{ties}" if ties else f"{wins}-{losses}"
+
+
+def merge_schedule_records_into_history(schedules: dict[str, dict]) -> int:
+    """Fill 26-27 W-L from schedule results when MaxPreps standings did not capture it.
+
+    Never overwrites a standings string already on file. Never invents W/L.
+    """
+    existing: dict[str, dict] = {}
+    if RAW_HISTORY.exists():
+        try:
+            existing = json.loads(RAW_HISTORY.read_text()).get("records") or {}
+        except json.JSONDecodeError:
+            existing = {}
+    captured: dict[str, str] = {}
+    for sid, row in schedules.items():
+        dest = canonical_school_id(sid) or sid
+        if (existing.get(dest) or {}).get("26-27") or (existing.get(sid) or {}).get("26-27"):
+            continue
+        rec = record_from_schedule_games(row.get("games") or [])
+        if rec:
+            captured[dest] = rec
+    if not captured:
+        print("schedule 26-27 fill 0 (standings already on file or no results)", flush=True)
+        return 0
+    n = merge_standings_into_history(captured)
+    print(f"schedule 26-27 fill {n} from game results (no standings overwrite)", flush=True)
+    return n
+
+
 def merge_standings_into_history(captured: dict[str, str]) -> int:
     """Write live 26-27 W-L onto season-history.json. Other seasons stay as stored."""
     if not captured:
@@ -3495,6 +3542,7 @@ def week_refresh() -> int:
     mp_attached, mp_kept, mp_fail = refresh_existing_maxpreps(schools, schedules)
     on3_attached, on3_kept = refresh_existing_on3(schools, schedules)
     merge_standings_into_history(PAGE_STANDINGS)
+    merge_schedule_records_into_history(schedules)
     on3_teams, joined, joined_mp, mp_payload, joined_dctf, dctf_payload = refresh_and_join_ranks(
         schools, force=True
     )
@@ -3579,6 +3627,7 @@ def week_restamp() -> int:
     schedules = load_schedules()
     collapse_canonical_ids(schools, schedules)
     fill_published_week_zips(schools)
+    merge_schedule_records_into_history(schedules)
     on3_teams = fetch_on3(force=False)
     joined = join_on3(schools, on3_teams)
     fill_on3_from_crosswalk(schools, on3_teams)
@@ -3636,6 +3685,105 @@ def week_restamp() -> int:
     return 0
 
 
+RESULT_STAMP_IDS = (
+    "tx-missouri-city-fort-bend-ridge-point",
+    "fl-bradenton-img-academy",
+    "tx-allen-allen",
+)
+
+
+def restamp_strength_from_results() -> int:
+    """Recompute every team_strength from current results. Boards may stay put."""
+    global USE_HTTP_CACHE, AS_OF
+    USE_HTTP_CACHE = False
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    week_start, week_end = current_gow_week()
+    print(f"strength-from-results as_of {AS_OF} gow {week_start}..{week_end}", flush=True)
+    schools = json.loads((SITE / "schools.json").read_text())
+    schedules = load_schedules()
+    before = {
+        s["id"]: {
+            "name": s.get("name"),
+            "team_strength": s.get("team_strength"),
+            "sos": s.get("sos"),
+            "success_adj": (s.get("strength_breakdown") or {}).get("success_adj"),
+            "success_win_pct": (s.get("strength_breakdown") or {}).get("success_win_pct"),
+            "success_games": (s.get("strength_breakdown") or {}).get("success_games"),
+            "prior": (s.get("strength_breakdown") or {}).get("prior"),
+        }
+        for s in schools
+    }
+    collapse_canonical_ids(schools, schedules)
+    fill_published_week_zips(schools)
+    merge_schedule_records_into_history(schedules)
+    on3_teams = fetch_on3(force=False)
+    joined = join_on3(schools, on3_teams)
+    fill_on3_from_crosswalk(schools, on3_teams)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    dctf_payload = fetch_dctf_6a(schools, force=False)
+    joined_dctf, dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    print(
+        f"strength-from-results ranks on3 {len(on3_teams)} joined {len(joined)} "
+        f"maxpreps {mp_payload.get('n')} joined {len(joined_mp)} "
+        f"dctf week {dctf_payload.get('week')} joined {len(joined_dctf)}",
+        flush=True,
+    )
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
+    restamp_schedules(schools, schedules)
+    n_gow = rebuild_gow_from_schedules(schools, schedules, week_start, week_end, 196)
+    write_board(
+        schools,
+        schedules,
+        len(on3_teams),
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+        joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
+    )
+    moved = 0
+    for s in schools:
+        old = before.get(s["id"], {}).get("team_strength")
+        new = s.get("team_strength")
+        if old != new:
+            moved += 1
+    print(f"strength restamp moved {moved}/{len(schools)} team_strength gow {n_gow}", flush=True)
+    by_id = {s["id"]: s for s in schools}
+    recs = {}
+    if RAW_HISTORY.exists():
+        recs = json.loads(RAW_HISTORY.read_text()).get("records") or {}
+    for sid in RESULT_STAMP_IDS:
+        s = by_id.get(sid) or {}
+        old = before.get(sid) or {}
+        bd = s.get("strength_breakdown") or {}
+        rec = record_from_schedule_games((schedules.get(sid) or {}).get("games") or [])
+        print(
+            "result-stamp",
+            s.get("name") or sid,
+            "wl",
+            (recs.get(sid) or {}).get("26-27"),
+            "sched",
+            rec,
+            "strength",
+            old.get("team_strength"),
+            "->",
+            s.get("team_strength"),
+            "form",
+            old.get("success_adj"),
+            "->",
+            bd.get("success_adj"),
+            "sos",
+            old.get("sos"),
+            "->",
+            s.get("sos"),
+            flush=True,
+        )
+    return 0
+
+
 def restamp_from_disk(*, fill_missing: bool = False) -> int:
     """Force-refresh On3/MaxPreps/DCTF boards, then recompute strength + SOS."""
     global USE_HTTP_CACHE, AS_OF
@@ -3648,6 +3796,7 @@ def restamp_from_disk(*, fill_missing: bool = False) -> int:
     fill_published_week_zips(schools)
     if fill_missing:
         fill_missing_schedules(schools, schedules)
+    merge_schedule_records_into_history(schedules)
     on3_teams, joined, joined_mp, mp_payload, joined_dctf, dctf_payload = refresh_and_join_ranks(
         schools, force=True
     )
@@ -3806,6 +3955,8 @@ if __name__ == "__main__":
         raise SystemExit(week_refresh())
     if "--week-restamp" in sys.argv:
         raise SystemExit(week_restamp())
+    if "--restamp-strength" in sys.argv:
+        raise SystemExit(restamp_strength_from_results())
     if "--fill-on3-empty" in sys.argv:
         raise SystemExit(fill_on3_empty_from_tsv())
     if "--gapfill" in sys.argv:
