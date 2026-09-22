@@ -58,6 +58,9 @@ PLACEHOLDER = re.compile(
 )
 BLUE_WHITE = re.compile(r"blue[\s\-]*white", re.I)
 SEASON = "26-27"
+# 26-27 football: fall 2026 through winter 2027. Last year's slate is not current.
+SEASON_GAME_START = "2026-07-01"
+SEASON_GAME_END = "2027-02-28"
 MAXPREPS_N = 100
 DCTF_N = 25
 DCTF_BONUS_MAX = 10.0
@@ -1169,6 +1172,16 @@ def name_kind(school_name: str, school_city: str | None, result_name: str) -> st
     return None
 
 
+def game_in_season(game: dict) -> bool:
+    day = (game.get("date") or (game.get("kickoff") or "")[:10] or "")
+    return bool(day) and SEASON_GAME_START <= day <= SEASON_GAME_END
+
+
+def current_season_games(games: list[dict]) -> list[dict]:
+    """Keep 26-27 contests only. A 2025-only page is empty, not last year's record."""
+    return [g for g in games if game_in_season(g)]
+
+
 def to_schedule_url(url: str) -> str:
     """26-27 varsity slate omits the year in the path."""
     path = urllib.parse.urlparse(url).path.split("?")[0].rstrip("/") + "/"
@@ -2176,7 +2189,7 @@ def attach_schedule_row(
         mp["scheduleUrl"] = sched_url
         school["maxpreps"] = mp
     kept = []
-    for g in games:
+    for g in current_season_games(games):
         opp = g.get("opponent") or {}
         if skip_opponent_name(opp.get("name")):
             continue
@@ -3447,6 +3460,14 @@ def refresh_existing_maxpreps(
             failures.append(sid)
             continue
         games, page_url = hit
+        season_games = current_season_games(games)
+        if not season_games:
+            PAGE_STANDINGS.pop(sid, None)
+            print(f"  keep prior {sid} live slate not 26-27 ({len(games)} games)", flush=True)
+            kept += 1
+            failures.append(sid)
+            continue
+        games = season_games
         if existing_src == "on3" and len(games) < 2:
             print(f"  keep on3 {sid} maxpreps only {len(games)} games", flush=True)
             kept += 1
@@ -3600,6 +3621,96 @@ def week_refresh() -> int:
                     timed += 1
         print(f"  {day} games {n} with_time {timed}", flush=True)
     rp = schedules.get("tx-missouri-city-fort-bend-ridge-point") or {}
+    for g in rp.get("games") or []:
+        opp = ((g.get("opponent") or {}).get("name") or "")
+        print(
+            "ridge-point",
+            g.get("date"),
+            g.get("kickoff"),
+            g.get("home_away"),
+            opp,
+            g.get("result"),
+            g.get("score"),
+            g.get("opp_score"),
+            flush=True,
+        )
+    return 0
+
+
+def week_scores() -> int:
+    """Live MaxPreps/On3 scores + W-L, then restamp strength. Reuse ranking boards."""
+    global USE_HTTP_CACHE, AS_OF, PAGE_STANDINGS
+    USE_HTTP_CACHE = False
+    PAGE_STANDINGS = {}
+    AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    week_start, week_end = current_gow_week()
+    print(f"week-scores as_of {AS_OF} gow {week_start}..{week_end}", flush=True)
+    schools = json.loads((SITE / "schools.json").read_text())
+    schedules = load_schedules()
+    before_n = len(schedules)
+    before_scored = scored_game_count(schedules)
+    old_wl: dict[str, str] = {}
+    if RAW_HISTORY.exists():
+        try:
+            old_wl = {
+                sid: (row or {}).get("26-27") or ""
+                for sid, row in (json.loads(RAW_HISTORY.read_text()).get("records") or {}).items()
+            }
+        except json.JSONDecodeError:
+            old_wl = {}
+    collapse_canonical_ids(schools, schedules)
+    fill_published_week_zips(schools)
+    mp_attached, mp_kept, mp_fail = refresh_existing_maxpreps(schools, schedules)
+    on3_attached, on3_kept = refresh_existing_on3(schools, schedules)
+    n_standings = merge_standings_into_history(PAGE_STANDINGS)
+    n_fill = merge_schedule_records_into_history(schedules)
+    new_wl = {}
+    if RAW_HISTORY.exists():
+        try:
+            new_wl = {
+                sid: (row or {}).get("26-27") or ""
+                for sid, row in (json.loads(RAW_HISTORY.read_text()).get("records") or {}).items()
+            }
+        except json.JSONDecodeError:
+            new_wl = {}
+    wl_changed = sum(1 for sid, rec in new_wl.items() if rec and rec != (old_wl.get(sid) or ""))
+    on3_teams = fetch_on3(force=False)
+    joined = join_on3(schools, on3_teams)
+    fill_on3_from_crosswalk(schools, on3_teams)
+    joined_mp, mp_payload = join_site_rank_board(schools, RAW_MP)
+    dctf_payload = fetch_dctf_6a(schools, force=False)
+    joined_dctf, dctf_payload = join_site_rank_board(schools, RAW_DCTF)
+    apply_strength(schools, joined, on3_teams, joined_mp, joined_dctf)
+    restamp_schedules(schools, schedules)
+    n_gow = rebuild_gow_from_schedules(schools, schedules, week_start, week_end, 196)
+    write_board(
+        schools,
+        schedules,
+        len(on3_teams),
+        len(joined),
+        n_mp=int(mp_payload.get("n") or MAXPREPS_N),
+        mp_joined=len(joined_mp),
+        n_dctf=DCTF_N,
+        dctf_joined=len(joined_dctf),
+        joined_on3=joined,
+        mp_payload=mp_payload,
+        dctf_payload=dctf_payload,
+    )
+    after_scored = scored_game_count(schedules)
+    print(
+        f"week-scores done schedules {before_n}->{len(schedules)} "
+        f"maxpreps_pages {mp_attached} kept {mp_kept} fail {len(mp_fail)} "
+        f"on3_sched {on3_attached} kept {on3_kept} "
+        f"scored {before_scored}->{after_scored} (+{after_scored - before_scored}) "
+        f"standings {n_standings} schedule_fill {n_fill} wl_changed {wl_changed} "
+        f"gow {n_gow}",
+        flush=True,
+    )
+    if mp_fail:
+        print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
+    rp = schedules.get("tx-missouri-city-fort-bend-ridge-point") or {}
+    rp_rec = (new_wl.get("tx-missouri-city-fort-bend-ridge-point") or "")
+    print(f"ridge-point record {rp_rec}", flush=True)
     for g in rp.get("games") or []:
         opp = ((g.get("opponent") or {}).get("name") or "")
         print(
@@ -3953,6 +4064,8 @@ def main() -> int:
 if __name__ == "__main__":
     if "--week-refresh" in sys.argv:
         raise SystemExit(week_refresh())
+    if "--week-scores" in sys.argv:
+        raise SystemExit(week_scores())
     if "--week-restamp" in sys.argv:
         raise SystemExit(week_restamp())
     if "--restamp-strength" in sys.argv:

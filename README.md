@@ -67,6 +67,8 @@ python3 scripts/fetch-season-history.py --refresh-current
 python3 scripts/build-strength-and-schedules.py --week-refresh
   # live MaxPreps 26-27 scores for known schedule URLs + On3-primary fallback
   # + force-refresh On3/MaxPreps/DCTF boards, restamp strength, rebuild GOTW
+python3 scripts/build-strength-and-schedules.py --week-scores
+  # live MaxPreps/On3 scores + W-L only; reuse ranking boards; restamp strength
 python3 scripts/build-strength-and-schedules.py --week-restamp
   # reuse on-disk schedules and On3/MaxPreps boards; force DCTF; restamp GOTW
 python3 scripts/build-strength-and-schedules.py --restamp-strength
