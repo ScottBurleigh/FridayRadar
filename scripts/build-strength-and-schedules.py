@@ -36,6 +36,8 @@ DCTF_RANKINGS_URL = "https://www.texasfootball.com/rankings/"
 # Newest published week article first. Live /rankings is the board; week
 # number comes from the article title, never from the Last Week column.
 DCTF_WEEK_ARTICLE_FALLBACKS = (
+    "https://www.texasfootball.com/article/2026/09/28/"
+    "official-txhsfb-ap-week-6-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/09/21/"
     "official-txhsfb-ap-week-5-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/09/14/"
@@ -3602,13 +3604,14 @@ def week_refresh() -> int:
     if mp_fail:
         print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
     for day in (
-        "2026-09-17",
-        "2026-09-18",
-        "2026-09-19",
         "2026-09-24",
         "2026-09-25",
         "2026-09-26",
         "2026-09-27",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
     ):
         n = timed = 0
         for row in schedules.values():
