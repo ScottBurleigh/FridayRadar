@@ -33,9 +33,19 @@ USE_HTTP_CACHE = True
 MAXPREPS_RANKINGS_PAGES = 4
 MAXPREPS_RANKINGS_URL = "https://www.maxpreps.com/football/rankings/{page}/"
 DCTF_RANKINGS_URL = "https://www.texasfootball.com/rankings/"
+DCTF_RANKINGS_URLS = (
+    DCTF_RANKINGS_URL,
+    "https://www.davecampbells.com/high-school-football/rankings",
+)
 # Newest published week article first. Live /rankings is the board; week
 # number comes from the article title, never from the Last Week column.
 DCTF_WEEK_ARTICLE_FALLBACKS = (
+    "https://www.davecampbells.com/articles/2026/10/06/"
+    "official-txhsfb-ap-week-7-rankings-powered-by-dctx",
+    "https://www.texasfootball.com/article/2026/10/06/"
+    "official-txhsfb-ap-week-7-rankings-powered-by-dctx",
+    "https://www.davecampbells.com/articles/2026/09/28/"
+    "official-txhsfb-ap-week-6-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/09/28/"
     "official-txhsfb-ap-week-6-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/09/21/"
@@ -798,34 +808,59 @@ def fetch_newest_dctf_week_article() -> tuple[str, str, int | None]:
         st, article = http_get(url, timeout=30, headers=HTML_UA, force=True)
         if st != 200 or not article:
             continue
+        if "Page Not Found" in (article or "") and "CLASS 6A" not in (article or "").upper():
+            continue
         week = dctf_week_from_html(article)
         if week is not None:
             return article, url, week
     return "", "", None
 
 
+def load_dctf_disk() -> dict:
+    if not RAW_DCTF.exists():
+        return {}
+    try:
+        cached = json.loads(RAW_DCTF.read_text())
+    except json.JSONDecodeError:
+        return {}
+    if len(cached.get("teams") or []) >= 20:
+        return cached
+    return {}
+
+
 def fetch_dctf_6a(schools: list[dict], *, force: bool = False) -> dict:
     """Live Dave Campbell’s 6A Top 25. Skip unmatched names; never invent ranks."""
-    if not force and RAW_DCTF.exists():
-        try:
-            cached = json.loads(RAW_DCTF.read_text())
-        except json.JSONDecodeError:
-            cached = {}
-        if len(cached.get("teams") or []) >= 20:
-            print(f"dctf cache {len(cached['teams'])} as_of {cached.get('as_of')}", flush=True)
-            return cached
-    status, html = http_get(DCTF_RANKINGS_URL, timeout=30, headers=HTML_UA, force=True)
+    cached = load_dctf_disk()
+    if not force and cached:
+        print(f"dctf cache {len(cached['teams'])} as_of {cached.get('as_of')}", flush=True)
+        return cached
+    rows: list[dict] = []
     source_url = DCTF_RANKINGS_URL
     week = None
-    rows = parse_dctf_live_grid(html) if status == 200 and html else []
+    for url in DCTF_RANKINGS_URLS:
+        status, html = http_get(url, timeout=30, headers=HTML_UA, force=True)
+        if status == 200 and html:
+            rows = parse_dctf_live_grid(html)
+            if len(rows) >= 20:
+                source_url = url
+                break
     article, art_url, art_week = fetch_newest_dctf_week_article()
     week = art_week
     if len(rows) < 20:
         print(f"dctf live grid {len(rows)} rows, trying week article", flush=True)
         if article:
-            rows = parse_dctf_article_table(article)
-            source_url = art_url or source_url
+            parsed = parse_dctf_article_table(article)
+            if len(parsed) >= 20:
+                rows = parsed
+                source_url = art_url or source_url
     if len(rows) < 20:
+        if cached:
+            print(
+                f"dctf live HTML empty ({len(rows)} rows); keeping on-disk week "
+                f"{cached.get('week')} as_of {cached.get('as_of')} (not invented)",
+                flush=True,
+            )
+            return cached
         raise RuntimeError(f"DCTF 6A Top 25 too small ({len(rows)}); refusing to invent ranks")
     by_rank: dict[int, dict] = {}
     for row in rows:
@@ -3604,14 +3639,14 @@ def week_refresh() -> int:
     if mp_fail:
         print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
     for day in (
-        "2026-09-24",
-        "2026-09-25",
-        "2026-09-26",
-        "2026-09-27",
         "2026-10-01",
         "2026-10-02",
         "2026-10-03",
         "2026-10-04",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
     ):
         n = timed = 0
         for row in schedules.values():
