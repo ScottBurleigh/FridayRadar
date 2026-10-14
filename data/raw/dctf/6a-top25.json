@@ -1,158 +1,158 @@
 {
-  "as_of": "2026-09-29",
-  "week": 6,
+  "as_of": "2026-10-14",
+  "week": 8,
   "board": "6A",
   "source": "Dave Campbell's Texas Football current 6A Top 25",
-  "source_url": "https://www.texasfootball.com/rankings/",
+  "source_url": "https://www.davecampbells.com/articles/2026/10/12/official-txhsfb-ap-week-8-rankings-powered-by-dctx",
   "joined": 23,
   "skipped": [
     {
-      "rank": 23,
-      "name": "Deer Park Deer"
+      "rank": 19,
+      "name": "Deer Park"
     },
     {
-      "rank": 25,
-      "name": "Klein Cain Hurricanes"
+      "rank": 24,
+      "name": "Klein"
     }
   ],
   "teams": [
     {
       "rank": 1,
-      "site_id": "tx-waxahachie-waxahachie",
-      "name": "Waxahachie",
-      "dctf_name": "Waxahachie Indians"
+      "site_id": "tx-fort-worth-north-crowley",
+      "name": "North Crowley",
+      "dctf_name": "North Crowley"
     },
     {
       "rank": 2,
       "site_id": "tx-houston-north-shore",
       "name": "North Shore",
-      "dctf_name": "Galena Park North Shore Mustangs"
+      "dctf_name": "Galena Park North Shore"
     },
     {
       "rank": 3,
-      "site_id": "tx-fort-worth-north-crowley",
-      "name": "North Crowley",
-      "dctf_name": "North Crowley Panthers"
+      "site_id": "tx-allen-allen",
+      "name": "Allen",
+      "dctf_name": "Allen"
     },
     {
       "rank": 4,
-      "site_id": "tx-allen-allen",
-      "name": "Allen",
-      "dctf_name": "Allen Eagles"
+      "site_id": "tx-katy-katy",
+      "name": "Katy",
+      "dctf_name": "Katy"
     },
     {
       "rank": 5,
-      "site_id": "tx-san-antonio-san-antonio-johnson",
-      "name": "San Antonio Johnson",
-      "dctf_name": "San Antonio Johnson Jaguars"
+      "site_id": "tx-missouri-city-fort-bend-ridge-point",
+      "name": "Fort Bend Ridge Point",
+      "dctf_name": "Fort Bend Ridge Point"
     },
     {
       "rank": 6,
-      "site_id": "tx-katy-katy",
-      "name": "Katy",
-      "dctf_name": "Katy Tigers"
+      "site_id": "tx-san-antonio-san-antonio-johnson",
+      "name": "San Antonio Johnson",
+      "dctf_name": "San Antonio Johnson"
     },
     {
       "rank": 7,
-      "site_id": "tx-missouri-city-fort-bend-ridge-point",
-      "name": "Fort Bend Ridge Point",
-      "dctf_name": "Fort Bend Ridge Point Panthers"
+      "site_id": "tx-houston-c-e-king",
+      "name": "C.E. King",
+      "dctf_name": "Sheldon C.E. King"
     },
     {
       "rank": 8,
-      "site_id": "tx-houston-c-e-king",
-      "name": "C.E. King",
-      "dctf_name": "Sheldon C.E. King Panthers"
+      "site_id": "tx-lewisville-lewisville",
+      "name": "Lewisville",
+      "dctf_name": "Lewisville"
     },
     {
       "rank": 9,
-      "site_id": "tx-coppell-coppell",
-      "name": "Coppell",
-      "dctf_name": "Coppell Cowboys"
+      "site_id": "tx-pearland-shadow-creek",
+      "name": "Shadow Creek",
+      "dctf_name": "Alvin Shadow Creek"
     },
     {
       "rank": 10,
-      "site_id": "tx-denton-denton-guyer",
-      "name": "Denton Guyer",
-      "dctf_name": "Denton Guyer Wildcats"
+      "site_id": "tx-longview-longview",
+      "name": "Longview",
+      "dctf_name": "Longview"
     },
     {
       "rank": 11,
-      "site_id": "tx-pearland-shadow-creek",
-      "name": "Shadow Creek",
-      "dctf_name": "Alvin Shadow Creek Sharks"
+      "site_id": "tx-waxahachie-waxahachie",
+      "name": "Waxahachie",
+      "dctf_name": "Waxahachie"
     },
     {
       "rank": 12,
-      "site_id": "tx-lewisville-lewisville",
-      "name": "Lewisville",
-      "dctf_name": "Lewisville Fighting Farmers"
+      "site_id": "tx-pearland-pearland",
+      "name": "Pearland",
+      "dctf_name": "Pearland"
     },
     {
       "rank": 13,
-      "site_id": "tx-longview-longview",
-      "name": "Longview",
-      "dctf_name": "Longview Lobos"
+      "site_id": "tx-coppell-coppell",
+      "name": "Coppell",
+      "dctf_name": "Coppell"
     },
     {
       "rank": 14,
-      "site_id": "tx-pearland-pearland",
-      "name": "Pearland",
-      "dctf_name": "Pearland Oilers"
+      "site_id": "tx-denton-denton-guyer",
+      "name": "Denton Guyer",
+      "dctf_name": "Denton Guyer"
     },
     {
       "rank": 15,
-      "site_id": "tx-manvel-manvel",
-      "name": "Manvel",
-      "dctf_name": "Manvel Mavericks"
+      "site_id": "tx-prosper-prosper",
+      "name": "Prosper",
+      "dctf_name": "Prosper"
     },
     {
       "rank": 16,
-      "site_id": "tx-houston-cy-falls",
-      "name": "Cy Falls",
-      "dctf_name": "Cypress Falls Eagles"
+      "site_id": "tx-austin-austin-westlake",
+      "name": "Austin Westlake",
+      "dctf_name": "Austin Westlake"
     },
     {
       "rank": 17,
-      "site_id": "tx-prosper-prosper",
-      "name": "Prosper",
-      "dctf_name": "Prosper Eagles"
+      "site_id": "tx-cibolo-cibolo-steele",
+      "name": "Cibolo Steele",
+      "dctf_name": "Cibolo Steele"
     },
     {
       "rank": 18,
-      "site_id": "tx-humble-atascocita",
-      "name": "Atascocita",
-      "dctf_name": "Humble Atascocita Eagles"
-    },
-    {
-      "rank": 19,
-      "site_id": "tx-austin-austin-westlake",
-      "name": "Austin Westlake",
-      "dctf_name": "Austin Westlake Chaparrals"
+      "site_id": "tx-humble-summer-creek",
+      "name": "Summer Creek",
+      "dctf_name": "Humble Summer Creek"
     },
     {
       "rank": 20,
-      "site_id": "tx-cibolo-cibolo-steele",
-      "name": "Cibolo Steele",
-      "dctf_name": "Cibolo Steele Knights"
+      "site_id": "tx-southlake-southlake-carroll",
+      "name": "Southlake Carroll",
+      "dctf_name": "Southlake Carroll"
     },
     {
       "rank": 21,
-      "site_id": "tx-humble-summer-creek",
-      "name": "Summer Creek",
-      "dctf_name": "Humble Summer Creek Bulldogs"
+      "site_id": "tx-san-antonio-san-antonio-brennan",
+      "name": "San Antonio Brennan",
+      "dctf_name": "San Antonio Brennan"
     },
     {
       "rank": 22,
-      "site_id": "tx-cypress-cy-fair",
-      "name": "Cy-Fair",
-      "dctf_name": "Cy-Fair Bobcats"
+      "site_id": "tx-cypress-bridgeland",
+      "name": "Bridgeland",
+      "dctf_name": "Bridgeland"
     },
     {
-      "rank": 24,
-      "site_id": "tx-southlake-southlake-carroll",
-      "name": "Southlake Carroll",
-      "dctf_name": "Southlake Carroll Dragons"
+      "rank": 23,
+      "site_id": "tx-the-woodlands-the-woodlands",
+      "name": "The Woodlands",
+      "dctf_name": "The Woodlands"
+    },
+    {
+      "rank": 25,
+      "site_id": "tx-duncanville-duncanville",
+      "name": "Duncanville",
+      "dctf_name": "Duncanville"
     }
   ]
 }

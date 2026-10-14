@@ -11,6 +11,8 @@ import hashlib
 import json
 import math
 import re
+import shutil
+import subprocess
 import sys
 import time
 import urllib.error
@@ -40,6 +42,10 @@ DCTF_RANKINGS_URLS = (
 # Newest published week article first. Live /rankings is the board; week
 # number comes from the article title, never from the Last Week column.
 DCTF_WEEK_ARTICLE_FALLBACKS = (
+    "https://www.davecampbells.com/articles/2026/10/12/"
+    "official-txhsfb-ap-week-8-rankings-powered-by-dctx",
+    "https://www.texasfootball.com/article/2026/10/12/"
+    "official-txhsfb-ap-week-8-rankings-powered-by-dctx",
     "https://www.davecampbells.com/articles/2026/10/06/"
     "official-txhsfb-ap-week-7-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/10/06/"
@@ -769,6 +775,12 @@ def parse_dctf_live_grid(html: str) -> list[dict]:
     return rows
 
 
+def _dctf_cell_text(html: str) -> str:
+    t = re.sub(r"<br\s*/?>", " ", html or "", flags=re.I)
+    t = re.sub(r"<[^>]+>", " ", t)
+    return re.sub(r"\s+", " ", t).strip()
+
+
 def parse_dctf_article_table(html: str) -> list[dict]:
     """Week-N article HTML tables: CLASS 6A until CLASS 5A."""
     block_m = re.search(
@@ -778,18 +790,112 @@ def parse_dctf_article_table(html: str) -> list[dict]:
     )
     if not block_m:
         return []
-    rows = []
+    body = block_m.group("body")
+    rows: list[dict] = []
+    seen: set[int] = set()
+    cells = [_dctf_cell_text(c) for c in re.findall(r"<td[^>]*>(.*?)</td>", body, re.I | re.S)]
+    i = 0
+    while i < len(cells) - 1:
+        if re.fullmatch(r"\d+", cells[i] or ""):
+            rank = int(cells[i])
+            raw = cells[i + 1]
+            name = re.sub(r"\s*\([^)]*\)\s*$", "", raw).strip()
+            if (
+                1 <= rank <= DCTF_N
+                and rank not in seen
+                and re.search(r"[A-Za-z]", name or "")
+                and not re.match(r"^(rank|school|idle|nr)$", name, re.I)
+                and not re.match(r"^[WL]:", name, re.I)
+            ):
+                seen.add(rank)
+                rows.append({"rank": rank, "name": name})
+                i += 2
+                continue
+        i += 1
+    if len(rows) >= 20:
+        return rows
     for m in re.finditer(
-        r"<th[^>]*>\s*(\d+)\s*</th>\s*<td[^>]*>\s*([^<]+?)\s*</td>",
-        block_m.group("body"),
+        r"<th[^>]*>\s*(\d+)\s*</th>\s*<td[^>]*>(.*?)</td>",
+        body,
+        re.I | re.S,
+    ):
+        rank = int(m.group(1))
+        raw = _dctf_cell_text(m.group(2))
+        name = re.sub(r"\s*\([^)]*\)\s*$", "", raw).strip()
+        if 1 <= rank <= DCTF_N and name and rank not in seen:
+            seen.add(rank)
+            rows.append({"rank": rank, "name": name})
+    return rows
+
+
+def parse_dctf_datatable(html: str) -> list[dict]:
+    """Rendered davecampbells.com rankings DataTable (JS). Names may include mascot."""
+    rows: list[dict] = []
+    seen: set[int] = set()
+    for m in re.finditer(
+        r'title="#(\d+)"[\s\S]{0,1800}?ImageTextWrapper[\s\S]{0,600}?>([^<]+)</p>',
+        html or "",
         re.I,
     ):
         rank = int(m.group(1))
-        raw = re.sub(r"\s+", " ", m.group(2)).strip()
-        name = re.sub(r"\s*\([^)]*\)\s*$", "", raw).strip()
-        if 1 <= rank <= DCTF_N and name:
-            rows.append({"rank": rank, "name": name})
+        name = re.sub(r"\s+", " ", m.group(2)).strip()
+        if rank in seen or not (1 <= rank <= DCTF_N) or not name:
+            continue
+        seen.add(rank)
+        rows.append({"rank": rank, "name": name})
+        if len(rows) >= DCTF_N:
+            break
     return rows
+
+
+def dctf_article_url_candidates() -> list[str]:
+    """Known week articles first, then recent Monday slugs. Never invents ranks."""
+    urls: list[str] = list(DCTF_WEEK_ARTICLE_FALLBACKS)
+    today = datetime.now(timezone.utc).date()
+    slug_weeks = (9, 8, 7, 6, 5)
+    for delta in range(0, 22):
+        d = today - timedelta(days=delta)
+        if d.weekday() != 0:
+            continue
+        for week in slug_weeks:
+            slug = f"official-txhsfb-ap-week-{week}-rankings-powered-by-dctx"
+            urls.append(f"https://www.davecampbells.com/articles/{d:%Y/%m/%d}/{slug}")
+            urls.append(f"https://www.texasfootball.com/article/{d:%Y/%m/%d}/{slug}")
+    seen: set[str] = set()
+    out: list[str] = []
+    for url in urls:
+        if url in seen:
+            continue
+        seen.add(url)
+        out.append(url)
+    return out
+
+
+def fetch_dctf_rendered_rankings() -> str:
+    """Headless Chrome dump of the JS rankings board. Empty string if Chrome is missing."""
+    chrome = shutil.which("google-chrome") or shutil.which("google-chrome-stable")
+    if not chrome:
+        return ""
+    url = "https://www.davecampbells.com/high-school-football/rankings"
+    try:
+        proc = subprocess.run(
+            [
+                chrome,
+                "--headless=new",
+                "--disable-gpu",
+                "--no-sandbox",
+                "--virtual-time-budget=20000",
+                "--dump-dom",
+                url,
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=55,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    return proc.stdout or ""
 
 
 def dctf_week_from_html(html: str) -> int | None:
@@ -804,15 +910,18 @@ def dctf_week_from_html(html: str) -> int | None:
 
 
 def fetch_newest_dctf_week_article() -> tuple[str, str, int | None]:
-    for url in DCTF_WEEK_ARTICLE_FALLBACKS:
+    for url in dctf_article_url_candidates():
         st, article = http_get(url, timeout=30, headers=HTML_UA, force=True)
         if st != 200 or not article:
             continue
         if "Page Not Found" in (article or "") and "CLASS 6A" not in (article or "").upper():
             continue
         week = dctf_week_from_html(article)
-        if week is not None:
-            return article, url, week
+        if week is None:
+            continue
+        if "CLASS 6A" not in (article or "").upper() and len(parse_dctf_article_table(article)) < 20:
+            continue
+        return article, url, week
     return "", "", None
 
 
@@ -853,6 +962,15 @@ def fetch_dctf_6a(schools: list[dict], *, force: bool = False) -> dict:
             if len(parsed) >= 20:
                 rows = parsed
                 source_url = art_url or source_url
+    if len(rows) < 20:
+        print("dctf article empty, trying headless rankings render", flush=True)
+        rendered = fetch_dctf_rendered_rankings()
+        parsed = parse_dctf_datatable(rendered)
+        if len(parsed) >= 20:
+            rows = parsed
+            source_url = "https://www.davecampbells.com/high-school-football/rankings"
+            week = dctf_week_from_html(rendered) or week
+            print(f"dctf rendered board {len(rows)} rows", flush=True)
     if len(rows) < 20:
         if cached:
             print(
@@ -3639,14 +3757,14 @@ def week_refresh() -> int:
     if mp_fail:
         print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
     for day in (
-        "2026-10-01",
-        "2026-10-02",
-        "2026-10-03",
-        "2026-10-04",
         "2026-10-08",
         "2026-10-09",
         "2026-10-10",
         "2026-10-11",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
     ):
         n = timed = 0
         for row in schedules.values():
