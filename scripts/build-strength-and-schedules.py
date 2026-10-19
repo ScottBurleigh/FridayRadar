@@ -42,6 +42,10 @@ DCTF_RANKINGS_URLS = (
 # Newest published week article first. Live /rankings is the board; week
 # number comes from the article title, never from the Last Week column.
 DCTF_WEEK_ARTICLE_FALLBACKS = (
+    "https://www.davecampbells.com/articles/2026/10/19/"
+    "official-txhsfb-ap-week-9-rankings-powered-by-dctx",
+    "https://www.texasfootball.com/article/2026/10/19/"
+    "official-txhsfb-ap-week-9-rankings-powered-by-dctx",
     "https://www.davecampbells.com/articles/2026/10/12/"
     "official-txhsfb-ap-week-8-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/10/12/"
@@ -852,7 +856,7 @@ def dctf_article_url_candidates() -> list[str]:
     """Known week articles first, then recent Monday slugs. Never invents ranks."""
     urls: list[str] = list(DCTF_WEEK_ARTICLE_FALLBACKS)
     today = datetime.now(timezone.utc).date()
-    slug_weeks = (9, 8, 7, 6, 5)
+    slug_weeks = (10, 9, 8, 7, 6)
     for delta in range(0, 22):
         d = today - timedelta(days=delta)
         if d.weekday() != 0:
@@ -3757,14 +3761,14 @@ def week_refresh() -> int:
     if mp_fail:
         print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
     for day in (
-        "2026-10-08",
-        "2026-10-09",
-        "2026-10-10",
-        "2026-10-11",
         "2026-10-15",
         "2026-10-16",
         "2026-10-17",
         "2026-10-18",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
     ):
         n = timed = 0
         for row in schedules.values():
