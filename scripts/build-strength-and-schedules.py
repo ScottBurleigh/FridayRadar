@@ -881,25 +881,29 @@ def fetch_dctf_rendered_rankings() -> str:
     if not chrome:
         return ""
     url = "https://www.davecampbells.com/high-school-football/rankings"
+    cmd = [
+        chrome,
+        "--headless=new",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--virtual-time-budget=20000",
+        "--dump-dom",
+        url,
+    ]
     try:
         proc = subprocess.run(
-            [
-                chrome,
-                "--headless=new",
-                "--disable-gpu",
-                "--no-sandbox",
-                "--virtual-time-budget=20000",
-                "--dump-dom",
-                url,
-            ],
+            cmd,
             check=False,
             capture_output=True,
             text=True,
-            timeout=55,
+            timeout=90,
         )
-    except (OSError, subprocess.TimeoutExpired):
+        return proc.stdout or ""
+    except subprocess.TimeoutExpired as e:
+        out = e.stdout or ""
+        return out.decode("utf-8", "replace") if isinstance(out, bytes) else out
+    except OSError:
         return ""
-    return proc.stdout or ""
 
 
 def dctf_week_from_html(html: str) -> int | None:
@@ -908,6 +912,9 @@ def dctf_week_from_html(html: str) -> int | None:
     if m:
         return int(m.group(1))
     m = re.search(r"Week\s+(\d+)\s+Rankings\s+Powered", html or "", re.I)
+    if m:
+        return int(m.group(1))
+    m = re.search(r'value="Week\s+(\d+)"', html or "", re.I)
     if m:
         return int(m.group(1))
     return None
@@ -966,15 +973,21 @@ def fetch_dctf_6a(schools: list[dict], *, force: bool = False) -> dict:
             if len(parsed) >= 20:
                 rows = parsed
                 source_url = art_url or source_url
-    if len(rows) < 20:
-        print("dctf article empty, trying headless rankings render", flush=True)
-        rendered = fetch_dctf_rendered_rankings()
-        parsed = parse_dctf_datatable(rendered)
-        if len(parsed) >= 20:
-            rows = parsed
+    print("dctf trying headless rankings render", flush=True)
+    rendered = fetch_dctf_rendered_rankings()
+    rendered_rows = parse_dctf_datatable(rendered)
+    rendered_week = dctf_week_from_html(rendered)
+    if len(rendered_rows) >= 20:
+        newer = rendered_week is not None and (week is None or rendered_week > week)
+        if len(rows) < 20 or newer:
+            rows = rendered_rows
             source_url = "https://www.davecampbells.com/high-school-football/rankings"
-            week = dctf_week_from_html(rendered) or week
-            print(f"dctf rendered board {len(rows)} rows", flush=True)
+            week = rendered_week or week
+            print(
+                f"dctf rendered board {len(rows)} rows week {week} "
+                f"(article week {art_week})",
+                flush=True,
+            )
     if len(rows) < 20:
         if cached:
             print(
