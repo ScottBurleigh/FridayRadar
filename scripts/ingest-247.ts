@@ -85,6 +85,28 @@ function parsePage(html: string) {
   return { players, count };
 }
 
+async function chromeDump(url: string): Promise<string> {
+  const dir = join(tmpdir(), `chrome-247-${process.pid}`);
+  try {
+    const { stdout } = await execFileAsync(
+      "google-chrome-stable",
+      [
+        "--headless=new",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--virtual-time-budget=12000",
+        `--user-data-dir=${dir}`,
+        "--dump-dom",
+        url,
+      ],
+      { timeout: 50000, maxBuffer: 20 * 1024 * 1024 },
+    );
+    return stdout || "";
+  } catch (err) {
+    return (err as { stdout?: string }).stdout || "";
+  }
+}
+
 async function curlGet(
   url: string,
   cookieJar: string,
@@ -136,8 +158,7 @@ function mergePlayers(into: Map<string, PlayerRow>, rows: PlayerRow[]) {
   for (const p of rows) {
     if (!p.name || !p.stars) continue;
     const k = String(p.player_id ?? p.name);
-    const prev = into.get(k);
-    if (!prev || (p.stars ?? 0) > (prev.stars ?? 0)) into.set(k, p);
+    into.set(k, p);
   }
 }
 
@@ -182,6 +203,13 @@ async function fetchYear(year: number, cookieJar: string) {
       break;
     }
     if (status !== 200 || !body.includes("rankings-page__list-item")) {
+      const chromeBody = await chromeDump(url);
+      if (chromeBody.includes("rankings-page__list-item")) {
+        status = 200;
+        body = chromeBody;
+      }
+    }
+    if (status !== 200 || !body.includes("rankings-page__list-item")) {
       consecutiveEmpty += 1;
       console.warn(`247 ${year} p${page} ${status} empty=${consecutiveEmpty}`);
       if (consecutiveEmpty >= 3) break;
@@ -224,6 +252,7 @@ async function fetchYear(year: number, cookieJar: string) {
     year,
     count: players.length,
     listed,
+    as_of: new Date().toISOString(),
     stars,
     players,
   });

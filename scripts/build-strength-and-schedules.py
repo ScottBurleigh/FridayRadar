@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import re
 import shutil
 import subprocess
@@ -887,6 +888,7 @@ def fetch_dctf_rendered_rankings() -> str:
         "--disable-gpu",
         "--no-sandbox",
         "--virtual-time-budget=20000",
+        f"--user-data-dir=/tmp/chrome-dctf-{os.getpid()}",
         "--dump-dom",
         url,
     ]
@@ -1269,6 +1271,19 @@ CANONICAL_SCHOOL_IDS = {
     "oh-cleveland-saint-ignatius": "oh-cleveland-st-ignatius",
     "oh-cleveland-villa-angela-saint-joseph": "oh-cleveland-villa-angela-st-joseph",
     "oh-columbus-saint-francis-de-sales": "oh-columbus-st-francis-de-sales",
+    "oh-columbus-saint-francis-de-sales-high-school": "oh-columbus-st-francis-de-sales",
+    "tx-denton-john-h-guyer-high-school": "tx-denton-denton-guyer",
+    "oh-massillon-washington-high-school": "oh-massillon-massillon-washington",
+    "wi-green-bay-notre-dame-de-la-baie-academy": "wi-green-bay-notre-dame-academy",
+    "ne-omaha-westside-high-school": "ne-omaha-omaha-westside",
+    "tx-killeen-shoemaker-high-school": "tx-killeen-killeen-shoemaker",
+    "la-baton-rouge-catholic-high-school": "la-baton-rouge-baton-rouge-catholic",
+    "il-park-ridge-maine-township-south-high-school": "il-park-ridge-maine-south",
+    "fl-tallahassee-james-s-rickards-high-school": "fl-tallahassee-rickards",
+    "la-metairie-archbishop-rummel-school-for-boys": "la-metairie-archbishop-rummel",
+    "tx-conroe-oak-ridge-high-school": "tx-conroe-conroe-oak-ridge",
+    "sd-pierre-theodore-f-riggs-high-school": "sd-pierre-t-f-riggs",
+    "md-indian-head-lackey-high-school": "md-indian-head-henry-e-lackey",
     "oh-lakewood-saint-edward": "oh-lakewood-st-edward",
     "oh-massillon-washington": "oh-massillon-massillon-washington",
     "oh-saint-clairsville-saint-clairsville": "oh-st-clairsville-st-clairsville",

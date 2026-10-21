@@ -81,8 +81,12 @@ async function fetchYear(year: number) {
   });
   const dir = join(ROOT, "data/raw/espn");
   await mkdir(dir, { recursive: true });
-  await writeFile(join(dir, `${year}.json`), JSON.stringify({ year, count: slim.length, players: slim }));
-  console.log("wrote", year, slim.length);
+  const asOf = new Date().toISOString();
+  await writeFile(
+    join(dir, `${year}.json`),
+    JSON.stringify({ year, count: slim.length, as_of: asOf, players: slim }),
+  );
+  console.log("wrote", year, slim.length, asOf);
 }
 
 async function main() {
