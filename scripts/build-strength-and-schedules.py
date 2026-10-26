@@ -43,6 +43,10 @@ DCTF_RANKINGS_URLS = (
 # Newest published week article first. Live /rankings is the board; week
 # number comes from the article title, never from the Last Week column.
 DCTF_WEEK_ARTICLE_FALLBACKS = (
+    "https://www.davecampbells.com/articles/2026/10/26/"
+    "official-txhsfb-ap-week-10-rankings-powered-by-dctx",
+    "https://www.texasfootball.com/article/2026/10/26/"
+    "official-txhsfb-ap-week-10-rankings-powered-by-dctx",
     "https://www.davecampbells.com/articles/2026/10/19/"
     "official-txhsfb-ap-week-9-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/10/19/"
@@ -260,11 +264,32 @@ def fetch_on3(*, force: bool = False) -> list[dict]:
         print(f"on3 page {page} total {len(teams)}", flush=True)
         if len(teams) >= 1000:
             break
+    prior = []
+    if RAW_ON3.exists():
+        try:
+            prior = json.loads(RAW_ON3.read_text()).get("teams") or []
+        except json.JSONDecodeError:
+            prior = []
+    if len(teams) < 900 and len(prior) >= 900:
+        print(
+            f"on3 live {len(teams)} teams; keeping on-disk {len(prior)} (not invented)",
+            flush=True,
+        )
+        return prior
+    as_of = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     RAW_ON3.parent.mkdir(parents=True, exist_ok=True)
     RAW_ON3.write_text(
-        json.dumps({"year": 2026, "source": "on3_composite_national", "count": len(teams), "teams": teams})
+        json.dumps(
+            {
+                "year": 2026,
+                "source": "on3_composite_national",
+                "count": len(teams),
+                "as_of": as_of,
+                "teams": teams,
+            }
+        )
     )
-    print(f"wrote {RAW_ON3} {len(teams)}")
+    print(f"wrote {RAW_ON3} {len(teams)} as_of {as_of}")
     return teams
 
 
@@ -708,6 +733,19 @@ def fetch_maxpreps_national(schools: list[dict], *, force: bool = False) -> dict
             rows.append(row)
         print(f"maxpreps rankings page {page} +{len(page_rows)} total {len(rows)}", flush=True)
     if len(rows) < 90:
+        if RAW_MP.exists():
+            try:
+                cached = json.loads(RAW_MP.read_text())
+            except json.JSONDecodeError:
+                cached = {}
+            n = len(cached.get("teams") or []) + len(cached.get("skipped") or [])
+            if n >= 90:
+                print(
+                    f"maxpreps national live {len(rows)} rows; keeping on-disk "
+                    f"{n} as_of {cached.get('as_of')} (not invented)",
+                    flush=True,
+                )
+                return cached
         raise RuntimeError(f"MaxPreps national board too small ({len(rows)}); refusing to invent ranks")
     teams = []
     skipped = []
@@ -857,7 +895,7 @@ def dctf_article_url_candidates() -> list[str]:
     """Known week articles first, then recent Monday slugs. Never invents ranks."""
     urls: list[str] = list(DCTF_WEEK_ARTICLE_FALLBACKS)
     today = datetime.now(timezone.utc).date()
-    slug_weeks = (10, 9, 8, 7, 6)
+    slug_weeks = (11, 10, 9, 8, 7, 6)
     for delta in range(0, 22):
         d = today - timedelta(days=delta)
         if d.weekday() != 0:
@@ -3789,14 +3827,14 @@ def week_refresh() -> int:
     if mp_fail:
         print(f"maxpreps fetch-miss {len(mp_fail)} (kept prior slate): {mp_fail[:20]}", flush=True)
     for day in (
-        "2026-10-15",
-        "2026-10-16",
-        "2026-10-17",
-        "2026-10-18",
         "2026-10-22",
         "2026-10-23",
         "2026-10-24",
         "2026-10-25",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
     ):
         n = timed = 0
         for row in schedules.values():
