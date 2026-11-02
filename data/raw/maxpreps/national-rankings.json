@@ -1,10 +1,10 @@
 {
-  "as_of": "2026-10-26",
+  "as_of": "2026-11-02",
   "n": 100,
   "source": "MaxPreps national computer rankings (not editorial Top 25)",
   "source_url": "https://www.maxpreps.com/football/rankings/1/",
-  "last_updated": "2026-10-26T15:47:17",
-  "joined": 86,
+  "last_updated": "2026-11-02T17:30:44",
+  "joined": 88,
   "skipped": [
     {
       "rank": 4,
@@ -19,7 +19,7 @@
       "state": "FL"
     },
     {
-      "rank": 20,
+      "rank": 21,
       "name": "Prattville",
       "school_id": "2e600d06-eddc-4a2c-8da9-7865f1012bdb",
       "state": "AL"
@@ -31,28 +31,28 @@
       "state": "CA"
     },
     {
-      "rank": 35,
+      "rank": 33,
       "name": "King",
       "school_id": "f574c035-ca19-4267-ba0f-e046392a7ba8",
       "state": "TX"
     },
     {
-      "rank": 41,
+      "rank": 37,
       "name": "Creekside",
       "school_id": "827f16df-20c0-4157-99da-c39633b66ae9",
       "state": "GA"
     },
     {
-      "rank": 70,
-      "name": "American Heritage",
-      "school_id": "d74071bd-dfc9-418d-8fb5-a24bffcaa5fa",
-      "state": "FL"
-    },
-    {
-      "rank": 80,
+      "rank": 67,
       "name": "Grayson",
       "school_id": "f1bb5b85-e938-4368-b146-6d7ae5cfd51f",
       "state": "GA"
+    },
+    {
+      "rank": 71,
+      "name": "Frederick Douglass",
+      "school_id": "a2802a10-b089-4af3-ac78-bc867d05cba2",
+      "state": "KY"
     },
     {
       "rank": 83,
@@ -61,16 +61,22 @@
       "state": "MS"
     },
     {
-      "rank": 91,
+      "rank": 85,
+      "name": "American Heritage",
+      "school_id": "d74071bd-dfc9-418d-8fb5-a24bffcaa5fa",
+      "state": "FL"
+    },
+    {
+      "rank": 93,
       "name": "Imhotep Charter",
       "school_id": "616abd7a-0e54-4529-b3cd-c75d50c5c88c",
       "state": "PA"
     },
     {
-      "rank": 98,
-      "name": "Frederick Douglass",
-      "school_id": "a2802a10-b089-4af3-ac78-bc867d05cba2",
-      "state": "KY"
+      "rank": 99,
+      "name": "Lakota West",
+      "school_id": "ae4b4150-f34d-40d0-a40f-c647968bf2f3",
+      "state": "OH"
     }
   ],
   "teams": [
@@ -132,24 +138,24 @@
     },
     {
       "rank": 11,
-      "site_id": "ca-bellflower-st-john-bosco",
-      "school_id": "229cf8e5-737c-418e-8f4e-f3ac3d566af4",
-      "name": "St. John Bosco",
-      "state": "CA"
-    },
-    {
-      "rank": 12,
       "site_id": "ga-thomasville-thomas-county-central",
       "school_id": "a1ebf8be-9abc-48be-a64f-f29630826189",
       "name": "Thomas County Central",
       "state": "GA"
     },
     {
-      "rank": 13,
+      "rank": 12,
       "site_id": "tx-fort-worth-north-crowley",
       "school_id": "f2548e90-ae2d-4833-89f8-b267d9b316fe",
       "name": "North Crowley",
       "state": "TX"
+    },
+    {
+      "rank": 13,
+      "site_id": "ca-santa-ana-mater-dei",
+      "school_id": "2b6b45d3-4465-4750-ba48-a273b674e37c",
+      "name": "Mater Dei",
+      "state": "CA"
     },
     {
       "rank": 14,
@@ -181,31 +187,31 @@
     },
     {
       "rank": 18,
-      "site_id": "ca-santa-ana-mater-dei",
-      "school_id": "2b6b45d3-4465-4750-ba48-a273b674e37c",
-      "name": "Mater Dei",
-      "state": "CA"
-    },
-    {
-      "rank": 19,
       "site_id": "pa-pittsburgh-central-catholic",
       "school_id": "22ca1fcb-bec9-4ca0-8c85-ee67efe1e705",
       "name": "Central Catholic",
       "state": "PA"
     },
     {
-      "rank": 21,
+      "rank": 19,
+      "site_id": "la-new-orleans-st-augustine",
+      "school_id": "503da63d-989d-4cb7-8154-1b1d96750722",
+      "name": "St. Augustine",
+      "state": "LA"
+    },
+    {
+      "rank": 20,
+      "site_id": "ca-bellflower-st-john-bosco",
+      "school_id": "229cf8e5-737c-418e-8f4e-f3ac3d566af4",
+      "name": "St. John Bosco",
+      "state": "CA"
+    },
+    {
+      "rank": 22,
       "site_id": "ky-louisville-trinity",
       "school_id": "687384b7-6d3f-47cc-b983-ef07b585923c",
       "name": "Trinity",
       "state": "KY"
-    },
-    {
-      "rank": 22,
-      "site_id": "la-new-orleans-edna-karr",
-      "school_id": "3dbf5a43-de1f-4696-b9a6-cf3fee0ab234",
-      "name": "Edna Karr",
-      "state": "LA"
     },
     {
       "rank": 23,
@@ -251,293 +257,307 @@
     },
     {
       "rank": 30,
-      "site_id": "fl-miami-miami-central",
-      "school_id": "bb694921-d3fe-43ae-95b9-2e8d83844fd4",
-      "name": "Miami Central",
-      "state": "FL"
-    },
-    {
-      "rank": 31,
       "site_id": "il-east-st-louis-east-st-louis",
       "school_id": "ebb81bec-bb5e-4806-b418-2536b760578c",
       "name": "East St. Louis",
       "state": "IL"
     },
     {
-      "rank": 32,
+      "rank": 31,
       "site_id": "tn-brentwood-brentwood-academy",
       "school_id": "1ca1eec6-40e3-4d04-9831-04fe92760ad0",
       "name": "Brentwood Academy",
       "state": "TN"
     },
     {
-      "rank": 33,
-      "site_id": "ok-bixby-bixby",
-      "school_id": "5d2fd0ac-98d4-4a9d-8b67-3721b7af6e99",
-      "name": "Bixby",
-      "state": "OK"
-    },
-    {
-      "rank": 34,
+      "rank": 32,
       "site_id": "fl-jacksonville-raines",
       "school_id": "774c9f71-2a64-4e55-a5b5-a072c71a9c8a",
       "name": "Raines",
       "state": "FL"
     },
     {
-      "rank": 36,
+      "rank": 34,
       "site_id": "ga-tyrone-sandy-creek",
       "school_id": "eeec62a6-c752-46ed-a9f8-a58a3eb6af9a",
       "name": "Sandy Creek",
       "state": "GA"
     },
     {
-      "rank": 37,
+      "rank": 35,
       "site_id": "tx-richmond-richmond-randle",
       "school_id": "8edeaac4-5a9e-450d-afb3-699ea6fbb4dd",
       "name": "Richmond Randle",
       "state": "TX"
     },
     {
-      "rank": 38,
+      "rank": 36,
       "site_id": "oh-columbus-bishop-watterson",
       "school_id": "ef6f1859-cc8b-493e-8157-7d99b19e27e3",
       "name": "Bishop Watterson",
       "state": "OH"
     },
     {
-      "rank": 39,
-      "site_id": "md-baltimore-st-frances-academy",
-      "school_id": "c1783fb0-c965-42a0-abe3-41fbe7641303",
-      "name": "St. Frances Academy",
-      "state": "MD"
-    },
-    {
-      "rank": 40,
-      "site_id": "al-pinson-clay-chalkville",
-      "school_id": "d10ba1be-e353-4009-bd7b-99311091eeb0",
-      "name": "Clay-Chalkville",
-      "state": "AL"
-    },
-    {
-      "rank": 42,
+      "rank": 38,
       "site_id": "nc-greensboro-grimsley",
       "school_id": "86cd69cb-275e-450e-82b6-e3c0a3746382",
       "name": "Grimsley",
       "state": "NC"
     },
     {
-      "rank": 43,
+      "rank": 39,
       "site_id": "mi-detroit-cass-technical",
       "school_id": "b37776a7-3c03-4dec-959e-a6da95fb761f",
       "name": "Cass Technical",
       "state": "MI"
     },
     {
-      "rank": 44,
-      "site_id": "la-new-orleans-st-augustine",
-      "school_id": "503da63d-989d-4cb7-8154-1b1d96750722",
-      "name": "St. Augustine",
-      "state": "LA"
+      "rank": 40,
+      "site_id": "md-baltimore-st-frances-academy",
+      "school_id": "c1783fb0-c965-42a0-abe3-41fbe7641303",
+      "name": "St. Frances Academy",
+      "state": "MD"
     },
     {
-      "rank": 45,
-      "site_id": "ca-orange-orange-lutheran",
-      "school_id": "098e1491-1717-4088-b7a0-55e47c8e1d17",
-      "name": "Orange Lutheran",
-      "state": "CA"
-    },
-    {
-      "rank": 46,
+      "rank": 41,
       "site_id": "tx-houston-north-shore",
       "school_id": "0bcb98b4-30ea-4f0c-aaf5-c35f45870f53",
       "name": "North Shore",
       "state": "TX"
     },
     {
-      "rank": 47,
+      "rank": 42,
       "site_id": "ne-omaha-omaha-westside",
       "school_id": "d6f09ff7-ddc1-4a88-ad7c-539f28e6a418",
       "name": "Omaha Westside",
       "state": "NE"
     },
     {
-      "rank": 48,
+      "rank": 43,
       "site_id": "ca-mission-viejo-mission-viejo",
       "school_id": "3d826abe-7d55-4a8e-a911-c11f4990aa07",
       "name": "Mission Viejo",
       "state": "CA"
     },
     {
-      "rank": 49,
+      "rank": 44,
       "site_id": "fl-venice-venice",
       "school_id": "1d6e9c6d-44a0-4e67-932e-789d27de9a90",
       "name": "Venice",
       "state": "FL"
     },
     {
-      "rank": 50,
+      "rank": 45,
       "site_id": "ut-herriman-mountain-ridge",
       "school_id": "63103896-a46c-47ce-8b5c-fe54c3aad494",
       "name": "Mountain Ridge",
       "state": "UT"
     },
     {
-      "rank": 51,
+      "rank": 46,
       "site_id": "fl-lakeland-lakeland",
       "school_id": "331ffa71-c3f0-4fa7-84f6-cb9e7e563868",
       "name": "Lakeland",
       "state": "FL"
     },
     {
-      "rank": 52,
+      "rank": 47,
+      "site_id": "ok-broken-arrow-broken-arrow",
+      "school_id": "1af41bd9-49d9-4046-b7c7-c0c87ef73d9b",
+      "name": "Broken Arrow",
+      "state": "OK"
+    },
+    {
+      "rank": 48,
       "site_id": "co-englewood-cherry-creek",
       "school_id": "c5b0553b-97b2-480b-9e86-6c8f591a04f6",
       "name": "Cherry Creek",
       "state": "CO"
     },
     {
-      "rank": 53,
+      "rank": 49,
       "site_id": "tx-southlake-southlake-carroll",
       "school_id": "fbce2bd4-14b1-4d70-affe-b7d2d746a418",
       "name": "Southlake Carroll",
       "state": "TX"
     },
     {
-      "rank": 54,
-      "site_id": "ga-gainesville-gainesville",
-      "school_id": "04c16894-2bc7-41de-ad3f-a9ff7110fc09",
-      "name": "Gainesville",
-      "state": "GA"
-    },
-    {
-      "rank": 56,
-      "site_id": "oh-lakewood-st-edward",
-      "school_id": "2f510683-5829-4d1e-9a93-703a82f12a58",
-      "name": "St. Edward",
-      "state": "OH"
-    },
-    {
-      "rank": 57,
+      "rank": 50,
       "site_id": "ga-roswell-blessed-trinity-high-school",
       "school_id": "76d9c5f9-e46c-4a1d-a130-d1e47281bf7a",
       "name": "Blessed Trinity High School",
       "state": "GA"
     },
     {
-      "rank": 58,
-      "site_id": "sc-irmo-dutch-fork",
-      "school_id": "c2e8711a-25ca-4802-bf2c-7edad087024c",
-      "name": "Dutch Fork",
-      "state": "SC"
-    },
-    {
-      "rank": 59,
+      "rank": 51,
       "site_id": "ga-alpharetta-milton",
       "school_id": "e372bc25-b5c1-4c9a-ad82-6bac6c618767",
       "name": "Milton",
       "state": "GA"
     },
     {
-      "rank": 60,
-      "site_id": "dc-washington-st-john-s-college",
-      "school_id": "56d98abd-343e-4f12-b510-666a90501fac",
-      "name": "St. John's College",
-      "state": "DC"
-    },
-    {
-      "rank": 61,
-      "site_id": "fl-boca-raton-west-boca-raton",
-      "school_id": "e7903dfb-37a9-4b3b-af93-19f0569f5114",
-      "name": "West Boca Raton",
-      "state": "FL"
-    },
-    {
-      "rank": 62,
-      "site_id": "tx-desoto-desoto",
-      "school_id": "9a075e03-96fb-4f90-9768-1541d5385443",
-      "name": "DeSoto",
-      "state": "TX"
-    },
-    {
-      "rank": 63,
-      "site_id": "wa-puyallup-puyallup",
-      "school_id": "19339740-6e93-4929-b54d-f7123a6dd09e",
-      "name": "Puyallup",
-      "state": "WA"
-    },
-    {
-      "rank": 64,
-      "site_id": "tx-dallas-south-oak-cliff",
-      "school_id": "7cb7e6a9-f837-4204-8c37-f9cb9dd17ce8",
-      "name": "South Oak Cliff",
-      "state": "TX"
-    },
-    {
-      "rank": 65,
+      "rank": 52,
       "site_id": "fl-tampa-carrollwood-day",
       "school_id": "ebbdd449-82bd-4cde-88a4-457482b189ac",
       "name": "Carrollwood Day",
       "state": "FL"
     },
     {
-      "rank": 66,
-      "site_id": "tx-spring-branch-smithson-valley",
-      "school_id": "9c4be553-e2ef-49a5-a55f-483d725bc1f1",
-      "name": "Smithson Valley",
-      "state": "TX"
+      "rank": 53,
+      "site_id": "oh-lakewood-st-edward",
+      "school_id": "2f510683-5829-4d1e-9a93-703a82f12a58",
+      "name": "St. Edward",
+      "state": "OH"
     },
     {
-      "rank": 67,
-      "site_id": "fl-deland-deland",
-      "school_id": "a56cc5ad-8455-4ed9-8ecf-4eaa17076fe4",
-      "name": "DeLand",
-      "state": "FL"
-    },
-    {
-      "rank": 68,
-      "site_id": "tx-san-antonio-cornerstone-christian",
-      "school_id": "0d4488fa-a03d-47c9-b874-f78523a2e76a",
-      "name": "Cornerstone Christian",
-      "state": "TX"
-    },
-    {
-      "rank": 69,
-      "site_id": "ga-valdosta-lowndes",
-      "school_id": "ec00d511-6c9c-47c8-92e7-eb4fcc9fc46d",
-      "name": "Lowndes",
-      "state": "GA"
-    },
-    {
-      "rank": 71,
+      "rank": 54,
       "site_id": "al-phenix-city-central-high-school",
       "school_id": "48daa12f-8c91-485f-b3eb-680258f20dd8",
       "name": "Central High School",
       "state": "AL"
     },
     {
-      "rank": 73,
+      "rank": 55,
+      "site_id": "az-chandler-basha",
+      "school_id": "a9439e73-249d-4e8c-872b-f8f4ffe9252a",
+      "name": "Basha",
+      "state": "AZ"
+    },
+    {
+      "rank": 56,
+      "site_id": "dc-washington-st-john-s-college",
+      "school_id": "56d98abd-343e-4f12-b510-666a90501fac",
+      "name": "St. John's College",
+      "state": "DC"
+    },
+    {
+      "rank": 57,
+      "site_id": "az-peoria-liberty",
+      "school_id": "66bf0a37-d675-40af-9e43-7d07ec01fca9",
+      "name": "Liberty",
+      "state": "AZ"
+    },
+    {
+      "rank": 58,
+      "site_id": "fl-boca-raton-west-boca-raton",
+      "school_id": "e7903dfb-37a9-4b3b-af93-19f0569f5114",
+      "name": "West Boca Raton",
+      "state": "FL"
+    },
+    {
+      "rank": 59,
+      "site_id": "sc-irmo-dutch-fork",
+      "school_id": "c2e8711a-25ca-4802-bf2c-7edad087024c",
+      "name": "Dutch Fork",
+      "state": "SC"
+    },
+    {
+      "rank": 60,
+      "site_id": "tx-desoto-desoto",
+      "school_id": "9a075e03-96fb-4f90-9768-1541d5385443",
+      "name": "DeSoto",
+      "state": "TX"
+    },
+    {
+      "rank": 61,
+      "site_id": "wa-puyallup-puyallup",
+      "school_id": "19339740-6e93-4929-b54d-f7123a6dd09e",
+      "name": "Puyallup",
+      "state": "WA"
+    },
+    {
+      "rank": 62,
+      "site_id": "tx-dallas-south-oak-cliff",
+      "school_id": "7cb7e6a9-f837-4204-8c37-f9cb9dd17ce8",
+      "name": "South Oak Cliff",
+      "state": "TX"
+    },
+    {
+      "rank": 63,
+      "site_id": "ga-valdosta-lowndes",
+      "school_id": "ec00d511-6c9c-47c8-92e7-eb4fcc9fc46d",
+      "name": "Lowndes",
+      "state": "GA"
+    },
+    {
+      "rank": 64,
+      "site_id": "la-new-orleans-edna-karr",
+      "school_id": "3dbf5a43-de1f-4696-b9a6-cf3fee0ab234",
+      "name": "Edna Karr",
+      "state": "LA"
+    },
+    {
+      "rank": 65,
+      "site_id": "tx-spring-branch-smithson-valley",
+      "school_id": "9c4be553-e2ef-49a5-a55f-483d725bc1f1",
+      "name": "Smithson Valley",
+      "state": "TX"
+    },
+    {
+      "rank": 66,
+      "site_id": "ga-gainesville-gainesville",
+      "school_id": "04c16894-2bc7-41de-ad3f-a9ff7110fc09",
+      "name": "Gainesville",
+      "state": "GA"
+    },
+    {
+      "rank": 68,
+      "site_id": "fl-opa-locka-miami-carol-city",
+      "school_id": "f051aa65-cc12-479d-9b7c-8ee8eadd1405",
+      "name": "Miami Carol City",
+      "state": "FL"
+    },
+    {
+      "rank": 69,
       "site_id": "oh-massillon-massillon-washington",
       "school_id": "3797b87e-6c59-4035-9e62-9a1231211658",
       "name": "Massillon Washington",
       "state": "OH"
     },
     {
-      "rank": 74,
+      "rank": 70,
       "site_id": "ca-fresno-central-east",
       "school_id": "6a60da72-1f39-4e93-b1ee-8784d933457e",
       "name": "Central East",
       "state": "CA"
     },
     {
+      "rank": 72,
+      "site_id": "fl-miami-miami-central",
+      "school_id": "bb694921-d3fe-43ae-95b9-2e8d83844fd4",
+      "name": "Miami Central",
+      "state": "FL"
+    },
+    {
+      "rank": 73,
+      "site_id": "ca-orange-orange-lutheran",
+      "school_id": "098e1491-1717-4088-b7a0-55e47c8e1d17",
+      "name": "Orange Lutheran",
+      "state": "CA"
+    },
+    {
+      "rank": 74,
+      "site_id": "oh-cincinnati-princeton",
+      "school_id": "f96cacba-88b2-419a-9b6a-80d97d42c4f4",
+      "name": "Princeton",
+      "state": "OH"
+    },
+    {
       "rank": 75,
-      "site_id": "ga-valdosta-valdosta",
-      "school_id": "34394634-0bb0-41ca-84e5-c7b5f49d0072",
-      "name": "Valdosta",
-      "state": "GA"
+      "site_id": "tx-lewisville-lewisville",
+      "school_id": "929dcb6e-629a-445a-8caf-cb5ab1f92c9d",
+      "name": "Lewisville",
+      "state": "TX"
     },
     {
       "rank": 76,
+      "site_id": "fl-deland-deland",
+      "school_id": "a56cc5ad-8455-4ed9-8ecf-4eaa17076fe4",
+      "name": "DeLand",
+      "state": "FL"
+    },
+    {
+      "rank": 77,
       "site_id": "az-peoria-peoria-centennial",
       "school_id": "bf733f50-1346-49aa-989f-0ab2fa06694c",
       "name": "Peoria Centennial",
@@ -545,24 +565,31 @@
     },
     {
       "rank": 78,
-      "site_id": "ut-lehi-skyridge",
-      "school_id": "4a0f0b57-1a90-4c1a-8738-5ed0bd61bf9d",
-      "name": "Skyridge",
-      "state": "UT"
+      "site_id": "ok-bixby-bixby",
+      "school_id": "5d2fd0ac-98d4-4a9d-8b67-3721b7af6e99",
+      "name": "Bixby",
+      "state": "OK"
     },
     {
       "rank": 79,
-      "site_id": "fl-sarasota-cardinal-mooney",
-      "school_id": "312d4acc-805f-40c0-bcb3-9b3362c3fe5f",
-      "name": "Cardinal Mooney",
-      "state": "FL"
+      "site_id": "al-pinson-clay-chalkville",
+      "school_id": "d10ba1be-e353-4009-bd7b-99311091eeb0",
+      "name": "Clay-Chalkville",
+      "state": "AL"
+    },
+    {
+      "rank": 80,
+      "site_id": "nj-jersey-city-st-peter-s-prep",
+      "school_id": "d6f4b19b-0fa4-4567-b38e-4f19996fe38d",
+      "name": "St. Peter's Prep",
+      "state": "NJ"
     },
     {
       "rank": 81,
-      "site_id": "fl-opa-locka-miami-carol-city",
-      "school_id": "f051aa65-cc12-479d-9b7c-8ee8eadd1405",
-      "name": "Miami Carol City",
-      "state": "FL"
+      "site_id": "nj-ramsey-don-bosco-prep",
+      "school_id": "e2708027-e41b-4746-8cfc-8a631ea3fd4c",
+      "name": "Don Bosco Prep",
+      "state": "NJ"
     },
     {
       "rank": 82,
@@ -573,48 +600,48 @@
     },
     {
       "rank": 84,
+      "site_id": "ga-valdosta-valdosta",
+      "school_id": "34394634-0bb0-41ca-84e5-c7b5f49d0072",
+      "name": "Valdosta",
+      "state": "GA"
+    },
+    {
+      "rank": 86,
+      "site_id": "ut-lehi-skyridge",
+      "school_id": "4a0f0b57-1a90-4c1a-8738-5ed0bd61bf9d",
+      "name": "Skyridge",
+      "state": "UT"
+    },
+    {
+      "rank": 87,
+      "site_id": "fl-sarasota-cardinal-mooney",
+      "school_id": "312d4acc-805f-40c0-bcb3-9b3362c3fe5f",
+      "name": "Cardinal Mooney",
+      "state": "FL"
+    },
+    {
+      "rank": 88,
       "site_id": "ut-draper-corner-canyon",
       "school_id": "7e4dce6a-b7c1-4d9a-959c-892cd4b227df",
       "name": "Corner Canyon",
       "state": "UT"
     },
     {
-      "rank": 85,
+      "rank": 89,
       "site_id": "az-chandler-hamilton",
       "school_id": "96ef6983-d533-4398-807f-f0fe51088378",
       "name": "Hamilton",
       "state": "AZ"
     },
     {
-      "rank": 86,
-      "site_id": "nj-jersey-city-st-peter-s-prep",
-      "school_id": "d6f4b19b-0fa4-4567-b38e-4f19996fe38d",
-      "name": "St. Peter's Prep",
-      "state": "NJ"
-    },
-    {
-      "rank": 87,
+      "rank": 90,
       "site_id": "tn-franklin-battle-ground-academy",
       "school_id": "84849335-fd4d-452f-8ed9-c66ccd8b3b29",
       "name": "Battle Ground Academy",
       "state": "TN"
     },
     {
-      "rank": 88,
-      "site_id": "nj-ramsey-don-bosco-prep",
-      "school_id": "e2708027-e41b-4746-8cfc-8a631ea3fd4c",
-      "name": "Don Bosco Prep",
-      "state": "NJ"
-    },
-    {
-      "rank": 89,
-      "site_id": "pa-philadelphia-st-joseph-s-prep",
-      "school_id": "e6ce254d-240b-4081-a66e-26e1ced9a095",
-      "name": "St. Joseph's Prep",
-      "state": "PA"
-    },
-    {
-      "rank": 90,
+      "rank": 91,
       "site_id": "sc-rock-hill-northwestern",
       "school_id": "0ef5b507-0ba0-4fed-8e94-d24f2f552aa9",
       "name": "Northwestern",
@@ -622,59 +649,52 @@
     },
     {
       "rank": 92,
+      "site_id": "fl-west-palm-beach-cardinal-newman",
+      "school_id": "bc5120f5-7344-46ef-acc1-53e9d36b4e75",
+      "name": "Cardinal Newman",
+      "state": "FL"
+    },
+    {
+      "rank": 94,
       "site_id": "tx-san-antonio-san-antonio-johnson",
       "school_id": "b7b35422-9c70-4ec0-8922-411f884029c8",
       "name": "San Antonio Johnson",
       "state": "TX"
     },
     {
-      "rank": 93,
+      "rank": 95,
       "site_id": "in-indianapolis-warren-central",
       "school_id": "884f17d0-4b31-4ff4-8bba-0cd74eae3b0f",
       "name": "Warren Central",
       "state": "IN"
     },
     {
-      "rank": 94,
+      "rank": 96,
       "site_id": "fl-lake-city-columbia",
       "school_id": "db481745-3473-4327-a373-dbf128574298",
       "name": "Columbia",
       "state": "FL"
     },
     {
-      "rank": 95,
-      "site_id": "la-metairie-archbishop-rummel",
-      "school_id": "1e4f512d-b354-42b7-b653-1f6439d92d57",
-      "name": "Archbishop Rummel",
-      "state": "LA"
-    },
-    {
-      "rank": 96,
-      "site_id": "fl-orlando-the-first-academy",
-      "school_id": "de4a3297-9cd7-4580-a062-3fff1f0c7f27",
-      "name": "The First Academy",
-      "state": "FL"
-    },
-    {
       "rank": 97,
-      "site_id": "ga-douglas-coffee",
-      "school_id": "3ee34731-b5f5-4b87-ae98-82e31bffa5cd",
-      "name": "Coffee",
-      "state": "GA"
-    },
-    {
-      "rank": 99,
-      "site_id": "ok-broken-arrow-broken-arrow",
-      "school_id": "1af41bd9-49d9-4046-b7c7-c0c87ef73d9b",
-      "name": "Broken Arrow",
-      "state": "OK"
-    },
-    {
-      "rank": 100,
       "site_id": "tx-missouri-city-fort-bend-ridge-point",
       "school_id": "6c52102d-93b7-4b91-a3b1-809756bf5223",
       "name": "Fort Bend Ridge Point",
       "state": "TX"
+    },
+    {
+      "rank": 98,
+      "site_id": "ca-gardena-junipero-serra",
+      "school_id": "16e16363-66d8-45af-b777-7820b3256850",
+      "name": "Junipero Serra",
+      "state": "CA"
+    },
+    {
+      "rank": 100,
+      "site_id": "pa-philadelphia-st-joseph-s-prep",
+      "school_id": "e6ce254d-240b-4081-a66e-26e1ced9a095",
+      "name": "St. Joseph's Prep",
+      "state": "PA"
     }
   ]
 }
