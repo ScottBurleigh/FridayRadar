@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ListOrdered, CalendarDays, LogOut } from "lucide-react";
+import { ListOrdered, CalendarDays, Flag, LogOut } from "lucide-react";
 import { signOut } from "@/lib/auth-actions";
 
 export function SiteHeader() {
@@ -12,6 +12,7 @@ export function SiteHeader() {
   const links = [
     { href: "/", label: "Rankings", Icon: ListOrdered },
     { href: "/games", label: "Games of the week", Icon: CalendarDays },
+    { href: "/tournaments", label: "Tournaments", Icon: Flag },
   ];
   return (
     <header className="border-b border-amber-400/35 bg-[#0a1220]/95 backdrop-blur">

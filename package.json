@@ -19,7 +19,8 @@
     "ingest:247": "npx tsx scripts/ingest-247.ts",
     "ingest:on3": "npx tsx scripts/ingest-on3.ts",
     "ingest:maxpreps": "npx tsx scripts/ingest-maxpreps.ts",
-    "build:data": "npx tsx scripts/build-dataset.ts"
+    "build:data": "npx tsx scripts/build-dataset.ts",
+    "fetch:zorts": "python3 scripts/fetch-zorts.py"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

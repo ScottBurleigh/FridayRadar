@@ -17,6 +17,8 @@ import { SESSION_COOKIE, sessionTokenValid } from "@/lib/auth";
 /** Assets the login page itself needs before a session exists. */
 function isPublicPath(pathname: string): boolean {
   if (pathname === "/login" || pathname === "/logout") return true;
+  // Public Texas 7v7/flag listings — page + RSC payload (`?_rsc=`). Nothing else.
+  if (pathname === "/tournaments" || pathname === "/tournaments/") return true;
   // Build output and optimized images — needed to render /login at all.
   if (pathname.startsWith("/_next/static") || pathname.startsWith("/_next/image")) return true;
   if (pathname === "/favicon.ico") return true;
