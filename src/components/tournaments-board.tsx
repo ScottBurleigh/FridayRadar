@@ -80,6 +80,33 @@ function categoryLabel(cat: string): string {
   return cat || "—";
 }
 
+function EventMeta({ t }: { t: Tournament }) {
+  const flag50 = (t.flag50_url || "").trim();
+  return (
+    <div className="mt-1 flex flex-wrap items-center gap-1.5">
+      {t.verified ? (
+        <Badge
+          variant="outline"
+          className="border-emerald-400/50 bg-emerald-400/10 text-[10px] font-medium uppercase tracking-wide text-emerald-200"
+        >
+          Verified on Zorts + Flag50
+        </Badge>
+      ) : null}
+      {flag50 ? (
+        <a
+          href={flag50}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1 text-[11px] text-sky-300 hover:text-amber-300"
+        >
+          Flag50
+          <ExternalLink className="size-3" aria-hidden />
+        </a>
+      ) : null}
+    </div>
+  );
+}
+
 function categoryClass(cat: string): string {
   if (cat === "7v7") return "border-amber-400/40 bg-amber-400/10 text-amber-200";
   if (cat === "flag") return "border-sky-400/40 bg-sky-400/10 text-sky-200";
@@ -141,6 +168,7 @@ export function TournamentsBoard({
   const [q, setQ] = useState("");
   const [format, setFormat] = useState<FormatFilter>("all");
   const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [month, setMonth] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -154,6 +182,13 @@ export function TournamentsBoard({
     for (const t of tournaments) if (t.city) s.add(t.city);
     return [...s].sort((a, b) => a.localeCompare(b));
   }, [tournaments]);
+
+  const states = useMemo(() => {
+    const s = new Set<string>();
+    for (const t of tournaments) if (t.state) s.add(t.state);
+    return [...s].sort((a, b) => a.localeCompare(b));
+  }, [tournaments]);
+  const showStateFilter = states.length > 1;
 
   const months = useMemo(() => {
     const s = new Set<string>();
@@ -173,6 +208,7 @@ export function TournamentsBoard({
     const feeCap = cap != null && Number.isFinite(cap) ? cap : null;
     const rows = tournaments.filter((t) => {
       if (!matchesFormat(t, format)) return false;
+      if (state && t.state !== state) return false;
       if (city && t.city !== city) return false;
       if (month && monthKey(t.start_date) !== month) return false;
       if (from && (t.start_date || "") < from) return false;
@@ -204,7 +240,7 @@ export function TournamentsBoard({
       return (a.start_date || "").localeCompare(b.start_date || "") || a.name.localeCompare(b.name);
     });
     return rows;
-  }, [tournaments, q, format, city, month, from, to, maxFee, division, sortKey, sortDir]);
+  }, [tournaments, q, format, city, state, month, from, to, maxFee, division, sortKey, sortDir]);
 
   function toggleSort(key: SortKey) {
     if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -218,6 +254,7 @@ export function TournamentsBoard({
     setQ("");
     setFormat("all");
     setCity("");
+    setState("");
     setMonth("");
     setFrom("");
     setTo("");
@@ -228,7 +265,9 @@ export function TournamentsBoard({
   const updated = generated
     ? generated.replace("T", " ").replace(/\.\d+$/, "")
     : null;
-  const filtersOn = Boolean(q || city || month || from || to || maxFee || division || format !== "all");
+  const filtersOn = Boolean(
+    q || city || state || month || from || to || maxFee || division || format !== "all",
+  );
 
   return (
     <>
@@ -241,10 +280,12 @@ export function TournamentsBoard({
             Tournaments
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-zinc-300">
-            Upcoming Texas 7v7 and flag football tournaments from Zorts. Each
-            event name opens the organizer&apos;s registration page. Past events
-            (ended before today, Central Time) are hidden. Fees, divisions, and
-            contacts are copied from the public listing — never invented.
+            Upcoming Texas 7v7 and flag football tournaments from Zorts and
+            Flag50. Each event name opens the organizer&apos;s registration
+            page; Flag50 listings also get a Flag50 link. Events on both sites
+            show a verified badge. Past events (ended before today, Central
+            Time) are hidden. Fees, divisions, and contacts are copied from the
+            public listing — never invented.
           </p>
         </div>
         <p className="font-mono text-sm text-zinc-400">
@@ -311,6 +352,26 @@ export function TournamentsBoard({
           </div>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          {showStateFilter ? (
+            <div>
+              <Label htmlFor="tstate" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
+                State
+              </Label>
+              <select
+                id="tstate"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
+              >
+                <option value="">All states</option>
+                {states.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
           <div>
             <Label htmlFor="tcity" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
               City
@@ -408,7 +469,7 @@ export function TournamentsBoard({
           <p className="text-lg font-medium text-zinc-100">No tournaments match</p>
           <p className="mx-auto mt-2 max-w-lg text-sm text-zinc-400">
             {tournaments.length === 0
-              ? "No upcoming Texas 7v7 or flag events are on file. The Monday refresh pulls Zorts public listings when they are reachable."
+              ? "No upcoming 7v7 or flag events are on file. The Monday refresh pulls Zorts and Flag50 public listings when they are reachable."
               : "Try clearing a filter, widening the date range, or switching format back to All."}
           </p>
         </div>
@@ -494,6 +555,7 @@ export function TournamentsBoard({
                         <span>{t.name}</span>
                         <ExternalLink className="mt-0.5 size-3 shrink-0 text-zinc-500" aria-hidden />
                       </a>
+                      <EventMeta t={t} />
                       {t.venue ? (
                         <p className="mt-0.5 text-xs text-zinc-500">{t.venue}</p>
                       ) : null}
@@ -539,8 +601,9 @@ export function TournamentsBoard({
                   <span>{t.name}</span>
                   <ExternalLink className="mt-1 size-3 shrink-0 text-zinc-500" aria-hidden />
                 </a>
+                <EventMeta t={t} />
                 <p className="mt-1 text-sm text-zinc-400">
-                  {[t.city, t.organizer].filter(Boolean).join(" · ") || t.venue || "—"}
+                  {[t.city, t.state, t.organizer].filter(Boolean).join(" · ") || t.venue || "—"}
                 </p>
                 {t.entry_fee ? (
                   <p className="mt-1 font-mono text-xs text-amber-200">{t.entry_fee}</p>

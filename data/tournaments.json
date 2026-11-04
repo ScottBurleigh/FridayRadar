@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-04T18:11:11",
+  "generated": "2026-11-04T12:28:52",
   "window": [
     "2026-11-04",
     "2027-06-04"
@@ -7,8 +7,9 @@
   "count": 136,
   "tournaments": [
     {
-      "id": "27094",
+      "id": "zorts-27094",
       "category": "flag",
+      "state": "TX",
       "name": "We Run The World Houston",
       "start_date": "2026-11-07",
       "end_date": "2026-11-07",
@@ -24,11 +25,50 @@
       "contact_phone": "2158537079",
       "event_url": "https://www.zortssports.com/join/tournament/27094",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27094",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27094",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27991",
+      "id": "flag50-zs27593",
       "category": "flag",
+      "state": "TX",
+      "name": "Youth Texas Shootout Classic Tournament - New Braunfels, TX",
+      "start_date": "2026-11-08",
+      "end_date": "2026-11-08",
+      "city": "New Braunfels",
+      "venue": "Zipp Family Sports Park, West Klein Road, New Braunfels, TX",
+      "sport": "Boy's Football (5v5)",
+      "age_groups": "7u to 18u",
+      "divisions": "",
+      "entry_fee": "$275.00 USD per team",
+      "registration_ends": "",
+      "organizer": "Texas Flag Football Association",
+      "contact_email": "",
+      "contact_phone": "",
+      "event_url": "https://flag50.com/tournaments/youth-texas-shootout-classic-tournament-new-braunfels-tx-new-braunfels-tx-zs27593",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse?tid=27593",
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27593",
+      "flag50_url": "https://flag50.com/tournaments/youth-texas-shootout-classic-tournament-new-braunfels-tx-new-braunfels-tx-zs27593",
+      "also_listed_as": [],
+      "conflicts": "linked Zorts event 27593 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - November 8, 2026"
+    },
+    {
+      "id": "zorts-27991",
+      "category": "flag",
+      "state": "TX",
       "name": "Neighborhood Sports NFL Flag State Championships Fall 2026",
       "start_date": "2026-11-14",
       "end_date": "2026-11-14",
@@ -44,11 +84,20 @@
       "contact_phone": "(512)-560-1677",
       "event_url": "https://www.zortssports.com/join/tournament/27991",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27991",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27991",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27600",
+      "id": "zorts-27600",
       "category": "flag",
+      "state": "TX",
       "name": "2nd Annual Turkey & Troops",
       "start_date": "2026-11-15",
       "end_date": "2026-11-15",
@@ -64,11 +113,21 @@
       "contact_phone": "806-412-9253",
       "event_url": "https://www.zortssports.com/join/tournament/27600",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27600",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27600",
+      "flag50_url": "https://flag50.com/tournaments/2nd-annual-turkey-troops-lubbock-tx-zs27600",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27259",
+      "id": "zorts-27259",
       "category": "7v7",
+      "state": "TX",
       "name": "7on7 \"Battle For the Bird\" Turkey-Bowl 2026 (Fort Worth, TX)",
       "start_date": "2026-11-15",
       "end_date": "2026-11-15",
@@ -84,11 +143,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27259",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27259",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27259",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26621",
+      "id": "zorts-26621",
       "category": "flag",
+      "state": "TX",
       "name": "SLCT FLAG TURKEY BOWL CHAMPIONSHIPS brought to you by FLAGFOOTBALLX",
       "start_date": "2026-11-15",
       "end_date": "2026-11-15",
@@ -104,11 +172,21 @@
       "contact_phone": "817.482.3800",
       "event_url": "https://www.zortssports.com/join/tournament/26621",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26621",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26621",
+      "flag50_url": "https://flag50.com/tournaments/slct-flag-turkey-bowl-championships-brought-to-you-by-flagfo-fort-worth-tx-zs26621",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27358",
+      "id": "zorts-27358",
       "category": "both",
+      "state": "TX",
       "name": "TEXAS SHOWDOWN",
       "start_date": "2026-11-15",
       "end_date": "2026-11-15",
@@ -124,11 +202,20 @@
       "contact_phone": "5128848333",
       "event_url": "https://www.zortssports.com/join/tournament/27358",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27358",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27358",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27234",
+      "id": "zorts-27234",
       "category": "both",
+      "state": "TX",
       "name": "ATX Bowl 2026 (Arlington, TX)",
       "start_date": "2026-11-20",
       "end_date": "2026-11-22",
@@ -144,31 +231,23 @@
       "contact_phone": "(817) 373-5599",
       "event_url": "https://www.zortssports.com/join/tournament/27234",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27234",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27234",
+      "flag50_url": "https://flag50.com/tournaments/atx-bowl-2026-arlington-tx-arlington-tx-fffeb39e2f",
+      "also_listed_as": [
+        "https://flag50.com/tournaments/2026-atx-bowl-arlington-tx-ff3acfae7d"
+      ],
+      "conflicts": "start date differs: zorts 27234=2026-11-20; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-21 | end date differs: zorts 27234=2026-11-22; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-22 | Flag50 marks a listing as adult (isAdult)"
     },
     {
-      "id": "27516",
+      "id": "zorts-27321",
       "category": "flag",
-      "name": "HERO 5V5 FLAG DALLAS",
-      "start_date": "2026-11-21",
-      "end_date": "2026-11-22",
-      "city": "Rowlett",
-      "venue": "Bullitt Training Center, Princeton Road, Rowlett, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "6u to Adult",
-      "divisions": "Coed 6u; Coed 8u; Coed 10u; Coed 12u; Coed 13u; Girl's 10u Girls; Girl's 12u Girls; Girl's 14u Girls; Girl's HS Girls; Women's Adult Women",
-      "entry_fee": "$450.00 USD per team",
-      "registration_ends": "Nov 16, 2026 @ 12:00 AM",
-      "organizer": "HERO 5v5 FLAG",
-      "contact_email": "sjohnson@herosportz.com",
-      "contact_phone": "484 326 8506",
-      "event_url": "https://www.zortssports.com/join/tournament/27516",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27516",
-      "source": "map"
-    },
-    {
-      "id": "27321",
-      "category": "flag",
+      "state": "TX",
       "name": "HERO 5v5 DALLAS",
       "start_date": "2026-11-21",
       "end_date": "2026-11-22",
@@ -184,11 +263,23 @@
       "contact_phone": "214-949-4489",
       "event_url": "https://www.zortssports.com/join/tournament/27321",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27321",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27321",
+      "flag50_url": "https://flag50.com/tournaments/hero-5v5-dallas-rowlett-tx-ff1ef8c78d",
+      "also_listed_as": [
+        "https://www.zortssports.com/join/tournament/27516"
+      ],
+      "conflicts": "end date differs: zorts 27516=2026-11-22; zorts 27321=2026-11-22; flag50 flag50-ff1ef8c78d=2026-11-21"
     },
     {
-      "id": "27781",
+      "id": "zorts-27781",
       "category": "7v7",
+      "state": "TX",
       "name": "TURKEY BOWL 2026",
       "start_date": "2026-11-21",
       "end_date": "2026-11-21",
@@ -204,11 +295,20 @@
       "contact_phone": "9567630140",
       "event_url": "https://www.zortssports.com/join/tournament/27781",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27781",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27781",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26736",
+      "id": "zorts-26736",
       "category": "both",
+      "state": "TX",
       "name": "Turkey Bowl 2026",
       "start_date": "2026-11-21",
       "end_date": "2026-11-21",
@@ -224,11 +324,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/26736",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26736",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26736",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27515",
+      "id": "zorts-27515",
       "category": "flag",
+      "state": "TX",
       "name": "\"TEXAS BATTLE WARS 10\" BOYS FLAG & TACKLE/GIRLS 5V5",
       "start_date": "2026-11-27",
       "end_date": "2026-11-29",
@@ -244,11 +353,21 @@
       "contact_phone": "BOYS 214-603-0081 OR GIRLS 214-543-3839",
       "event_url": "https://www.zortssports.com/join/tournament/27515",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27515",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27515",
+      "flag50_url": "https://flag50.com/tournaments/texas-battle-wars-10-boys-flag-tackle-girls-5v5-arlington-tx-zs27515",
+      "also_listed_as": [],
+      "conflicts": "fee differs: zorts 27515=$100.00 USD per team; flag50 flag50-zs27515=$250.00 USD per team"
     },
     {
-      "id": "25421",
+      "id": "zorts-25421",
       "category": "flag",
+      "state": "TX",
       "name": "Black Friday Blitz 2026 Flag Football Tournament",
       "start_date": "2026-11-28",
       "end_date": "2026-11-28",
@@ -264,11 +383,21 @@
       "contact_phone": "7132993335",
       "event_url": "https://www.zortssports.com/join/tournament/25421",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25421",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/25421",
+      "flag50_url": "https://flag50.com/tournaments/black-friday-blitz-2026-flag-football-tournament-spring-tx-25421",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28309",
+      "id": "zorts-28309",
       "category": "flag",
+      "state": "TX",
       "name": "Days of Thunder",
       "start_date": "2026-11-28",
       "end_date": "2026-11-28",
@@ -284,11 +413,20 @@
       "contact_phone": "8064456997",
       "event_url": "https://www.zortssports.com/join/tournament/28309",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28309",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28309",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28104",
+      "id": "zorts-28104",
       "category": "both",
+      "state": "TX",
       "name": "Stuff the Turkey \u2013 Thanksgiving Football Tournament",
       "start_date": "2026-11-28",
       "end_date": "2026-11-29",
@@ -304,11 +442,20 @@
       "contact_phone": "8065591656",
       "event_url": "https://www.zortssports.com/join/tournament/28104",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28104",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28104",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "24260",
+      "id": "zorts-24260",
       "category": "flag",
+      "state": "TX",
       "name": "2026 Pinnacle Football National Championships \u2013 Corpus Christi",
       "start_date": "2026-12-03",
       "end_date": "2026-12-07",
@@ -324,11 +471,21 @@
       "contact_phone": "4702138405",
       "event_url": "https://www.zortssports.com/join/tournament/24260",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/24260",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/24260",
+      "flag50_url": "https://flag50.com/tournaments/2026-pinnacle-football-national-championships-corpus-christi-corpus-christi-tx-24260",
+      "also_listed_as": [],
+      "conflicts": "Flag50 eventType='review'"
     },
     {
-      "id": "27237",
+      "id": "zorts-27237",
       "category": "7v7",
+      "state": "TX",
       "name": "7V7 PRESEASON SERIES T-30",
       "start_date": "2026-12-05",
       "end_date": "2026-12-05",
@@ -344,11 +501,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27237",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27237",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27237",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27334",
+      "id": "zorts-27334",
       "category": "flag",
+      "state": "TX",
       "name": "Gridiron's G5 National Qualifier",
       "start_date": "2026-12-05",
       "end_date": "2026-12-05",
@@ -364,11 +530,52 @@
       "contact_phone": "817-690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27334",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27334",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27334",
+      "flag50_url": "https://flag50.com/tournaments/gridiron-s-g5-national-qualifier-fort-worth-tx-zs27334",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28237",
+      "id": "flag50-ffd36e74e8",
       "category": "flag",
+      "state": "TX",
+      "name": "NFL FLAG Texans Fall 2026 Regional Tournament",
+      "start_date": "2026-12-05",
+      "end_date": "2026-12-05",
+      "city": "Spring",
+      "venue": "Farm League Park, Spring, TX",
+      "sport": "Girl's, Coed Football (5v5)",
+      "age_groups": "High school",
+      "divisions": "",
+      "entry_fee": "",
+      "registration_ends": "",
+      "organizer": "NFL FLAG / RCX Sports",
+      "contact_email": "",
+      "contact_phone": "",
+      "event_url": "https://flag50.com/tournaments/nfl-flag-texans-fall-2026-regional-tournament-spring-tx-ffd36e74e8",
+      "clubhouse_url": "https://nflflag.com/texans-2026-fall-regional-tournament-series",
+      "source": "flag50",
+      "sources": [
+        "flag50"
+      ],
+      "verified": false,
+      "zorts_url": "",
+      "flag50_url": "https://flag50.com/tournaments/nfl-flag-texans-fall-2026-regional-tournament-spring-tx-ffd36e74e8",
+      "also_listed_as": [
+        "https://flag50.com/tournaments/nfl-flag-texans-regional-spring-tx-ffb547c6c6"
+      ],
+      "conflicts": ""
+    },
+    {
+      "id": "zorts-28237",
+      "category": "flag",
+      "state": "TX",
       "name": "RISING STARS EXPERIENCE TEXAS FLAG REGIONAL CHAMPIONSHIP",
       "start_date": "2026-12-05",
       "end_date": "2026-12-06",
@@ -384,11 +591,20 @@
       "contact_phone": "2149664558",
       "event_url": "https://www.zortssports.com/join/tournament/28237",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28237",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28237",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28439",
+      "id": "zorts-28439",
       "category": "flag",
+      "state": "TX",
       "name": "Texas Legacy Youth Tackle Football Tournament",
       "start_date": "2026-12-05",
       "end_date": "2026-12-06",
@@ -404,11 +620,52 @@
       "contact_phone": "(713) 340-9609",
       "event_url": "https://www.zortssports.com/join/tournament/28439",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28439",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28439",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28383",
+      "id": "flag50-ffb265944e",
       "category": "flag",
+      "state": "TX",
+      "name": "Texas Showdown",
+      "start_date": "2026-12-05",
+      "end_date": "2026-12-06",
+      "city": "Graford",
+      "venue": "Graford, TX",
+      "sport": "Men's, Women's Football (5v5)",
+      "age_groups": "Grades 2-11",
+      "divisions": "",
+      "entry_fee": "",
+      "registration_ends": "",
+      "organizer": "Unrivaled Flag",
+      "contact_email": "",
+      "contact_phone": "",
+      "event_url": "https://flag50.com/tournaments/texas-showdown-graford-tx-ffb265944e",
+      "clubhouse_url": "https://www.zortssports.com/join/tournament/23535",
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/23535",
+      "flag50_url": "https://flag50.com/tournaments/texas-showdown-graford-tx-ffb265944e",
+      "also_listed_as": [
+        "https://flag50.com/tournaments/texas-showdown-aau-junior-olympic-games-qualifier-graford-tx-23535"
+      ],
+      "conflicts": "Flag50 marks a listing as adult (isAdult) | linked Zorts event 23535 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - December 12 to December 13, 2026 | start date differs: flag50=2026-12-05; zorts page=2026-12-12"
+    },
+    {
+      "id": "zorts-28383",
+      "category": "flag",
+      "state": "TX",
       "name": "DALLAS",
       "start_date": "2026-12-06",
       "end_date": "2026-12-06",
@@ -424,11 +681,20 @@
       "contact_phone": "979-201-6869",
       "event_url": "https://www.zortssports.com/join/tournament/28383",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28383",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28383",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26812",
+      "id": "zorts-26812",
       "category": "flag",
+      "state": "TX",
       "name": "INT'L SUPERFLAG INVITATIONAL December 12-13, 2026",
       "start_date": "2026-12-12",
       "end_date": "2026-12-13",
@@ -444,11 +710,21 @@
       "contact_phone": "972-701-2162",
       "event_url": "https://www.zortssports.com/join/tournament/26812",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26812",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26812",
+      "flag50_url": "https://flag50.com/tournaments/int-l-superflag-invitational-december-12-13-2026-dallas-tx-zs26812",
+      "also_listed_as": [],
+      "conflicts": "Flag50 marks a listing as adult (isAdult)"
     },
     {
-      "id": "27082",
+      "id": "zorts-27082",
       "category": "flag",
+      "state": "TX",
       "name": "Oakley Icon Alliance WEST REGIONAL",
       "start_date": "2026-12-12",
       "end_date": "2026-12-13",
@@ -464,11 +740,21 @@
       "contact_phone": "267-644-1115",
       "event_url": "https://www.zortssports.com/join/tournament/27082",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27082",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27082",
+      "flag50_url": "https://flag50.com/tournaments/oakley-icon-alliance-west-regional-arlington-tx-zs27082",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26737",
+      "id": "zorts-26737",
       "category": "both",
+      "state": "TX",
       "name": "Santa Bowl 2026",
       "start_date": "2026-12-12",
       "end_date": "2026-12-12",
@@ -484,11 +770,21 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/26737",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26737",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26737",
+      "flag50_url": "https://flag50.com/tournaments/santa-bowl-2026-fort-worth-tx-zs26737",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28075",
+      "id": "zorts-28075",
       "category": "flag",
+      "state": "TX",
       "name": "The CTX Holiday Bowl",
       "start_date": "2026-12-12",
       "end_date": "2026-12-13",
@@ -504,11 +800,20 @@
       "contact_phone": "254-410-9237",
       "event_url": "https://www.zortssports.com/join/tournament/28075",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28075",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28075",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27601",
+      "id": "zorts-27601",
       "category": "flag",
+      "state": "TX",
       "name": "Toys for tots flag football tournament",
       "start_date": "2026-12-12",
       "end_date": "2026-12-13",
@@ -524,11 +829,21 @@
       "contact_phone": "806-412-9253",
       "event_url": "https://www.zortssports.com/join/tournament/27601",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27601",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27601",
+      "flag50_url": "https://flag50.com/tournaments/toys-for-tots-flag-football-tournament-lubbock-tx-zs27601",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26882",
+      "id": "zorts-26882",
       "category": "flag",
+      "state": "TX",
       "name": "Lonestar national championship",
       "start_date": "2026-12-15",
       "end_date": "2026-12-20",
@@ -544,11 +859,20 @@
       "contact_phone": "678-863-5320",
       "event_url": "https://www.zortssports.com/join/tournament/26882",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26882",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26882",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27346",
+      "id": "zorts-27346",
       "category": "both",
+      "state": "TX",
       "name": "Lonestar Shootout 2026 Powered by Military Bowl Week",
       "start_date": "2026-12-18",
       "end_date": "2026-12-20",
@@ -564,11 +888,21 @@
       "contact_phone": "8177132129",
       "event_url": "https://www.zortssports.com/join/tournament/27346",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27346",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27346",
+      "flag50_url": "https://flag50.com/tournaments/lonestar-shootout-2026-powered-by-military-bowl-week-fort-worth-tx-zs27346",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27266",
+      "id": "zorts-27266",
       "category": "7v7",
+      "state": "TX",
       "name": "PremierEventsUSA 7on7 Battle of the Best \"Toys Under The Tree\u201d (Fort Worth, TX)",
       "start_date": "2026-12-19",
       "end_date": "2026-12-19",
@@ -584,31 +918,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27266",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27266",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27266",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27826",
+      "id": "zorts-27824",
       "category": "7v7",
-      "name": "Toy BOWL 2026 (clone)",
-      "start_date": "2026-12-19",
-      "end_date": "2026-12-20",
-      "city": "Laredo",
-      "venue": "Laredo, TX, USA",
-      "sport": "Coed Football (7v7)",
-      "age_groups": "11u to 18u",
-      "divisions": "11u to 13u; 12u to 14u; 13u to 15u; 15u to 17u; 16u to 18u",
-      "entry_fee": "",
-      "registration_ends": "",
-      "organizer": "LTX Affiliated 7v7 Football League",
-      "contact_email": "ltxaffiliated7v7@gmail.com",
-      "contact_phone": "9567630140",
-      "event_url": "https://www.zortssports.com/join/tournament/27826",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27826",
-      "source": "map"
-    },
-    {
-      "id": "27824",
-      "category": "7v7",
+      "state": "TX",
       "name": "Toy Bowl",
       "start_date": "2026-12-19",
       "end_date": "2026-12-19",
@@ -624,31 +947,23 @@
       "contact_phone": "9567630140",
       "event_url": "https://www.zortssports.com/join/tournament/27824",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27824",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27824",
+      "flag50_url": "",
+      "also_listed_as": [
+        "https://www.zortssports.com/join/tournament/27826",
+        "https://www.zortssports.com/join/tournament/27827"
+      ],
+      "conflicts": "end date differs: zorts 27826=2026-12-20; zorts 27824=2026-12-19; zorts 27827=2026-12-19 | fee differs: zorts 27824=$200.00 USD per team; zorts 27827=$250.00 USD per team"
     },
     {
-      "id": "27827",
+      "id": "zorts-27318",
       "category": "7v7",
-      "name": "Toy bowl (clone)",
-      "start_date": "2026-12-19",
-      "end_date": "2026-12-19",
-      "city": "Laredo",
-      "venue": "Laredo, TX, USA",
-      "sport": "Coed Football (7v7)",
-      "age_groups": "8u to 18u",
-      "divisions": "8u; 10u; 12u; 14u; 15u; 18u",
-      "entry_fee": "$250.00 USD per team",
-      "registration_ends": "Dec 19, 2026 @ 12:00 AM",
-      "organizer": "LTX Affiliated 7v7 Football League",
-      "contact_email": "ltxaffiliated7v7@gmail.com",
-      "contact_phone": "9567630140",
-      "event_url": "https://www.zortssports.com/join/tournament/27827",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27827",
-      "source": "map"
-    },
-    {
-      "id": "27318",
-      "category": "7v7",
+      "state": "TX",
       "name": "2027 Kickoff Classic Tournament",
       "start_date": "2027-01-02",
       "end_date": "2027-01-02",
@@ -664,11 +979,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27318",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27318",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27318",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27750",
+      "id": "zorts-27750",
       "category": "both",
+      "state": "TX",
       "name": "THE 5TH ANNUAL NATIONAL BOYS 7v7 & GIRLS FLAG 5V5 TOURNAMENT",
       "start_date": "2027-01-02",
       "end_date": "2027-01-03",
@@ -684,11 +1008,21 @@
       "contact_phone": "2109067359",
       "event_url": "https://www.zortssports.com/join/tournament/27750",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27750",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27750",
+      "flag50_url": "https://flag50.com/tournaments/the-5th-annual-national-boys-7v7-girls-flag-5v5-tournament-converse-tx-zs27750",
+      "also_listed_as": [],
+      "conflicts": "city differs: zorts 27750=San Antonio; flag50 flag50-zs27750=Converse"
     },
     {
-      "id": "27506",
+      "id": "zorts-27506",
       "category": "7v7",
+      "state": "TX",
       "name": "THE OPENING-HOUSTON",
       "start_date": "2027-01-02",
       "end_date": "2027-01-03",
@@ -704,11 +1038,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27506",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27506",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27506",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28151",
+      "id": "zorts-28151",
       "category": "flag",
+      "state": "TX",
       "name": "HOUSTON",
       "start_date": "2027-01-03",
       "end_date": "2027-01-03",
@@ -724,11 +1067,20 @@
       "contact_phone": "979-201-6869",
       "event_url": "https://www.zortssports.com/join/tournament/28151",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28151",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28151",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27229",
+      "id": "zorts-27229",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" Kick Off Classic (NIT) Qualifier (Lake Dallas, TX)",
       "start_date": "2027-01-09",
       "end_date": "2027-01-10",
@@ -744,11 +1096,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27229",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27229",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27229",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27507",
+      "id": "zorts-27507",
       "category": "7v7",
+      "state": "TX",
       "name": "DFW INDOOR KICKOFF PT.1",
       "start_date": "2027-01-09",
       "end_date": "2027-01-09",
@@ -764,11 +1125,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27507",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27507",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27507",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28438",
+      "id": "zorts-28438",
       "category": "7v7",
+      "state": "TX",
       "name": "P",
       "start_date": "2027-01-09",
       "end_date": "2027-01-10",
@@ -784,31 +1154,20 @@
       "contact_phone": "346-802-5199",
       "event_url": "https://www.zortssports.com/join/tournament/28438",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28438",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28438",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26622",
-      "category": "flag",
-      "name": "SLCT FLAG NEW YEARS BOWL AT THE WORLD FAMOUS AT&T STADIUM brought to you by FLAGFOOTBALLX",
-      "start_date": "2027-01-09",
-      "end_date": "2027-01-10",
-      "city": "Arlington",
-      "venue": "AT&T Stadium Tours, AT&T Way, Arlington, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "5u to 18u",
-      "divisions": "Boy's 5U; Boy's 6U; Boy's 7U; Boy's 8U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 13U; Boy's 14U; Girl's 8UG; Girl's 10UG; Girl's 12UG; Girl's 14UG; Girl's HSG",
-      "entry_fee": "$495.00 USD per team",
-      "registration_ends": "Jan 10, 2027 @ 12:00 AM",
-      "organizer": "FlagFootballX",
-      "contact_email": "Text us at 817.482.3800",
-      "contact_phone": "817.482.3800",
-      "event_url": "https://www.zortssports.com/join/tournament/26622",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26622",
-      "source": "map"
-    },
-    {
-      "id": "27377",
+      "id": "zorts-27377",
       "category": "7v7",
+      "state": "TX",
       "name": "Showtime Champion Kickoff Classic 7on7",
       "start_date": "2027-01-09",
       "end_date": "2027-01-10",
@@ -824,11 +1183,50 @@
       "contact_phone": "8327527827",
       "event_url": "https://www.zortssports.com/join/tournament/27377",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27377",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27377",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "25422",
+      "id": "zorts-26622",
       "category": "flag",
+      "state": "TX",
+      "name": "SLCT FLAG NEW YEARS BOWL AT THE WORLD FAMOUS AT&T STADIUM brought to you by FLAGFOOTBALLX",
+      "start_date": "2027-01-09",
+      "end_date": "2027-01-10",
+      "city": "Arlington",
+      "venue": "AT&T Stadium Tours, AT&T Way, Arlington, TX, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "5u to 18u",
+      "divisions": "Boy's 5U; Boy's 6U; Boy's 7U; Boy's 8U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 13U; Boy's 14U; Girl's 8UG; Girl's 10UG; Girl's 12UG; Girl's 14UG; Girl's HSG",
+      "entry_fee": "$495.00 USD per team",
+      "registration_ends": "Jan 10, 2027 @ 12:00 AM",
+      "organizer": "FlagFootballX",
+      "contact_email": "Text us at 817.482.3800",
+      "contact_phone": "817.482.3800",
+      "event_url": "https://www.zortssports.com/join/tournament/26622",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26622",
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26622",
+      "flag50_url": "https://flag50.com/tournaments/slct-flag-new-years-bowl-at-the-world-famous-at-t-stadium-br-arlington-tx-zs26622",
+      "also_listed_as": [],
+      "conflicts": ""
+    },
+    {
+      "id": "zorts-25422",
+      "category": "flag",
+      "state": "TX",
       "name": "Winter Soldiers 2027 Flag Football Tournament",
       "start_date": "2027-01-09",
       "end_date": "2027-01-09",
@@ -844,11 +1242,21 @@
       "contact_phone": "7132993335",
       "event_url": "https://www.zortssports.com/join/tournament/25422",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25422",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/25422",
+      "flag50_url": "https://flag50.com/tournaments/winter-soldiers-2027-flag-football-tournament-spring-tx-25422",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27509",
+      "id": "zorts-27509",
       "category": "7v7",
+      "state": "TX",
       "name": "DFW INDOOR KICKOFF PT. 2",
       "start_date": "2027-01-10",
       "end_date": "2027-01-10",
@@ -864,11 +1272,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27509",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27509",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27509",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27296",
+      "id": "zorts-27296",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle in the Buildings\" ALL INDOOR (NIT) Qualifier (Fort Worth, TX)",
       "start_date": "2027-01-16",
       "end_date": "2027-01-17",
@@ -884,11 +1301,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27296",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27296",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27296",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27354",
+      "id": "zorts-27354",
       "category": "7v7",
+      "state": "TX",
       "name": "4- Vertical Tournament",
       "start_date": "2027-01-16",
       "end_date": "2027-01-16",
@@ -904,11 +1330,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27354",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27354",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27354",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27906",
+      "id": "zorts-27906",
       "category": "7v7",
+      "state": "TX",
       "name": "January Jumpstart 7on7 Football Tournament 2027",
       "start_date": "2027-01-16",
       "end_date": "2027-01-16",
@@ -924,11 +1359,20 @@
       "contact_phone": "(936) 266-0070",
       "event_url": "https://www.zortssports.com/join/tournament/27906",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27906",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27906",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27209",
+      "id": "zorts-27209",
       "category": "7v7",
+      "state": "TX",
       "name": "Rising Stars Middle School Divisions Secure The Bag-Opening Day",
       "start_date": "2027-01-16",
       "end_date": "2027-01-17",
@@ -944,11 +1388,20 @@
       "contact_phone": "214-966-4558",
       "event_url": "https://www.zortssports.com/join/tournament/27209",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27209",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27209",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27298",
+      "id": "zorts-27298",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Houston, TX)",
       "start_date": "2027-01-23",
       "end_date": "2027-01-24",
@@ -964,11 +1417,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27298",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27298",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27298",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27857",
+      "id": "zorts-27857",
       "category": "7v7",
+      "state": "TX",
       "name": "CHAMPIONS of I35",
       "start_date": "2027-01-23",
       "end_date": "2027-01-24",
@@ -984,11 +1446,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27857",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27857",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27857",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27030",
+      "id": "zorts-27030",
       "category": "both",
+      "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 DALLAS TX 1.23-1.24",
       "start_date": "2027-01-23",
       "end_date": "2027-01-24",
@@ -1004,11 +1475,21 @@
       "contact_phone": "+1 (808) 990-0655",
       "event_url": "https://www.zortssports.com/join/tournament/27030",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27030",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27030",
+      "flag50_url": "https://flag50.com/tournaments/rated-five-star-7v7-2027-dallas-tx-1-23-1-24-dallas-tx-zs27030",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27356",
+      "id": "zorts-27356",
       "category": "7v7",
+      "state": "TX",
       "name": "Red River Rivalry",
       "start_date": "2027-01-23",
       "end_date": "2027-01-23",
@@ -1024,11 +1505,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27356",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27356",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27356",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27230",
+      "id": "zorts-27230",
       "category": "flag",
+      "state": "TX",
       "name": "The Built Different Legacy Classic",
       "start_date": "2027-01-23",
       "end_date": "2027-01-23",
@@ -1044,11 +1534,20 @@
       "contact_phone": "2253647614",
       "event_url": "https://www.zortssports.com/join/tournament/27230",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27230",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27230",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28365",
+      "id": "zorts-28365",
       "category": "flag",
+      "state": "TX",
       "name": "The Ice Bowl",
       "start_date": "2027-01-23",
       "end_date": "2027-01-23",
@@ -1064,11 +1563,20 @@
       "contact_phone": "4083910526",
       "event_url": "https://www.zortssports.com/join/tournament/28365",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28365",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28365",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27767",
+      "id": "zorts-27767",
       "category": "flag",
+      "state": "TX",
       "name": "Unleashed Flag Foundation Gauntlet Series: Head Top Energy",
       "start_date": "2027-01-29",
       "end_date": "2027-01-30",
@@ -1084,11 +1592,20 @@
       "contact_phone": "940-290-4141",
       "event_url": "https://www.zortssports.com/join/tournament/27767",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27767",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27767",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27357",
+      "id": "zorts-27357",
       "category": "7v7",
+      "state": "TX",
       "name": "Best of Texas 2027",
       "start_date": "2027-01-30",
       "end_date": "2027-01-30",
@@ -1104,31 +1621,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27357",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27357",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27357",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27903",
+      "id": "zorts-27212",
       "category": "7v7",
-      "name": "HOME OF CHAMPIONS",
-      "start_date": "2027-01-30",
-      "end_date": "2027-01-31",
-      "city": "Dallas-Fort Worth Metropolitan Area",
-      "venue": "Dallas-Fort Worth Metropolitan Area, TX, USA",
-      "sport": "Boy's Football (7v7)",
-      "age_groups": "6u to 18u",
-      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
-      "entry_fee": "$475.00 USD per team",
-      "registration_ends": "Jan 28, 2027 @ 6:00 PM",
-      "organizer": "TEXAS CHAMPIONS",
-      "contact_email": "7on7txcl@gmail.com",
-      "contact_phone": "9792016869",
-      "event_url": "https://www.zortssports.com/join/tournament/27903",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27903",
-      "source": "map"
-    },
-    {
-      "id": "27212",
-      "category": "7v7",
+      "state": "TX",
       "name": "High School Divisions Secure The Bag-Opening Day",
       "start_date": "2027-01-30",
       "end_date": "2027-01-31",
@@ -1144,11 +1650,49 @@
       "contact_phone": "214-326-7853",
       "event_url": "https://www.zortssports.com/join/tournament/27212",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27212",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27212",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28156",
+      "id": "zorts-27903",
       "category": "7v7",
+      "state": "TX",
+      "name": "HOME OF CHAMPIONS",
+      "start_date": "2027-01-30",
+      "end_date": "2027-01-31",
+      "city": "Dallas-Fort Worth Metropolitan Area",
+      "venue": "Dallas-Fort Worth Metropolitan Area, TX, USA",
+      "sport": "Boy's Football (7v7)",
+      "age_groups": "6u to 18u",
+      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
+      "entry_fee": "$475.00 USD per team",
+      "registration_ends": "Jan 28, 2027 @ 6:00 PM",
+      "organizer": "TEXAS CHAMPIONS",
+      "contact_email": "7on7txcl@gmail.com",
+      "contact_phone": "9792016869",
+      "event_url": "https://www.zortssports.com/join/tournament/27903",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27903",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27903",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
+    },
+    {
+      "id": "zorts-28156",
+      "category": "7v7",
+      "state": "TX",
       "name": "New year Same Smoke",
       "start_date": "2027-01-30",
       "end_date": "2027-01-31",
@@ -1164,11 +1708,20 @@
       "contact_phone": "8322509869",
       "event_url": "https://www.zortssports.com/join/tournament/28156",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28156",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28156",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27033",
+      "id": "zorts-27033",
       "category": "both",
+      "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 1.30-1.31",
       "start_date": "2027-01-30",
       "end_date": "2027-01-31",
@@ -1184,11 +1737,20 @@
       "contact_phone": "+1 (808) 990-0655",
       "event_url": "https://www.zortssports.com/join/tournament/27033",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27033",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27033",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27300",
+      "id": "zorts-27300",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Houston, TX)",
       "start_date": "2027-02-06",
       "end_date": "2027-02-07",
@@ -1204,11 +1766,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27300",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27300",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27300",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28069",
+      "id": "zorts-28069",
       "category": "both",
+      "state": "TX",
       "name": "BATTLE IN THE TONE 5",
       "start_date": "2027-02-06",
       "end_date": "2027-02-09",
@@ -1224,11 +1795,20 @@
       "contact_phone": "2109067359",
       "event_url": "https://www.zortssports.com/join/tournament/28069",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28069",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28069",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27915",
+      "id": "zorts-27915",
       "category": "7v7",
+      "state": "TX",
       "name": "HOME OF CHAMPIONS",
       "start_date": "2027-02-06",
       "end_date": "2027-02-07",
@@ -1244,11 +1824,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27915",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27915",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27915",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28263",
+      "id": "zorts-28263",
       "category": "both",
+      "state": "TX",
       "name": "RZE Texas 27' | Boys 7v7 - Girls Flag - 5v5 Lineman",
       "start_date": "2027-02-06",
       "end_date": "2027-02-07",
@@ -1264,11 +1853,20 @@
       "contact_phone": "817-658-1660",
       "event_url": "https://www.zortssports.com/join/tournament/28263",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28263",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28263",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27461",
+      "id": "zorts-27461",
       "category": "7v7",
+      "state": "TX",
       "name": "The Winter Classic",
       "start_date": "2027-02-06",
       "end_date": "2027-02-06",
@@ -1284,11 +1882,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27461",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27461",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27461",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28132",
+      "id": "zorts-28132",
       "category": "both",
+      "state": "TX",
       "name": "UNFINISHED BUSINESS- DA-JUMP OFF!!",
       "start_date": "2027-02-06",
       "end_date": "2027-02-07",
@@ -1304,11 +1911,20 @@
       "contact_phone": "4694425112",
       "event_url": "https://www.zortssports.com/join/tournament/28132",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28132",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28132",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27301",
+      "id": "zorts-27301",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Denton, TX)",
       "start_date": "2027-02-13",
       "end_date": "2027-02-14",
@@ -1324,11 +1940,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27301",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27301",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27301",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27462",
+      "id": "zorts-27462",
       "category": "7v7",
+      "state": "TX",
       "name": "DFW Air Raid Tournament",
       "start_date": "2027-02-13",
       "end_date": "2027-02-13",
@@ -1344,11 +1969,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27462",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27462",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27462",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28270",
+      "id": "zorts-28270",
       "category": "both",
+      "state": "TX",
       "name": "RZE Houston Tx 27' | Boys 7v7 - Girls Flag - 5v5 Lineman",
       "start_date": "2027-02-13",
       "end_date": "2027-02-14",
@@ -1364,31 +1998,20 @@
       "contact_phone": "817-658-1660",
       "event_url": "https://www.zortssports.com/join/tournament/28270",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28270",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28270",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27916",
+      "id": "zorts-28140",
       "category": "7v7",
-      "name": "SUPER SATURDAY 1 DAY",
-      "start_date": "2027-02-13",
-      "end_date": "2027-02-13",
-      "city": "San Marcos",
-      "venue": "San Marcos, TX, USA",
-      "sport": "Boy's Football (7v7)",
-      "age_groups": "6u to 18u",
-      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
-      "entry_fee": "$375.00 USD per team",
-      "registration_ends": "Feb 11, 2027 @ 6:00 PM",
-      "organizer": "TEXAS CHAMPIONS",
-      "contact_email": "7on7txcl@gmail.com",
-      "contact_phone": "9792016869",
-      "event_url": "https://www.zortssports.com/join/tournament/27916",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27916",
-      "source": "map"
-    },
-    {
-      "id": "28140",
-      "category": "7v7",
+      "state": "TX",
       "name": "Showtime Champion-Waller Showdown 7on7",
       "start_date": "2027-02-13",
       "end_date": "2027-02-14",
@@ -1404,11 +2027,49 @@
       "contact_phone": "8327527827",
       "event_url": "https://www.zortssports.com/join/tournament/28140",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28140",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28140",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27907",
+      "id": "zorts-27916",
       "category": "7v7",
+      "state": "TX",
+      "name": "SUPER SATURDAY 1 DAY",
+      "start_date": "2027-02-13",
+      "end_date": "2027-02-13",
+      "city": "San Marcos",
+      "venue": "San Marcos, TX, USA",
+      "sport": "Boy's Football (7v7)",
+      "age_groups": "6u to 18u",
+      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
+      "entry_fee": "$375.00 USD per team",
+      "registration_ends": "Feb 11, 2027 @ 6:00 PM",
+      "organizer": "TEXAS CHAMPIONS",
+      "contact_email": "7on7txcl@gmail.com",
+      "contact_phone": "9792016869",
+      "event_url": "https://www.zortssports.com/join/tournament/27916",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27916",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27916",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
+    },
+    {
+      "id": "zorts-27907",
+      "category": "7v7",
+      "state": "TX",
       "name": "Texas Takedown 7on7 Football Tournament 2027",
       "start_date": "2027-02-13",
       "end_date": "2027-02-14",
@@ -1424,11 +2085,20 @@
       "contact_phone": "(936) 266-0070",
       "event_url": "https://www.zortssports.com/join/tournament/27907",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27907",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27907",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27302",
+      "id": "zorts-27302",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Fort Worth, TX)",
       "start_date": "2027-02-20",
       "end_date": "2027-02-21",
@@ -1444,11 +2114,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27302",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27302",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27302",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28057",
+      "id": "zorts-28057",
       "category": "flag",
+      "state": "TX",
       "name": "AAU Flag Football Junior Olympic Games Qualifier",
       "start_date": "2027-02-20",
       "end_date": "2027-02-21",
@@ -1464,31 +2143,20 @@
       "contact_phone": "210-788-4200",
       "event_url": "https://www.zortssports.com/join/tournament/28057",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28057",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28057",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26716",
+      "id": "zorts-27463",
       "category": "7v7",
-      "name": "BATTLE7 HOUSTON",
-      "start_date": "2027-02-20",
-      "end_date": "2027-02-21",
-      "city": "Houston",
-      "venue": "C.E. King High School, East Sam Houston Parkway North, Houston, TX, USA",
-      "sport": "Boy's Football (7v7), Football (5v5 Lineman)",
-      "age_groups": "8u to 18u",
-      "divisions": "Football (7v7) 10u; Football (7v7) 12U; Football (7v7) 14U; Football (7v7) 15U; Football (7v7) High School; Football (5v5 Lineman) 15u to 18u",
-      "entry_fee": "$900.00 USD per team",
-      "registration_ends": "Feb 15, 2027 @ 11:00 PM",
-      "organizer": "Battle Sports",
-      "contact_email": "spotlight7v7@gmail.com",
-      "contact_phone": "000-000-0000",
-      "event_url": "https://www.zortssports.com/join/tournament/26716",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26716",
-      "source": "map"
-    },
-    {
-      "id": "27463",
-      "category": "7v7",
+      "state": "TX",
       "name": "Battle of Frisco",
       "start_date": "2027-02-20",
       "end_date": "2027-02-20",
@@ -1504,11 +2172,49 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27463",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27463",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27463",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "26959",
+      "id": "zorts-26716",
+      "category": "7v7",
+      "state": "TX",
+      "name": "BATTLE7 HOUSTON",
+      "start_date": "2027-02-20",
+      "end_date": "2027-02-21",
+      "city": "Houston",
+      "venue": "C.E. King High School, East Sam Houston Parkway North, Houston, TX, USA",
+      "sport": "Boy's Football (7v7), Football (5v5 Lineman)",
+      "age_groups": "8u to 18u",
+      "divisions": "Football (7v7) 10u; Football (7v7) 12U; Football (7v7) 14U; Football (7v7) 15U; Football (7v7) High School; Football (5v5 Lineman) 15u to 18u",
+      "entry_fee": "$900.00 USD per team",
+      "registration_ends": "Feb 15, 2027 @ 11:00 PM",
+      "organizer": "Battle Sports",
+      "contact_email": "spotlight7v7@gmail.com",
+      "contact_phone": "000-000-0000",
+      "event_url": "https://www.zortssports.com/join/tournament/26716",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26716",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26716",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
+    },
+    {
+      "id": "zorts-26959",
       "category": "both",
+      "state": "TX",
       "name": "KING OF SE7ENS II",
       "start_date": "2027-02-20",
       "end_date": "2027-02-20",
@@ -1524,11 +2230,20 @@
       "contact_phone": "8303592433",
       "event_url": "https://www.zortssports.com/join/tournament/26959",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26959",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26959",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28160",
+      "id": "zorts-28160",
       "category": "7v7",
+      "state": "TX",
       "name": "No fly zone",
       "start_date": "2027-02-20",
       "end_date": "2027-02-21",
@@ -1544,11 +2259,20 @@
       "contact_phone": "8322509869",
       "event_url": "https://www.zortssports.com/join/tournament/28160",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28160",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28160",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28458",
+      "id": "zorts-28458",
       "category": "both",
+      "state": "TX",
       "name": "RATED FIVE STAR X DRTY PRO 7v7 2027 ORANGE COUNTY, TX 2.20",
       "start_date": "2027-02-20",
       "end_date": "2027-02-20",
@@ -1564,11 +2288,20 @@
       "contact_phone": "+1 (808) 990-0655",
       "event_url": "https://www.zortssports.com/join/tournament/28458",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28458",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28458",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28070",
+      "id": "zorts-28070",
       "category": "both",
+      "state": "TX",
       "name": "THE I-35 SHOOTOUT",
       "start_date": "2027-02-20",
       "end_date": "2027-02-21",
@@ -1584,11 +2317,20 @@
       "contact_phone": "2109067359",
       "event_url": "https://www.zortssports.com/join/tournament/28070",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28070",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28070",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28423",
+      "id": "zorts-28423",
       "category": "flag",
+      "state": "TX",
       "name": "Winter Bounty",
       "start_date": "2027-02-20",
       "end_date": "2027-02-20",
@@ -1604,11 +2346,20 @@
       "contact_phone": "9797778056",
       "event_url": "https://www.zortssports.com/join/tournament/28423",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28423",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28423",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27918",
+      "id": "zorts-27918",
       "category": "7v7",
+      "state": "TX",
       "name": "HOME OF CHAMPIONS",
       "start_date": "2027-02-27",
       "end_date": "2027-02-28",
@@ -1624,11 +2375,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27918",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27918",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27918",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28421",
+      "id": "zorts-28421",
       "category": "both",
+      "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 2.27-2.28",
       "start_date": "2027-02-27",
       "end_date": "2027-02-28",
@@ -1644,11 +2404,20 @@
       "contact_phone": "+1 (808) 990-0655",
       "event_url": "https://www.zortssports.com/join/tournament/28421",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28421",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28421",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27650",
+      "id": "zorts-27650",
       "category": "7v7",
+      "state": "TX",
       "name": "The Spring Shootout",
       "start_date": "2027-02-27",
       "end_date": "2027-02-27",
@@ -1664,11 +2433,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27650",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27650",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27650",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27304",
+      "id": "zorts-27304",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Denton, TX)",
       "start_date": "2027-03-06",
       "end_date": "2027-03-07",
@@ -1684,11 +2462,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27304",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27304",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27304",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28059",
+      "id": "zorts-28059",
       "category": "flag",
+      "state": "TX",
       "name": "AAU Flag Football Junior Olympic Games Qualifier",
       "start_date": "2027-03-06",
       "end_date": "2027-03-07",
@@ -1704,11 +2491,20 @@
       "contact_phone": "210-788-4200",
       "event_url": "https://www.zortssports.com/join/tournament/28059",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28059",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28059",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27919",
+      "id": "zorts-27919",
       "category": "7v7",
+      "state": "TX",
       "name": "HOME OF CHAMPIONS",
       "start_date": "2027-03-06",
       "end_date": "2027-03-07",
@@ -1724,11 +2520,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27919",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27919",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27919",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27651",
+      "id": "zorts-27651",
       "category": "7v7",
+      "state": "TX",
       "name": "The Shamrock Invitational Tournament",
       "start_date": "2027-03-06",
       "end_date": "2027-03-06",
@@ -1744,11 +2549,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27651",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27651",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27651",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27210",
+      "id": "zorts-27210",
       "category": "7v7",
+      "state": "TX",
       "name": "Youth-Middle School Divisions Spring Bling-Dash For The Cash",
       "start_date": "2027-03-06",
       "end_date": "2027-03-07",
@@ -1764,11 +2578,20 @@
       "contact_phone": "214-326-7853",
       "event_url": "https://www.zortssports.com/join/tournament/27210",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27210",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27210",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28290",
+      "id": "zorts-28290",
       "category": "both",
+      "state": "TX",
       "name": "Battle of the Ski Goggles 5 7v7/5v5 Girls Flag/Big Man Tournament",
       "start_date": "2027-03-13",
       "end_date": "2027-03-14",
@@ -1784,11 +2607,20 @@
       "contact_phone": "469-442-5112",
       "event_url": "https://www.zortssports.com/join/tournament/28290",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28290",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28290",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27908",
+      "id": "zorts-27908",
       "category": "7v7",
+      "state": "TX",
       "name": "Spring Shootout 7on7 Football Tournament 2027",
       "start_date": "2027-03-13",
       "end_date": "2027-03-14",
@@ -1804,11 +2636,20 @@
       "contact_phone": "(936) 266-0070",
       "event_url": "https://www.zortssports.com/join/tournament/27908",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27908",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27908",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27652",
+      "id": "zorts-27652",
       "category": "7v7",
+      "state": "TX",
       "name": "The Lonestar Shootout",
       "start_date": "2027-03-13",
       "end_date": "2027-03-13",
@@ -1824,11 +2665,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27652",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27652",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27652",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27306",
+      "id": "zorts-27306",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"MidNight Madness\" (NIT) Qualifier (Round Rock, TX)",
       "start_date": "2027-03-19",
       "end_date": "2027-03-19",
@@ -1844,11 +2694,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27306",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27306",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27306",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27307",
+      "id": "zorts-27307",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Round Rock, TX)",
       "start_date": "2027-03-20",
       "end_date": "2027-03-21",
@@ -1864,11 +2723,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27307",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27307",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27307",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27331",
+      "id": "zorts-27331",
       "category": "both",
+      "state": "TX",
       "name": "2027 Girls 5v5 & 7on7 Flag \u201cBattle of the Best\" NIT Qualifier (Round Rock, TX)",
       "start_date": "2027-03-20",
       "end_date": "2027-03-21",
@@ -1884,11 +2752,21 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27331",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27331",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27331",
+      "flag50_url": "https://flag50.com/tournaments/2027-girls-5v5-7on7-flag-battle-of-the-best-nit-qualifier-ro-round-rock-tx-zs27331",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28060",
+      "id": "zorts-28060",
       "category": "flag",
+      "state": "TX",
       "name": "AAU Flag Football Junior Olympic Games Qualifier",
       "start_date": "2027-03-20",
       "end_date": "2027-03-21",
@@ -1904,15 +2782,24 @@
       "contact_phone": "210-788-4200",
       "event_url": "https://www.zortssports.com/join/tournament/28060",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28060",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28060",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27215",
+      "id": "zorts-27215",
       "category": "flag",
+      "state": "TX",
       "name": "Battle5 Texas | National Qualifier",
       "start_date": "2027-03-20",
       "end_date": "2027-03-21",
-      "city": "",
+      "city": "Texas",
       "venue": "Texas, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "7u to 18u",
@@ -1924,11 +2811,21 @@
       "contact_phone": "000-000-0000",
       "event_url": "https://www.zortssports.com/join/tournament/27215",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27215",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27215",
+      "flag50_url": "https://flag50.com/tournaments/battle5-texas-national-qualifier-texas-tx-zs27215",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "25529",
+      "id": "zorts-25529",
       "category": "flag",
+      "state": "TX",
       "name": "Gold Rush 2027 Flag Football Tournament",
       "start_date": "2027-03-20",
       "end_date": "2027-03-20",
@@ -1944,31 +2841,21 @@
       "contact_phone": "7132993335",
       "event_url": "https://www.zortssports.com/join/tournament/25529",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25529",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/25529",
+      "flag50_url": "https://flag50.com/tournaments/gold-rush-2027-flag-football-tournament-spring-tx-25529",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27921",
+      "id": "zorts-27213",
       "category": "7v7",
-      "name": "HOME OF CHAMPIONS",
-      "start_date": "2027-03-20",
-      "end_date": "2027-03-21",
-      "city": "Dallas-Fort Worth Metropolitan Area",
-      "venue": "Dallas-Fort Worth Metropolitan Area, TX, USA",
-      "sport": "Boy's Football (7v7)",
-      "age_groups": "6u to 18u",
-      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
-      "entry_fee": "$475.00 USD per team",
-      "registration_ends": "Mar 18, 2027 @ 6:00 PM",
-      "organizer": "TEXAS CHAMPIONS",
-      "contact_email": "7on7txcl@gmail.com",
-      "contact_phone": "9792016869",
-      "event_url": "https://www.zortssports.com/join/tournament/27921",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27921",
-      "source": "map"
-    },
-    {
-      "id": "27213",
-      "category": "7v7",
+      "state": "TX",
       "name": "High School Divisions Spring Bling-Dash For The Cash",
       "start_date": "2027-03-20",
       "end_date": "2027-03-21",
@@ -1984,11 +2871,49 @@
       "contact_phone": "214-326-7853",
       "event_url": "https://www.zortssports.com/join/tournament/27213",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27213",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27213",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27653",
+      "id": "zorts-27921",
       "category": "7v7",
+      "state": "TX",
+      "name": "HOME OF CHAMPIONS",
+      "start_date": "2027-03-20",
+      "end_date": "2027-03-21",
+      "city": "Dallas-Fort Worth Metropolitan Area",
+      "venue": "Dallas-Fort Worth Metropolitan Area, TX, USA",
+      "sport": "Boy's Football (7v7)",
+      "age_groups": "6u to 18u",
+      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
+      "entry_fee": "$475.00 USD per team",
+      "registration_ends": "Mar 18, 2027 @ 6:00 PM",
+      "organizer": "TEXAS CHAMPIONS",
+      "contact_email": "7on7txcl@gmail.com",
+      "contact_phone": "9792016869",
+      "event_url": "https://www.zortssports.com/join/tournament/27921",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27921",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27921",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
+    },
+    {
+      "id": "zorts-27653",
+      "category": "7v7",
+      "state": "TX",
       "name": "March Madness Tournament",
       "start_date": "2027-03-20",
       "end_date": "2027-03-20",
@@ -2004,11 +2929,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27653",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27653",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27653",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28424",
+      "id": "zorts-28424",
       "category": "both",
+      "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 3.20-3.21",
       "start_date": "2027-03-20",
       "end_date": "2027-03-21",
@@ -2024,11 +2958,20 @@
       "contact_phone": "+1 (808) 990-0655",
       "event_url": "https://www.zortssports.com/join/tournament/28424",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28424",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28424",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28141",
+      "id": "zorts-28141",
       "category": "7v7",
+      "state": "TX",
       "name": "Showtime Champion-Waller Showdown 7on7",
       "start_date": "2027-03-20",
       "end_date": "2027-03-21",
@@ -2044,11 +2987,20 @@
       "contact_phone": "8327527827",
       "event_url": "https://www.zortssports.com/join/tournament/28141",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28141",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28141",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27922",
+      "id": "zorts-27922",
       "category": "7v7",
+      "state": "TX",
       "name": "FRIDAY NIGHT FEVER-SCHOOLS OUT",
       "start_date": "2027-03-26",
       "end_date": "2027-03-26",
@@ -2064,11 +3016,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27922",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27922",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27922",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27309",
+      "id": "zorts-27309",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Melissa, TX)",
       "start_date": "2027-03-27",
       "end_date": "2027-03-27",
@@ -2084,11 +3045,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27309",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27309",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27309",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28433",
+      "id": "zorts-28433",
       "category": "7v7",
+      "state": "TX",
       "name": "San Antonio",
       "start_date": "2027-03-27",
       "end_date": "2027-03-27",
@@ -2104,11 +3074,20 @@
       "contact_phone": "8504545338",
       "event_url": "https://www.zortssports.com/join/tournament/28433",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28433",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28433",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27923",
+      "id": "zorts-27923",
       "category": "7v7",
+      "state": "TX",
       "name": "TEXAS MEGA 1 DAY",
       "start_date": "2027-03-27",
       "end_date": "2027-03-27",
@@ -2124,11 +3103,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27923",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27923",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27923",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28449",
+      "id": "zorts-28449",
       "category": "both",
+      "state": "TX",
       "name": "UNFINISHED BUSINESS- THE EASTER TAKEOVER!!",
       "start_date": "2027-03-27",
       "end_date": "2027-03-28",
@@ -2144,11 +3132,20 @@
       "contact_phone": "4694425112",
       "event_url": "https://www.zortssports.com/join/tournament/28449",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28449",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28449",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27310",
+      "id": "zorts-27310",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Fort Worth, TX)",
       "start_date": "2027-04-03",
       "end_date": "2027-04-04",
@@ -2164,11 +3161,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27310",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27310",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27310",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27927",
+      "id": "zorts-27927",
       "category": "7v7",
+      "state": "TX",
       "name": "HOME OF CHAMPIONS",
       "start_date": "2027-04-03",
       "end_date": "2027-04-04",
@@ -2184,11 +3190,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27927",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27927",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27927",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27192",
+      "id": "zorts-27192",
       "category": "both",
+      "state": "TX",
       "name": "K7NG OF SE7ENS III",
       "start_date": "2027-04-03",
       "end_date": "2027-04-03",
@@ -2204,11 +3219,20 @@
       "contact_phone": "8303592433",
       "event_url": "https://www.zortssports.com/join/tournament/27192",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27192",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27192",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27654",
+      "id": "zorts-27654",
       "category": "7v7",
+      "state": "TX",
       "name": "Spring Showcase",
       "start_date": "2027-04-03",
       "end_date": "2027-04-03",
@@ -2224,11 +3248,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27654",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27654",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27654",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27211",
+      "id": "zorts-27211",
       "category": "7v7",
+      "state": "TX",
       "name": "Youth-Middle School Divisions Money Bag-The Ultimate Paper Chase",
       "start_date": "2027-04-03",
       "end_date": "2027-04-04",
@@ -2244,11 +3277,20 @@
       "contact_phone": "214-326-7853",
       "event_url": "https://www.zortssports.com/join/tournament/27211",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27211",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27211",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27417",
+      "id": "zorts-27417",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Melissa, TX)",
       "start_date": "2027-04-10",
       "end_date": "2027-04-11",
@@ -2264,11 +3306,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27417",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27417",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27417",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27311",
+      "id": "zorts-27311",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"FSG/PremierEventsUSA\" (NIT) Qualifier (Houston, TX)",
       "start_date": "2027-04-10",
       "end_date": "2027-04-11",
@@ -2284,11 +3335,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27311",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27311",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27311",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27451",
+      "id": "zorts-27451",
       "category": "both",
+      "state": "TX",
       "name": "FSG Tournament Series - Houston",
       "start_date": "2027-04-10",
       "end_date": "2027-04-11",
@@ -2304,11 +3364,21 @@
       "contact_phone": "404-461-3004",
       "event_url": "https://www.zortssports.com/join/tournament/27451",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27451",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27451",
+      "flag50_url": "https://flag50.com/tournaments/fsg-tournament-series-houston-houston-tx-zs27451",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27655",
+      "id": "zorts-27655",
       "category": "7v7",
+      "state": "TX",
       "name": "Gridiron Invitational",
       "start_date": "2027-04-10",
       "end_date": "2027-04-10",
@@ -2324,11 +3394,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27655",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27655",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27655",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27656",
+      "id": "zorts-27656",
       "category": "7v7",
+      "state": "TX",
       "name": "Gridiron Redzone",
       "start_date": "2027-04-17",
       "end_date": "2027-04-17",
@@ -2344,31 +3423,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27656",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27656",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27656",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27929",
+      "id": "zorts-27214",
       "category": "7v7",
-      "name": "HOME OF CHAMPIONS",
-      "start_date": "2027-04-17",
-      "end_date": "2027-04-18",
-      "city": "Dallas-Fort Worth Metropolitan Area",
-      "venue": "Dallas-Fort Worth Metropolitan Area, TX, USA",
-      "sport": "Boy's Football (7v7)",
-      "age_groups": "6u to 18u",
-      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
-      "entry_fee": "$475.00 USD per team",
-      "registration_ends": "Apr 15, 2027 @ 8:00 AM",
-      "organizer": "TEXAS CHAMPIONS",
-      "contact_email": "7on7txcl@gmail.com",
-      "contact_phone": "9792016869",
-      "event_url": "https://www.zortssports.com/join/tournament/27929",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27929",
-      "source": "map"
-    },
-    {
-      "id": "27214",
-      "category": "7v7",
+      "state": "TX",
       "name": "High School Divisions Money Bag-The Ultimate Paper Chase",
       "start_date": "2027-04-17",
       "end_date": "2027-04-18",
@@ -2384,11 +3452,49 @@
       "contact_phone": "214-326-7853",
       "event_url": "https://www.zortssports.com/join/tournament/27214",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27214",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27214",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28426",
+      "id": "zorts-27929",
+      "category": "7v7",
+      "state": "TX",
+      "name": "HOME OF CHAMPIONS",
+      "start_date": "2027-04-17",
+      "end_date": "2027-04-18",
+      "city": "Dallas-Fort Worth Metropolitan Area",
+      "venue": "Dallas-Fort Worth Metropolitan Area, TX, USA",
+      "sport": "Boy's Football (7v7)",
+      "age_groups": "6u to 18u",
+      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 16U; 18U",
+      "entry_fee": "$475.00 USD per team",
+      "registration_ends": "Apr 15, 2027 @ 8:00 AM",
+      "organizer": "TEXAS CHAMPIONS",
+      "contact_email": "7on7txcl@gmail.com",
+      "contact_phone": "9792016869",
+      "event_url": "https://www.zortssports.com/join/tournament/27929",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27929",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27929",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
+    },
+    {
+      "id": "zorts-28426",
       "category": "both",
+      "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 4.17-4.18",
       "start_date": "2027-04-17",
       "end_date": "2027-04-18",
@@ -2404,11 +3510,20 @@
       "contact_phone": "+1 (808) 990-0655",
       "event_url": "https://www.zortssports.com/join/tournament/28426",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28426",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28426",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28142",
+      "id": "zorts-28142",
       "category": "7v7",
+      "state": "TX",
       "name": "Showtime Champion-Waller Showdown 7on7",
       "start_date": "2027-04-17",
       "end_date": "2027-04-18",
@@ -2424,11 +3539,20 @@
       "contact_phone": "8327527827",
       "event_url": "https://www.zortssports.com/join/tournament/28142",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28142",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28142",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28451",
+      "id": "zorts-28451",
       "category": "both",
+      "state": "TX",
       "name": "UNFINISHED BUSINESS- NO EXCUSES!!",
       "start_date": "2027-04-17",
       "end_date": "2027-04-18",
@@ -2444,11 +3568,20 @@
       "contact_phone": "4694425112",
       "event_url": "https://www.zortssports.com/join/tournament/28451",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28451",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28451",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27930",
+      "id": "zorts-27930",
       "category": "7v7",
+      "state": "TX",
       "name": "CHAMPIONS of I35",
       "start_date": "2027-04-24",
       "end_date": "2027-04-25",
@@ -2464,11 +3597,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27930",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27930",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27930",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27657",
+      "id": "zorts-27657",
       "category": "7v7",
+      "state": "TX",
       "name": "King of Spring Tournament",
       "start_date": "2027-04-24",
       "end_date": "2027-04-24",
@@ -2484,11 +3626,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27657",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27657",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27657",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27316",
+      "id": "zorts-27316",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Denton, TX)",
       "start_date": "2027-05-01",
       "end_date": "2027-05-02",
@@ -2504,11 +3655,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27316",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27316",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27316",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27658",
+      "id": "zorts-27658",
       "category": "7v7",
+      "state": "TX",
       "name": "Cinco De Mayo",
       "start_date": "2027-05-01",
       "end_date": "2027-05-01",
@@ -2524,11 +3684,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27658",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27658",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27658",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28457",
+      "id": "zorts-28457",
       "category": "both",
+      "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 5.1-5.2",
       "start_date": "2027-05-01",
       "end_date": "2027-05-02",
@@ -2544,11 +3713,20 @@
       "contact_phone": "+1 (808) 990-0655",
       "event_url": "https://www.zortssports.com/join/tournament/28457",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28457",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28457",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27910",
+      "id": "zorts-27910",
       "category": "7v7",
+      "state": "TX",
       "name": "Texas State School-Based 7on7 Football Tournament 2027",
       "start_date": "2027-05-01",
       "end_date": "2027-05-01",
@@ -2564,11 +3742,20 @@
       "contact_phone": "(936) 266-0070",
       "event_url": "https://www.zortssports.com/join/tournament/27910",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27910",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27910",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27317",
+      "id": "zorts-27317",
       "category": "7v7",
+      "state": "TX",
       "name": "2027 7on7 \"Battle of the Best\" (NIT) Qualifier (Fort Worth, TX)",
       "start_date": "2027-05-08",
       "end_date": "2027-05-09",
@@ -2584,11 +3771,20 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27317",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27317",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27317",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27932",
+      "id": "zorts-27932",
       "category": "7v7",
+      "state": "TX",
       "name": "BATTLE OF CHAMPIONS",
       "start_date": "2027-05-08",
       "end_date": "2027-05-09",
@@ -2604,11 +3800,20 @@
       "contact_phone": "9792016869",
       "event_url": "https://www.zortssports.com/join/tournament/27932",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27932",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27932",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27659",
+      "id": "zorts-27659",
       "category": "7v7",
+      "state": "TX",
       "name": "Champions Showcase",
       "start_date": "2027-05-08",
       "end_date": "2027-05-08",
@@ -2624,11 +3829,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27659",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27659",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27659",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "28453",
+      "id": "zorts-28453",
       "category": "both",
+      "state": "TX",
       "name": "UNFINISHED BUSINESS(NATIONALS)",
       "start_date": "2027-05-08",
       "end_date": "2027-05-09",
@@ -2644,11 +3858,20 @@
       "contact_phone": "4694425112",
       "event_url": "https://www.zortssports.com/join/tournament/28453",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28453",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28453",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27333",
+      "id": "zorts-27333",
       "category": "both",
+      "state": "TX",
       "name": "2027 Girls 5v5 & 7on7 Flag \u201cBattle of the Best\" National Invitational Championships (Dallas/Fort Worth, TX)",
       "start_date": "2027-05-15",
       "end_date": "2027-05-16",
@@ -2664,11 +3887,21 @@
       "contact_phone": "4693969332",
       "event_url": "https://www.zortssports.com/join/tournament/27333",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27333",
-      "source": "map"
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27333",
+      "flag50_url": "https://flag50.com/tournaments/2027-girls-5v5-7on7-flag-battle-of-the-best-national-invitat-fort-worth-tx-zs27333",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27909",
+      "id": "zorts-27909",
       "category": "7v7",
+      "state": "TX",
       "name": "War In The Woods 7on7 Football Tournament 2027",
       "start_date": "2027-05-15",
       "end_date": "2027-05-16",
@@ -2684,11 +3917,20 @@
       "contact_phone": "(936) 266-0070",
       "event_url": "https://www.zortssports.com/join/tournament/27909",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27909",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27909",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27660",
+      "id": "zorts-27660",
       "category": "7v7",
+      "state": "TX",
       "name": "The Elite 7's Tournament",
       "start_date": "2027-05-22",
       "end_date": "2027-05-22",
@@ -2704,11 +3946,20 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27660",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27660",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27660",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     },
     {
-      "id": "27662",
+      "id": "zorts-27662",
       "category": "7v7",
+      "state": "TX",
       "name": "The Memorial Tournament",
       "start_date": "2027-05-29",
       "end_date": "2027-05-29",
@@ -2724,7 +3975,15 @@
       "contact_phone": "(817) 690-8458",
       "event_url": "https://www.zortssports.com/join/tournament/27662",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27662",
-      "source": "map"
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27662",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": ""
     }
   ]
 }

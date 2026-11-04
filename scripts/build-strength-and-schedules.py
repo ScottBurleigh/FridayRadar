@@ -97,8 +97,8 @@ DCTF_N = 25
 DCTF_BONUS_MAX = 10.0
 
 RAW_HISTORY = ROOT / "data/raw/maxpreps" / "season-history.json"
-RAW_ZORTS = ROOT / "data" / "tournaments.json"
-ZORTS_FETCH = ROOT / "scripts" / "fetch-zorts.py"
+RAW_TOURNAMENTS = ROOT / "data" / "tournaments.json"
+TOURNAMENTS_REFRESH = ROOT / "scripts" / "tournaments" / "refresh.py"
 SEASON_RE = re.compile(r"^\d\d-\d\d$")
 RECORD_RE = re.compile(r"^(\d+)-(\d+)(?:-(\d+))?$")
 # Recency weights, newest completed season first.
@@ -3866,75 +3866,89 @@ def week_refresh() -> int:
             g.get("opp_score"),
             flush=True,
         )
-    refresh_zorts_tournaments()
+    refresh_tournaments()
     return 0
 
 
-def zorts_payload_signature(payload: dict) -> str:
+def tournaments_payload_signature(payload: dict) -> str:
     """Compare event rows only — generated timestamps always change."""
     rows = payload.get("tournaments") or []
     return json.dumps(rows, sort_keys=True, separators=(",", ":"))
 
 
-def refresh_zorts_tournaments() -> int:
-    """Run scripts/fetch-zorts.py. Write data/tournaments.json only when rows change.
+def refresh_tournaments() -> int:
+    """Zorts + Flag50 fetch/merge. Write data/tournaments.json only when rows change.
 
     On 403 / captcha / Cloudflare / any fetch failure, keep the prior file.
     Never invent tournaments.
     """
-    if not ZORTS_FETCH.exists():
-        print("zorts script missing; keeping on-disk tournaments.json", flush=True)
+    if not TOURNAMENTS_REFRESH.exists():
+        print("tournaments refresh script missing; keeping on-disk tournaments.json", flush=True)
         return 0
-    tmp = Path("/tmp/fridayradar-zorts-week")
+    tmp = Path("/tmp/fridayradar-tournaments-week")
     if tmp.exists():
         shutil.rmtree(tmp, ignore_errors=True)
     tmp.mkdir(parents=True, exist_ok=True)
     proc = subprocess.run(
-        [sys.executable, str(ZORTS_FETCH), "--outdir", str(tmp)],
+        [
+            sys.executable,
+            str(TOURNAMENTS_REFRESH),
+            "--states",
+            "TX",
+            "--no-find",
+            "--outdir",
+            str(tmp),
+            "--workdir",
+            str(tmp / "work"),
+        ],
         check=False,
         capture_output=True,
         text=True,
     )
+    if proc.stdout:
+        sys.stdout.write(proc.stdout)
+        if not proc.stdout.endswith("\n"):
+            sys.stdout.write("\n")
     if proc.stderr:
         sys.stderr.write(proc.stderr)
         if not proc.stderr.endswith("\n"):
             sys.stderr.write("\n")
     if proc.returncode != 0:
         print(
-            f"zorts fetch failed (exit {proc.returncode}); keeping on-disk "
+            f"tournaments fetch failed (exit {proc.returncode}); keeping on-disk "
             "tournaments.json (not invented)",
             flush=True,
         )
         return 0
     fresh_path = tmp / "tournaments.json"
     if not fresh_path.exists():
-        print("zorts fetch wrote nothing; keeping on-disk tournaments.json", flush=True)
+        print("tournaments fetch wrote nothing; keeping on-disk tournaments.json", flush=True)
         return 0
     try:
         fresh = json.loads(fresh_path.read_text())
     except json.JSONDecodeError:
-        print("zorts fetch JSON invalid; keeping on-disk tournaments.json", flush=True)
+        print("tournaments fetch JSON invalid; keeping on-disk tournaments.json", flush=True)
         return 0
     if not isinstance(fresh.get("tournaments"), list):
-        print("zorts fetch missing tournaments[]; keeping on-disk", flush=True)
+        print("tournaments fetch missing tournaments[]; keeping on-disk", flush=True)
         return 0
     prior: dict = {}
-    if RAW_ZORTS.exists():
+    if RAW_TOURNAMENTS.exists():
         try:
-            prior = json.loads(RAW_ZORTS.read_text())
+            prior = json.loads(RAW_TOURNAMENTS.read_text())
         except json.JSONDecodeError:
             prior = {}
-    if zorts_payload_signature(fresh) == zorts_payload_signature(prior):
+    if tournaments_payload_signature(fresh) == tournaments_payload_signature(prior):
         print(
-            f"zorts tournaments unchanged ({fresh.get('count')} rows); "
+            f"tournaments unchanged ({fresh.get('count')} rows); "
             "keeping prior generated stamp",
             flush=True,
         )
         return 0
-    RAW_ZORTS.parent.mkdir(parents=True, exist_ok=True)
-    RAW_ZORTS.write_text(json.dumps(fresh, indent=2) + "\n")
+    RAW_TOURNAMENTS.parent.mkdir(parents=True, exist_ok=True)
+    RAW_TOURNAMENTS.write_text(json.dumps(fresh, indent=2) + "\n")
     print(
-        f"zorts tournaments updated {len(prior.get('tournaments') or [])}->"
+        f"tournaments updated {len(prior.get('tournaments') or [])}->"
         f"{len(fresh.get('tournaments') or [])} as_of {fresh.get('generated')}",
         flush=True,
     )

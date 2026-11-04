@@ -19,6 +19,13 @@ export type Tournament = {
   event_url: string;
   clubhouse_url: string;
   source: string;
+  state?: string;
+  sources?: string[];
+  verified?: boolean;
+  conflicts?: string;
+  zorts_url?: string;
+  flag50_url?: string;
+  also_listed_as?: string[];
 };
 
 export type TournamentBoard = {
