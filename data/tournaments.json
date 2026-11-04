@@ -1,40 +1,11 @@
 {
-  "generated": "2026-11-04T12:28:52",
+  "generated": "2026-11-04T16:22:21",
   "window": [
     "2026-11-04",
     "2027-06-04"
   ],
-  "count": 136,
+  "count": 128,
   "tournaments": [
-    {
-      "id": "zorts-27094",
-      "category": "flag",
-      "state": "TX",
-      "name": "We Run The World Houston",
-      "start_date": "2026-11-07",
-      "end_date": "2026-11-07",
-      "city": "Spring",
-      "venue": "19717 Stuebner Airline Rd, Spring, TX 77379, USA",
-      "sport": "Girl's Football (5v5 Flag)",
-      "age_groups": "8u to 17u",
-      "divisions": "8u Girls; 10u Girls; 12u Girls; 14u Girls; High School Girls",
-      "entry_fee": "$395.00 USD per team",
-      "registration_ends": "Oct 30, 2026 @ 12:00 AM",
-      "organizer": "Flag Football Life",
-      "contact_email": "info@flagfootballlife.com",
-      "contact_phone": "2158537079",
-      "event_url": "https://www.zortssports.com/join/tournament/27094",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27094",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27094",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": ""
-    },
     {
       "id": "flag50-zs27593",
       "category": "flag",
@@ -63,7 +34,10 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27593",
       "flag50_url": "https://flag50.com/tournaments/youth-texas-shootout-classic-tournament-new-braunfels-tx-new-braunfels-tx-zs27593",
       "also_listed_as": [],
-      "conflicts": "linked Zorts event 27593 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - November 8, 2026"
+      "conflicts": "linked Zorts event 27593 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - November 8, 2026",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": []
     },
     {
       "id": "zorts-27991",
@@ -92,7 +66,22 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27991",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8u",
+        "Girl's 10u",
+        "Girl's 12u",
+        "Girl's 14u",
+        "Girl's High School"
+      ],
+      "open_divisions": [
+        "Coed 6u",
+        "Coed 8u",
+        "Coed 10u",
+        "Coed 12u",
+        "Coed 14u"
+      ]
     },
     {
       "id": "zorts-27600",
@@ -122,7 +111,18 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27600",
       "flag50_url": "https://flag50.com/tournaments/2nd-annual-turkey-troops-lubbock-tx-zs27600",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 11u",
+        "Girl's 13u"
+      ],
+      "open_divisions": [
+        "Coed 5u",
+        "Coed 7u",
+        "Coed 9u",
+        "Coed 11u"
+      ]
     },
     {
       "id": "zorts-27259",
@@ -151,7 +151,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27259",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-26621",
@@ -181,11 +194,30 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/26621",
       "flag50_url": "https://flag50.com/tournaments/slct-flag-turkey-bowl-championships-brought-to-you-by-flagfo-fort-worth-tx-zs26621",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8UG",
+        "Girl's 10UG",
+        "Girl's 12UG",
+        "Girl's 14UG",
+        "Girl's HSG"
+      ],
+      "open_divisions": [
+        "Boy's 6U",
+        "Boy's 7U",
+        "Boy's 8U",
+        "Boy's 9U",
+        "Boy's 10U",
+        "Boy's 11U",
+        "Boy's 12U",
+        "Boy's 13U",
+        "Boy's 14U"
+      ]
     },
     {
       "id": "zorts-27358",
-      "category": "both",
+      "category": "flag",
       "state": "TX",
       "name": "TEXAS SHOWDOWN",
       "start_date": "2026-11-15",
@@ -210,11 +242,27 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27358",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 6u",
+        "Girl's Football (5v5 Flag) 8u",
+        "Girl's Football (5v5 Flag) 10u",
+        "Girl's Football (5v5 Flag) 12u",
+        "Girl's Football (5v5 Flag) 14u",
+        "Girl's Football (7v7) HIGH SCHOOL GIRLS"
+      ],
+      "open_divisions": [
+        "Coed Football (5v5 Flag) 6u",
+        "Coed Football (5v5 Flag) 8u",
+        "Coed Football (5v5 Flag) 10u",
+        "Coed Football (5v5 Flag) 12u",
+        "Coed Football (5v5 Flag) 14u"
+      ]
     },
     {
       "id": "zorts-27234",
-      "category": "both",
+      "category": "flag",
       "state": "TX",
       "name": "ATX Bowl 2026 (Arlington, TX)",
       "start_date": "2026-11-20",
@@ -242,7 +290,38 @@
       "also_listed_as": [
         "https://flag50.com/tournaments/2026-atx-bowl-arlington-tx-ff3acfae7d"
       ],
-      "conflicts": "start date differs: zorts 27234=2026-11-20; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-21 | end date differs: zorts 27234=2026-11-22; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-22 | Flag50 marks a listing as adult (isAdult)"
+      "conflicts": "start date differs: zorts 27234=2026-11-20; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-21 | end date differs: zorts 27234=2026-11-22; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-22 | Flag50 marks a listing as adult (isAdult)",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U",
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) 16U",
+        "Girl's Football (5v5 Flag) 18U",
+        "Girl's Football (5v5 Flag) Air it Out - 8U",
+        "Girl's Football (5v5 Flag) Air it Out - 10U",
+        "Girl's Football (5v5 Flag) Air it Out - 12U",
+        "Girl's Football (5v5 Flag) Air it Out - 14U",
+        "Girl's Football (5v5 Flag) Air it Out - HS",
+        "Girl's Football (7v7) HS 7v7"
+      ],
+      "open_divisions": [
+        "Boy's Football (5v5 Flag) 6U",
+        "Boy's Football (5v5 Flag) 7U",
+        "Boy's Football (5v5 Flag) 8U",
+        "Boy's Football (5v5 Flag) 9U",
+        "Boy's Football (5v5 Flag) 10U",
+        "Boy's Football (5v5 Flag) 11U",
+        "Boy's Football (5v5 Flag) 12U",
+        "Boy's Football (5v5 Flag) 14U",
+        "Boy's Football (5v5 Flag) HS",
+        "Boy's Football (5v5 Flag) Air it Out - 8U",
+        "Boy's Football (5v5 Flag) Air it Out - 10U",
+        "Boy's Football (5v5 Flag) Air it Out - 12U",
+        "Boy's Football (5v5 Flag) Air it Out - 14U",
+        "Boy's Football (5v5 Flag) Air it Out - HS"
+      ]
     },
     {
       "id": "zorts-27321",
@@ -274,7 +353,22 @@
       "also_listed_as": [
         "https://www.zortssports.com/join/tournament/27516"
       ],
-      "conflicts": "end date differs: zorts 27516=2026-11-22; zorts 27321=2026-11-22; flag50 flag50-ff1ef8c78d=2026-11-21"
+      "conflicts": "end date differs: zorts 27516=2026-11-22; zorts 27321=2026-11-22; flag50 flag50-ff1ef8c78d=2026-11-21",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10u",
+        "Girl's 12u",
+        "Girl's 14u",
+        "Girl's 18u",
+        "Women's Adult Women's"
+      ],
+      "open_divisions": [
+        "Boy's 6u",
+        "Boy's 8u",
+        "Boy's 10u",
+        "Boy's 12u",
+        "Boy's 13u"
+      ]
     },
     {
       "id": "zorts-27781",
@@ -303,7 +397,16 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27781",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "7th Grade",
+        "8th Grade",
+        "Freshman",
+        "Junior Varsity",
+        "Senior Varsity"
+      ]
     },
     {
       "id": "zorts-26736",
@@ -332,7 +435,28 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/26736",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U Girls",
+        "Girl's Football (5v5 Flag) 12U Girls",
+        "Girl's Football (5v5 Flag) 14U Girls",
+        "Girl's Football (5v5 Flag) HS Girls"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U",
+        "Boy's Football (7v7) 9U",
+        "Boy's Football (7v7) 10U",
+        "Boy's Football (7v7) 11U",
+        "Boy's Football (7v7) 12U",
+        "Boy's Football (7v7) 13U",
+        "Boy's Football (7v7) 14U",
+        "Boy's Football (7v7) HS Division",
+        "Coed Football (5v5 Flag) 8U Flag",
+        "Coed Football (5v5 Flag) 9U Flag",
+        "Coed Football (5v5 Flag) 10U Flag",
+        "Coed Football (5v5 Flag) 12U Flag"
+      ]
     },
     {
       "id": "zorts-27515",
@@ -362,7 +486,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27515",
       "flag50_url": "https://flag50.com/tournaments/texas-battle-wars-10-boys-flag-tackle-girls-5v5-arlington-tx-zs27515",
       "also_listed_as": [],
-      "conflicts": "fee differs: zorts 27515=$100.00 USD per team; flag50 flag50-zs27515=$250.00 USD per team"
+      "conflicts": "fee differs: zorts 27515=$100.00 USD per team; flag50 flag50-zs27515=$250.00 USD per team",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U GIRLS 5V5",
+        "Girl's Football (5v5 Flag) 10U GIRLS 5V5",
+        "Girl's Football (5v5 Flag) HIGH SCHOOL GIRLS 5V5",
+        "Girl's Football (5v5 Flag) 14U GIRLS 5V5"
+      ],
+      "open_divisions": [
+        "Boy's Football (5v5 Flag) 5U FLAG",
+        "Boy's Football (5v5 Flag) 6U FLAG",
+        "Boy's Football (Tackle) 6U TACKLE",
+        "Boy's Football (Tackle) 7U",
+        "Boy's Football (Tackle) 9U",
+        "Boy's Football (Tackle) 11U",
+        "Boy's Football (Tackle) 12U",
+        "Boy's Football (Tackle) 13U"
+      ]
     },
     {
       "id": "zorts-25421",
@@ -392,7 +533,19 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/25421",
       "flag50_url": "https://flag50.com/tournaments/black-friday-blitz-2026-flag-football-tournament-spring-tx-25421",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10u Girls",
+        "Girl's 12u Girls",
+        "Girl's 14u Girls",
+        "Girl's High School Girls"
+      ],
+      "open_divisions": [
+        "Coed 8u Coed",
+        "Coed 10u Coed",
+        "Coed 12u Coed"
+      ]
     },
     {
       "id": "zorts-28309",
@@ -421,7 +574,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28309",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 16u"
+      ],
+      "open_divisions": [
+        "Coed 9u",
+        "Coed 11u",
+        "Coed 13u",
+        "Coed 7u"
+      ]
     },
     {
       "id": "zorts-28104",
@@ -450,7 +613,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28104",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "Coed Football (5v5 Flag) 7U 5v5 Flag",
+        "Coed Football (5v5 Flag) 9U 5v5 Flag",
+        "Coed Football (5v5 Flag) 11U 5v5 Flag",
+        "Coed Football (5v5 Flag) 13U 5v5 Flag",
+        "Coed Football (5v5 Flag) 15U 5v5 Flag",
+        "Coed Football (7v7) Coed 7v7",
+        "Coed Football (7v7) Coed 7v7",
+        "Coed Football (7v7) Coed 7v7",
+        "Coed Football (7v7) Coed 7v7",
+        "Boy's Football (7v7) Boys 7v7",
+        "Coed Football (5v5 Flag) 5U Flag",
+        "Coed Football (5v5 Flag) 5U Flag"
+      ]
     },
     {
       "id": "zorts-24260",
@@ -480,7 +659,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/24260",
       "flag50_url": "https://flag50.com/tournaments/2026-pinnacle-football-national-championships-corpus-christi-corpus-christi-tx-24260",
       "also_listed_as": [],
-      "conflicts": "Flag50 eventType='review'"
+      "conflicts": "Flag50 eventType='review'",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "Football (5v5 Flag) 6U - 11 Man Flag REC",
+        "Football (Tackle) 6U REC",
+        "Football (Tackle) 7u REC",
+        "Football (Tackle) 8U REC",
+        "Football (Tackle) 9U REC",
+        "Football (Tackle) 10U REC",
+        "Football (Tackle) 11U REC",
+        "Football (Tackle) 12U REC",
+        "Football (Tackle) 13U REC"
+      ]
     },
     {
       "id": "zorts-27237",
@@ -509,7 +701,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27237",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27334",
@@ -539,7 +745,10 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27334",
       "flag50_url": "https://flag50.com/tournaments/gridiron-s-g5-national-qualifier-fort-worth-tx-zs27334",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": []
     },
     {
       "id": "flag50-ffd36e74e8",
@@ -570,36 +779,10 @@
       "also_listed_as": [
         "https://flag50.com/tournaments/nfl-flag-texans-regional-spring-tx-ffb547c6c6"
       ],
-      "conflicts": ""
-    },
-    {
-      "id": "zorts-28237",
-      "category": "flag",
-      "state": "TX",
-      "name": "RISING STARS EXPERIENCE TEXAS FLAG REGIONAL CHAMPIONSHIP",
-      "start_date": "2026-12-05",
-      "end_date": "2026-12-06",
-      "city": "Rowlett",
-      "venue": "Rowlett, TX, USA",
-      "sport": "Football (5v5 Flag), Football (Tackle)",
-      "age_groups": "5u to 18u",
-      "divisions": "Boy's Football (Tackle) 5u; Boy's Football (Tackle) 6u; Girl's Football (5v5 Flag) 8u; Girl's Football (5v5 Flag) 10u; Girl's Football (5v5 Flag) 12u; Girl's Football (5v5 Flag) 14u; Girl's Football (5v5 Flag) 15u to 18u",
-      "entry_fee": "$0.00 USD per team",
-      "registration_ends": "Dec 6, 2026 @ 10:00 PM",
-      "organizer": "The Bullitt Experience",
-      "contact_email": "rsyouthcombine@gmail.com",
-      "contact_phone": "2149664558",
-      "event_url": "https://www.zortssports.com/join/tournament/28237",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28237",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28237",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [],
+      "open_divisions": []
     },
     {
       "id": "zorts-28439",
@@ -628,7 +811,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28439",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "Football (Tackle) 6u",
+        "Football (Tackle) 8u",
+        "Football (Tackle) 10u",
+        "Football (Tackle) 12u",
+        "Football (Tackle) 13u",
+        "Football (5v5 Flag) 5u"
+      ]
     },
     {
       "id": "flag50-ffb265944e",
@@ -660,36 +853,10 @@
       "also_listed_as": [
         "https://flag50.com/tournaments/texas-showdown-aau-junior-olympic-games-qualifier-graford-tx-23535"
       ],
-      "conflicts": "Flag50 marks a listing as adult (isAdult) | linked Zorts event 23535 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - December 12 to December 13, 2026 | start date differs: flag50=2026-12-05; zorts page=2026-12-12"
-    },
-    {
-      "id": "zorts-28383",
-      "category": "flag",
-      "state": "TX",
-      "name": "DALLAS",
-      "start_date": "2026-12-06",
-      "end_date": "2026-12-06",
-      "city": "Dallas-Fort Worth Metropolitan Area",
-      "venue": "Dallas-Fort Worth Metropolitan Area, TX, USA",
-      "sport": "Girl's Football (5v5 Flag)",
-      "age_groups": "7u to 18u",
-      "divisions": "8U; 10U; 12U; 14U; 18U",
-      "entry_fee": "$250.00 USD per team",
-      "registration_ends": "Dec 3, 2026 @ 6:00 PM",
-      "organizer": "TEXAS CHAMPIONS- GIRLS FLAG",
-      "contact_email": "7on7txcl@gmail.com",
-      "contact_phone": "979-201-6869",
-      "event_url": "https://www.zortssports.com/join/tournament/28383",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28383",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28383",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "Flag50 marks a listing as adult (isAdult) | linked Zorts event 23535 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - December 12 to December 13, 2026 | start date differs: flag50=2026-12-05; zorts page=2026-12-12",
+      "has_girls_divisions": true,
+      "girls_divisions": [],
+      "open_divisions": []
     },
     {
       "id": "zorts-26812",
@@ -719,37 +886,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/26812",
       "flag50_url": "https://flag50.com/tournaments/int-l-superflag-invitational-december-12-13-2026-dallas-tx-zs26812",
       "also_listed_as": [],
-      "conflicts": "Flag50 marks a listing as adult (isAdult)"
-    },
-    {
-      "id": "zorts-27082",
-      "category": "flag",
-      "state": "TX",
-      "name": "Oakley Icon Alliance WEST REGIONAL",
-      "start_date": "2026-12-12",
-      "end_date": "2026-12-13",
-      "city": "Arlington",
-      "venue": "AT&T Stadium, AT&T Way, Arlington, TX, USA",
-      "sport": "Girl's Football (5v5 Flag)",
-      "age_groups": "13u to 18u",
-      "divisions": "",
-      "entry_fee": "$2,250.00 USD per team",
-      "registration_ends": "Aug 31, 2026 @ 12:00 AM",
-      "organizer": "Oakley Icon Alliance",
-      "contact_email": "matt@zortssports.com",
-      "contact_phone": "267-644-1115",
-      "event_url": "https://www.zortssports.com/join/tournament/27082",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27082",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
+      "conflicts": "Flag50 marks a listing as adult (isAdult)",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8U 5v5",
+        "Girl's 10U 5v5",
+        "Girl's 12U 5v5",
+        "Girl's 14U 5v5",
+        "Girl's 16U 5v5",
+        "Girl's 18U 5v5"
       ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27082",
-      "flag50_url": "https://flag50.com/tournaments/oakley-icon-alliance-west-regional-arlington-tx-zs27082",
-      "also_listed_as": [],
-      "conflicts": ""
+      "open_divisions": [
+        "Boy's 8U 5v5",
+        "Boy's 10U 5v5",
+        "Boy's 12U 5v5",
+        "Boy's 14U 5v5",
+        "Boy's 16U 5v5",
+        "Boy's 18U 5v5"
+      ]
     },
     {
       "id": "zorts-26737",
@@ -779,7 +933,26 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/26737",
       "flag50_url": "https://flag50.com/tournaments/santa-bowl-2026-fort-worth-tx-zs26737",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U Girls",
+        "Girl's Football (5v5 Flag) 12U Girls",
+        "Girl's Football (5v5 Flag) 14U Girls",
+        "Girl's Football (5v5 Flag) HS Girls"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U",
+        "Boy's Football (7v7) 10U",
+        "Boy's Football (7v7) 11U",
+        "Boy's Football (7v7) 12U",
+        "Boy's Football (7v7) 13U",
+        "Boy's Football (7v7) 14U",
+        "Boy's Football (7v7) HS Division",
+        "Coed Football (5v5 Flag) 8U Flag",
+        "Coed Football (5v5 Flag) 10U Flag",
+        "Coed Football (5v5 Flag) 12U Flag"
+      ]
     },
     {
       "id": "zorts-28075",
@@ -808,7 +981,15 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28075",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "Coed Other 6u",
+        "Boy's Football (Tackle) 8u",
+        "Boy's Football (Tackle) 10u",
+        "Boy's Football (Tackle) 12u"
+      ]
     },
     {
       "id": "zorts-27601",
@@ -838,40 +1019,22 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27601",
       "flag50_url": "https://flag50.com/tournaments/toys-for-tots-flag-football-tournament-lubbock-tx-zs27601",
       "also_listed_as": [],
-      "conflicts": ""
-    },
-    {
-      "id": "zorts-26882",
-      "category": "flag",
-      "state": "TX",
-      "name": "Lonestar national championship",
-      "start_date": "2026-12-15",
-      "end_date": "2026-12-20",
-      "city": "Frisco",
-      "venue": "Frisco, TX, USA",
-      "sport": "Football (5v5 Flag), Football (Tackle)",
-      "age_groups": "9u to 18u",
-      "divisions": "Boy's Football (Tackle) 4TH-5TH GRADE; Boy's Football (Tackle) MIDDLE SCHOOL 6TH, 7TH, 8TH; Boy's Football (Tackle) HIGH SCHOOL DIVISION; Girl's Football (5v5 Flag) 12u to 14u",
-      "entry_fee": "$250.00 USD per athlete",
-      "registration_ends": "Nov 14, 2026 @ 2:00 PM",
-      "organizer": "MAB",
-      "contact_email": "theagencyga24@gmail.com",
-      "contact_phone": "678-863-5320",
-      "event_url": "https://www.zortssports.com/join/tournament/26882",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26882",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/26882",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "5u",
+        "7u",
+        "9u",
+        "11u",
+        "13u",
+        "15u",
+        "17u"
+      ]
     },
     {
       "id": "zorts-27346",
-      "category": "both",
+      "category": "flag",
       "state": "TX",
       "name": "Lonestar Shootout 2026 Powered by Military Bowl Week",
       "start_date": "2026-12-18",
@@ -897,7 +1060,38 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27346",
       "flag50_url": "https://flag50.com/tournaments/lonestar-shootout-2026-powered-by-military-bowl-week-fort-worth-tx-zs27346",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U",
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) 16U",
+        "Girl's Football (5v5 Flag) 18U",
+        "Girl's Football (5v5 Flag) 8U Air it Out",
+        "Girl's Football (5v5 Flag) 10U Air it Out",
+        "Girl's Football (5v5 Flag) 12U Air it Out",
+        "Girl's Football (5v5 Flag) 14U Air it Out",
+        "Girl's Football (5v5 Flag) HS Air it Out",
+        "Girl's Football (7v7) HS"
+      ],
+      "open_divisions": [
+        "Boy's Football (5v5 Flag) 6U",
+        "Boy's Football (5v5 Flag) 7U",
+        "Boy's Football (5v5 Flag) 8U",
+        "Boy's Football (5v5 Flag) 9U",
+        "Boy's Football (5v5 Flag) 10U",
+        "Boy's Football (5v5 Flag) 11U",
+        "Boy's Football (5v5 Flag) 12U",
+        "Boy's Football (5v5 Flag) 13U",
+        "Boy's Football (5v5 Flag) 14U",
+        "Boy's Football (5v5 Flag) HS",
+        "Boy's Football (5v5 Flag) 8U Air it Out",
+        "Boy's Football (5v5 Flag) 10U Air it Out",
+        "Boy's Football (5v5 Flag) 12U Air it Out",
+        "Boy's Football (5v5 Flag) 14U Air it Out"
+      ]
     },
     {
       "id": "zorts-27266",
@@ -926,7 +1120,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27266",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27824",
@@ -958,7 +1162,12 @@
         "https://www.zortssports.com/join/tournament/27826",
         "https://www.zortssports.com/join/tournament/27827"
       ],
-      "conflicts": "end date differs: zorts 27826=2026-12-20; zorts 27824=2026-12-19; zorts 27827=2026-12-19 | fee differs: zorts 27824=$200.00 USD per team; zorts 27827=$250.00 USD per team"
+      "conflicts": "end date differs: zorts 27826=2026-12-20; zorts 27824=2026-12-19; zorts 27827=2026-12-19 | fee differs: zorts 27824=$200.00 USD per team; zorts 27827=$250.00 USD per team",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u to 18u"
+      ]
     },
     {
       "id": "zorts-27318",
@@ -987,11 +1196,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27318",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27750",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "THE 5TH ANNUAL NATIONAL BOYS 7v7 & GIRLS FLAG 5V5 TOURNAMENT",
       "start_date": "2027-01-02",
@@ -1017,7 +1239,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27750",
       "flag50_url": "https://flag50.com/tournaments/the-5th-annual-national-boys-7v7-girls-flag-5v5-tournament-converse-tx-zs27750",
       "also_listed_as": [],
-      "conflicts": "city differs: zorts 27750=San Antonio; flag50 flag50-zs27750=Converse"
+      "conflicts": "city differs: zorts 27750=San Antonio; flag50 flag50-zs27750=Converse",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U",
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) HIGH SCHOOL"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U",
+        "Boy's Football (7v7) 9U",
+        "Boy's Football (7v7) 10U",
+        "Boy's Football (7v7) 11U",
+        "Boy's Football (7v7) 12U",
+        "Boy's Football (7v7) 13U",
+        "Boy's Football (7v7) 15u",
+        "Boy's Football (7v7) 16U",
+        "Boy's Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-27506",
@@ -1046,36 +1286,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27506",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
-    },
-    {
-      "id": "zorts-28151",
-      "category": "flag",
-      "state": "TX",
-      "name": "HOUSTON",
-      "start_date": "2027-01-03",
-      "end_date": "2027-01-03",
-      "city": "Houston",
-      "venue": "C.E. King High School, East Sam Houston Parkway North, Houston, TX, USA",
-      "sport": "Girl's Football (5v5 Flag)",
-      "age_groups": "7u to 18u",
-      "divisions": "8U; 10U; 12U; 14U; 18U",
-      "entry_fee": "$300.00 USD per team",
-      "registration_ends": "Dec 30, 2026 @ 6:00 PM",
-      "organizer": "TEXAS CHAMPIONS- GIRLS FLAG",
-      "contact_email": "7on7txcl@gmail.com",
-      "contact_phone": "979-201-6869",
-      "event_url": "https://www.zortssports.com/join/tournament/28151",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28151",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28151",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27229",
@@ -1104,7 +1329,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27229",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27507",
@@ -1133,7 +1372,16 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27507",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "14U",
+        "15U"
+      ]
     },
     {
       "id": "zorts-28438",
@@ -1162,7 +1410,18 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28438",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u",
+        "10u",
+        "12u",
+        "13u",
+        "14u",
+        "15u",
+        "18u"
+      ]
     },
     {
       "id": "zorts-27377",
@@ -1191,7 +1450,19 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27377",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "13U/7th Grade",
+        "14U/8th Grade",
+        "15U/Freshman",
+        "16U/JV",
+        "18U/Varsity"
+      ]
     },
     {
       "id": "zorts-26622",
@@ -1221,7 +1492,27 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/26622",
       "flag50_url": "https://flag50.com/tournaments/slct-flag-new-years-bowl-at-the-world-famous-at-t-stadium-br-arlington-tx-zs26622",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8UG",
+        "Girl's 10UG",
+        "Girl's 12UG",
+        "Girl's 14UG",
+        "Girl's HSG"
+      ],
+      "open_divisions": [
+        "Boy's 5U",
+        "Boy's 6U",
+        "Boy's 7U",
+        "Boy's 8U",
+        "Boy's 9U",
+        "Boy's 10U",
+        "Boy's 11U",
+        "Boy's 12U",
+        "Boy's 13U",
+        "Boy's 14U"
+      ]
     },
     {
       "id": "zorts-25422",
@@ -1251,7 +1542,18 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/25422",
       "flag50_url": "https://flag50.com/tournaments/winter-soldiers-2027-flag-football-tournament-spring-tx-25422",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10u Girls",
+        "Girl's 12u Girls",
+        "Girl's 14u Girls"
+      ],
+      "open_divisions": [
+        "Coed 8u Coed",
+        "Coed 10u Coed",
+        "Coed 12u Coed"
+      ]
     },
     {
       "id": "zorts-27509",
@@ -1280,7 +1582,16 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27509",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "9U",
+        "11U",
+        "13U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27296",
@@ -1309,7 +1620,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27296",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27354",
@@ -1338,7 +1663,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27354",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27906",
@@ -1367,7 +1705,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27906",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "18U",
+        "8u"
+      ]
     },
     {
       "id": "zorts-27209",
@@ -1396,7 +1744,18 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27209",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u",
+        "9u",
+        "10u",
+        "11u",
+        "12u",
+        "13u",
+        "14u"
+      ]
     },
     {
       "id": "zorts-27298",
@@ -1425,7 +1784,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27298",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27857",
@@ -1454,11 +1827,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27857",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27030",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 DALLAS TX 1.23-1.24",
       "start_date": "2027-01-23",
@@ -1484,7 +1871,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27030",
       "flag50_url": "https://flag50.com/tournaments/rated-five-star-7v7-2027-dallas-tx-1-23-1-24-dallas-tx-zs27030",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Coed Football (7v7) 8U",
+        "Coed Football (7v7) 10U",
+        "Coed Football (7v7) 12U",
+        "Coed Football (7v7) 13U",
+        "Coed Football (7v7) 14U",
+        "Coed Football (7v7) 15U",
+        "Coed Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-27356",
@@ -1513,7 +1916,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27356",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27230",
@@ -1542,7 +1958,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27230",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10u",
+        "Girl's 12u",
+        "Girl's 14u"
+      ],
+      "open_divisions": [
+        "Boy's 7u",
+        "Boy's 8u",
+        "Boy's 9u",
+        "Boy's 10u",
+        "Boy's 12u",
+        "Boy's 14u"
+      ]
     },
     {
       "id": "zorts-28365",
@@ -1571,7 +2001,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28365",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10u Girls",
+        "Girl's 12u Girls",
+        "Girl's 14u Girls",
+        "Girl's High School Girls"
+      ],
+      "open_divisions": [
+        "Coed 8u Coed",
+        "Coed 10u Coed",
+        "Coed 12u Coed",
+        "Coed 14u Coed"
+      ]
     },
     {
       "id": "zorts-27767",
@@ -1600,7 +2043,22 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27767",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Girls 8u",
+        "Girl's Girls 10u",
+        "Girl's Girls 12u",
+        "Girl's Girls 14u",
+        "Girl's Girls 16u",
+        "Girl's Girls HS"
+      ],
+      "open_divisions": [
+        "Boy's Boys 6u",
+        "Boy's Boys 8u",
+        "Boy's Boys 10u",
+        "Boy's Boys 12u"
+      ]
     },
     {
       "id": "zorts-27357",
@@ -1629,7 +2087,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27357",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27212",
@@ -1658,7 +2129,14 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27212",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "15u",
+        "16u",
+        "18u"
+      ]
     },
     {
       "id": "zorts-27903",
@@ -1687,7 +2165,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27903",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28156",
@@ -1716,11 +2208,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28156",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "7u to 8u",
+        "9u to 10u",
+        "11u to 12u",
+        "13u to 14u",
+        "15u to 16u",
+        "17u to 18u"
+      ]
     },
     {
       "id": "zorts-27033",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 1.30-1.31",
       "start_date": "2027-01-30",
@@ -1745,7 +2247,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27033",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Coed Football (7v7) 8U",
+        "Coed Football (7v7) 10U",
+        "Coed Football (7v7) 12U",
+        "Coed Football (7v7) 13U",
+        "Coed Football (7v7) 14U",
+        "Coed Football (7v7) 15U",
+        "Coed Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-27300",
@@ -1774,11 +2292,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27300",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-28069",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "BATTLE IN THE TONE 5",
       "start_date": "2027-02-06",
@@ -1803,7 +2335,26 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28069",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8u",
+        "Girl's Football (5v5 Flag) 10u",
+        "Girl's Football (5v5 Flag) 12u",
+        "Girl's Football (5v5 Flag) 14u",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8u",
+        "Boy's Football (7v7) 10u",
+        "Boy's Football (7v7) 12u",
+        "Boy's Football (7v7) 14u",
+        "Boy's Football (7v7) 15u",
+        "Boy's Football (7v7) 18u",
+        "Boy's Football (7v7) 9u",
+        "Boy's Football (7v7) 11u",
+        "Boy's Football (7v7) 16u"
+      ]
     },
     {
       "id": "zorts-27915",
@@ -1832,11 +2383,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27915",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28263",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RZE Texas 27' | Boys 7v7 - Girls Flag - 5v5 Lineman",
       "start_date": "2027-02-06",
@@ -1861,7 +2426,29 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28263",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (7v7) GIR7S HS/18 U (7v7 Flag)",
+        "Girl's Football (5v5 Flag) 14U Girls 5v5 Flag",
+        "Girl's Football (5v5 Flag) 12U Girls 5v5 Flag",
+        "Girl's Football (5v5 Flag) 10U Girls 5v5 Flag"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U Boys",
+        "Boy's Football (7v7) 9U Boys",
+        "Boy's Football (7v7) 10U Boys",
+        "Boy's Football (7v7) 11U Boys",
+        "Boy's Football (7v7) 12 U Boys",
+        "Boy's Football (7v7) 13U Boys",
+        "Boy's Football (7v7) 14U Boys",
+        "Boy's Football (7v7) 15U Boys",
+        "Boy's Football (7v7) HS/18 U Boys",
+        "Boy's Football (5v5 Lineman) HS/18u 5on5 Lineman",
+        "Boy's Football (5v5 Lineman) MS/14u 5on5 Lineman",
+        "Boy's Football (5v5 Lineman) 12u 5on5 Lineman",
+        "Boy's Football (5v5 Lineman) 10u 5on5 Lineman"
+      ]
     },
     {
       "id": "zorts-27461",
@@ -1890,11 +2477,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27461",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28132",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "UNFINISHED BUSINESS- DA-JUMP OFF!!",
       "start_date": "2027-02-06",
@@ -1919,7 +2519,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28132",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U 5v5",
+        "Girl's Football (5v5 Flag) 10U 5v5",
+        "Girl's Football (5v5 Flag) 12U 5v5",
+        "Girl's Football (5v5 Flag) 14U 5v5",
+        "Girl's Football (5v5 Flag) 5v5 HS"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U 7v7",
+        "Boy's Football (7v7) 9U 7v7",
+        "Boy's Football (7v7) 10U 7v7",
+        "Boy's Football (7v7) 12U 7v7",
+        "Boy's Football (7v7) 14U 7v7",
+        "Boy's Football (7v7) 15U 7v7",
+        "Boy's Football (7v7) HS 7v7"
+      ]
     },
     {
       "id": "zorts-27301",
@@ -1948,7 +2565,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27301",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27462",
@@ -1977,11 +2608,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27462",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9u",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28270",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RZE Houston Tx 27' | Boys 7v7 - Girls Flag - 5v5 Lineman",
       "start_date": "2027-02-13",
@@ -2006,7 +2650,29 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28270",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (7v7) GIR7S HS/18 U (7v7 Flag)",
+        "Girl's Football (5v5 Flag) 14U Girls 5v5 Flag",
+        "Girl's Football (5v5 Flag) 12U Girls 5v5 Flag",
+        "Girl's Football (5v5 Flag) 10U Girls 5v5 Flag"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U Boys",
+        "Boy's Football (7v7) 9U Boys",
+        "Boy's Football (7v7) 10U Boys",
+        "Boy's Football (7v7) 11U Boys",
+        "Boy's Football (7v7) 12 U Boys",
+        "Boy's Football (7v7) 13U Boys",
+        "Boy's Football (7v7) 14U Boys",
+        "Boy's Football (7v7) 15U Boys",
+        "Boy's Football (7v7) HS/18 U Boys",
+        "Boy's Football (5v5 Lineman) HS/18u 5on5 Lineman",
+        "Boy's Football (5v5 Lineman) MS/14u 5on5 Lineman",
+        "Boy's Football (5v5 Lineman) 12u 5on5 Lineman",
+        "Boy's Football (5v5 Lineman) 10u 5on5 Lineman"
+      ]
     },
     {
       "id": "zorts-28140",
@@ -2035,7 +2701,19 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28140",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "13U/7th Grade",
+        "14U/8th Grade",
+        "15U/Freshman",
+        "16U/JV",
+        "18U/Varsity"
+      ]
     },
     {
       "id": "zorts-27916",
@@ -2064,7 +2742,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27916",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27907",
@@ -2093,7 +2785,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27907",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "18U",
+        "8u"
+      ]
     },
     {
       "id": "zorts-27302",
@@ -2122,7 +2824,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27302",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-28057",
@@ -2151,7 +2867,36 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28057",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 7u",
+        "Girl's 8u",
+        "Girl's 9u",
+        "Girl's 10u",
+        "Girl's 11u",
+        "Girl's 12u",
+        "Girl's 13u",
+        "Girl's 14u",
+        "Girl's 15u",
+        "Girl's 16u",
+        "Girl's 17u",
+        "Girl's 18u"
+      ],
+      "open_divisions": [
+        "Boy's 7u",
+        "Boy's 8u",
+        "Boy's 9u",
+        "Boy's 10u",
+        "Boy's 11u",
+        "Boy's 12u",
+        "Boy's 13u",
+        "Boy's 14u",
+        "Boy's 15u",
+        "Boy's 16u",
+        "Boy's 17u",
+        "Boy's 18u"
+      ]
     },
     {
       "id": "zorts-27463",
@@ -2180,7 +2925,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27463",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-26716",
@@ -2209,11 +2967,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/26716",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "Football (7v7) 10u",
+        "Football (7v7) 12U",
+        "Football (7v7) 14U",
+        "Football (7v7) 15U",
+        "Football (7v7) High School",
+        "Football (5v5 Lineman) 15u to 18u"
+      ]
     },
     {
       "id": "zorts-26959",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "KING OF SE7ENS II",
       "start_date": "2027-02-20",
@@ -2238,7 +3006,22 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/26959",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10u",
+        "Girl's Football (5v5 Flag) 12u",
+        "Girl's Football (5v5 Flag) 14u",
+        "Girl's Football (5v5 Flag) 18u"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8u",
+        "Boy's Football (7v7) 10u",
+        "Boy's Football (7v7) 12u",
+        "Boy's Football (7v7) 14u",
+        "Boy's Football (7v7) 15u",
+        "Boy's Football (7v7) 18u"
+      ]
     },
     {
       "id": "zorts-28160",
@@ -2267,11 +3050,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28160",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "7u to 8u",
+        "9u to 10u",
+        "11u to 12u",
+        "13u to 14u",
+        "15u to 16u",
+        "17u to 18u"
+      ]
     },
     {
       "id": "zorts-28458",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RATED FIVE STAR X DRTY PRO 7v7 2027 ORANGE COUNTY, TX 2.20",
       "start_date": "2027-02-20",
@@ -2296,11 +3089,27 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28458",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Coed Football (7v7) 8U",
+        "Coed Football (7v7) 10U",
+        "Coed Football (7v7) 12U",
+        "Coed Football (7v7) 13U",
+        "Coed Football (7v7) 14U",
+        "Coed Football (7v7) 15U",
+        "Coed Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-28070",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "THE I-35 SHOOTOUT",
       "start_date": "2027-02-20",
@@ -2325,7 +3134,27 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28070",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8u",
+        "Girl's Football (5v5 Flag) 10u",
+        "Girl's Football (5v5 Flag) 12u",
+        "Girl's Football (5v5 Flag) 14u",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8u",
+        "Boy's Football (7v7) 9u",
+        "Boy's Football (7v7) 10u",
+        "Boy's Football (7v7) 11u",
+        "Boy's Football (7v7) 12u",
+        "Boy's Football (7v7) 13u",
+        "Boy's Football (7v7) 14u",
+        "Boy's Football (7v7) 15u",
+        "Boy's Football (7v7) 16u",
+        "Boy's Football (7v7) 18u"
+      ]
     },
     {
       "id": "zorts-28423",
@@ -2354,7 +3183,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28423",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8u",
+        "Girl's 10u",
+        "Girl's 12u",
+        "Girl's 14u",
+        "Girl's HIGH SCHOOL GIRLS"
+      ],
+      "open_divisions": [
+        "Coed 8u",
+        "Coed 10u",
+        "Coed 12u",
+        "Coed 14u"
+      ]
     },
     {
       "id": "zorts-27918",
@@ -2383,11 +3226,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27918",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28421",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 2.27-2.28",
       "start_date": "2027-02-27",
@@ -2412,7 +3269,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28421",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Coed Football (7v7) 8U",
+        "Coed Football (7v7) 10U",
+        "Coed Football (7v7) 12U",
+        "Coed Football (7v7) 13U",
+        "Coed Football (7v7) 14U",
+        "Coed Football (7v7) 15U",
+        "Coed Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-27650",
@@ -2441,7 +3314,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27650",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27304",
@@ -2470,7 +3356,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27304",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-28059",
@@ -2499,7 +3399,36 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28059",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 7u",
+        "Girl's 8u",
+        "Girl's 9u",
+        "Girl's 10u",
+        "Girl's 11u",
+        "Girl's 12u",
+        "Girl's 13u",
+        "Girl's 14u",
+        "Girl's 15u",
+        "Girl's 16u",
+        "Girl's 17u",
+        "Girl's 18u"
+      ],
+      "open_divisions": [
+        "Boy's 7u",
+        "Boy's 8u",
+        "Boy's 9u",
+        "Boy's 10u",
+        "Boy's 11u",
+        "Boy's 12u",
+        "Boy's 13u",
+        "Boy's 14u",
+        "Boy's 15u",
+        "Boy's 16u",
+        "Boy's 17u",
+        "Boy's 18u"
+      ]
     },
     {
       "id": "zorts-27919",
@@ -2528,7 +3457,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27919",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27651",
@@ -2557,7 +3500,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27651",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27210",
@@ -2586,11 +3542,22 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27210",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u",
+        "9u",
+        "10u",
+        "11u",
+        "12u",
+        "13u",
+        "14u"
+      ]
     },
     {
       "id": "zorts-28290",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "Battle of the Ski Goggles 5 7v7/5v5 Girls Flag/Big Man Tournament",
       "start_date": "2027-03-13",
@@ -2615,7 +3582,28 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28290",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U 5v5",
+        "Girl's Football (5v5 Flag) 10U 5v5",
+        "Girl's Football (5v5 Flag) 12U 5v5",
+        "Girl's Football (5v5 Flag) 14U 5v5",
+        "Girl's Football (5v5 Flag) HS 5v5 (No Seniors)"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U",
+        "Boy's Football (7v7) 9U",
+        "Boy's Football (7v7) 10U",
+        "Boy's Football (7v7) 12U",
+        "Boy's Football (7v7) MS (13U/14U)",
+        "Boy's Football (7v7) 15U",
+        "Boy's Football (7v7) 18U (No Seniors)",
+        "Boy's Football (5v5 Lineman) 8U Lineman Challenge",
+        "Boy's Football (5v5 Lineman) 10U Lineman Challenge",
+        "Boy's Football (5v5 Lineman) 12U Lineman Challenge",
+        "Boy's Football (5v5 Lineman) MS (13U/14U) Lineman Challenge"
+      ]
     },
     {
       "id": "zorts-27908",
@@ -2644,7 +3632,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27908",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "18U",
+        "8u"
+      ]
     },
     {
       "id": "zorts-27652",
@@ -2673,7 +3671,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27652",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27306",
@@ -2702,7 +3713,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27306",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27307",
@@ -2731,37 +3756,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27307",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
-    },
-    {
-      "id": "zorts-27331",
-      "category": "both",
-      "state": "TX",
-      "name": "2027 Girls 5v5 & 7on7 Flag \u201cBattle of the Best\" NIT Qualifier (Round Rock, TX)",
-      "start_date": "2027-03-20",
-      "end_date": "2027-03-21",
-      "city": "Round Rock",
-      "venue": "Round Rock Multipurpose Complex, 2001 North N Kenney Fort Blvd, Round Rock, TX 78665, USA",
-      "sport": "Girl's Football (7v7), Football (5v5 Flag)",
-      "age_groups": "7u to 18u",
-      "divisions": "Football (5v5 Flag) 8U Girls; Football (5v5 Flag) 10U Girls; Football (5v5 Flag) 12U Girls; Football (5v5 Flag) 14U Girls; Football (7v7) HSG 7on7 Flag",
-      "entry_fee": "$495.00 USD per team",
-      "registration_ends": "Mar 18, 2027 @ 6:00 PM",
-      "organizer": "PremierEventsUSA - Football",
-      "contact_email": "info@premiereventsusa.com",
-      "contact_phone": "4693969332",
-      "event_url": "https://www.zortssports.com/join/tournament/27331",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27331",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27331",
-      "flag50_url": "https://flag50.com/tournaments/2027-girls-5v5-7on7-flag-battle-of-the-best-nit-qualifier-ro-round-rock-tx-zs27331",
-      "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-28060",
@@ -2790,7 +3799,36 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28060",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 7u",
+        "Girl's 8u",
+        "Girl's 9u",
+        "Girl's 10u",
+        "Girl's 11u",
+        "Girl's 12u",
+        "Girl's 13u",
+        "Girl's 14u",
+        "Girl's 15u",
+        "Girl's 16u",
+        "Girl's 17u",
+        "Girl's 18u"
+      ],
+      "open_divisions": [
+        "Boy's 7u",
+        "Boy's 8u",
+        "Boy's 9u",
+        "Boy's 10u",
+        "Boy's 11u",
+        "Boy's 12u",
+        "Boy's 13u",
+        "Boy's 14u",
+        "Boy's 15u",
+        "Boy's 16u",
+        "Boy's 17u",
+        "Boy's 18u"
+      ]
     },
     {
       "id": "zorts-27215",
@@ -2820,7 +3858,10 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27215",
       "flag50_url": "https://flag50.com/tournaments/battle5-texas-national-qualifier-texas-tx-zs27215",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": []
     },
     {
       "id": "zorts-25529",
@@ -2850,7 +3891,18 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/25529",
       "flag50_url": "https://flag50.com/tournaments/gold-rush-2027-flag-football-tournament-spring-tx-25529",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10u Girls",
+        "Girl's 12u Girls",
+        "Girl's 14u Girls"
+      ],
+      "open_divisions": [
+        "Coed 8u Coed",
+        "Coed 10u Coed",
+        "Coed 12u Coed"
+      ]
     },
     {
       "id": "zorts-27213",
@@ -2879,7 +3931,14 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27213",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "15u",
+        "16u",
+        "18u"
+      ]
     },
     {
       "id": "zorts-27921",
@@ -2908,7 +3967,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27921",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27653",
@@ -2937,11 +4010,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27653",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28424",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 3.20-3.21",
       "start_date": "2027-03-20",
@@ -2966,7 +4052,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28424",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Coed Football (7v7) 8U",
+        "Coed Football (7v7) 10U",
+        "Coed Football (7v7) 12U",
+        "Coed Football (7v7) 13U",
+        "Coed Football (7v7) 14U",
+        "Coed Football (7v7) 15U",
+        "Coed Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-28141",
@@ -2995,7 +4097,19 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28141",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "13U/7th Grade",
+        "14U/8th Grade",
+        "15U/Freshman",
+        "16U/JV",
+        "18U/Varsity"
+      ]
     },
     {
       "id": "zorts-27922",
@@ -3024,7 +4138,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27922",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27309",
@@ -3053,7 +4181,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27309",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-28433",
@@ -3082,7 +4224,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28433",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u",
+        "10u",
+        "12u",
+        "14u",
+        "15u",
+        "High School (No Seniors)"
+      ]
     },
     {
       "id": "zorts-27923",
@@ -3111,11 +4263,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27923",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28449",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "UNFINISHED BUSINESS- THE EASTER TAKEOVER!!",
       "start_date": "2027-03-27",
@@ -3140,7 +4306,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28449",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U 5v5",
+        "Girl's Football (5v5 Flag) 10U 5v5",
+        "Girl's Football (5v5 Flag) 12U 5v5",
+        "Girl's Football (5v5 Flag) 14U 5v5",
+        "Girl's Football (5v5 Flag) 5v5 HS"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U 7v7",
+        "Boy's Football (7v7) 9U 7v7",
+        "Boy's Football (7v7) 10U 7v7",
+        "Boy's Football (7v7) 12U 7v7",
+        "Boy's Football (7v7) 14U 7v7",
+        "Boy's Football (7v7) 15U 7v7",
+        "Boy's Football (7v7) HS 7v7"
+      ]
     },
     {
       "id": "zorts-27310",
@@ -3169,7 +4352,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27310",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27927",
@@ -3198,11 +4395,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27927",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27192",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "K7NG OF SE7ENS III",
       "start_date": "2027-04-03",
@@ -3227,7 +4438,22 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27192",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10u",
+        "Girl's Football (5v5 Flag) 12u",
+        "Girl's Football (5v5 Flag) 14u",
+        "Girl's Football (5v5 Flag) 18u"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8u",
+        "Boy's Football (7v7) 10u",
+        "Boy's Football (7v7) 12u",
+        "Boy's Football (7v7) 14u",
+        "Boy's Football (7v7) 15u",
+        "Boy's Football (7v7) 18u"
+      ]
     },
     {
       "id": "zorts-27654",
@@ -3256,7 +4482,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27654",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27211",
@@ -3285,7 +4524,18 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27211",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u",
+        "9u",
+        "10u",
+        "11u",
+        "12u",
+        "13u",
+        "14u"
+      ]
     },
     {
       "id": "zorts-27417",
@@ -3314,7 +4564,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27417",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27311",
@@ -3343,11 +4607,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27311",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27451",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "FSG Tournament Series - Houston",
       "start_date": "2027-04-10",
@@ -3373,7 +4651,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27451",
       "flag50_url": "https://flag50.com/tournaments/fsg-tournament-series-houston-houston-tx-zs27451",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) High School",
+        "Girl's Football (5v5 Flag) Junior Division"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) Minor (8U)",
+        "Boy's Football (7v7) Next Division (10U) National",
+        "Boy's Football (7v7) Stars Division (12U) National",
+        "Boy's Football (7v7) Future Division (13U) National",
+        "Boy's Football (7v7) Intermediate Division (14U) National",
+        "Boy's Football (7v7) Junior Division (15U) National",
+        "Boy's Football (7v7) Senior Division (18U) National"
+      ]
     },
     {
       "id": "zorts-27655",
@@ -3402,7 +4694,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27655",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27656",
@@ -3431,7 +4736,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27656",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27214",
@@ -3460,7 +4778,14 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27214",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "15u",
+        "16u",
+        "18u"
+      ]
     },
     {
       "id": "zorts-27929",
@@ -3489,11 +4814,25 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27929",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28426",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 4.17-4.18",
       "start_date": "2027-04-17",
@@ -3518,7 +4857,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28426",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Coed Football (7v7) 8U",
+        "Coed Football (7v7) 10U",
+        "Coed Football (7v7) 12U",
+        "Coed Football (7v7) 13U",
+        "Coed Football (7v7) 14U",
+        "Coed Football (7v7) 15U",
+        "Coed Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-28142",
@@ -3547,11 +4902,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28142",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "13U/7th Grade",
+        "14U/8th Grade",
+        "15U/Freshman",
+        "16U/JV",
+        "18U/Varsity"
+      ]
     },
     {
       "id": "zorts-28451",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "UNFINISHED BUSINESS- NO EXCUSES!!",
       "start_date": "2027-04-17",
@@ -3576,7 +4943,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28451",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U 5v5",
+        "Girl's Football (5v5 Flag) 10U 5v5",
+        "Girl's Football (5v5 Flag) 12U 5v5",
+        "Girl's Football (5v5 Flag) 14U 5v5",
+        "Girl's Football (5v5 Flag) 5v5 HS"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 8U 7v7",
+        "Boy's Football (7v7) 9U 7v7",
+        "Boy's Football (7v7) 10U 7v7",
+        "Boy's Football (7v7) 12U 7v7",
+        "Boy's Football (7v7) 14U 7v7",
+        "Boy's Football (7v7) 15U 7v7",
+        "Boy's Football (7v7) HS 7v7"
+      ]
     },
     {
       "id": "zorts-27930",
@@ -3605,7 +4989,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27930",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27657",
@@ -3634,7 +5032,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27657",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27316",
@@ -3663,7 +5074,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27316",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27658",
@@ -3692,11 +5117,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27658",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28457",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "RATED FIVE STAR 7v7 2027 HOUSTON TX 5.1-5.2",
       "start_date": "2027-05-01",
@@ -3721,7 +5159,23 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28457",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 10U",
+        "Girl's Football (5v5 Flag) 12U",
+        "Girl's Football (5v5 Flag) 14U",
+        "Girl's Football (5v5 Flag) High School"
+      ],
+      "open_divisions": [
+        "Coed Football (7v7) 8U",
+        "Coed Football (7v7) 10U",
+        "Coed Football (7v7) 12U",
+        "Coed Football (7v7) 13U",
+        "Coed Football (7v7) 14U",
+        "Coed Football (7v7) 15U",
+        "Coed Football (7v7) 18U"
+      ]
     },
     {
       "id": "zorts-27910",
@@ -3750,7 +5204,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27910",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "3rd & 4th Grade",
+        "5th & 6th Grade",
+        "7th Grade",
+        "8th Grade",
+        "Freshman",
+        "High School"
+      ]
     },
     {
       "id": "zorts-27317",
@@ -3779,7 +5243,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27317",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U / 7th Grade",
+        "14U / 8th Grade",
+        "15U / 9th Grade",
+        "16U / JV",
+        "18U / Varsity"
+      ]
     },
     {
       "id": "zorts-27932",
@@ -3808,7 +5286,21 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27932",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "16U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27659",
@@ -3837,11 +5329,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27659",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-28453",
-      "category": "both",
+      "category": "7v7",
       "state": "TX",
       "name": "UNFINISHED BUSINESS(NATIONALS)",
       "start_date": "2027-05-08",
@@ -3866,37 +5371,24 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/28453",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
-    },
-    {
-      "id": "zorts-27333",
-      "category": "both",
-      "state": "TX",
-      "name": "2027 Girls 5v5 & 7on7 Flag \u201cBattle of the Best\" National Invitational Championships (Dallas/Fort Worth, TX)",
-      "start_date": "2027-05-15",
-      "end_date": "2027-05-16",
-      "city": "Fort Worth",
-      "venue": "North Crowley High School, 9100 South Hulen Street, Fort Worth, TX 76123, USA",
-      "sport": "Girl's Football (7v7), Football (5v5 Flag)",
-      "age_groups": "7u to 18u",
-      "divisions": "Football (5v5 Flag) 8U Girls; Football (5v5 Flag) 10U Girls; Football (5v5 Flag) 12U Girls; Football (5v5 Flag) 14U Girls; Football (7v7) HSG (7on7 Flag)",
-      "entry_fee": "$495.00 USD per team",
-      "registration_ends": "May 13, 2027 @ 6:00 PM",
-      "organizer": "PremierEventsUSA - Football",
-      "contact_email": "info@premiereventsusa.com",
-      "contact_phone": "4693969332",
-      "event_url": "https://www.zortssports.com/join/tournament/27333",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27333",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8U 5v5",
+        "Girl's Football (5v5 Flag) 10U 5v5",
+        "Girl's Football (5v5 Flag) 12U 5v5",
+        "Girl's Football (5v5 Flag) 14U 5v5",
+        "Girl's Football (5v5 Flag) 5v5 HS"
       ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27333",
-      "flag50_url": "https://flag50.com/tournaments/2027-girls-5v5-7on7-flag-battle-of-the-best-national-invitat-fort-worth-tx-zs27333",
-      "also_listed_as": [],
-      "conflicts": ""
+      "open_divisions": [
+        "Boy's Football (7v7) 8U 7v7",
+        "Boy's Football (7v7) 9U 7v7",
+        "Boy's Football (7v7) 10U 7v7",
+        "Boy's Football (7v7) 12U 7v7",
+        "Boy's Football (7v7) 14U 7v7",
+        "Boy's Football (7v7) 15U 7v7",
+        "Boy's Football (7v7) HS 7v7"
+      ]
     },
     {
       "id": "zorts-27909",
@@ -3925,7 +5417,17 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27909",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "18U",
+        "8u"
+      ]
     },
     {
       "id": "zorts-27660",
@@ -3954,7 +5456,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27660",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     },
     {
       "id": "zorts-27662",
@@ -3983,7 +5498,20 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27662",
       "flag50_url": "",
       "also_listed_as": [],
-      "conflicts": ""
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "9U",
+        "10U",
+        "11U",
+        "12U",
+        "13U",
+        "14U",
+        "15U",
+        "18U"
+      ]
     }
   ]
 }

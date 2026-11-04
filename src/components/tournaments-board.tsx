@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown, ExternalLink } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, ExternalLink, MapPin, Navigation } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MultiSelect } from "@/components/multi-select";
 import {
   Table,
   TableBody,
@@ -14,7 +15,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { parseEntryFeeUsd, type Tournament } from "@/lib/tournaments";
+import {
+  compareDivisionBuckets,
+  divisionBuckets,
+  mapsDirectionsUrl,
+  mapsQuery,
+  mapsSearchUrl,
+  parseEntryFeeUsd,
+  type Tournament,
+} from "@/lib/tournaments";
 
 type FormatFilter = "all" | "7v7" | "flag";
 type SortKey =
@@ -25,6 +34,7 @@ type SortKey =
   | "entry_fee"
   | "registration_ends"
   | "organizer";
+type OpenFilter = "div" | "city" | "month" | null;
 
 const MONTH_LABEL = new Intl.DateTimeFormat("en-US", {
   month: "long",
@@ -60,17 +70,14 @@ function monthLabel(ym: string): string {
   return MONTH_LABEL.format(new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, 1)));
 }
 
-function matchesFormat(t: Tournament, format: FormatFilter): boolean {
+function matchesFormat(t: Tournament, format: FormatFilter, excludeBoth: boolean): boolean {
   if (format === "all") return true;
-  if (t.category === "both") return true;
+  if (t.category === "both") return !excludeBoth;
   return t.category === format;
 }
 
-function divisionTokens(t: Tournament): string[] {
-  return (t.divisions || "")
-    .split(";")
-    .map((s) => s.trim())
-    .filter(Boolean);
+function isClone(t: Tournament): boolean {
+  return (t.name || "").toLowerCase().includes("(clone)");
 }
 
 function categoryLabel(cat: string): string {
@@ -80,8 +87,14 @@ function categoryLabel(cat: string): string {
   return cat || "—";
 }
 
+function openDivisionText(t: Tournament): string {
+  if (t.open_divisions && t.open_divisions.length) return t.open_divisions.join("; ");
+  return t.divisions || t.age_groups || "—";
+}
+
 function EventMeta({ t }: { t: Tournament }) {
   const flag50 = (t.flag50_url || "").trim();
+  const girls = (t.girls_divisions || []).join("; ");
   return (
     <div className="mt-1 flex flex-wrap items-center gap-1.5">
       {t.verified ? (
@@ -90,6 +103,15 @@ function EventMeta({ t }: { t: Tournament }) {
           className="border-emerald-400/50 bg-emerald-400/10 text-[10px] font-medium uppercase tracking-wide text-emerald-200"
         >
           Verified on Zorts + Flag50
+        </Badge>
+      ) : null}
+      {t.has_girls_divisions ? (
+        <Badge
+          variant="outline"
+          title={girls || undefined}
+          className="border-pink-400/50 bg-pink-400/10 text-[10px] font-medium uppercase tracking-wide text-pink-200"
+        >
+          + girls divisions
         </Badge>
       ) : null}
       {flag50 ? (
@@ -104,6 +126,35 @@ function EventMeta({ t }: { t: Tournament }) {
         </a>
       ) : null}
     </div>
+  );
+}
+
+function CityLinks({ t }: { t: Tournament }) {
+  const query = mapsQuery(t);
+  const label = t.city || (query ? "Map" : "—");
+  if (!query) return <span className="font-sans text-zinc-200">{label}</span>;
+  return (
+    <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-0.5">
+      <a
+        href={mapsSearchUrl(query)}
+        target="_blank"
+        rel="noreferrer"
+        title="Open in Google Maps"
+        className="inline-flex items-center gap-1 text-zinc-100 hover:text-amber-300"
+      >
+        <MapPin className="size-3 shrink-0 text-amber-300" aria-hidden />
+        {label}
+      </a>
+      <a
+        href={mapsDirectionsUrl(query)}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-1 text-[11px] text-sky-300 hover:text-amber-300"
+      >
+        <Navigation className="size-3" aria-hidden />
+        Directions
+      </a>
+    </span>
   );
 }
 
@@ -167,20 +218,24 @@ export function TournamentsBoard({
 }) {
   const [q, setQ] = useState("");
   const [format, setFormat] = useState<FormatFilter>("all");
-  const [city, setCity] = useState("");
+  const [citiesSel, setCitiesSel] = useState<string[]>([]);
   const [state, setState] = useState("");
-  const [month, setMonth] = useState("");
+  const [monthsSel, setMonthsSel] = useState<string[]>([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [maxFee, setMaxFee] = useState("");
-  const [division, setDivision] = useState("");
+  const [divsSel, setDivsSel] = useState<string[]>([]);
+  const [hideGirls, setHideGirls] = useState(false);
+  const [hideClone, setHideClone] = useState(true);
+  const [excludeBoth, setExcludeBoth] = useState(false);
+  const [openMs, setOpenMs] = useState<OpenFilter>(null);
   const [sortKey, setSortKey] = useState<SortKey>("start_date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
-  const cities = useMemo(() => {
-    const s = new Set<string>();
-    for (const t of tournaments) if (t.city) s.add(t.city);
-    return [...s].sort((a, b) => a.localeCompare(b));
+  const bucketsById = useMemo(() => {
+    const m = new Map<string, string[]>();
+    for (const t of tournaments) m.set(t.id, divisionBuckets(t));
+    return m;
   }, [tournaments]);
 
   const states = useMemo(() => {
@@ -190,44 +245,50 @@ export function TournamentsBoard({
   }, [tournaments]);
   const showStateFilter = states.length > 1;
 
-  const months = useMemo(() => {
+  const cityItems = useMemo(() => {
     const s = new Set<string>();
-    for (const t of tournaments) if (t.start_date) s.add(monthKey(t.start_date));
-    return [...s].sort();
+    for (const t of tournaments) s.add(t.city || "(unspecified)");
+    return [...s].sort((a, b) => a.localeCompare(b)).map((value) => ({ value, label: value }));
   }, [tournaments]);
 
-  const divisions = useMemo(() => {
+  const monthItems = useMemo(() => {
     const s = new Set<string>();
-    for (const t of tournaments) for (const d of divisionTokens(t)) s.add(d);
-    return [...s].sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+    for (const t of tournaments) if (t.start_date) s.add(monthKey(t.start_date));
+    return [...s].sort().map((value) => ({ value, label: monthLabel(value) }));
   }, [tournaments]);
+
+  const divItems = useMemo(() => {
+    const s = new Set<string>();
+    for (const t of tournaments) for (const d of bucketsById.get(t.id) || []) s.add(d);
+    return [...s].sort(compareDivisionBuckets).map((value) => ({ value, label: value }));
+  }, [tournaments, bucketsById]);
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     const cap = maxFee.trim() === "" ? null : Number(maxFee);
     const feeCap = cap != null && Number.isFinite(cap) ? cap : null;
+    const citySet = new Set(citiesSel);
+    const monthSet = new Set(monthsSel);
+    const divSet = new Set(divsSel);
     const rows = tournaments.filter((t) => {
-      if (!matchesFormat(t, format)) return false;
+      if (!matchesFormat(t, format, excludeBoth)) return false;
+      if (hideGirls && t.has_girls_divisions) return false;
+      if (hideClone && isClone(t)) return false;
       if (state && t.state !== state) return false;
-      if (city && t.city !== city) return false;
-      if (month && monthKey(t.start_date) !== month) return false;
-      if (from && (t.start_date || "") < from) return false;
+      if (citySet.size && !citySet.has(t.city || "(unspecified)")) return false;
+      if (monthSet.size && !monthSet.has(monthKey(t.start_date))) return false;
+      if (divSet.size) {
+        const buckets = bucketsById.get(t.id) || [];
+        if (!buckets.some((d) => divSet.has(d))) return false;
+      }
+      if (from && (t.end_date || t.start_date || "") < from) return false;
       if (to && (t.start_date || "") > to) return false;
-      if (division && !divisionTokens(t).includes(division)) return false;
       if (feeCap != null) {
         const fee = parseEntryFeeUsd(t.entry_fee);
         if (fee == null || fee > feeCap) return false;
       }
       if (needle) {
-        const blob = [
-          t.name,
-          t.city,
-          t.venue,
-          t.organizer,
-          t.sport,
-          t.divisions,
-          t.age_groups,
-        ]
+        const blob = [t.name, t.city, t.venue, t.organizer, t.sport, t.divisions, t.age_groups]
           .join(" ")
           .toLowerCase();
         if (!blob.includes(needle)) return false;
@@ -240,7 +301,24 @@ export function TournamentsBoard({
       return (a.start_date || "").localeCompare(b.start_date || "") || a.name.localeCompare(b.name);
     });
     return rows;
-  }, [tournaments, q, format, city, state, month, from, to, maxFee, division, sortKey, sortDir]);
+  }, [
+    tournaments,
+    q,
+    format,
+    excludeBoth,
+    hideGirls,
+    hideClone,
+    state,
+    citiesSel,
+    monthsSel,
+    divsSel,
+    from,
+    to,
+    maxFee,
+    sortKey,
+    sortDir,
+    bucketsById,
+  ]);
 
   function toggleSort(key: SortKey) {
     if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -253,20 +331,33 @@ export function TournamentsBoard({
   function clearFilters() {
     setQ("");
     setFormat("all");
-    setCity("");
+    setCitiesSel([]);
     setState("");
-    setMonth("");
+    setMonthsSel([]);
     setFrom("");
     setTo("");
     setMaxFee("");
-    setDivision("");
+    setDivsSel([]);
+    setHideGirls(false);
+    setHideClone(true);
+    setExcludeBoth(false);
+    setOpenMs(null);
   }
 
-  const updated = generated
-    ? generated.replace("T", " ").replace(/\.\d+$/, "")
-    : null;
+  const updated = generated ? generated.replace("T", " ").replace(/\.\d+$/, "") : null;
   const filtersOn = Boolean(
-    q || city || state || month || from || to || maxFee || division || format !== "all",
+    q ||
+      citiesSel.length ||
+      state ||
+      monthsSel.length ||
+      from ||
+      to ||
+      maxFee ||
+      divsSel.length ||
+      hideGirls ||
+      !hideClone ||
+      excludeBoth ||
+      format !== "all",
   );
 
   return (
@@ -276,16 +367,13 @@ export function TournamentsBoard({
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-amber-400/80">
             Texas 7v7 and flag
           </p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-zinc-50">
-            Tournaments
-          </h1>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-zinc-50">Tournaments</h1>
           <p className="mt-2 max-w-2xl text-sm text-zinc-300">
-            Upcoming Texas 7v7 and flag football tournaments from Zorts and
-            Flag50. Each event name opens the organizer&apos;s registration
-            page; Flag50 listings also get a Flag50 link. Events on both sites
-            show a verified badge. Past events (ended before today, Central
-            Time) are hidden. Fees, divisions, and contacts are copied from the
-            public listing — never invented.
+            Upcoming Texas 7v7 and flag football tournaments from Zorts and Flag50. Girls-only
+            events are omitted; mixed events keep a + girls divisions tag. Each event name opens
+            the organizer&apos;s registration page. City opens Google Maps; Directions uses the
+            venue. Past events (ended before today, Central Time) are hidden. Fees, divisions, and
+            contacts are copied from the public listing — never invented.
           </p>
         </div>
         <p className="font-mono text-sm text-zinc-400">
@@ -373,40 +461,47 @@ export function TournamentsBoard({
             </div>
           ) : null}
           <div>
-            <Label htmlFor="tcity" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
-              City
+            <Label htmlFor="tdiv" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
+              Divisions
             </Label>
-            <select
+            <MultiSelect
+              id="tdiv"
+              label="Divisions"
+              items={divItems}
+              selected={divsSel}
+              onChange={setDivsSel}
+              open={openMs === "div"}
+              onOpenChange={(o) => setOpenMs(o ? "div" : null)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="tcity" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
+              Cities
+            </Label>
+            <MultiSelect
               id="tcity"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
-            >
-              <option value="">All cities</option>
-              {cities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              label="Cities"
+              items={cityItems}
+              selected={citiesSel}
+              onChange={setCitiesSel}
+              searchable
+              open={openMs === "city"}
+              onOpenChange={(o) => setOpenMs(o ? "city" : null)}
+            />
           </div>
           <div>
             <Label htmlFor="tmonth" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
-              Month
+              Months
             </Label>
-            <select
+            <MultiSelect
               id="tmonth"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
-            >
-              <option value="">All months</option>
-              {months.map((m) => (
-                <option key={m} value={m}>
-                  {monthLabel(m)}
-                </option>
-              ))}
-            </select>
+              label="Months"
+              items={monthItems}
+              selected={monthsSel}
+              onChange={setMonthsSel}
+              open={openMs === "month"}
+              onOpenChange={(o) => setOpenMs(o ? "month" : null)}
+            />
           </div>
           <div>
             <Label htmlFor="tfrom" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
@@ -436,24 +531,35 @@ export function TournamentsBoard({
               className="mt-1"
             />
           </div>
-          <div>
-            <Label htmlFor="tdiv" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
-              Division
-            </Label>
-            <select
-              id="tdiv"
-              value={division}
-              onChange={(e) => setDivision(e.target.value)}
-              className="night-select mt-1 h-8 w-full rounded-lg px-2.5 text-sm"
-            >
-              <option value="">All divisions</option>
-              {divisions.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-          </div>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <label className="flex items-center gap-2 text-sm text-zinc-200">
+            <input
+              type="checkbox"
+              className="size-3.5 accent-amber-400"
+              checked={hideGirls}
+              onChange={(e) => setHideGirls(e.target.checked)}
+            />
+            Hide tournaments with girls divisions
+          </label>
+          <label className="flex items-center gap-2 text-sm text-zinc-200">
+            <input
+              type="checkbox"
+              className="size-3.5 accent-amber-400"
+              checked={hideClone}
+              onChange={(e) => setHideClone(e.target.checked)}
+            />
+            Hide “(clone)” duplicates
+          </label>
+          <label className="flex items-center gap-2 text-sm text-zinc-200">
+            <input
+              type="checkbox"
+              className="size-3.5 accent-amber-400"
+              checked={excludeBoth}
+              onChange={(e) => setExcludeBoth(e.target.checked)}
+            />
+            Exclude events that have both formats
+          </label>
         </div>
         {filtersOn ? (
           <div>
@@ -556,22 +662,20 @@ export function TournamentsBoard({
                         <ExternalLink className="mt-0.5 size-3 shrink-0 text-zinc-500" aria-hidden />
                       </a>
                       <EventMeta t={t} />
-                      {t.venue ? (
-                        <p className="mt-0.5 text-xs text-zinc-500">{t.venue}</p>
-                      ) : null}
+                      {t.venue ? <p className="mt-0.5 text-xs text-zinc-500">{t.venue}</p> : null}
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline" className={categoryClass(t.category)}>
                         {categoryLabel(t.category)}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-sans text-zinc-200">{t.city || "—"}</TableCell>
+                    <TableCell className="whitespace-normal">
+                      <CityLinks t={t} />
+                    </TableCell>
                     <TableCell className="max-w-[14rem] whitespace-normal text-xs text-zinc-400">
-                      {t.divisions || t.age_groups || "—"}
+                      {openDivisionText(t)}
                     </TableCell>
-                    <TableCell className="text-right font-mono text-zinc-200">
-                      {t.entry_fee || "—"}
-                    </TableCell>
+                    <TableCell className="text-right font-mono text-zinc-200">{t.entry_fee || "—"}</TableCell>
                     <TableCell className="whitespace-normal text-xs text-zinc-400">
                       {t.registration_ends || "—"}
                     </TableCell>
@@ -602,15 +706,14 @@ export function TournamentsBoard({
                   <ExternalLink className="mt-1 size-3 shrink-0 text-zinc-500" aria-hidden />
                 </a>
                 <EventMeta t={t} />
-                <p className="mt-1 text-sm text-zinc-400">
-                  {[t.city, t.state, t.organizer].filter(Boolean).join(" · ") || t.venue || "—"}
+                <p className="mt-1">
+                  <CityLinks t={t} />
                 </p>
+                {t.organizer ? <p className="mt-1 text-sm text-zinc-400">{t.organizer}</p> : null}
                 {t.entry_fee ? (
                   <p className="mt-1 font-mono text-xs text-amber-200">{t.entry_fee}</p>
                 ) : null}
-                {t.divisions ? (
-                  <p className="mt-1 text-xs text-zinc-500">{t.divisions}</p>
-                ) : null}
+                <p className="mt-1 text-xs text-zinc-500">{openDivisionText(t)}</p>
               </li>
             ))}
           </ul>

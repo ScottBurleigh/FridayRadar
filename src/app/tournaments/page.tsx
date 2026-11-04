@@ -5,7 +5,7 @@ import { loadUpcomingTournaments } from "@/lib/load-tournaments";
 export const metadata: Metadata = {
   title: "Texas 7v7 / flag tournaments",
   description:
-    "Upcoming Texas 7v7 and flag football tournaments from public Zorts and Flag50 listings.",
+    "Upcoming Texas 7v7 and flag football tournaments from public Zorts and Flag50 listings. Girls-only events are omitted.",
 };
 
 export const dynamic = "force-dynamic";
