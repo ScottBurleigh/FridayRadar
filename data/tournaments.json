@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-09T07:11:05",
+  "generated": "2026-11-09T19:19:48",
   "window": [
     "2026-11-09",
     "2027-06-09"
@@ -136,7 +136,7 @@
       "venue": "Central High School, Ray White Road, Fort Worth, TX, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "6u to 18u",
-      "divisions": "Boy's 6U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 13/14U; Girl's 8UG; Girl's 10UG; Girl's 12UG; Girl's 14UG; Girl's HSG",
+      "divisions": "Boy's 6U; Boy's 7U; Boy's 8U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 13/14U; Girl's 8UG; Girl's 10UG; Girl's 12UG; Girl's 14UG; Girl's HSG",
       "entry_fee": "$350.00 USD per team",
       "registration_ends": "Nov 15, 2026 @ 12:00 AM",
       "organizer": "FlagFootballX",
@@ -164,6 +164,8 @@
       ],
       "open_divisions": [
         "Boy's 6U",
+        "Boy's 7U",
+        "Boy's 8U",
         "Boy's 9U",
         "Boy's 10U",
         "Boy's 11U",
@@ -416,7 +418,7 @@
       "venue": "Harold Patterson Sports Center, West Bardin Road, Arlington, TX, USA",
       "sport": "Football (5v5 Flag), Football (Tackle)",
       "age_groups": "5u to 18u",
-      "divisions": "Boy's Football (5v5 Flag) 5U FLAG; Boy's Football (5v5 Flag) 6U FLAG; Boy's Football (Tackle) 6U TACKLE; Boy's Football (Tackle) 7U; Boy's Football (Tackle) 8U; Boy's Football (Tackle) 9U; Boy's Football (Tackle) 11U; Boy's Football (Tackle) 12U; Boy's Football (Tackle) 13U; Girl's Football (5v5 Flag) 8U GIRLS 5V5; Girl's Football (5v5 Flag) 10U GIRLS 5V5; Girl's Football (5v5 Flag) HIGH SCHOOL GIRLS 5V5; Girl's Football (5v5 Flag) 14U GIRLS 5V5",
+      "divisions": "Boy's Football (5v5 Flag) 5U FLAG; Boy's Football (5v5 Flag) 6U FLAG; Boy's Football (Tackle) 6U TACKLE; Boy's Football (Tackle) 7U; Boy's Football (Tackle) 9U; Boy's Football (Tackle) 11U; Boy's Football (Tackle) 12U; Boy's Football (Tackle) 13U; Girl's Football (5v5 Flag) 8U GIRLS 5V5; Girl's Football (5v5 Flag) 10U GIRLS 5V5; Girl's Football (5v5 Flag) HIGH SCHOOL GIRLS 5V5; Girl's Football (5v5 Flag) 14U GIRLS 5V5",
       "entry_fee": "$100.00 USD per team",
       "registration_ends": "Nov 26, 2026 @ 12:00 AM",
       "organizer": "TEXAS BATTLE WARS \"STATE CHAMPIONSHIP\" 10",
@@ -446,7 +448,6 @@
         "Boy's Football (5v5 Flag) 6U FLAG",
         "Boy's Football (Tackle) 6U TACKLE",
         "Boy's Football (Tackle) 7U",
-        "Boy's Football (Tackle) 8U",
         "Boy's Football (Tackle) 9U",
         "Boy's Football (Tackle) 11U",
         "Boy's Football (Tackle) 12U",
