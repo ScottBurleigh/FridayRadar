@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown, ExternalLink, MapPin, Navigation } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/multi-select";
+import { TournamentSchedulePanel } from "@/components/tournament-schedule-panel";
 import {
   Table,
   TableBody,
@@ -15,6 +16,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  LS_SCHEDULE,
+  LS_WEEKENDS,
+  readHashScheduleIds,
+  readLocalStringArray,
+  writeHashScheduleIds,
+  writeLocalStringArray,
+} from "@/lib/tournament-schedule";
+import {
+  hiddenByWeekends,
+  overlapsWeekend,
+  weekendList,
+  type Weekend,
+} from "@/lib/tournament-weekends";
 import {
   compareDivisionBuckets,
   divisionBuckets,
@@ -34,7 +49,7 @@ type SortKey =
   | "entry_fee"
   | "registration_ends"
   | "organizer";
-type OpenFilter = "div" | "city" | "month" | null;
+type OpenFilter = "div" | "city" | "month" | "wk" | null;
 
 const MONTH_LABEL = new Intl.DateTimeFormat("en-US", {
   month: "long",
@@ -179,6 +194,23 @@ function compare(a: Tournament, b: Tournament, key: SortKey): number {
   return av.localeCompare(bv, "en", { sensitivity: "base", numeric: true });
 }
 
+function AddButton({ on, onClick }: { on: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      className={
+        on
+          ? "addbtn on w-full rounded-md border border-emerald-400/50 bg-emerald-400/15 px-2.5 py-1 text-xs font-semibold text-emerald-200"
+          : "addbtn w-full rounded-md border border-amber-200/45 bg-[#0f1a2e] px-2.5 py-1 text-xs font-medium text-zinc-200 hover:bg-amber-400/10"
+      }
+    >
+      {on ? "✓ In schedule" : "+ Add"}
+    </button>
+  );
+}
+
 function SortButton({
   label,
   active,
@@ -228,9 +260,56 @@ export function TournamentsBoard({
   const [hideGirls, setHideGirls] = useState(false);
   const [hideClone, setHideClone] = useState(true);
   const [excludeBoth, setExcludeBoth] = useState(false);
+  const [weekendsSel, setWeekendsSel] = useState<string[]>([]);
+  const [weekends, setWeekends] = useState<Weekend[]>([]);
+  const [scheduleIds, setScheduleIds] = useState<string[]>([]);
+  const [schedOpen, setSchedOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const [openMs, setOpenMs] = useState<OpenFilter>(null);
   const [sortKey, setSortKey] = useState<SortKey>("start_date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  useEffect(() => {
+    const list = weekendList();
+    // Viewer-local date + localStorage; must run after hydration to avoid TZ mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only hydrate
+    setWeekends(list);
+    const knownWk = new Set(list.map((w) => w.id));
+    const knownIds = new Set(tournaments.map((t) => t.id));
+    const hash = readHashScheduleIds(knownIds);
+    const fromLs = readLocalStringArray(LS_SCHEDULE).filter((id) => knownIds.has(id));
+    const next = hash ?? fromLs;
+    setScheduleIds(next);
+    if (hash) writeLocalStringArray(LS_SCHEDULE, hash);
+    writeHashScheduleIds(next);
+    setWeekendsSel(readLocalStringArray(LS_WEEKENDS).filter((id) => knownWk.has(id)));
+    setHydrated(true);
+    // Viewer-local date + localStorage; run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    writeLocalStringArray(LS_SCHEDULE, scheduleIds);
+    writeHashScheduleIds(scheduleIds);
+  }, [scheduleIds, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    writeLocalStringArray(LS_WEEKENDS, weekendsSel);
+  }, [weekendsSel, hydrated]);
+
+  useEffect(() => {
+    function onHash() {
+      const knownIds = new Set(tournaments.map((t) => t.id));
+      const ids = readHashScheduleIds(knownIds);
+      if (!ids) return;
+      setScheduleIds(ids);
+      writeLocalStringArray(LS_SCHEDULE, ids);
+    }
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, [tournaments]);
 
   const bucketsById = useMemo(() => {
     const m = new Map<string, string[]>();
@@ -263,6 +342,12 @@ export function TournamentsBoard({
     return [...s].sort(compareDivisionBuckets).map((value) => ({ value, label: value }));
   }, [tournaments, bucketsById]);
 
+  const schedSet = useMemo(() => new Set(scheduleIds), [scheduleIds]);
+
+  function toggleSched(id: string) {
+    setScheduleIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }
+
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     const cap = maxFee.trim() === "" ? null : Number(maxFee);
@@ -270,7 +355,68 @@ export function TournamentsBoard({
     const citySet = new Set(citiesSel);
     const monthSet = new Set(monthsSel);
     const divSet = new Set(divsSel);
-    const rows = tournaments.filter((t) => {
+    function pass(t: Tournament): boolean {
+      if (!matchesFormat(t, format, excludeBoth)) return false;
+      if (hideGirls && t.has_girls_divisions) return false;
+      if (hideClone && isClone(t)) return false;
+      if (state && t.state !== state) return false;
+      if (citySet.size && !citySet.has(t.city || "(unspecified)")) return false;
+      if (monthSet.size && !monthSet.has(monthKey(t.start_date))) return false;
+      if (divSet.size) {
+        const buckets = bucketsById.get(t.id) || [];
+        if (!buckets.some((d) => divSet.has(d))) return false;
+      }
+      if (from && (t.end_date || t.start_date || "") < from) return false;
+      if (to && (t.start_date || "") > to) return false;
+      if (feeCap != null) {
+        const fee = parseEntryFeeUsd(t.entry_fee);
+        if (fee == null || fee > feeCap) return false;
+      }
+      if (needle) {
+        const blob = [t.name, t.city, t.venue, t.organizer, t.sport, t.divisions, t.age_groups]
+          .join(" ")
+          .toLowerCase();
+        if (!blob.includes(needle)) return false;
+      }
+      if (hiddenByWeekends(t.start_date, t.end_date, weekendsSel, weekends)) return false;
+      return true;
+    }
+    const rows = tournaments.filter((t) => pass(t));
+    rows.sort((a, b) => {
+      const c = compare(a, b, sortKey);
+      if (c !== 0) return sortDir === "asc" ? c : -c;
+      return (a.start_date || "").localeCompare(b.start_date || "") || a.name.localeCompare(b.name);
+    });
+    return rows;
+  }, [
+    tournaments,
+    q,
+    format,
+    excludeBoth,
+    hideGirls,
+    hideClone,
+    state,
+    citiesSel,
+    monthsSel,
+    divsSel,
+    from,
+    to,
+    maxFee,
+    sortKey,
+    sortDir,
+    bucketsById,
+    weekendsSel,
+    weekends,
+  ]);
+
+  const weekendItems = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    const cap = maxFee.trim() === "" ? null : Number(maxFee);
+    const feeCap = cap != null && Number.isFinite(cap) ? cap : null;
+    const citySet = new Set(citiesSel);
+    const monthSet = new Set(monthsSel);
+    const divSet = new Set(divsSel);
+    const base = tournaments.filter((t) => {
       if (!matchesFormat(t, format, excludeBoth)) return false;
       if (hideGirls && t.has_girls_divisions) return false;
       if (hideClone && isClone(t)) return false;
@@ -295,12 +441,12 @@ export function TournamentsBoard({
       }
       return true;
     });
-    rows.sort((a, b) => {
-      const c = compare(a, b, sortKey);
-      if (c !== 0) return sortDir === "asc" ? c : -c;
-      return (a.start_date || "").localeCompare(b.start_date || "") || a.name.localeCompare(b.name);
-    });
-    return rows;
+    return weekends.map((w) => ({
+      value: w.id,
+      label: w.label,
+      group: w.month,
+      count: base.filter((t) => overlapsWeekend(t.start_date, t.end_date, w)).length,
+    }));
   }, [
     tournaments,
     q,
@@ -315,9 +461,8 @@ export function TournamentsBoard({
     from,
     to,
     maxFee,
-    sortKey,
-    sortDir,
     bucketsById,
+    weekends,
   ]);
 
   function toggleSort(key: SortKey) {
@@ -341,6 +486,7 @@ export function TournamentsBoard({
     setHideGirls(false);
     setHideClone(true);
     setExcludeBoth(false);
+    setWeekendsSel([]);
     setOpenMs(null);
   }
 
@@ -354,6 +500,7 @@ export function TournamentsBoard({
       to ||
       maxFee ||
       divsSel.length ||
+      weekendsSel.length ||
       hideGirls ||
       !hideClone ||
       excludeBoth ||
@@ -361,7 +508,7 @@ export function TournamentsBoard({
   );
 
   return (
-    <>
+    <div className="pb-24">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-amber-400/80">
@@ -372,8 +519,9 @@ export function TournamentsBoard({
             Upcoming Texas 7v7 and flag football tournaments from Zorts and Flag50. Girls-only
             events are omitted; mixed events keep a + girls divisions tag. Each event name opens
             the organizer&apos;s registration page. City opens Google Maps; Directions uses the
-            venue. Past events (ended before today, Central Time) are hidden. Fees, divisions, and
-            contacts are copied from the public listing — never invented.
+            venue. Mark weekends you cannot play to hide overlapping events, and Add tournaments to
+            build a schedule. Past events (ended before today, Central Time) are hidden. Fees,
+            divisions, and contacts are copied from the public listing — never invented.
           </p>
         </div>
         <p className="font-mono text-sm text-zinc-400">
@@ -532,6 +680,30 @@ export function TournamentsBoard({
             />
           </div>
         </div>
+        <div>
+          <Label htmlFor="ms-wk" className="text-xs font-medium uppercase tracking-wide text-zinc-100">
+            Unavailable weekends
+          </Label>
+          <div className="max-w-xl">
+            <MultiSelect
+              id="ms-wk"
+              label="Weekends"
+              items={weekendItems}
+              selected={weekendsSel}
+              onChange={setWeekendsSel}
+              open={openMs === "wk"}
+              onOpenChange={(o) => setOpenMs(o ? "wk" : null)}
+              summary={(n) =>
+                n === 0 ? "No weekends excluded" : n === 1 ? "1 weekend excluded" : `${n} weekends excluded`
+              }
+              wide
+            />
+          </div>
+          <p className="mt-1 text-xs text-zinc-500">
+            Select weekends you cannot play. Tournaments that overlap that Friday–Sunday are hidden.
+            Weekends run from this week through the end of July.
+          </p>
+        </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <label className="flex items-center gap-2 text-sm text-zinc-200">
             <input
@@ -585,6 +757,7 @@ export function TournamentsBoard({
             <Table className="text-[13px]">
               <TableHeader>
                 <TableRow className="border-white/10 hover:bg-transparent">
+                  <TableHead className="w-28 text-zinc-300">Schedule</TableHead>
                   <TableHead className="text-zinc-300">
                     <SortButton
                       label="Date"
@@ -647,7 +820,17 @@ export function TournamentsBoard({
               </TableHeader>
               <TableBody>
                 {filtered.map((t) => (
-                  <TableRow key={t.id} className="border-white/12 hover:bg-amber-400/8">
+                  <TableRow
+                    key={t.id}
+                    className={
+                      schedSet.has(t.id)
+                        ? "in-sched border-white/12 bg-emerald-400/8 hover:bg-emerald-400/12"
+                        : "border-white/12 hover:bg-amber-400/8"
+                    }
+                  >
+                    <TableCell>
+                      <AddButton on={schedSet.has(t.id)} onClick={() => toggleSched(t.id)} />
+                    </TableCell>
                     <TableCell className="whitespace-nowrap font-mono text-zinc-300">
                       {formatRange(t.start_date, t.end_date)}
                     </TableCell>
@@ -689,7 +872,14 @@ export function TournamentsBoard({
           </div>
           <ul className="mt-6 space-y-2 lg:hidden">
             {filtered.map((t) => (
-              <li key={t.id} className="rounded-xl border border-amber-400/30 bg-[#17233d] p-3">
+              <li
+                key={t.id}
+                className={
+                  schedSet.has(t.id)
+                    ? "in-sched rounded-xl border border-emerald-400/40 bg-emerald-400/8 p-3"
+                    : "rounded-xl border border-amber-400/30 bg-[#17233d] p-3"
+                }
+              >
                 <div className="flex items-start justify-between gap-3">
                   <p className="font-mono text-xs text-zinc-400">{formatRange(t.start_date, t.end_date)}</p>
                   <Badge variant="outline" className={categoryClass(t.category)}>
@@ -714,11 +904,24 @@ export function TournamentsBoard({
                   <p className="mt-1 font-mono text-xs text-amber-200">{t.entry_fee}</p>
                 ) : null}
                 <p className="mt-1 text-xs text-zinc-500">{openDivisionText(t)}</p>
+                <div className="mt-3">
+                  <AddButton on={schedSet.has(t.id)} onClick={() => toggleSched(t.id)} />
+                </div>
               </li>
             ))}
           </ul>
         </>
       )}
-    </>
+      <TournamentSchedulePanel
+        tournaments={tournaments}
+        scheduleIds={scheduleIds}
+        onScheduleIds={setScheduleIds}
+        excludedWeekendIds={weekendsSel}
+        weekends={weekends}
+        generated={generated}
+        open={schedOpen}
+        onOpenChange={setSchedOpen}
+      />
+    </div>
   );
 }

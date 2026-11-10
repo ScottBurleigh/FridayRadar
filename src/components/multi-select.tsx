@@ -3,7 +3,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-type Item = { value: string; label: string; count?: number };
+type Item = { value: string; label: string; count?: number; group?: string };
 
 export function MultiSelect({
   id,
@@ -14,6 +14,8 @@ export function MultiSelect({
   searchable = false,
   open,
   onOpenChange,
+  summary,
+  wide = false,
 }: {
   id: string;
   label: string;
@@ -23,6 +25,8 @@ export function MultiSelect({
   searchable?: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  summary?: (n: number) => string;
+  wide?: boolean;
 }) {
   const [q, setQ] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
@@ -33,8 +37,9 @@ export function MultiSelect({
     ? items.filter((it) => it.label.toLowerCase().includes(needle) || it.value.toLowerCase().includes(needle))
     : items;
 
-  const summary =
-    selected.length === 0
+  const summaryText = summary
+    ? summary(selected.length)
+    : selected.length === 0
       ? `All ${label.toLowerCase()}`
       : selected.length === 1
         ? (items.find((it) => it.value === selected[0])?.label ?? selected[0])
@@ -84,7 +89,7 @@ export function MultiSelect({
           selected.length ? "border-amber-300/70 font-medium text-amber-100" : ""
         }`}
       >
-        <span className="truncate">{summary}</span>
+        <span className="truncate">{summaryText}</span>
         <ChevronDown className="size-3.5 shrink-0 text-zinc-400" aria-hidden />
       </button>
       {open ? (
@@ -92,7 +97,9 @@ export function MultiSelect({
           role="listbox"
           aria-multiselectable="true"
           aria-labelledby={id}
-          className="absolute z-30 mt-1 min-w-full w-max max-w-[min(20rem,92vw)] rounded-lg border border-amber-200/45 bg-[#0f1a2e] p-2 shadow-xl"
+          className={`absolute z-30 mt-1 min-w-full w-max rounded-lg border border-amber-200/45 bg-[#0f1a2e] p-2 shadow-xl ${
+            wide ? "max-w-[min(28rem,92vw)]" : "max-w-[min(20rem,92vw)]"
+          }`}
         >
           {searchable ? (
             <input
@@ -124,10 +131,16 @@ export function MultiSelect({
             {visible.length === 0 ? (
               <li className="px-1 py-2 text-xs text-zinc-500">No matches</li>
             ) : (
-              visible.map((it) => {
+              visible.map((it, i) => {
                 const checked = sel.has(it.value);
+                const showGroup = Boolean(it.group) && it.group !== visible[i - 1]?.group;
                 return (
                   <li key={it.value}>
+                    {showGroup ? (
+                      <p className="sticky top-0 bg-[#0f1a2e] px-1 py-1 text-[11px] font-semibold uppercase tracking-wide text-amber-300/80">
+                        {it.group}
+                      </p>
+                    ) : null}
                     <label className="flex cursor-pointer items-center gap-2 rounded-md px-1 py-1 text-sm text-zinc-100 hover:bg-amber-400/10">
                       <input
                         type="checkbox"
