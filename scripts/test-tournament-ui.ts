@@ -3,11 +3,17 @@
  * Run: npx tsx scripts/test-tournament-ui.ts
  */
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
+  ageLine,
+  ageTokens,
+  collectAges,
   conflictNotes,
   feeTotal,
+  formatAgeRange,
   parseScheduleFee,
   readHashScheduleIds,
+  schedulePlainText,
   writeHashScheduleIds,
 } from "../src/lib/tournament-schedule";
 import {
@@ -125,8 +131,69 @@ function checkHash() {
   assert.equal(loc.hash, "");
 }
 
+function checkAges() {
+  assert.deepEqual(ageTokens("Coed 13/14U"), ["13/14U"]);
+  assert.deepEqual(ageTokens("13-14u"), ["13/14U"]);
+  assert.deepEqual(ageTokens("Boy's 18U"), ["18U"]);
+  assert.deepEqual(ageTokens("Girl's High School"), ["HS"]);
+  assert.equal(formatAgeRange("4u to 17u"), "4U–17U");
+  assert.equal(formatAgeRange("6u to adult"), "6U–Adult");
+  assert.equal(formatAgeRange("8U, 10U"), "");
+  assert.deepEqual(collectAges(["8U", "10U", "8U", "MS"]), ["8U", "10U", "MS"]);
+
+  assert.equal(ageLine(t({ id: "x", name: "Empty", start_date: "2026-11-14" })), "Ages TBD");
+  assert.equal(
+    ageLine(t({ id: "x", name: "List AG", start_date: "2026-11-14", age_groups: "8U; 10U; HS" })),
+    "8U, 10U, HS",
+  );
+  assert.equal(
+    ageLine(
+      t({
+        id: "x",
+        name: "Div girls",
+        start_date: "2026-11-14",
+        divisions: "Boy's 10U; Girl's 12U; Girl's HS",
+      }),
+    ),
+    "10U (girls: 12U, HS)",
+  );
+
+  const board = JSON.parse(readFileSync("data/tournaments.json", "utf8")) as {
+    tournaments: Tournament[];
+  };
+  const byName = (name: string) => {
+    const row = board.tournaments.find((r) => r.name === name);
+    assert.ok(row, `missing ${name}`);
+    return row!;
+  };
+  assert.equal(
+    ageLine(byName("Neighborhood Sports NFL Flag State Championships Fall 2026")),
+    "6U, 8U, 10U, 12U, 14U (girls: 8U, 10U, 12U, 14U, HS)",
+  );
+  assert.equal(
+    ageLine(byName("ATX Bowl 2026 (Arlington, TX)")),
+    "6U, 7U, 8U, 9U, 10U, 11U, 12U, 14U, HS (girls: 8U, 10U, 12U, 14U, 16U, 18U, HS)",
+  );
+  assert.equal(
+    ageLine(byName("2027 Kickoff Classic Tournament")),
+    "8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 18U",
+  );
+  assert.equal(ageLine(byName("2nd Annual Turkey & Troops")), "4U–17U");
+
+  const plain = schedulePlainText(
+    [byName("2nd Annual Turkey & Troops"), t({ id: "empty", name: "No ages", start_date: "2027-02-01" })],
+    "test",
+    "$0",
+    [],
+    () => "Flag",
+  );
+  assert.ok(plain.includes("  Ages: 4U–17U"));
+  assert.ok(plain.includes("  Ages: TBD"));
+}
+
 checkFees();
 checkWeekends();
 checkConflicts();
 checkHash();
+checkAges();
 console.log("test-tournament-ui: ok");

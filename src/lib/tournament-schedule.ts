@@ -151,6 +151,123 @@ export function writeHashScheduleIds(ids: string[]): void {
   }
 }
 
+function ageOrder(a: string): number {
+  const m = /^(\d+)(?:\/(\d+))?U$/.exec(a);
+  if (m) return Number(m[1]);
+  if (a === "MS") return 14.5;
+  if (a === "Freshman") return 17;
+  if (a === "JV") return 18;
+  if (a === "Varsity" || a === "HS") return 19;
+  if (a === "Adult") return 21;
+  const g = /^Grade (\d+)$/.exec(a);
+  if (g) return 30 + Number(g[1]);
+  const r = /^(\d+)U/.exec(a);
+  if (r) return Number(r[1]);
+  return 99;
+}
+
+function sortAges(arr: string[]): string[] {
+  return [...arr].sort((a, b) => ageOrder(a) - ageOrder(b) || (a < b ? -1 : a > b ? 1 : 0));
+}
+
+/** Discrete age brackets from one division / age_groups fragment. 13/14U stays combined; 18U stays 18U. */
+export function ageTokens(s: string | null | undefined): string[] {
+  if (s == null || s === "") return [];
+  let rest = String(s);
+  const found: string[] = [];
+  const seen: Record<string, number> = {};
+  function add(tok: string) {
+    if (!tok) return;
+    const k = tok.toUpperCase();
+    if (seen[k]) return;
+    seen[k] = 1;
+    found.push(tok);
+  }
+  rest = rest.replace(/\b(\d{1,2})\s*[\/\-]\s*(\d{1,2})\s*-?\s*u\s*g?\b/gi, (_, a, b) => {
+    add(`${Number(a)}/${Number(b)}U`);
+    return " ";
+  });
+  rest = rest.replace(/\b(\d{1,2})\s*-?\s*u\s*g?\b/gi, (_, a) => {
+    add(`${Number(a)}U`);
+    return " ";
+  });
+  if (/high\s*school|\bhsg\b|\bhs\b|\bsenior\b/i.test(rest)) add("HS");
+  if (/middle\s*school|\bms\b/i.test(rest)) add("MS");
+  if (/\bfreshman\b/i.test(rest)) add("Freshman");
+  if (/\bjv\b|junior\s*varsity/i.test(rest)) add("JV");
+  if (/\bvarsity\b/i.test(rest)) add("Varsity");
+  if (/\badult\b|\bwomen'?s\b|\bmen'?s\b/i.test(rest)) add("Adult");
+  const g = rest.match(/(\d{1,2})(?:st|nd|rd|th)\s*grade/i);
+  if (g) add(`Grade ${Number(g[1])}`);
+  return found;
+}
+
+/** `6u to 18u` / `6u to adult` → `6U–18U`. Empty when the string is not a range. */
+export function formatAgeRange(s: string | null | undefined): string {
+  const m = /^\s*(\d{1,2})\s*u\s+to\s+(?:(\d{1,2})\s*u|(adult|hs|high\s*school))\s*$/i.exec(s || "");
+  if (!m) return "";
+  const a = `${Number(m[1])}U`;
+  const b = m[2] ? `${Number(m[2])}U` : /adult/i.test(m[3] ?? "") ? "Adult" : "HS";
+  return `${a}\u2013${b}`;
+}
+
+export function collectAges(list: Iterable<string> | null | undefined): string[] {
+  const out: string[] = [];
+  for (const d of list || []) {
+    for (const tok of ageTokens(d)) {
+      if (!out.includes(tok)) out.push(tok);
+    }
+  }
+  return sortAges(out);
+}
+
+const GIRL_DIV =
+  /\bgirl|\bwomen|\blady|\bfemale|\bgff\b|\b\d{1,2}ug\b|\bhsg\b/i;
+
+/**
+ * Comma-delimited ages for the schedule builder.
+ * Prefer open_divisions, then divisions; age_groups range only when there is no
+ * division list. Girls brackets append as `(girls: 12U, HS)`. Empty → `Ages TBD`.
+ */
+export function ageLine(r: Pick<Tournament, "open_divisions" | "girls_divisions" | "divisions" | "age_groups">): string {
+  let open = collectAges(r.open_divisions && r.open_divisions.length ? r.open_divisions : null);
+  let girls = collectAges(r.girls_divisions && r.girls_divisions.length ? r.girls_divisions : null);
+  if (!open.length && r.divisions) {
+    const parts = String(r.divisions)
+      .split(/[;|,]/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const o: string[] = [];
+    const g: string[] = [];
+    for (const p of parts) {
+      const dest = GIRL_DIV.test(p) ? g : o;
+      for (const tok of ageTokens(p)) {
+        if (!dest.includes(tok)) dest.push(tok);
+      }
+    }
+    if (!open.length) open = sortAges(o);
+    if (!girls.length) girls = sortAges(g);
+  }
+  if (!open.length && r.age_groups) {
+    const ag = String(r.age_groups).trim();
+    const rng = formatAgeRange(ag);
+    if (rng) open = [rng];
+    else {
+      const toks: string[] = [];
+      for (const p of String(ag).split(/[;|,]/)) {
+        for (const tok of ageTokens(p)) {
+          if (!toks.includes(tok)) toks.push(tok);
+        }
+      }
+      open = sortAges(toks);
+    }
+  }
+  if (!open.length && !girls.length) return "Ages TBD";
+  let s = open.join(", ");
+  if (girls.length) s += (s ? " " : "") + `(girls: ${girls.join(", ")})`;
+  return s;
+}
+
 export function schedulePlainText(
   items: Tournament[],
   generated: string,
@@ -162,8 +279,10 @@ export function schedulePlainText(
   for (const r of items) {
     const f = parseScheduleFee(r.entry_fee);
     lines.push(formatScheduleRange(r.start_date, r.end_date));
+    const ages = ageLine(r);
     lines.push(`  ${r.name}  (${categoryLabel(r.category)})`);
     lines.push(`  ${r.city || "—"}${r.venue ? ` · ${r.venue}` : ""}  ·  ${f.label}`);
+    lines.push(`  Ages: ${ages === "Ages TBD" ? "TBD" : ages}`);
     if (r.event_url) lines.push(`  ${r.event_url}`);
     lines.push("");
   }

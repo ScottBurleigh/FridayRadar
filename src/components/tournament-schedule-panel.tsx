@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  ageLine,
   conflictNotes,
   feeTotal,
   formatScheduleRange,
@@ -312,6 +313,7 @@ function ScheduleTable({
                   >
                     {r.name}
                   </a>
+                  <div className="ages">{ageLine(r)}</div>
                 </td>
                 <td className="px-3 py-2">
                   {q ? (
@@ -383,6 +385,7 @@ function PrintSchedule({
                 <td>{formatScheduleRange(r.start_date, r.end_date)}</td>
                 <td>
                   {r.name}
+                  <div className="meta">{ageLine(r)}</div>
                   {r.event_url ? <div className="meta">{r.event_url}</div> : null}
                 </td>
                 <td>{r.city || "—"}</td>
