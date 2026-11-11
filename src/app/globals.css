@@ -157,6 +157,13 @@
   line-height: 1.35;
 }
 
+/* Wrappers exist for the 640px schedule modal; they must not box on desktop. */
+.modal-head,
+.modal-head-text,
+.modal-scroll {
+  display: contents;
+}
+
 #print-sched {
   display: none;
 }
@@ -220,5 +227,247 @@
     color: #000;
     text-decoration: none;
     font-weight: 600;
+  }
+}
+
+/* Unlayered display overrides: Tailwind's [hidden] { display:none !important } lives in
+   @layer base, which beats !important in utilities. Keep these in base so the 640px
+   modal can show the close button and footer. */
+@layer base {
+  @media (max-width: 640px) {
+    #closex[hidden],
+    .modal-x[hidden] {
+      display: inline-flex !important;
+    }
+    #schedfoot[hidden] {
+      display: block !important;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  body.modal-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  html:has(body.modal-open) {
+    overflow: hidden;
+  }
+  #sched-modal {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    --tw-translate-x: 0px !important;
+    --tw-translate-y: 0px !important;
+    translate: 0 0 !important;
+    transform: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    margin: 0;
+    border-radius: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: hidden;
+    box-shadow: none;
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  #sched-modal [data-slot="dialog-close"] {
+    display: none !important;
+  }
+  .modal-head {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 16px 10px;
+    padding-top: max(12px, env(safe-area-inset-top, 0px));
+    border-bottom: 1px solid rgb(253 230 138 / 0.35);
+    background: #12203a;
+    z-index: 2;
+  }
+  .modal-head-text {
+    display: block;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .modal-head .lead {
+    margin-bottom: 0;
+  }
+  #closex[hidden],
+  .modal-x[hidden] {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border-radius: 10px;
+    font-size: 22px;
+    line-height: 1;
+    color: #fafafa;
+    background: #0f1a2e;
+    border: 1px solid rgb(253 230 138 / 0.45);
+  }
+  .modal-scroll {
+    display: block;
+    flex: 1 1 auto;
+    overflow: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 12px 16px;
+  }
+  #sched-modal .warns .w,
+  #schedwarns p {
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 10px 12px;
+    overflow-wrap: anywhere;
+  }
+  #sched-modal .modal-scroll .overflow-x-auto {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+  }
+  #sched-modal .sched-table,
+  #sched-modal .sched-table tbody {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    border-radius: 0;
+  }
+  #sched-modal .sched-table thead {
+    display: none;
+  }
+  #sched-modal .sched-table tr:not(.total-row) {
+    display: block;
+    width: 100%;
+    background: #17233d;
+    border: 1px solid rgb(253 230 138 / 0.35);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 0 0 10px;
+    box-sizing: border-box;
+  }
+  #sched-modal .sched-table tr.conflict:not(.total-row) {
+    background: rgb(251 191 36 / 0.1);
+  }
+  #sched-modal .sched-table tr.excluded:not(.total-row) {
+    background: rgb(248 113 113 / 0.1);
+  }
+  #sched-modal .sched-table tr:not(.total-row) td {
+    display: block;
+    width: 100%;
+    border: 0;
+    padding: 2px 0;
+    background: transparent !important;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  #sched-modal .sched-table td[data-l="Date"] {
+    font-weight: 700;
+    font-size: 13px;
+    color: #fbbf24;
+    padding-bottom: 6px;
+  }
+  #sched-modal .sched-table td[data-l="Date"]:before,
+  #sched-modal .sched-table td[data-l="Tournament"]:before {
+    content: none;
+  }
+  #sched-modal .sched-table td[data-l="City"]:before,
+  #sched-modal .sched-table td[data-l="Format"]:before {
+    content: attr(data-l) ": ";
+    font-weight: 600;
+    color: #a1a1aa;
+    font-size: 12px;
+  }
+  #sched-modal .sched-table .ages {
+    margin-top: 4px;
+    overflow-wrap: anywhere;
+  }
+  #sched-modal .sched-table tr:not(.total-row) td[data-l="Fee"] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgb(253 230 138 / 0.35);
+    font-size: 18px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  #sched-modal .sched-table td[data-l="Fee"]:before {
+    content: attr(data-l);
+    font-size: 12px;
+    font-weight: 600;
+    color: #a1a1aa;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  #sched-modal .sched-table .total-row {
+    display: none !important;
+  }
+  #sched-modal .rm {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 8px;
+  }
+  #schedfoot[hidden] {
+    display: block !important;
+    flex: 0 0 auto;
+    padding: 10px 16px 0;
+    background: #12203a;
+    border-top: 1px solid rgb(253 230 138 / 0.35);
+  }
+  #schedtot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 4px 0 8px;
+  }
+  #schedtot:empty {
+    display: none;
+  }
+  #sched-modal .modal-actions {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0;
+    padding: 8px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    border-top: 0;
+    border-radius: 0;
+    background: #12203a;
+  }
+  #sched-modal .modal-actions > div {
+    display: contents;
+  }
+  #sched-modal .modal-actions .spacer {
+    display: none;
+  }
+  #sched-modal .modal-actions button {
+    min-height: 44px;
+    width: 100%;
+    margin: 0;
+    padding: 10px 8px;
+  }
+  #sched-modal .modal-actions button.primary {
+    grid-column: 1 / -1;
   }
 }

@@ -120,6 +120,11 @@ export function TournamentSchedulePanel({
     return () => window.clearTimeout(t);
   }, [toast]);
 
+  useEffect(() => {
+    document.body.classList.toggle("modal-open", open);
+    return () => document.body.classList.remove("modal-open");
+  }, [open]);
+
   function remove(id: string) {
     onScheduleIds(scheduleIds.filter((x) => x !== id));
   }
@@ -179,44 +184,70 @@ export function TournamentSchedulePanel({
           className="max-h-[90vh] w-full overflow-y-auto sm:max-w-4xl"
           initialFocus={() => document.getElementById("sched-modal")}
         >
-          <DialogHeader>
-            <DialogTitle id="schedtitle">My tournament schedule</DialogTitle>
-            <DialogDescription id="schedlead">
-              {items.length
-                ? `${items.length} tournament${items.length === 1 ? "" : "s"} selected`
-                : "No tournaments on your schedule yet. Use “+ Add” on a tournament to add it."}
-            </DialogDescription>
-          </DialogHeader>
-          {notes.length ? (
-            <div id="schedwarns" className="space-y-1.5">
-              {notes.map((n) => (
-                <p
-                  key={n.text}
-                  className={
-                    n.type === "excluded"
-                      ? "rounded-md border border-red-400/40 bg-red-400/10 px-2 py-1.5 text-sm text-red-100"
-                      : "rounded-md border border-amber-400/40 bg-amber-400/10 px-2 py-1.5 text-sm text-amber-100"
-                  }
-                >
-                  {n.text}
-                </p>
-              ))}
+          <div className="modal-head">
+            <div className="modal-head-text">
+              <DialogHeader>
+                <DialogTitle id="schedtitle">My tournament schedule</DialogTitle>
+                <DialogDescription id="schedlead" className="lead">
+                  {items.length
+                    ? `${items.length} tournament${items.length === 1 ? "" : "s"} selected`
+                    : "No tournaments on your schedule yet. Use “+ Add” on a tournament to add it."}
+                </DialogDescription>
+              </DialogHeader>
             </div>
-          ) : null}
-          <div id="schedbody">
-            {items.length === 0 ? (
-              <p className="empty py-8 text-center text-sm text-zinc-400">Your schedule is empty.</p>
-            ) : (
-              <ScheduleTable
-                items={items}
-                tot={tot.label}
-                conflictIds={conflictIds}
-                exclIds={exclIds}
-                onRemove={remove}
-              />
-            )}
+            <button
+              type="button"
+              className="modal-x"
+              id="closex"
+              hidden
+              aria-label="Close"
+              onClick={() => onOpenChange(false)}
+            >
+              ×
+            </button>
           </div>
-          <DialogFooter className="flex-wrap gap-2 sm:justify-between">
+          <div className="modal-scroll">
+            {notes.length ? (
+              <div id="schedwarns" className="warns space-y-1.5">
+                {notes.map((n) => (
+                  <p
+                    key={n.text}
+                    className={
+                      n.type === "excluded"
+                        ? "w ex rounded-md border border-red-400/40 bg-red-400/10 px-2 py-1.5 text-sm text-red-100"
+                        : "w rounded-md border border-amber-400/40 bg-amber-400/10 px-2 py-1.5 text-sm text-amber-100"
+                    }
+                  >
+                    {n.text}
+                  </p>
+                ))}
+              </div>
+            ) : null}
+            <div id="schedbody">
+              {items.length === 0 ? (
+                <p className="empty py-8 text-center text-sm text-zinc-400">Your schedule is empty.</p>
+              ) : (
+                <ScheduleTable
+                  items={items}
+                  tot={tot.label}
+                  conflictIds={conflictIds}
+                  exclIds={exclIds}
+                  onRemove={remove}
+                />
+              )}
+            </div>
+          </div>
+          <div className="modal-foot" id="schedfoot" hidden>
+            <div id="schedtot">
+              {items.length ? (
+                <>
+                  <span>Total</span>
+                  <span>{tot.label}</span>
+                </>
+              ) : null}
+            </div>
+          </div>
+          <DialogFooter className="modal-actions flex-wrap gap-2 sm:justify-between">
             <div className="flex flex-wrap gap-2">
               <Button type="button" variant="outline" id="copysched" onClick={() => void copySchedule()}>
                 Copy schedule
@@ -238,7 +269,7 @@ export function TournamentSchedulePanel({
                 Clear schedule
               </Button>
             </div>
-            <Button type="button" id="closesched" onClick={() => onOpenChange(false)}>
+            <Button type="button" className="primary" id="closesched" onClick={() => onOpenChange(false)}>
               Close
             </Button>
           </DialogFooter>
@@ -296,10 +327,10 @@ function ScheduleTable({
                 : "";
             return (
               <tr key={r.id} className={`border-b border-white/8 ${rowClass}`}>
-                <td className="whitespace-nowrap px-3 py-2 font-mono text-zinc-300">
+                <td data-l="Date" className="whitespace-nowrap px-3 py-2 font-mono text-zinc-300">
                   {formatScheduleRange(r.start_date, r.end_date)}
                 </td>
-                <td className="px-3 py-2">
+                <td data-l="Tournament" className="px-3 py-2">
                   <span className="mr-1.5 inline-flex align-middle">
                     <Badge variant="outline" className={categoryClass(r.category)}>
                       {r.category === "flag" ? "FLAG" : categoryLabel(r.category)}
@@ -315,7 +346,7 @@ function ScheduleTable({
                   </a>
                   <div className="ages">{ageLine(r)}</div>
                 </td>
-                <td className="px-3 py-2">
+                <td data-l="City" className="px-3 py-2">
                   {q ? (
                     <a
                       href={mapsSearchUrl(q)}
@@ -330,10 +361,10 @@ function ScheduleTable({
                     <span>{r.city || "—"}</span>
                   )}
                 </td>
-                <td className="px-3 py-2 text-zinc-300">{categoryLabel(r.category)}</td>
-                <td className="whitespace-nowrap px-3 py-2 font-mono text-zinc-200">{f.label}</td>
+                <td data-l="Format" className="px-3 py-2 text-zinc-300">{categoryLabel(r.category)}</td>
+                <td data-l="Fee" className="whitespace-nowrap px-3 py-2 font-mono text-zinc-200">{f.label}</td>
                 <td className="px-3 py-2">
-                  <Button type="button" variant="outline" size="xs" data-rm={r.id} onClick={() => onRemove(r.id)}>
+                  <Button type="button" variant="outline" size="xs" className="rm" data-rm={r.id} onClick={() => onRemove(r.id)}>
                     Remove
                   </Button>
                 </td>
