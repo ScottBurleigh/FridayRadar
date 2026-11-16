@@ -157,6 +157,25 @@
   line-height: 1.35;
 }
 
+.badge.bpast {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 1px 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  vertical-align: 1px;
+  background: #e5e7eb;
+  color: #374151;
+  margin-left: 6px;
+  margin-right: 0;
+}
+tr.past {
+  opacity: 0.62;
+}
+li.past {
+  opacity: 0.62;
+}
+
 /* Wrappers exist for the 640px schedule modal; they must not box on desktop. */
 .modal-head,
 .modal-head-text,

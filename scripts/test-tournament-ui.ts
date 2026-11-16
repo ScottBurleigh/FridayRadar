@@ -11,6 +11,9 @@ import {
   conflictNotes,
   feeTotal,
   formatAgeRange,
+  hiddenByPast,
+  isPast,
+  localTodayYmd,
   parseScheduleFee,
   readHashScheduleIds,
   schedulePlainText,
@@ -191,9 +194,53 @@ function checkAges() {
   assert.ok(plain.includes("  Ages: TBD"));
 }
 
+function checkPast() {
+  const today = "2026-11-22";
+  const ended = t({ id: "p1", name: "Ended", start_date: "2026-11-21", end_date: "2026-11-21" });
+  const endsToday = t({ id: "p2", name: "Today", start_date: "2026-11-22", end_date: "2026-11-22" });
+  const future = t({ id: "p3", name: "Future", start_date: "2026-11-27", end_date: "2026-11-29" });
+  const startOnlyPast = t({ id: "p4", name: "Start only", start_date: "2026-11-21", end_date: "" });
+  const startOnlyToday = t({ id: "p5", name: "Start today", start_date: "2026-11-22", end_date: "" });
+  const spanning = t({
+    id: "p6",
+    name: "Span",
+    start_date: "2026-11-21",
+    end_date: "2026-11-22",
+  });
+
+  assert.equal(isPast(ended, today), true);
+  assert.equal(isPast(endsToday, today), false);
+  assert.equal(isPast(future, today), false);
+  assert.equal(isPast(startOnlyPast, today), true);
+  assert.equal(isPast(startOnlyToday, today), false);
+  assert.equal(isPast(spanning, today), false);
+  assert.equal(isPast(ended, ""), false);
+
+  assert.equal(hiddenByPast(ended, false, today), false);
+  assert.equal(hiddenByPast(ended, true, today), true);
+  assert.equal(hiddenByPast(future, true, today), false);
+  assert.equal(hiddenByPast(ended, true, ""), false);
+
+  const rows = [ended, endsToday, future, startOnlyPast, spanning];
+  const shown = rows.filter((r) => !hiddenByPast(r, true, today));
+  assert.deepEqual(
+    shown.map((r) => r.id),
+    ["p2", "p3", "p6"],
+  );
+
+  assert.equal(localTodayYmd(new Date(2026, 10, 22, 0, 5, 0)), "2026-11-22");
+  assert.equal(localTodayYmd(new Date(2026, 10, 22, 23, 59, 0)), "2026-11-22");
+
+  const copy = schedulePlainText([ended, future], "test", "$0", [], () => "7v7", today);
+  assert.ok(copy.includes("Nov 21, 2026  (Past)"));
+  assert.ok(copy.includes("Nov 27–29, 2026\n"));
+  assert.ok(!copy.includes("Nov 27–29, 2026  (Past)"));
+}
+
 checkFees();
 checkWeekends();
 checkConflicts();
 checkHash();
 checkAges();
+checkPast();
 console.log("test-tournament-ui: ok");

@@ -17,11 +17,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  LS_HIDE_PAST,
   LS_SCHEDULE,
   LS_WEEKENDS,
+  hiddenByPast,
+  isPast,
+  localTodayYmd,
   readHashScheduleIds,
+  readLocalBool,
   readLocalStringArray,
   writeHashScheduleIds,
+  writeLocalBool,
   writeLocalStringArray,
 } from "@/lib/tournament-schedule";
 import {
@@ -258,6 +264,8 @@ export function TournamentsBoard({
   const [maxFee, setMaxFee] = useState("");
   const [divsSel, setDivsSel] = useState<string[]>([]);
   const [hideGirls, setHideGirls] = useState(false);
+  const [hidePast, setHidePast] = useState(false);
+  const [todayYmd, setTodayYmd] = useState("");
   const [hideClone, setHideClone] = useState(true);
   const [excludeBoth, setExcludeBoth] = useState(false);
   const [weekendsSel, setWeekendsSel] = useState<string[]>([]);
@@ -283,6 +291,15 @@ export function TournamentsBoard({
     if (hash) writeLocalStringArray(LS_SCHEDULE, hash);
     writeHashScheduleIds(next);
     setWeekendsSel(readLocalStringArray(LS_WEEKENDS).filter((id) => knownWk.has(id)));
+    setHidePast(readLocalBool(LS_HIDE_PAST, false));
+    let today = localTodayYmd();
+    try {
+      const override = new URLSearchParams(window.location.search).get("today");
+      if (override && /^\d{4}-\d{2}-\d{2}$/.test(override)) today = override;
+    } catch {
+      /* ignore */
+    }
+    setTodayYmd(today);
     setHydrated(true);
     // Viewer-local date + localStorage; run once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -298,6 +315,11 @@ export function TournamentsBoard({
     if (!hydrated) return;
     writeLocalStringArray(LS_WEEKENDS, weekendsSel);
   }, [weekendsSel, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    writeLocalBool(LS_HIDE_PAST, hidePast);
+  }, [hidePast, hydrated]);
 
   useEffect(() => {
     function onHash() {
@@ -379,6 +401,7 @@ export function TournamentsBoard({
         if (!blob.includes(needle)) return false;
       }
       if (hiddenByWeekends(t.start_date, t.end_date, weekendsSel, weekends)) return false;
+      if (hiddenByPast(t, hidePast, todayYmd)) return false;
       return true;
     }
     const rows = tournaments.filter((t) => pass(t));
@@ -407,6 +430,8 @@ export function TournamentsBoard({
     bucketsById,
     weekendsSel,
     weekends,
+    hidePast,
+    todayYmd,
   ]);
 
   const weekendItems = useMemo(() => {
@@ -439,6 +464,7 @@ export function TournamentsBoard({
           .toLowerCase();
         if (!blob.includes(needle)) return false;
       }
+      if (hiddenByPast(t, hidePast, todayYmd)) return false;
       return true;
     });
     return weekends.map((w) => ({
@@ -463,6 +489,8 @@ export function TournamentsBoard({
     maxFee,
     bucketsById,
     weekends,
+    hidePast,
+    todayYmd,
   ]);
 
   function toggleSort(key: SortKey) {
@@ -484,6 +512,8 @@ export function TournamentsBoard({
     setMaxFee("");
     setDivsSel([]);
     setHideGirls(false);
+    setHidePast(false);
+    writeLocalBool(LS_HIDE_PAST, false);
     setHideClone(true);
     setExcludeBoth(false);
     setWeekendsSel([]);
@@ -502,6 +532,7 @@ export function TournamentsBoard({
       divsSel.length ||
       weekendsSel.length ||
       hideGirls ||
+      hidePast ||
       !hideClone ||
       excludeBoth ||
       format !== "all",
@@ -716,6 +747,16 @@ export function TournamentsBoard({
           </label>
           <label className="flex items-center gap-2 text-sm text-zinc-200">
             <input
+              id="hidepast"
+              type="checkbox"
+              className="size-3.5 accent-amber-400"
+              checked={hidePast}
+              onChange={(e) => setHidePast(e.target.checked)}
+            />
+            Hide past events
+          </label>
+          <label className="flex items-center gap-2 text-sm text-zinc-200">
+            <input
               type="checkbox"
               className="size-3.5 accent-amber-400"
               checked={hideClone}
@@ -819,13 +860,15 @@ export function TournamentsBoard({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.map((t) => (
+                {filtered.map((t) => {
+                  const past = isPast(t, todayYmd);
+                  return (
                   <TableRow
                     key={t.id}
                     className={
-                      schedSet.has(t.id)
+                      (schedSet.has(t.id)
                         ? "in-sched border-white/12 bg-emerald-400/8 hover:bg-emerald-400/12"
-                        : "border-white/12 hover:bg-amber-400/8"
+                        : "border-white/12 hover:bg-amber-400/8") + (past ? " past" : "")
                     }
                   >
                     <TableCell>
@@ -833,6 +876,7 @@ export function TournamentsBoard({
                     </TableCell>
                     <TableCell className="whitespace-nowrap font-mono text-zinc-300">
                       {formatRange(t.start_date, t.end_date)}
+                      {past ? <span className="badge bpast">Past</span> : null}
                     </TableCell>
                     <TableCell className="max-w-xs whitespace-normal font-sans">
                       <a
@@ -866,22 +910,28 @@ export function TournamentsBoard({
                       {t.organizer || "—"}
                     </TableCell>
                   </TableRow>
-                ))}
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
           <ul className="mt-6 space-y-2 lg:hidden">
-            {filtered.map((t) => (
+            {filtered.map((t) => {
+              const past = isPast(t, todayYmd);
+              return (
               <li
                 key={t.id}
                 className={
-                  schedSet.has(t.id)
+                  (schedSet.has(t.id)
                     ? "in-sched rounded-xl border border-emerald-400/40 bg-emerald-400/8 p-3"
-                    : "rounded-xl border border-amber-400/30 bg-[#17233d] p-3"
+                    : "rounded-xl border border-amber-400/30 bg-[#17233d] p-3") + (past ? " past" : "")
                 }
               >
                 <div className="flex items-start justify-between gap-3">
-                  <p className="font-mono text-xs text-zinc-400">{formatRange(t.start_date, t.end_date)}</p>
+                  <p className="font-mono text-xs text-zinc-400">
+                    {formatRange(t.start_date, t.end_date)}
+                    {past ? <span className="badge bpast">Past</span> : null}
+                  </p>
                   <Badge variant="outline" className={categoryClass(t.category)}>
                     {categoryLabel(t.category)}
                   </Badge>
@@ -908,7 +958,8 @@ export function TournamentsBoard({
                   <AddButton on={schedSet.has(t.id)} onClick={() => toggleSched(t.id)} />
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </>
       )}
@@ -919,6 +970,7 @@ export function TournamentsBoard({
         excludedWeekendIds={weekendsSel}
         weekends={weekends}
         generated={generated}
+        todayYmd={todayYmd}
         open={schedOpen}
         onOpenChange={setSchedOpen}
       />

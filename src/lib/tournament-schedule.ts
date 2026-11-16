@@ -3,6 +3,54 @@ import { weekendsOf, type Weekend } from "./tournament-weekends";
 
 export const LS_WEEKENDS = "fr.tournaments.v1.weekends";
 export const LS_SCHEDULE = "fr.tournaments.v1.schedule";
+export const LS_HIDE_PAST = "fr.tournaments.v1.hidePast";
+
+function pad2(n: number): string {
+  return (n < 10 ? "0" : "") + String(n);
+}
+
+/** Viewer's local calendar date as YYYY-MM-DD. */
+export function localTodayYmd(now = new Date()): string {
+  return `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
+}
+
+/**
+ * Past when end_date (or start_date if there is no end) is strictly before today.
+ * Pass the viewer's local YYYY-MM-DD; empty today never marks a row past (SSR-safe).
+ */
+export function isPast(
+  r: Pick<Tournament, "end_date" | "start_date">,
+  todayYmd: string,
+): boolean {
+  const d = (r.end_date || r.start_date || "").slice(0, 10);
+  return !!todayYmd && !!d && d < todayYmd;
+}
+
+export function hiddenByPast(
+  r: Pick<Tournament, "end_date" | "start_date">,
+  hidePast: boolean,
+  todayYmd: string,
+): boolean {
+  return hidePast && isPast(r, todayYmd);
+}
+
+export function readLocalBool(key: string, fallback = false): boolean {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw == null || raw === "") return fallback;
+    return Boolean(JSON.parse(raw));
+  } catch {
+    return fallback;
+  }
+}
+
+export function writeLocalBool(key: string, value: boolean): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* quota / private mode */
+  }
+}
 
 export type ScheduleFee = { value: number | null; label: string };
 
@@ -274,11 +322,14 @@ export function schedulePlainText(
   totLabel: string,
   notes: ScheduleNote[],
   categoryLabel: (cat: string) => string,
+  todayYmd = "",
 ): string {
   const lines = ["My Tournament Schedule", "", `Generated from FridayRadar tournaments · ${generated || ""}`, ""];
   for (const r of items) {
     const f = parseScheduleFee(r.entry_fee);
-    lines.push(formatScheduleRange(r.start_date, r.end_date));
+    lines.push(
+      formatScheduleRange(r.start_date, r.end_date) + (isPast(r, todayYmd) ? "  (Past)" : ""),
+    );
     const ages = ageLine(r);
     lines.push(`  ${r.name}  (${categoryLabel(r.category)})`);
     lines.push(`  ${r.city || "—"}${r.venue ? ` · ${r.venue}` : ""}  ·  ${f.label}`);

@@ -17,6 +17,7 @@ import {
   conflictNotes,
   feeTotal,
   formatScheduleRange,
+  isPast,
   parseScheduleFee,
   schedulePlainText,
   writeHashScheduleIds,
@@ -64,6 +65,7 @@ export function TournamentSchedulePanel({
   excludedWeekendIds,
   weekends,
   generated,
+  todayYmd,
   open,
   onOpenChange,
 }: {
@@ -73,6 +75,7 @@ export function TournamentSchedulePanel({
   excludedWeekendIds: string[];
   weekends: Weekend[];
   generated: string;
+  todayYmd: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -110,8 +113,8 @@ export function TournamentSchedulePanel({
   }, [notes]);
 
   const plain = useMemo(
-    () => schedulePlainText(items, generated, tot.label, notes, categoryLabel),
-    [items, generated, tot.label, notes],
+    () => schedulePlainText(items, generated, tot.label, notes, categoryLabel, todayYmd),
+    [items, generated, tot.label, notes, todayYmd],
   );
 
   useEffect(() => {
@@ -232,6 +235,7 @@ export function TournamentSchedulePanel({
                   tot={tot.label}
                   conflictIds={conflictIds}
                   exclIds={exclIds}
+                  todayYmd={todayYmd}
                   onRemove={remove}
                 />
               )}
@@ -276,7 +280,7 @@ export function TournamentSchedulePanel({
         </DialogContent>
       </Dialog>
 
-      <PrintSchedule items={items} tot={tot.label} notes={notes} generated={generated} />
+      <PrintSchedule items={items} tot={tot.label} notes={notes} generated={generated} todayYmd={todayYmd} />
 
       {toast ? (
         <p
@@ -295,12 +299,14 @@ function ScheduleTable({
   tot,
   conflictIds,
   exclIds,
+  todayYmd,
   onRemove,
 }: {
   items: Tournament[];
   tot: string;
   conflictIds: Set<string>;
   exclIds: Set<string>;
+  todayYmd: string;
   onRemove: (id: string) => void;
 }) {
   return (
@@ -320,15 +326,17 @@ function ScheduleTable({
           {items.map((r) => {
             const f = parseScheduleFee(r.entry_fee);
             const q = mapsQuery(r);
+            const past = isPast(r, todayYmd);
             const rowClass = exclIds.has(r.id)
               ? "excluded bg-red-400/10"
               : conflictIds.has(r.id)
                 ? "conflict bg-amber-400/10"
                 : "";
             return (
-              <tr key={r.id} className={`border-b border-white/8 ${rowClass}`}>
+              <tr key={r.id} className={`border-b border-white/8 ${rowClass}${past ? " past" : ""}`}>
                 <td data-l="Date" className="whitespace-nowrap px-3 py-2 font-mono text-zinc-300">
                   {formatScheduleRange(r.start_date, r.end_date)}
+                  {past ? <span className="badge bpast">Past</span> : null}
                 </td>
                 <td data-l="Tournament" className="px-3 py-2">
                   <span className="mr-1.5 inline-flex align-middle">
@@ -389,11 +397,13 @@ function PrintSchedule({
   tot,
   notes,
   generated,
+  todayYmd,
 }: {
   items: Tournament[];
   tot: string;
   notes: ScheduleNote[];
   generated: string;
+  todayYmd: string;
 }) {
   return (
     <section id="print-sched" aria-hidden="true">
@@ -413,7 +423,10 @@ function PrintSchedule({
           <tbody>
             {items.map((r) => (
               <tr key={r.id}>
-                <td>{formatScheduleRange(r.start_date, r.end_date)}</td>
+                <td>
+                  {formatScheduleRange(r.start_date, r.end_date)}
+                  {isPast(r, todayYmd) ? " (Past)" : ""}
+                </td>
                 <td>
                   {r.name}
                   <div className="meta">{ageLine(r)}</div>
