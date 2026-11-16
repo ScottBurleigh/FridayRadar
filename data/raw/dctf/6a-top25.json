@@ -1,18 +1,18 @@
 {
-  "as_of": "2026-11-09",
+  "as_of": "2026-11-16",
   "week": 12,
   "board": "6A",
   "source": "Dave Campbell's Texas Football current 6A Top 25",
-  "source_url": "https://www.davecampbells.com/high-school-football/rankings",
+  "source_url": "https://www.davecampbells.com/articles/2026/11/09/official-txhsfb-ap-week-12-rankings-powered-by-dctx",
   "joined": 23,
   "skipped": [
     {
       "rank": 20,
-      "name": "Cedar Park Timberwolves"
+      "name": "Cedar Park"
     },
     {
       "rank": 25,
-      "name": "Odessa Permian Panthers"
+      "name": "Odessa Permian"
     }
   ],
   "teams": [
@@ -20,139 +20,139 @@
       "rank": 1,
       "site_id": "tx-fort-worth-north-crowley",
       "name": "North Crowley",
-      "dctf_name": "North Crowley Panthers"
+      "dctf_name": "North Crowley"
     },
     {
       "rank": 2,
       "site_id": "tx-allen-allen",
       "name": "Allen",
-      "dctf_name": "Allen Eagles"
+      "dctf_name": "Allen"
     },
     {
       "rank": 3,
       "site_id": "tx-katy-katy",
       "name": "Katy",
-      "dctf_name": "Katy Tigers"
+      "dctf_name": "Katy"
     },
     {
       "rank": 4,
       "site_id": "tx-houston-c-e-king",
       "name": "C.E. King",
-      "dctf_name": "Sheldon C.E. King Panthers"
+      "dctf_name": "Sheldon C.E. King"
     },
     {
       "rank": 5,
       "site_id": "tx-missouri-city-fort-bend-ridge-point",
       "name": "Fort Bend Ridge Point",
-      "dctf_name": "Fort Bend Ridge Point Panthers"
+      "dctf_name": "Fort Bend Ridge Point"
     },
     {
       "rank": 6,
       "site_id": "tx-san-antonio-san-antonio-johnson",
       "name": "San Antonio Johnson",
-      "dctf_name": "San Antonio Johnson Jaguars"
+      "dctf_name": "San Antonio Johnson"
     },
     {
       "rank": 7,
       "site_id": "tx-lewisville-lewisville",
       "name": "Lewisville",
-      "dctf_name": "Lewisville Fighting Farmers"
+      "dctf_name": "Lewisville"
     },
     {
       "rank": 8,
       "site_id": "tx-houston-north-shore",
       "name": "North Shore",
-      "dctf_name": "Galena Park North Shore Mustangs"
+      "dctf_name": "Galena Park North Shore"
     },
     {
       "rank": 9,
       "site_id": "tx-pearland-shadow-creek",
       "name": "Shadow Creek",
-      "dctf_name": "Alvin Shadow Creek Sharks"
+      "dctf_name": "Alvin Shadow Creek"
     },
     {
       "rank": 10,
       "site_id": "tx-longview-longview",
       "name": "Longview",
-      "dctf_name": "Longview Lobos"
+      "dctf_name": "Longview"
     },
     {
       "rank": 11,
       "site_id": "tx-waxahachie-waxahachie",
       "name": "Waxahachie",
-      "dctf_name": "Waxahachie Indians"
+      "dctf_name": "Waxahachie"
     },
     {
       "rank": 12,
       "site_id": "tx-denton-denton-guyer",
       "name": "Denton Guyer",
-      "dctf_name": "Denton Guyer Wildcats"
+      "dctf_name": "Denton Guyer"
     },
     {
       "rank": 13,
       "site_id": "tx-prosper-prosper",
       "name": "Prosper",
-      "dctf_name": "Prosper Eagles"
+      "dctf_name": "Prosper"
     },
     {
       "rank": 14,
       "site_id": "tx-austin-austin-westlake",
       "name": "Austin Westlake",
-      "dctf_name": "Austin Westlake Chaparrals"
+      "dctf_name": "Austin Westlake"
     },
     {
       "rank": 15,
       "site_id": "tx-cibolo-cibolo-steele",
       "name": "Cibolo Steele",
-      "dctf_name": "Cibolo Steele Knights"
+      "dctf_name": "Cibolo Steele"
     },
     {
       "rank": 16,
       "site_id": "tx-southlake-southlake-carroll",
       "name": "Southlake Carroll",
-      "dctf_name": "Southlake Carroll Dragons"
+      "dctf_name": "Southlake Carroll"
     },
     {
       "rank": 17,
       "site_id": "tx-san-antonio-san-antonio-brennan",
       "name": "San Antonio Brennan",
-      "dctf_name": "San Antonio Brennan Bears"
+      "dctf_name": "San Antonio Brennan"
     },
     {
       "rank": 18,
       "site_id": "tx-cypress-bridgeland",
       "name": "Bridgeland",
-      "dctf_name": "Cypress Bridgeland Bears"
+      "dctf_name": "Bridgeland"
     },
     {
       "rank": 19,
       "site_id": "tx-the-woodlands-the-woodlands",
       "name": "The Woodlands",
-      "dctf_name": "The Woodlands Highlanders"
+      "dctf_name": "The Woodlands"
     },
     {
       "rank": 21,
       "site_id": "tx-arlington-arlington-martin",
       "name": "Arlington Martin",
-      "dctf_name": "Arlington Martin Warriors"
+      "dctf_name": "Arlington Martin"
     },
     {
       "rank": 22,
       "site_id": "tx-cypress-cy-ranch",
       "name": "Cy Ranch",
-      "dctf_name": "Cypress Ranch Mustangs"
+      "dctf_name": "Cypress Ranch"
     },
     {
       "rank": 23,
       "site_id": "tx-pearland-pearland",
       "name": "Pearland",
-      "dctf_name": "Pearland Oilers"
+      "dctf_name": "Pearland"
     },
     {
       "rank": 24,
       "site_id": "tx-humble-summer-creek",
       "name": "Summer Creek",
-      "dctf_name": "Humble Summer Creek Bulldogs"
+      "dctf_name": "Humble Summer Creek"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T07:18:54",
+  "generated": "2026-11-16T19:20:37",
   "window": [
     "2026-11-16",
     "2027-06-16"
@@ -81,10 +81,8 @@
       "verified": true,
       "zorts_url": "https://www.zortssports.com/join/tournament/27321",
       "flag50_url": "https://flag50.com/tournaments/hero-5v5-dallas-rowlett-tx-ff1ef8c78d",
-      "also_listed_as": [
-        "https://www.zortssports.com/join/tournament/27516"
-      ],
-      "conflicts": "end date differs: zorts 27516=2026-11-22; zorts 27321=2026-11-22; flag50 flag50-ff1ef8c78d=2026-11-21",
+      "also_listed_as": [],
+      "conflicts": "end date differs: zorts 27321=2026-11-22; flag50 flag50-ff1ef8c78d=2026-11-21",
       "has_girls_divisions": true,
       "girls_divisions": [
         "Girl's 10u",
@@ -225,24 +223,24 @@
       ]
     },
     {
-      "id": "zorts-27515",
+      "id": "flag50-zs27515",
       "category": "flag",
       "state": "TX",
       "name": "\"TEXAS BATTLE WARS 10\" BOYS FLAG & TACKLE/GIRLS 5V5",
       "start_date": "2026-11-27",
       "end_date": "2026-11-29",
       "city": "Arlington",
-      "venue": "Harold Patterson Sports Center, West Bardin Road, Arlington, TX, USA",
-      "sport": "Football (5v5 Flag), Football (Tackle)",
+      "venue": "Harold Patterson Sports Center, West Bardin Road, Arlington, TX",
+      "sport": "Boy's Football (5v5, tackle)",
       "age_groups": "5u to 18u",
-      "divisions": "Boy's Football (5v5 Flag) 5U FLAG; Boy's Football (5v5 Flag) 6U FLAG; Boy's Football (Tackle) 6U TACKLE; Boy's Football (Tackle) 7U; Boy's Football (Tackle) 9U; Boy's Football (Tackle) 11U; Boy's Football (Tackle) 12U; Boy's Football (Tackle) 13U; Girl's Football (5v5 Flag) 8U GIRLS 5V5; Girl's Football (5v5 Flag) 10U GIRLS 5V5; Girl's Football (5v5 Flag) HIGH SCHOOL GIRLS 5V5; Girl's Football (5v5 Flag) 14U GIRLS 5V5",
-      "entry_fee": "$0.00 USD per team",
-      "registration_ends": "Nov 26, 2026 @ 12:00 AM",
+      "divisions": "",
+      "entry_fee": "$250.00 USD per team",
+      "registration_ends": "",
       "organizer": "TEXAS BATTLE WARS \"STATE CHAMPIONSHIP\" 10",
-      "contact_email": "christopher.curryjr@yahoo.com",
-      "contact_phone": "BOYS 214-603-0081 OR GIRLS 214-543-3839",
-      "event_url": "https://www.zortssports.com/join/tournament/27515",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27515",
+      "contact_email": "",
+      "contact_phone": "",
+      "event_url": "https://flag50.com/tournaments/texas-battle-wars-10-boys-flag-tackle-girls-5v5-arlington-tx-zs27515",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse?tid=27515",
       "source": "flag50+zorts",
       "sources": [
         "flag50",
@@ -252,24 +250,10 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27515",
       "flag50_url": "https://flag50.com/tournaments/texas-battle-wars-10-boys-flag-tackle-girls-5v5-arlington-tx-zs27515",
       "also_listed_as": [],
-      "conflicts": "fee differs: zorts 27515=$0.00 USD per team; flag50 flag50-zs27515=$250.00 USD per team",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's Football (5v5 Flag) 8U GIRLS 5V5",
-        "Girl's Football (5v5 Flag) 10U GIRLS 5V5",
-        "Girl's Football (5v5 Flag) HIGH SCHOOL GIRLS 5V5",
-        "Girl's Football (5v5 Flag) 14U GIRLS 5V5"
-      ],
-      "open_divisions": [
-        "Boy's Football (5v5 Flag) 5U FLAG",
-        "Boy's Football (5v5 Flag) 6U FLAG",
-        "Boy's Football (Tackle) 6U TACKLE",
-        "Boy's Football (Tackle) 7U",
-        "Boy's Football (Tackle) 9U",
-        "Boy's Football (Tackle) 11U",
-        "Boy's Football (Tackle) 12U",
-        "Boy's Football (Tackle) 13U"
-      ]
+      "conflicts": "linked Zorts event 27515 is not in the Zorts feed; its page says: Football (5v5 Flag), Football (Tackle) Tournament - November 27 to November 29, 2026",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": []
     },
     {
       "id": "zorts-25421",
