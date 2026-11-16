@@ -167,21 +167,21 @@ function checkAges() {
     return row!;
   };
   assert.equal(
-    ageLine(byName("Neighborhood Sports NFL Flag State Championships Fall 2026")),
-    "6U, 8U, 10U, 12U, 14U (girls: 8U, 10U, 12U, 14U, HS)",
+    ageLine(byName("TurkeyPalooza 2026")),
+    "6U, 8U, 10U, 12U, 14U, 18U, HS (girls: 12U, 18U, HS)",
   );
   assert.equal(
     ageLine(byName("ATX Bowl 2026 (Arlington, TX)")),
-    "6U, 7U, 8U, 9U, 10U, 11U, 12U, 14U, HS (girls: 8U, 10U, 12U, 14U, 16U, 18U, HS)",
+    "9U, 10U, 12U, 14U (girls: 8U, 10U, 12U, 16U, 18U, HS)",
   );
   assert.equal(
     ageLine(byName("2027 Kickoff Classic Tournament")),
     "8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 18U",
   );
-  assert.equal(ageLine(byName("2nd Annual Turkey & Troops")), "4U–17U");
+  assert.equal(ageLine(byName("Toys for tots flag football tournament")), "4U–17U");
 
   const plain = schedulePlainText(
-    [byName("2nd Annual Turkey & Troops"), t({ id: "empty", name: "No ages", start_date: "2027-02-01" })],
+    [byName("Toys for tots flag football tournament"), t({ id: "empty", name: "No ages", start_date: "2027-02-01" })],
     "test",
     "$0",
     [],

@@ -1,235 +1,23 @@
 {
-  "generated": "2026-11-09T19:19:48",
+  "generated": "2026-11-16T07:18:54",
   "window": [
-    "2026-11-09",
-    "2027-06-09"
+    "2026-11-16",
+    "2027-06-16"
   ],
-  "count": 128,
+  "count": 127,
   "tournaments": [
-    {
-      "id": "zorts-27991",
-      "category": "flag",
-      "state": "TX",
-      "name": "Neighborhood Sports NFL Flag State Championships Fall 2026",
-      "start_date": "2026-11-14",
-      "end_date": "2026-11-14",
-      "city": "Leander",
-      "venue": "Glenn High School, Collaborative Way, Leander, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "6u to 17u",
-      "divisions": "Coed 6u; Coed 8u; Coed 10u; Coed 12u; Coed 14u; Girl's 8u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's High School",
-      "entry_fee": "$350.00 USD per team",
-      "registration_ends": "Nov 11, 2026 @ 12:00 AM",
-      "organizer": "Neighborhood Sports",
-      "contact_email": "tournaments@neighborhoodsports.us",
-      "contact_phone": "(512)-560-1677",
-      "event_url": "https://www.zortssports.com/join/tournament/27991",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27991",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27991",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 8u",
-        "Girl's 10u",
-        "Girl's 12u",
-        "Girl's 14u",
-        "Girl's High School"
-      ],
-      "open_divisions": [
-        "Coed 6u",
-        "Coed 8u",
-        "Coed 10u",
-        "Coed 12u",
-        "Coed 14u"
-      ]
-    },
-    {
-      "id": "flag50-zs27600",
-      "category": "flag",
-      "state": "TX",
-      "name": "2nd Annual Turkey & Troops",
-      "start_date": "2026-11-15",
-      "end_date": "2026-11-15",
-      "city": "Lubbock",
-      "venue": "Lubbock, TX",
-      "sport": "Coed Football (5v5)",
-      "age_groups": "4u to 17u",
-      "divisions": "",
-      "entry_fee": "$0.00 USD per team",
-      "registration_ends": "",
-      "organizer": "FLAG LIFE",
-      "contact_email": "",
-      "contact_phone": "",
-      "event_url": "https://flag50.com/tournaments/2nd-annual-turkey-troops-lubbock-tx-zs27600",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse?tid=27600",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27600",
-      "flag50_url": "https://flag50.com/tournaments/2nd-annual-turkey-troops-lubbock-tx-zs27600",
-      "also_listed_as": [],
-      "conflicts": "linked Zorts event 27600 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - November 15, 2026",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": []
-    },
-    {
-      "id": "zorts-27259",
-      "category": "7v7",
-      "state": "TX",
-      "name": "7on7 \"Battle For the Bird\" Turkey-Bowl 2026 (Fort Worth, TX)",
-      "start_date": "2026-11-15",
-      "end_date": "2026-11-15",
-      "city": "Fort Worth",
-      "venue": "Fossil Ridge High School, 4101 Thompson Rd, Fort Worth, TX 76244, USA",
-      "sport": "Boy's Football (7v7)",
-      "age_groups": "7u to 18u",
-      "divisions": "8U; 9U; 10U; 11U; 12U; 13U; 14U; 15U; 18U",
-      "entry_fee": "$395.00 USD per team",
-      "registration_ends": "Nov 12, 2026 @ 7:00 PM",
-      "organizer": "PremierEventsUSA - Football",
-      "contact_email": "info@premiereventsusa.com",
-      "contact_phone": "4693969332",
-      "event_url": "https://www.zortssports.com/join/tournament/27259",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27259",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27259",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": [
-        "8U",
-        "9U",
-        "10U",
-        "11U",
-        "12U",
-        "13U",
-        "14U",
-        "15U",
-        "18U"
-      ]
-    },
-    {
-      "id": "zorts-26621",
-      "category": "flag",
-      "state": "TX",
-      "name": "SLCT FLAG TURKEY BOWL CHAMPIONSHIPS brought to you by FLAGFOOTBALLX",
-      "start_date": "2026-11-15",
-      "end_date": "2026-11-15",
-      "city": "Fort Worth",
-      "venue": "Central High School, Ray White Road, Fort Worth, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "6u to 18u",
-      "divisions": "Boy's 6U; Boy's 7U; Boy's 8U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 13/14U; Girl's 8UG; Girl's 10UG; Girl's 12UG; Girl's 14UG; Girl's HSG",
-      "entry_fee": "$350.00 USD per team",
-      "registration_ends": "Nov 15, 2026 @ 12:00 AM",
-      "organizer": "FlagFootballX",
-      "contact_email": "Text us at 817.482.3800",
-      "contact_phone": "817.482.3800",
-      "event_url": "https://www.zortssports.com/join/tournament/26621",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26621",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/26621",
-      "flag50_url": "https://flag50.com/tournaments/slct-flag-turkey-bowl-championships-brought-to-you-by-flagfo-fort-worth-tx-zs26621",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 8UG",
-        "Girl's 10UG",
-        "Girl's 12UG",
-        "Girl's 14UG",
-        "Girl's HSG"
-      ],
-      "open_divisions": [
-        "Boy's 6U",
-        "Boy's 7U",
-        "Boy's 8U",
-        "Boy's 9U",
-        "Boy's 10U",
-        "Boy's 11U",
-        "Boy's 12U",
-        "Boy's 13/14U"
-      ]
-    },
-    {
-      "id": "zorts-27358",
-      "category": "flag",
-      "state": "TX",
-      "name": "TEXAS SHOWDOWN",
-      "start_date": "2026-11-15",
-      "end_date": "2026-11-15",
-      "city": "Leander",
-      "venue": "Glenn High School, Collaborative Way, Leander, TX, USA",
-      "sport": "Football (7v7), Football (5v5 Flag)",
-      "age_groups": "6u to 18u",
-      "divisions": "Coed Football (5v5 Flag) 6u; Coed Football (5v5 Flag) 8u; Coed Football (5v5 Flag) 10u; Coed Football (5v5 Flag) 12u; Coed Football (5v5 Flag) 14u; Girl's Football (5v5 Flag) 6u; Girl's Football (5v5 Flag) 8u; Girl's Football (5v5 Flag) 10u; Girl's Football (5v5 Flag) 12u; Girl's Football (5v5 Flag) 14u; Girl's Football (7v7) HIGH SCHOOL GIRLS",
-      "entry_fee": "$450.00 USD per team",
-      "registration_ends": "Nov 15, 2026 @ 12:00 AM",
-      "organizer": "CenTex Sports Center",
-      "contact_email": "nflcentexsportscenter@gmail.com",
-      "contact_phone": "5128848333",
-      "event_url": "https://www.zortssports.com/join/tournament/27358",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27358",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27358",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's Football (5v5 Flag) 6u",
-        "Girl's Football (5v5 Flag) 8u",
-        "Girl's Football (5v5 Flag) 10u",
-        "Girl's Football (5v5 Flag) 12u",
-        "Girl's Football (5v5 Flag) 14u",
-        "Girl's Football (7v7) HIGH SCHOOL GIRLS"
-      ],
-      "open_divisions": [
-        "Coed Football (5v5 Flag) 6u",
-        "Coed Football (5v5 Flag) 8u",
-        "Coed Football (5v5 Flag) 10u",
-        "Coed Football (5v5 Flag) 12u",
-        "Coed Football (5v5 Flag) 14u"
-      ]
-    },
     {
       "id": "zorts-27234",
       "category": "flag",
       "state": "TX",
       "name": "ATX Bowl 2026 (Arlington, TX)",
-      "start_date": "2026-11-20",
+      "start_date": "2026-11-21",
       "end_date": "2026-11-22",
       "city": "Arlington",
       "venue": "Harold Patterson Sports Center, West Bardin Road, Arlington, TX, USA",
       "sport": "Football (5v5 Flag)",
-      "age_groups": "6u to 18u",
-      "divisions": "Boy's 6U; Boy's 7U; Boy's 8U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 14U; Boy's HS; Girl's 8U; Girl's 10U; Girl's 12U; Girl's 16U; Girl's 18U; Girl's Air it Out - 8U; Girl's Air it Out - 10U; Girl's Air it Out - 12U; Girl's Air it Out - 14U; Girl's Air it Out - HS; Boy's Air it Out - 8U; Boy's Air it Out - 10U; Boy's Air it Out - 12U; Boy's Air it Out - 14U; Boy's Air it Out - HS",
+      "age_groups": "8u to 18u",
+      "divisions": "Boy's 9U; Boy's 10U; Boy's 12U; Boy's 14U; Girl's 8U; Girl's 10U; Girl's 12U; Girl's 16U; Girl's 18U; Girl's Air it Out - HS; Boy's Air it Out - 12U",
       "entry_fee": "$425.00 USD per team",
       "registration_ends": "Nov 13, 2026 @ 11:55 PM",
       "organizer": "iFlag Youth",
@@ -248,7 +36,7 @@
       "also_listed_as": [
         "https://flag50.com/tournaments/2026-atx-bowl-arlington-tx-ff3acfae7d"
       ],
-      "conflicts": "start date differs: zorts 27234=2026-11-20; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-21 | end date differs: zorts 27234=2026-11-22; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-22 | Flag50 marks a listing as adult (isAdult)",
+      "conflicts": "start date differs: zorts 27234=2026-11-21; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-21 | end date differs: zorts 27234=2026-11-22; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-22 | Flag50 marks a listing as adult (isAdult)",
       "has_girls_divisions": true,
       "girls_divisions": [
         "Girl's 8U",
@@ -256,27 +44,14 @@
         "Girl's 12U",
         "Girl's 16U",
         "Girl's 18U",
-        "Girl's Air it Out - 8U",
-        "Girl's Air it Out - 10U",
-        "Girl's Air it Out - 12U",
-        "Girl's Air it Out - 14U",
         "Girl's Air it Out - HS"
       ],
       "open_divisions": [
-        "Boy's 6U",
-        "Boy's 7U",
-        "Boy's 8U",
         "Boy's 9U",
         "Boy's 10U",
-        "Boy's 11U",
         "Boy's 12U",
         "Boy's 14U",
-        "Boy's HS",
-        "Boy's Air it Out - 8U",
-        "Boy's Air it Out - 10U",
-        "Boy's Air it Out - 12U",
-        "Boy's Air it Out - 14U",
-        "Boy's Air it Out - HS"
+        "Boy's Air it Out - 12U"
       ]
     },
     {
@@ -408,6 +183,48 @@
       ]
     },
     {
+      "id": "zorts-28564",
+      "category": "flag",
+      "state": "TX",
+      "name": "TurkeyPalooza 2026",
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "city": "El Paso",
+      "venue": "Ysleta High School, Alameda Avenue, El Paso, TX, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "4u to 18u",
+      "divisions": "Coed 6U Coed; Coed 8u Coed; Coed 10U Coed; Coed 12U Coed; Coed 14U Coed; Coed HS-18U; Girl's 12U All Girls; Girl's HS-18u All Girls",
+      "entry_fee": "$20.00 USD per athlete",
+      "registration_ends": "Nov 20, 2026 @ 12:00 AM",
+      "organizer": "Game Time Sports League",
+      "contact_email": "commish@gametimefb.com",
+      "contact_phone": "915-694-1451",
+      "event_url": "https://www.zortssports.com/join/tournament/28564",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28564",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28564",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 12U All Girls",
+        "Girl's HS-18u All Girls"
+      ],
+      "open_divisions": [
+        "Coed 6U Coed",
+        "Coed 8u Coed",
+        "Coed 10U Coed",
+        "Coed 12U Coed",
+        "Coed 14U Coed",
+        "Coed HS-18U"
+      ]
+    },
+    {
       "id": "zorts-27515",
       "category": "flag",
       "state": "TX",
@@ -419,7 +236,7 @@
       "sport": "Football (5v5 Flag), Football (Tackle)",
       "age_groups": "5u to 18u",
       "divisions": "Boy's Football (5v5 Flag) 5U FLAG; Boy's Football (5v5 Flag) 6U FLAG; Boy's Football (Tackle) 6U TACKLE; Boy's Football (Tackle) 7U; Boy's Football (Tackle) 9U; Boy's Football (Tackle) 11U; Boy's Football (Tackle) 12U; Boy's Football (Tackle) 13U; Girl's Football (5v5 Flag) 8U GIRLS 5V5; Girl's Football (5v5 Flag) 10U GIRLS 5V5; Girl's Football (5v5 Flag) HIGH SCHOOL GIRLS 5V5; Girl's Football (5v5 Flag) 14U GIRLS 5V5",
-      "entry_fee": "$100.00 USD per team",
+      "entry_fee": "$0.00 USD per team",
       "registration_ends": "Nov 26, 2026 @ 12:00 AM",
       "organizer": "TEXAS BATTLE WARS \"STATE CHAMPIONSHIP\" 10",
       "contact_email": "christopher.curryjr@yahoo.com",
@@ -435,7 +252,7 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27515",
       "flag50_url": "https://flag50.com/tournaments/texas-battle-wars-10-boys-flag-tackle-girls-5v5-arlington-tx-zs27515",
       "also_listed_as": [],
-      "conflicts": "fee differs: zorts 27515=$100.00 USD per team; flag50 flag50-zs27515=$250.00 USD per team",
+      "conflicts": "fee differs: zorts 27515=$0.00 USD per team; flag50 flag50-zs27515=$250.00 USD per team",
       "has_girls_divisions": true,
       "girls_divisions": [
         "Girl's Football (5v5 Flag) 8U GIRLS 5V5",
@@ -465,7 +282,7 @@
       "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "7u to 17u",
-      "divisions": "Coed 8u Coed; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Girl's 14u Girls; Girl's High School Girls",
+      "divisions": "Coed 8u Coed; Girl's 8u Girls; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
       "entry_fee": "$350.00 USD per team",
       "registration_ends": "Nov 25, 2026 @ 9:00 PM",
       "organizer": "Lone Star Football Tournaments",
@@ -485,6 +302,7 @@
       "conflicts": "",
       "has_girls_divisions": true,
       "girls_divisions": [
+        "Girl's 8u Girls",
         "Girl's 10u Girls",
         "Girl's 12u Girls",
         "Girl's 14u Girls",
@@ -493,7 +311,8 @@
       "open_divisions": [
         "Coed 8u Coed",
         "Coed 10u Coed",
-        "Coed 12u Coed"
+        "Coed 12u Coed",
+        "Coed 14u Coed"
       ]
     },
     {
@@ -578,6 +397,53 @@
         "Boy's Football (7v7) Boys 7v7",
         "Coed Football (5v5 Flag) 5U Flag",
         "Coed Football (5v5 Flag) 5U Flag"
+      ]
+    },
+    {
+      "id": "zorts-26621",
+      "category": "flag",
+      "state": "TX",
+      "name": "SLCT FLAG TURKEY BOWL CHAMPIONSHIPS brought to you by FLAGFOOTBALLX",
+      "start_date": "2026-11-29",
+      "end_date": "2026-11-29",
+      "city": "Fort Worth",
+      "venue": "Central High School, Ray White Road, Fort Worth, TX, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "6u to 18u",
+      "divisions": "Boy's 6U; Boy's 7U; Boy's 8U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 13/14U; Girl's 8UG; Girl's 10UG; Girl's 12UG; Girl's 14UG; Girl's HSG",
+      "entry_fee": "$350.00 USD per team",
+      "registration_ends": "Nov 29, 2026 @ 12:00 AM",
+      "organizer": "FlagFootballX",
+      "contact_email": "Text us at 817.482.3800",
+      "contact_phone": "817.482.3800",
+      "event_url": "https://www.zortssports.com/join/tournament/26621",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26621",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/26621",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8UG",
+        "Girl's 10UG",
+        "Girl's 12UG",
+        "Girl's 14UG",
+        "Girl's HSG"
+      ],
+      "open_divisions": [
+        "Boy's 6U",
+        "Boy's 7U",
+        "Boy's 8U",
+        "Boy's 9U",
+        "Boy's 10U",
+        "Boy's 11U",
+        "Boy's 12U",
+        "Boy's 13/14U"
       ]
     },
     {
@@ -678,7 +544,7 @@
       "sport": "Football (5v5 Flag)",
       "age_groups": "5u to 18u",
       "divisions": "",
-      "entry_fee": "$395.00 USD per team",
+      "entry_fee": "$297.00 USD per team",
       "registration_ends": "Dec 2, 2026 @ 12:00 AM",
       "organizer": "G-Series Tournaments",
       "contact_email": "ssmith@gridironfb.com",
@@ -694,7 +560,7 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27334",
       "flag50_url": "https://flag50.com/tournaments/gridiron-s-g5-national-qualifier-fort-worth-tx-zs27334",
       "also_listed_as": [],
-      "conflicts": "",
+      "conflicts": "fee differs: zorts 27334=$297.00 USD per team; flag50 flag50-zs27334=$395.00 USD per team",
       "has_girls_divisions": false,
       "girls_divisions": [],
       "open_divisions": []
@@ -732,45 +598,6 @@
       "has_girls_divisions": true,
       "girls_divisions": [],
       "open_divisions": []
-    },
-    {
-      "id": "zorts-28439",
-      "category": "flag",
-      "state": "TX",
-      "name": "Texas Legacy Youth Tackle Football Tournament",
-      "start_date": "2026-12-05",
-      "end_date": "2026-12-06",
-      "city": "Houston",
-      "venue": "13051 Whittington Dr, Houston, TX 77077, USA",
-      "sport": "Coed Football (5v5 Flag), Football (Tackle)",
-      "age_groups": "5u to 13u",
-      "divisions": "Football (Tackle) 6u; Football (Tackle) 8u; Football (Tackle) 10u; Football (Tackle) 12u; Football (Tackle) 13u; Football (5v5 Flag) 5u",
-      "entry_fee": "$200.00 USD per team",
-      "registration_ends": "Dec 1, 2026 @ 12:00 AM",
-      "organizer": "WAR 101",
-      "contact_email": "WarUnitedInc@gmail.com",
-      "contact_phone": "(713) 340-9609",
-      "event_url": "https://www.zortssports.com/join/tournament/28439",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28439",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28439",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": [
-        "Football (Tackle) 6u",
-        "Football (Tackle) 8u",
-        "Football (Tackle) 10u",
-        "Football (Tackle) 12u",
-        "Football (Tackle) 13u",
-        "Football (5v5 Flag) 5u"
-      ]
     },
     {
       "id": "flag50-ffb265944e",
@@ -906,6 +733,45 @@
       ]
     },
     {
+      "id": "zorts-28588",
+      "category": "flag",
+      "state": "TX",
+      "name": "Texas Legacy Youth Tackle Football Tournament",
+      "start_date": "2026-12-12",
+      "end_date": "2026-12-13",
+      "city": "Houston",
+      "venue": "13051 Whittington Dr, Houston, TX 77077, USA",
+      "sport": "Coed Football (5v5 Flag), Football (Tackle)",
+      "age_groups": "5u to 13u",
+      "divisions": "Football (Tackle) 6u; Football (Tackle) 8u; Football (Tackle) 10u; Football (Tackle) 12u; Football (Tackle) 13u; Football (5v5 Flag) 5u",
+      "entry_fee": "$200.00 USD per team",
+      "registration_ends": "Dec 8, 2026 @ 12:00 AM",
+      "organizer": "Texas Legacy",
+      "contact_email": "TexasLegacyLeague@gmail.com",
+      "contact_phone": "(713) 340-9609",
+      "event_url": "https://www.zortssports.com/join/tournament/28588",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28588",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28588",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "Football (Tackle) 6u",
+        "Football (Tackle) 8u",
+        "Football (Tackle) 10u",
+        "Football (Tackle) 12u",
+        "Football (Tackle) 13u",
+        "Football (5v5 Flag) 5u"
+      ]
+    },
+    {
       "id": "zorts-28075",
       "category": "flag",
       "state": "TX",
@@ -970,7 +836,7 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/27601",
       "flag50_url": "https://flag50.com/tournaments/toys-for-tots-flag-football-tournament-lubbock-tx-zs27601",
       "also_listed_as": [],
-      "conflicts": "linked Zorts event 27601 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - December 12 to December 13, 2026",
+      "conflicts": "linked Zorts event 27601 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - December 13, 2026 | start date differs: flag50=2026-12-12; zorts page=2026-12-13",
       "has_girls_divisions": false,
       "girls_divisions": [],
       "open_divisions": []
@@ -1126,7 +992,7 @@
       "venue": "UTSA, UTSA Circle, San Antonio, TX, USA",
       "sport": "Football (7v7), Football (5v5 Flag)",
       "age_groups": "8u to 18u",
-      "divisions": "Boy's Football (7v7) 8U; Boy's Football (7v7) 9U; Boy's Football (7v7) 10U; Boy's Football (7v7) 11U; Boy's Football (7v7) 12U; Boy's Football (7v7) 13U; Boy's Football (7v7) 15u; Boy's Football (7v7) 16U; Boy's Football (7v7) 18U; Girl's Football (5v5 Flag) 8U; Girl's Football (5v5 Flag) 10U; Girl's Football (5v5 Flag) 12U; Girl's Football (5v5 Flag) HIGH SCHOOL",
+      "divisions": "Boy's Football (7v7) 8U; Boy's Football (7v7) 9U; Boy's Football (7v7) 10U; Boy's Football (7v7) 11U; Boy's Football (7v7) 12U; Boy's Football (7v7) 14u; Boy's Football (7v7) 15u; Boy's Football (7v7) 16U; Boy's Football (7v7) 18U; Girl's Football (5v5 Flag) 8U; Girl's Football (5v5 Flag) 10U; Girl's Football (5v5 Flag) 12U; Girl's Football (5v5 Flag) HIGH SCHOOL; Girl's Football (5v5 Flag) 14u",
       "entry_fee": "$475.75 USD per team",
       "registration_ends": "Jan 14, 2027 @ 12:00 AM",
       "organizer": "The San Antonio Tone Baby\u2019s",
@@ -1149,7 +1015,8 @@
         "Girl's Football (5v5 Flag) 8U",
         "Girl's Football (5v5 Flag) 10U",
         "Girl's Football (5v5 Flag) 12U",
-        "Girl's Football (5v5 Flag) HIGH SCHOOL"
+        "Girl's Football (5v5 Flag) HIGH SCHOOL",
+        "Girl's Football (5v5 Flag) 14u"
       ],
       "open_divisions": [
         "Boy's Football (7v7) 8U",
@@ -1157,7 +1024,7 @@
         "Boy's Football (7v7) 10U",
         "Boy's Football (7v7) 11U",
         "Boy's Football (7v7) 12U",
-        "Boy's Football (7v7) 13U",
+        "Boy's Football (7v7) 14u",
         "Boy's Football (7v7) 15u",
         "Boy's Football (7v7) 16U",
         "Boy's Football (7v7) 18U"
@@ -1416,47 +1283,6 @@
         "Boy's 12U",
         "Boy's 13U",
         "Boy's 14U"
-      ]
-    },
-    {
-      "id": "zorts-25422",
-      "category": "flag",
-      "state": "TX",
-      "name": "Winter Soldiers 2027 Flag Football Tournament",
-      "start_date": "2027-01-09",
-      "end_date": "2027-01-09",
-      "city": "Spring",
-      "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "7u to 14u",
-      "divisions": "Coed 8u Coed; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Girl's 14u Girls",
-      "entry_fee": "$300.00 USD per team",
-      "registration_ends": "Jan 7, 2027 @ 12:00 AM",
-      "organizer": "Lone Star Football Tournaments",
-      "contact_email": "logan@thefarmleague.com",
-      "contact_phone": "7132993335",
-      "event_url": "https://www.zortssports.com/join/tournament/25422",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25422",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/25422",
-      "flag50_url": "https://flag50.com/tournaments/winter-soldiers-2027-flag-football-tournament-spring-tx-25422",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 10u Girls",
-        "Girl's 12u Girls",
-        "Girl's 14u Girls"
-      ],
-      "open_divisions": [
-        "Coed 8u Coed",
-        "Coed 10u Coed",
-        "Coed 12u Coed"
       ]
     },
     {
@@ -1921,6 +1747,47 @@
       ]
     },
     {
+      "id": "zorts-25422",
+      "category": "flag",
+      "state": "TX",
+      "name": "Winter Soldiers 2027 Flag Football Tournament",
+      "start_date": "2027-01-23",
+      "end_date": "2027-01-23",
+      "city": "Spring",
+      "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "7u to 14u",
+      "divisions": "Coed 8u Coed; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Girl's 14u Girls",
+      "entry_fee": "$300.00 USD per team",
+      "registration_ends": "Jan 7, 2027 @ 12:00 AM",
+      "organizer": "Lone Star Football Tournaments",
+      "contact_email": "logan@thefarmleague.com",
+      "contact_phone": "7132993335",
+      "event_url": "https://www.zortssports.com/join/tournament/25422",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25422",
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/25422",
+      "flag50_url": "https://flag50.com/tournaments/winter-soldiers-2027-flag-football-tournament-spring-tx-25422",
+      "also_listed_as": [],
+      "conflicts": "start date differs: zorts 25422=2027-01-23; flag50 flag50-25422=2027-01-09 | end date differs: zorts 25422=2027-01-23; flag50 flag50-25422=2027-01-09",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10u Girls",
+        "Girl's 12u Girls",
+        "Girl's 14u Girls"
+      ],
+      "open_divisions": [
+        "Coed 8u Coed",
+        "Coed 10u Coed",
+        "Coed 12u Coed"
+      ]
+    },
+    {
       "id": "zorts-27767",
       "category": "flag",
       "state": "TX",
@@ -2167,6 +2034,43 @@
         "Coed Football (7v7) 14U",
         "Coed Football (7v7) 15U",
         "Coed Football (7v7) 18U"
+      ]
+    },
+    {
+      "id": "zorts-28621",
+      "category": "7v7",
+      "state": "TX",
+      "name": "TURF WARS I: The Opening Snap",
+      "start_date": "2027-01-30",
+      "end_date": "2027-01-31",
+      "city": "Fort Worth",
+      "venue": "North Crowley High School, South Hulen Street, Fort Worth, TX, USA",
+      "sport": "Football (7v7), Football (5v5 Flag), Football (5v5 Lineman)",
+      "age_groups": "5u to 18u",
+      "divisions": "Boy's Football (7v7) 5u to 18u; Girl's Football (5v5 Flag) 8u to 18u; Boy's Football (5v5 Lineman) 8u to 18u",
+      "entry_fee": "$300.00 USD per team",
+      "registration_ends": "Jan 25, 2027 @ 12:00 PM",
+      "organizer": "Xtreme Sports",
+      "contact_email": "info@xtremeyouthsports.com",
+      "contact_phone": "8704897093",
+      "event_url": "https://www.zortssports.com/join/tournament/28621",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28621",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28621",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) 8u to 18u"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) 5u to 18u",
+        "Boy's Football (5v5 Lineman) 8u to 18u"
       ]
     },
     {
@@ -3022,15 +2926,15 @@
       "name": "Winter Bounty",
       "start_date": "2027-02-20",
       "end_date": "2027-02-20",
-      "city": "",
-      "venue": "Texas, USA",
+      "city": "College Station",
+      "venue": "College Station, TX, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "8u to 18u",
       "divisions": "Coed 8u; Coed 10u; Coed 12u; Coed 14u; Girl's 8u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's HIGH SCHOOL GIRLS",
-      "entry_fee": "$350.00 USD per team",
+      "entry_fee": "$375.00 USD per team",
       "registration_ends": "Feb 14, 2027 @ 12:00 AM",
       "organizer": "Mission 5 Flag Tournament Series",
-      "contact_email": "matthewmarucci@icloud.com",
+      "contact_email": "Info@nflflagaggieland.com",
       "contact_phone": "9797778056",
       "event_url": "https://www.zortssports.com/join/tournament/28423",
       "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28423",
@@ -3232,6 +3136,51 @@
       ]
     },
     {
+      "id": "zorts-28570",
+      "category": "7v7",
+      "state": "TX",
+      "name": "2027 National Recruiting Tournament (Boys & Girls)",
+      "start_date": "2027-03-06",
+      "end_date": "2027-03-07",
+      "city": "The Woodlands",
+      "venue": "4055 Marsico Place, The Woodlands, TX, USA",
+      "sport": "Football (7v7), Football (5v5 Flag)",
+      "age_groups": "8u to 18u",
+      "divisions": "Boy's Football (7v7) Boys 8U; Boy's Football (7v7) Boys 10U; Boy's Football (7v7) Boys 12U; Boy's Football (7v7) Boys 14U; Boy's Football (7v7) Boys 15U; Boy's Football (7v7) Boys 18U; Girl's Football (5v5 Flag) Girls 8U; Girl's Football (5v5 Flag) Girls 10U; Girl's Football (5v5 Flag) Girls 12U; Girl's Football (5v5 Flag) Girls 14U; Girl's Football (7v7) Girls Varsity Flag",
+      "entry_fee": "$700.00 USD per team",
+      "registration_ends": "Mar 2, 2027 @ 12:00 AM",
+      "organizer": "ENDZONE 7on7",
+      "contact_email": "ez7on7bm@gmail.com",
+      "contact_phone": "(832) 731-3714",
+      "event_url": "https://www.zortssports.com/join/tournament/28570",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28570",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28570",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) Girls 8U",
+        "Girl's Football (5v5 Flag) Girls 10U",
+        "Girl's Football (5v5 Flag) Girls 12U",
+        "Girl's Football (5v5 Flag) Girls 14U",
+        "Girl's Football (7v7) Girls Varsity Flag"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) Boys 8U",
+        "Boy's Football (7v7) Boys 10U",
+        "Boy's Football (7v7) Boys 12U",
+        "Boy's Football (7v7) Boys 14U",
+        "Boy's Football (7v7) Boys 15U",
+        "Boy's Football (7v7) Boys 18U"
+      ]
+    },
+    {
       "id": "zorts-28059",
       "category": "flag",
       "state": "TX",
@@ -3341,7 +3290,7 @@
       "end_date": "2027-03-07",
       "city": "Houston",
       "venue": "Houston, TX, USA",
-      "sport": "Boy's Football (7v7)",
+      "sport": "Coed Football (7v7)",
       "age_groups": "10u to 18u",
       "divisions": "10u; 12u; 14u; 15u; 18u",
       "entry_fee": "$400.00 USD per team",
@@ -3500,6 +3449,49 @@
         "Boy's Football (5v5 Lineman) 10U Lineman Challenge",
         "Boy's Football (5v5 Lineman) 12U Lineman Challenge",
         "Boy's Football (5v5 Lineman) MS (13U/14U) Lineman Challenge"
+      ]
+    },
+    {
+      "id": "zorts-25529",
+      "category": "flag",
+      "state": "TX",
+      "name": "Gold Rush 2027 Flag Football Tournament",
+      "start_date": "2027-03-13",
+      "end_date": "2027-03-13",
+      "city": "Spring",
+      "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "7u to 14u",
+      "divisions": "Coed 8u Coed; Girl's 8u Girls; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Coed 14u Coed; Girl's 14u Girls",
+      "entry_fee": "$300.00 USD per team",
+      "registration_ends": "Mar 10, 2027 @ 12:00 AM",
+      "organizer": "Lone Star Football Tournaments",
+      "contact_email": "logan@thefarmleague.com",
+      "contact_phone": "7132993335",
+      "event_url": "https://www.zortssports.com/join/tournament/25529",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25529",
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/25529",
+      "flag50_url": "https://flag50.com/tournaments/gold-rush-2027-flag-football-tournament-spring-tx-25529",
+      "also_listed_as": [],
+      "conflicts": "start date differs: zorts 25529=2027-03-13; flag50 flag50-25529=2027-03-20 | end date differs: zorts 25529=2027-03-13; flag50 flag50-25529=2027-03-20",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8u Girls",
+        "Girl's 10u Girls",
+        "Girl's 12u Girls",
+        "Girl's 14u Girls"
+      ],
+      "open_divisions": [
+        "Coed 8u Coed",
+        "Coed 10u Coed",
+        "Coed 12u Coed",
+        "Coed 14u Coed"
       ]
     },
     {
@@ -3738,7 +3730,7 @@
       "venue": "Texas, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "7u to 18u",
-      "divisions": "",
+      "divisions": "Boy's 7u-8u; Boy's 9u-10u; Boy's 11u-12u; Boy's 13u-14u; Girl's 8u-10u; Girl's 11u-12u; Girl's 13u-14u; Girl's HS",
       "entry_fee": "$675.00 USD per team",
       "registration_ends": "Feb 20, 2027 @ 12:00 AM",
       "organizer": "Battle Flag Football",
@@ -3756,49 +3748,18 @@
       "flag50_url": "https://flag50.com/tournaments/battle5-texas-national-qualifier-texas-tx-zs27215",
       "also_listed_as": [],
       "conflicts": "",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": []
-    },
-    {
-      "id": "zorts-25529",
-      "category": "flag",
-      "state": "TX",
-      "name": "Gold Rush 2027 Flag Football Tournament",
-      "start_date": "2027-03-20",
-      "end_date": "2027-03-20",
-      "city": "Spring",
-      "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "7u to 14u",
-      "divisions": "Coed 8u Coed; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Girl's 14u Girls",
-      "entry_fee": "$300.00 USD per team",
-      "registration_ends": "Mar 17, 2027 @ 12:00 AM",
-      "organizer": "Lone Star Football Tournaments",
-      "contact_email": "logan@thefarmleague.com",
-      "contact_phone": "7132993335",
-      "event_url": "https://www.zortssports.com/join/tournament/25529",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25529",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/25529",
-      "flag50_url": "https://flag50.com/tournaments/gold-rush-2027-flag-football-tournament-spring-tx-25529",
-      "also_listed_as": [],
-      "conflicts": "",
       "has_girls_divisions": true,
       "girls_divisions": [
-        "Girl's 10u Girls",
-        "Girl's 12u Girls",
-        "Girl's 14u Girls"
+        "Girl's 8u-10u",
+        "Girl's 11u-12u",
+        "Girl's 13u-14u",
+        "Girl's HS"
       ],
       "open_divisions": [
-        "Coed 8u Coed",
-        "Coed 10u Coed",
-        "Coed 12u Coed"
+        "Boy's 7u-8u",
+        "Boy's 9u-10u",
+        "Boy's 11u-12u",
+        "Boy's 13u-14u"
       ]
     },
     {
