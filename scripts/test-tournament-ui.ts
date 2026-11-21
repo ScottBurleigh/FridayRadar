@@ -170,8 +170,8 @@ function checkAges() {
     return row!;
   };
   assert.equal(
-    ageLine(byName("TurkeyPalooza 2026")),
-    "6U, 8U, 10U, 12U, 14U, 18U, HS (girls: 12U, 18U, HS)",
+    ageLine(byName("Black Friday Blitz 2026 Flag Football Tournament")),
+    "8U, 10U, 12U, 14U (girls: 8U, 10U, 12U, 14U, HS)",
   );
   assert.equal(
     ageLine(byName("ATX Bowl 2026 (Arlington, TX)")),

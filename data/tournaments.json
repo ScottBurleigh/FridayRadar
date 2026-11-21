@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-19T13:08:59",
+  "generated": "2026-11-21T07:18:40",
   "window": [
-    "2026-11-19",
-    "2027-06-19"
+    "2026-11-21",
+    "2027-06-21"
   ],
-  "count": 128,
+  "count": 125,
   "tournaments": [
     {
       "id": "zorts-27234",
@@ -32,11 +32,9 @@
       ],
       "verified": true,
       "zorts_url": "https://www.zortssports.com/join/tournament/27234",
-      "flag50_url": "https://flag50.com/tournaments/atx-bowl-2026-arlington-tx-arlington-tx-fffeb39e2f",
-      "also_listed_as": [
-        "https://flag50.com/tournaments/2026-atx-bowl-arlington-tx-ff3acfae7d"
-      ],
-      "conflicts": "start date differs: zorts 27234=2026-11-21; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-21 | end date differs: zorts 27234=2026-11-22; flag50 flag50-fffeb39e2f=2026-11-20; flag50 flag50-ff3acfae7d=2026-11-22 | Flag50 marks a listing as adult (isAdult)",
+      "flag50_url": "https://flag50.com/tournaments/2026-atx-bowl-arlington-tx-ff3acfae7d",
+      "also_listed_as": [],
+      "conflicts": "Flag50 marks a listing as adult (isAdult)",
       "has_girls_divisions": true,
       "girls_divisions": [
         "Girl's 8U",
@@ -97,128 +95,6 @@
         "Boy's 10u",
         "Boy's 12u",
         "Boy's 13u"
-      ]
-    },
-    {
-      "id": "zorts-26736",
-      "category": "both",
-      "state": "TX",
-      "name": "Turkey Bowl 2026",
-      "start_date": "2026-11-21",
-      "end_date": "2026-11-21",
-      "city": "Fort Worth",
-      "venue": "Boswell High School In Fort Worth Texas, West Bailey Boswell Road, Fort Worth, TX, USA",
-      "sport": "Boy's Football (7v7), Football (5v5 Flag)",
-      "age_groups": "7u to 18u",
-      "divisions": "Football (7v7) 8U; Football (7v7) 9U/10U; Football (5v5 Flag) 8U Flag; Football (7v7) 12U; Football (5v5 Flag) 10U Flag; Football (7v7) 13U/14U; Football (7v7) HS Division",
-      "entry_fee": "$397.00 USD per team",
-      "registration_ends": "Nov 20, 2026 @ 12:00 AM",
-      "organizer": "Gridiron Texas Elite Tournaments",
-      "contact_email": "ssmith@gridironfb.com",
-      "contact_phone": "(817) 690-8458",
-      "event_url": "https://www.zortssports.com/join/tournament/26736",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/26736",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/26736",
-      "flag50_url": "",
-      "also_listed_as": [
-        "https://www.zortssports.com/join/tournament/28492"
-      ],
-      "conflicts": "fee differs: zorts 28492=$319.00 USD per team; zorts 26736=$397.00 USD per team",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": [
-        "Football (7v7) 8U",
-        "Football (7v7) 9U/10U",
-        "Football (5v5 Flag) 8U Flag",
-        "Football (7v7) 12U",
-        "Football (5v5 Flag) 10U Flag",
-        "Football (7v7) 13U/14U",
-        "Football (7v7) HS Division"
-      ]
-    },
-    {
-      "id": "zorts-27781",
-      "category": "7v7",
-      "state": "TX",
-      "name": "TURKEY BOWL 2026",
-      "start_date": "2026-11-21",
-      "end_date": "2026-11-21",
-      "city": "Laredo",
-      "venue": "Laredo, TX, USA",
-      "sport": "Coed Football (7v7)",
-      "age_groups": "11u to 18u",
-      "divisions": "7th Grade; 8th Grade; Freshman; Junior Varsity; Senior Varsity",
-      "entry_fee": "$300.00 USD per team",
-      "registration_ends": "Nov 19, 2026 @ 12:00 AM",
-      "organizer": "LTX Affiliated 7v7 Football League",
-      "contact_email": "ltxaffiliated7v7@gmail.com",
-      "contact_phone": "9567630140",
-      "event_url": "https://www.zortssports.com/join/tournament/27781",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27781",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27781",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": [
-        "7th Grade",
-        "8th Grade",
-        "Freshman",
-        "Junior Varsity",
-        "Senior Varsity"
-      ]
-    },
-    {
-      "id": "zorts-28564",
-      "category": "flag",
-      "state": "TX",
-      "name": "TurkeyPalooza 2026",
-      "start_date": "2026-11-21",
-      "end_date": "2026-11-21",
-      "city": "El Paso",
-      "venue": "Ysleta High School, Alameda Avenue, El Paso, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "4u to 18u",
-      "divisions": "Coed 6U Coed; Coed 8u Coed; Coed 10U Coed; Coed 12U Coed; Coed 14U Coed; Coed HS-18U; Girl's 12U All Girls; Girl's HS-18u All Girls",
-      "entry_fee": "$20.00 USD per athlete",
-      "registration_ends": "Nov 20, 2026 @ 12:00 AM",
-      "organizer": "Game Time Sports League",
-      "contact_email": "commish@gametimefb.com",
-      "contact_phone": "915-694-1451",
-      "event_url": "https://www.zortssports.com/join/tournament/28564",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28564",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28564",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 12U All Girls",
-        "Girl's HS-18u All Girls"
-      ],
-      "open_divisions": [
-        "Coed 6U Coed",
-        "Coed 8u Coed",
-        "Coed 10U Coed",
-        "Coed 12U Coed",
-        "Coed 14U Coed",
-        "Coed HS-18U"
       ]
     },
     {
@@ -441,7 +317,7 @@
       "sport": "Boy's Football (5v5 Flag), Football (Tackle)",
       "age_groups": "4u to 13u",
       "divisions": "Football (5v5 Flag) 6U - 11 Man Flag REC; Football (Tackle) 6U REC; Football (Tackle) 7u REC; Football (Tackle) 8U REC; Football (Tackle) 9U REC; Football (Tackle) 10U REC; Football (Tackle) 11U REC; Football (Tackle) 12U REC; Football (Tackle) 13U REC",
-      "entry_fee": "$650.00 USD per team",
+      "entry_fee": "$500.00 USD per team",
       "registration_ends": "Nov 29, 2026 @ 11:00 PM",
       "organizer": "Pinnacle",
       "contact_email": "tourneys@psgllc.org",
@@ -716,45 +592,6 @@
       ]
     },
     {
-      "id": "zorts-28588",
-      "category": "flag",
-      "state": "TX",
-      "name": "Texas Legacy Youth Tackle Football Tournament",
-      "start_date": "2026-12-12",
-      "end_date": "2026-12-13",
-      "city": "Houston",
-      "venue": "13051 Whittington Dr, Houston, TX 77077, USA",
-      "sport": "Coed Football (5v5 Flag), Football (Tackle)",
-      "age_groups": "5u to 13u",
-      "divisions": "Football (Tackle) 6u; Football (Tackle) 8u; Football (Tackle) 10u; Football (Tackle) 12u; Football (Tackle) 13u; Football (5v5 Flag) 5u",
-      "entry_fee": "$200.00 USD per team",
-      "registration_ends": "Dec 8, 2026 @ 12:00 AM",
-      "organizer": "Texas Legacy",
-      "contact_email": "TexasLegacyLeague@gmail.com",
-      "contact_phone": "(713) 340-9609",
-      "event_url": "https://www.zortssports.com/join/tournament/28588",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28588",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28588",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": [
-        "Football (Tackle) 6u",
-        "Football (Tackle) 8u",
-        "Football (Tackle) 10u",
-        "Football (Tackle) 12u",
-        "Football (Tackle) 13u",
-        "Football (5v5 Flag) 5u"
-      ]
-    },
-    {
       "id": "zorts-28075",
       "category": "flag",
       "state": "TX",
@@ -1009,7 +846,7 @@
       "venue": "UTSA, UTSA Circle, San Antonio, TX, USA",
       "sport": "Football (7v7), Football (5v5 Flag)",
       "age_groups": "8u to 18u",
-      "divisions": "Boy's Football (7v7) 8U; Boy's Football (7v7) 9U; Boy's Football (7v7) 10U; Boy's Football (7v7) 11U; Boy's Football (7v7) 12U; Boy's Football (7v7) 14u; Boy's Football (7v7) 15u; Boy's Football (7v7) 16U; Boy's Football (7v7) 18U; Girl's Football (5v5 Flag) 8U; Girl's Football (5v5 Flag) 10U; Girl's Football (5v5 Flag) 12U; Girl's Football (5v5 Flag) HIGH SCHOOL; Girl's Football (5v5 Flag) 14u",
+      "divisions": "Boy's Football (7v7) 8U; Boy's Football (7v7) 9U; Boy's Football (7v7) 10U; Boy's Football (7v7) 11U; Boy's Football (7v7) 12U; Boy's Football (7v7) 14u; Boy's Football (7v7) 15u; Boy's Football (7v7) 16U; Boy's Football (7v7) 18U; Girl's Football (5v5 Flag) 8U; Girl's Football (5v5 Flag) 10U; Girl's Football (5v5 Flag) 12U; Girl's Football (5v5 Flag) HIGH SCHOOL; Girl's Football (5v5 Flag) 14u; Boy's Football (7v7) 13u",
       "entry_fee": "$475.75 USD per team",
       "registration_ends": "Jan 14, 2027 @ 12:00 AM",
       "organizer": "The San Antonio Tone Baby\u2019s",
@@ -1044,7 +881,8 @@
         "Boy's Football (7v7) 14u",
         "Boy's Football (7v7) 15u",
         "Boy's Football (7v7) 16U",
-        "Boy's Football (7v7) 18U"
+        "Boy's Football (7v7) 18U",
+        "Boy's Football (7v7) 13u"
       ]
     },
     {
@@ -2088,6 +1926,43 @@
       "open_divisions": [
         "Boy's Football (7v7) 5u to 18u",
         "Boy's Football (5v5 Lineman) 8u to 18u"
+      ]
+    },
+    {
+      "id": "zorts-28744",
+      "category": "flag",
+      "state": "TX",
+      "name": "Alamo City Winter Blitz",
+      "start_date": "2027-01-31",
+      "end_date": "2027-01-31",
+      "city": "San Antonio",
+      "venue": "San Antonio, TX, USA",
+      "sport": "Boy's Football (5v5 Flag)",
+      "age_groups": "8u to 14u",
+      "divisions": "8u; 10u; 12u; 14u",
+      "entry_fee": "$250.00 USD per team",
+      "registration_ends": "Jan 20, 2027 @ 12:00 AM",
+      "organizer": "Alamo City Flag Tournaments",
+      "contact_email": "antonio.lopez@acyf.us",
+      "contact_phone": "2104599737",
+      "event_url": "https://www.zortssports.com/join/tournament/28744",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28744",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28744",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u",
+        "10u",
+        "12u",
+        "14u"
       ]
     },
     {
