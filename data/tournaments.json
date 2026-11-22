@@ -1,102 +1,11 @@
 {
-  "generated": "2026-11-21T07:18:40",
+  "generated": "2026-11-22T07:08:48",
   "window": [
-    "2026-11-21",
-    "2027-06-21"
+    "2026-11-22",
+    "2027-06-22"
   ],
-  "count": 125,
+  "count": 123,
   "tournaments": [
-    {
-      "id": "zorts-27234",
-      "category": "flag",
-      "state": "TX",
-      "name": "ATX Bowl 2026 (Arlington, TX)",
-      "start_date": "2026-11-21",
-      "end_date": "2026-11-22",
-      "city": "Arlington",
-      "venue": "Harold Patterson Sports Center, West Bardin Road, Arlington, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "8u to 18u",
-      "divisions": "Boy's 9U; Boy's 10U; Boy's 12U; Boy's 14U; Girl's 8U; Girl's 10U; Girl's 12U; Girl's 16U; Girl's 18U; Girl's Air it Out - HS; Boy's Air it Out - 12U",
-      "entry_fee": "$425.00 USD per team",
-      "registration_ends": "Nov 13, 2026 @ 11:55 PM",
-      "organizer": "iFlag Youth",
-      "contact_email": "cassie@iflag.org",
-      "contact_phone": "(817) 373-5599",
-      "event_url": "https://www.zortssports.com/join/tournament/27234",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27234",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27234",
-      "flag50_url": "https://flag50.com/tournaments/2026-atx-bowl-arlington-tx-ff3acfae7d",
-      "also_listed_as": [],
-      "conflicts": "Flag50 marks a listing as adult (isAdult)",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 8U",
-        "Girl's 10U",
-        "Girl's 12U",
-        "Girl's 16U",
-        "Girl's 18U",
-        "Girl's Air it Out - HS"
-      ],
-      "open_divisions": [
-        "Boy's 9U",
-        "Boy's 10U",
-        "Boy's 12U",
-        "Boy's 14U",
-        "Boy's Air it Out - 12U"
-      ]
-    },
-    {
-      "id": "zorts-27321",
-      "category": "flag",
-      "state": "TX",
-      "name": "HERO 5v5 DALLAS",
-      "start_date": "2026-11-21",
-      "end_date": "2026-11-22",
-      "city": "Rowlett",
-      "venue": "Rowlett, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "6u to Adult",
-      "divisions": "Boy's 6u; Boy's 8u; Boy's 10u; Boy's 12u; Boy's 13u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's 18u; Women's Adult Women's",
-      "entry_fee": "$450.00 USD per team",
-      "registration_ends": "Nov 17, 2026 @ 12:00 AM",
-      "organizer": "The Bullitt Experience",
-      "contact_email": "info@thebullittexperience.com",
-      "contact_phone": "214-949-4489",
-      "event_url": "https://www.zortssports.com/join/tournament/27321",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27321",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27321",
-      "flag50_url": "https://flag50.com/tournaments/hero-5v5-dallas-rowlett-tx-ff1ef8c78d",
-      "also_listed_as": [],
-      "conflicts": "end date differs: zorts 27321=2026-11-22; flag50 flag50-ff1ef8c78d=2026-11-21",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 10u",
-        "Girl's 12u",
-        "Girl's 14u",
-        "Girl's 18u",
-        "Women's Adult Women's"
-      ],
-      "open_divisions": [
-        "Boy's 6u",
-        "Boy's 8u",
-        "Boy's 10u",
-        "Boy's 12u",
-        "Boy's 13u"
-      ]
-    },
     {
       "id": "flag50-zs27515",
       "category": "flag",
@@ -765,7 +674,7 @@
       "state": "TX",
       "name": "Up The Score 7v7 Holiday Shootout",
       "start_date": "2026-12-19",
-      "end_date": "2026-12-19",
+      "end_date": "2026-12-20",
       "city": "Fort Worth",
       "venue": "Fossil Ridge High School, Thompson Road, Fort Worth, TX, USA",
       "sport": "Boy's Football (7v7)",

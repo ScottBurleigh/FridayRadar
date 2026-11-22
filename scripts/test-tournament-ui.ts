@@ -174,8 +174,8 @@ function checkAges() {
     "8U, 10U, 12U, 14U (girls: 8U, 10U, 12U, 14U, HS)",
   );
   assert.equal(
-    ageLine(byName("ATX Bowl 2026 (Arlington, TX)")),
-    "9U, 10U, 12U, 14U (girls: 8U, 10U, 12U, 16U, 18U, HS)",
+    ageLine(byName("Santa Bowl 2026")),
+    "8U, 10U, 11U, 12U, 13U, 14U, HS (girls: 10U, 12U, 14U, HS)",
   );
   assert.equal(
     ageLine(byName("2027 Kickoff Classic Tournament")),
