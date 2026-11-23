@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-22T07:08:48",
+  "generated": "2026-11-23T07:03:05",
   "window": [
-    "2026-11-22",
-    "2027-06-22"
+    "2026-11-23",
+    "2027-06-23"
   ],
-  "count": 123,
+  "count": 128,
   "tournaments": [
     {
       "id": "flag50-zs27515",
@@ -415,7 +415,7 @@
       "age_groups": "7u to 18u",
       "divisions": "Boy's 8U 5v5; Girl's 8U 5v5; Boy's 10U 5v5; Girl's 10U 5v5; Boy's 12U 5v5; Girl's 12U 5v5; Boy's 14U 5v5; Girl's 14U 5v5; Boy's 16U 5v5; Girl's 16U 5v5; Boy's 18U 5v5; Girl's 18U 5v5",
       "entry_fee": "$550.00 USD per team",
-      "registration_ends": "Nov 22, 2026 @ 12:00 AM",
+      "registration_ends": "Nov 29, 2026 @ 12:00 AM",
       "organizer": "5v5 Sports",
       "contact_email": "isi@5v5sports.com",
       "contact_phone": "972-701-2162",
@@ -479,7 +479,7 @@
       "also_listed_as": [
         "https://www.zortssports.com/join/tournament/28543"
       ],
-      "conflicts": "city differs: zorts 26737=Prosper; zorts 28543=Prosper; flag50 flag50-zs26737=Fort Worth | fee differs: zorts 26737=$397.00 USD per team; zorts 28543=$295.00 USD per team; flag50 flag50-zs26737=$397.00 USD per team",
+      "conflicts": "city differs: zorts 26737=Prosper; zorts 28543=Prosper; flag50 flag50-zs26737=Fort Worth | fee differs: zorts 26737=$397.00 USD per team; zorts 28543=$319.00 USD per team; flag50 flag50-zs26737=$397.00 USD per team",
       "has_girls_divisions": true,
       "girls_divisions": [
         "Girl's Football (5v5 Flag) 10U Girls",
@@ -1249,6 +1249,45 @@
         "12u",
         "13u",
         "14u"
+      ]
+    },
+    {
+      "id": "zorts-27493",
+      "category": "7v7",
+      "state": "TX",
+      "name": "Road to the Crown Series - Houston, Tx",
+      "start_date": "2027-01-16",
+      "end_date": "2027-01-17",
+      "city": "Houston",
+      "venue": "Houston, TX, USA",
+      "sport": "Coed Football (7v7)",
+      "age_groups": "8u to 18u",
+      "divisions": "8U; 10U; 12U; 14U; 15U; High School (18U)",
+      "entry_fee": "$800.00 USD per team",
+      "registration_ends": "Jan 17, 2027 @ 12:00 AM",
+      "organizer": "DR7",
+      "contact_email": "info@drsportz.com",
+      "contact_phone": "972-240-2166",
+      "event_url": "https://www.zortssports.com/join/tournament/27493",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27493",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27493",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "High School (18U)"
       ]
     },
     {
@@ -2233,6 +2272,45 @@
       ]
     },
     {
+      "id": "zorts-27496",
+      "category": "7v7",
+      "state": "TX",
+      "name": "Road to the Crown Series - Fort Worth, Tx",
+      "start_date": "2027-02-13",
+      "end_date": "2027-02-13",
+      "city": "Fort Worth",
+      "venue": "Fort Worth, TX, USA",
+      "sport": "Coed Football (7v7)",
+      "age_groups": "8u to 18u",
+      "divisions": "8U; 10U; 12U; 14U; 15U; High School (18U)",
+      "entry_fee": "$800.00 USD per team",
+      "registration_ends": "Feb 13, 2027 @ 12:00 AM",
+      "organizer": "DR7",
+      "contact_email": "info@drsportz.com",
+      "contact_phone": "972-240-2166",
+      "event_url": "https://www.zortssports.com/join/tournament/27496",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27496",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27496",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "High School (18U)"
+      ]
+    },
+    {
       "id": "zorts-28270",
       "category": "7v7",
       "state": "TX",
@@ -2589,6 +2667,49 @@
       ]
     },
     {
+      "id": "zorts-28423",
+      "category": "flag",
+      "state": "TX",
+      "name": "Kickoff Classic",
+      "start_date": "2027-02-20",
+      "end_date": "2027-02-20",
+      "city": "College Station",
+      "venue": "College Station, TX, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "8u to 18u",
+      "divisions": "Coed 8u; Coed 10u; Coed 12u; Coed 14u; Girl's 8u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's HIGH SCHOOL GIRLS",
+      "entry_fee": "$375.00 USD per team",
+      "registration_ends": "Feb 14, 2027 @ 12:00 AM",
+      "organizer": "Mission 5 Flag Tournament Series",
+      "contact_email": "Info@nflflagaggieland.com",
+      "contact_phone": "9797778056",
+      "event_url": "https://www.zortssports.com/join/tournament/28423",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28423",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28423",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 8u",
+        "Girl's 10u",
+        "Girl's 12u",
+        "Girl's 14u",
+        "Girl's HIGH SCHOOL GIRLS"
+      ],
+      "open_divisions": [
+        "Coed 8u",
+        "Coed 10u",
+        "Coed 12u",
+        "Coed 14u"
+      ]
+    },
+    {
       "id": "zorts-26959",
       "category": "7v7",
       "state": "TX",
@@ -2721,49 +2842,6 @@
       ]
     },
     {
-      "id": "zorts-28423",
-      "category": "flag",
-      "state": "TX",
-      "name": "Winter Bounty",
-      "start_date": "2027-02-20",
-      "end_date": "2027-02-20",
-      "city": "College Station",
-      "venue": "College Station, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "8u to 18u",
-      "divisions": "Coed 8u; Coed 10u; Coed 12u; Coed 14u; Girl's 8u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's HIGH SCHOOL GIRLS",
-      "entry_fee": "$375.00 USD per team",
-      "registration_ends": "Feb 14, 2027 @ 12:00 AM",
-      "organizer": "Mission 5 Flag Tournament Series",
-      "contact_email": "Info@nflflagaggieland.com",
-      "contact_phone": "9797778056",
-      "event_url": "https://www.zortssports.com/join/tournament/28423",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28423",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28423",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 8u",
-        "Girl's 10u",
-        "Girl's 12u",
-        "Girl's 14u",
-        "Girl's HIGH SCHOOL GIRLS"
-      ],
-      "open_divisions": [
-        "Coed 8u",
-        "Coed 10u",
-        "Coed 12u",
-        "Coed 14u"
-      ]
-    },
-    {
       "id": "zorts-27918",
       "category": "7v7",
       "state": "TX",
@@ -2849,6 +2927,45 @@
         "Coed Football (7v7) 14U",
         "Coed Football (7v7) 15U",
         "Coed Football (7v7) 18U"
+      ]
+    },
+    {
+      "id": "zorts-27498",
+      "category": "7v7",
+      "state": "TX",
+      "name": "Road to the Crown Series - Houston Tx",
+      "start_date": "2027-02-27",
+      "end_date": "2027-02-28",
+      "city": "Houston",
+      "venue": "Houston, TX, USA",
+      "sport": "Coed Football (7v7)",
+      "age_groups": "8u to 18u",
+      "divisions": "8U; 10U; 12U; 14U; 15U; High School (18U)",
+      "entry_fee": "$800.00 USD per team",
+      "registration_ends": "Feb 28, 2027 @ 12:00 AM",
+      "organizer": "DR7",
+      "contact_email": "info@drsportz.com",
+      "contact_phone": "972-240-2166",
+      "event_url": "https://www.zortssports.com/join/tournament/27498",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27498",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27498",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "High School (18U)"
       ]
     },
     {
@@ -3819,6 +3936,45 @@
       ]
     },
     {
+      "id": "zorts-27501",
+      "category": "7v7",
+      "state": "TX",
+      "name": "Road to the Crown Series - Dallas, Tx",
+      "start_date": "2027-03-27",
+      "end_date": "2027-03-27",
+      "city": "Dallas",
+      "venue": "Dallas, TX, USA",
+      "sport": "Coed Football (7v7)",
+      "age_groups": "8u to 18u",
+      "divisions": "8U; 10U; 12U; 14U; 15U; High School (18U)",
+      "entry_fee": "$800.00 USD per team",
+      "registration_ends": "Mar 27, 2027 @ 12:00 AM",
+      "organizer": "DR7",
+      "contact_email": "info@drsportz.com",
+      "contact_phone": "972-240-2166",
+      "event_url": "https://www.zortssports.com/join/tournament/27501",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27501",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27501",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "High School (18U)"
+      ]
+    },
+    {
       "id": "zorts-28433",
       "category": "7v7",
       "state": "TX",
@@ -4156,6 +4312,45 @@
         "12u",
         "13u",
         "14u"
+      ]
+    },
+    {
+      "id": "zorts-27503",
+      "category": "7v7",
+      "state": "TX",
+      "name": "Road to the Crown Series - CROWN WEEKEND/ MVP BOWL Round Rock, TX",
+      "start_date": "2027-04-09",
+      "end_date": "2027-04-11",
+      "city": "Round Rock",
+      "venue": "Round Rock, TX, USA",
+      "sport": "Coed Football (7v7)",
+      "age_groups": "8u to 18u",
+      "divisions": "8U; 10U; 12U; 14U; 15U; High School (18U)",
+      "entry_fee": "$800.00 USD per team",
+      "registration_ends": "Apr 11, 2027 @ 12:00 AM",
+      "organizer": "DR7",
+      "contact_email": "info@drsportz.com",
+      "contact_phone": "972-240-2166",
+      "event_url": "https://www.zortssports.com/join/tournament/27503",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27503",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27503",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8U",
+        "10U",
+        "12U",
+        "14U",
+        "15U",
+        "High School (18U)"
       ]
     },
     {
