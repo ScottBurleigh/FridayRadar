@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-23T07:03:05",
+  "generated": "2026-11-23T19:16:02",
   "window": [
     "2026-11-23",
     "2027-06-23"
@@ -50,7 +50,7 @@
       "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "7u to 17u",
-      "divisions": "Coed 8u Coed; Girl's 8u Girls; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
+      "divisions": "Coed 8u Coed; Girl's 8u Girls; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
       "entry_fee": "$350.00 USD per team",
       "registration_ends": "Nov 25, 2026 @ 9:00 PM",
       "organizer": "Lone Star Football Tournaments",
@@ -78,7 +78,6 @@
       ],
       "open_divisions": [
         "Coed 8u Coed",
-        "Coed 10u Coed",
         "Coed 12u Coed",
         "Coed 14u Coed"
       ]
@@ -415,7 +414,7 @@
       "age_groups": "7u to 18u",
       "divisions": "Boy's 8U 5v5; Girl's 8U 5v5; Boy's 10U 5v5; Girl's 10U 5v5; Boy's 12U 5v5; Girl's 12U 5v5; Boy's 14U 5v5; Girl's 14U 5v5; Boy's 16U 5v5; Girl's 16U 5v5; Boy's 18U 5v5; Girl's 18U 5v5",
       "entry_fee": "$550.00 USD per team",
-      "registration_ends": "Nov 29, 2026 @ 12:00 AM",
+      "registration_ends": "Nov 29, 2026 @ 11:55 PM",
       "organizer": "5v5 Sports",
       "contact_email": "isi@5v5sports.com",
       "contact_phone": "972-701-2162",
@@ -2680,7 +2679,7 @@
       "divisions": "Coed 8u; Coed 10u; Coed 12u; Coed 14u; Girl's 8u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's HIGH SCHOOL GIRLS",
       "entry_fee": "$375.00 USD per team",
       "registration_ends": "Feb 14, 2027 @ 12:00 AM",
-      "organizer": "Mission 5 Flag Tournament Series",
+      "organizer": "Mission5 Flag Tournament Series",
       "contact_email": "Info@nflflagaggieland.com",
       "contact_phone": "9797778056",
       "event_url": "https://www.zortssports.com/join/tournament/28423",

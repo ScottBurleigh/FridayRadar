@@ -43,6 +43,18 @@ DCTF_RANKINGS_URLS = (
 # Newest published week article first. Live /rankings is the board; week
 # number comes from the article title, never from the Last Week column.
 DCTF_WEEK_ARTICLE_FALLBACKS = (
+    "https://www.davecampbells.com/articles/2026/11/23/"
+    "official-txhsfb-ap-week-14-rankings-powered-by-dctx",
+    "https://www.texasfootball.com/article/2026/11/23/"
+    "official-txhsfb-ap-week-14-rankings-powered-by-dctx",
+    "https://www.davecampbells.com/articles/2026/11/16/"
+    "official-txhsfb-ap-week-13-rankings-powered-by-dctx",
+    "https://www.texasfootball.com/article/2026/11/16/"
+    "official-txhsfb-ap-week-13-rankings-powered-by-dctx",
+    "https://www.davecampbells.com/articles/2026/11/09/"
+    "official-txhsfb-ap-week-12-rankings-powered-by-dctx",
+    "https://www.texasfootball.com/article/2026/11/09/"
+    "official-txhsfb-ap-week-12-rankings-powered-by-dctx",
     "https://www.davecampbells.com/articles/2026/11/02/"
     "official-txhsfb-ap-week-11-rankings-powered-by-dctx",
     "https://www.texasfootball.com/article/2026/11/02/"
@@ -838,6 +850,13 @@ def parse_dctf_article_table(html: str) -> list[dict]:
         re.I | re.S,
     )
     if not block_m:
+        # Current DCTX articles use <h1>6A</h1> rather than the CLASS 6A label.
+        block_m = re.search(
+            r"<h1[^>]*>\s*6A\s*</h1>(?P<body>.*?)(?:<h1[^>]*>\s*5A)",
+            html or "",
+            re.I | re.S,
+        )
+    if not block_m:
         return []
     body = block_m.group("body")
     rows: list[dict] = []
@@ -901,7 +920,7 @@ def dctf_article_url_candidates() -> list[str]:
     """Known week articles first, then recent Monday slugs. Never invents ranks."""
     urls: list[str] = list(DCTF_WEEK_ARTICLE_FALLBACKS)
     today = datetime.now(timezone.utc).date()
-    slug_weeks = (12, 11, 10, 9, 8, 7, 6)
+    slug_weeks = (14, 13, 12, 11, 10, 9, 8, 7, 6)
     for delta in range(0, 22):
         d = today - timedelta(days=delta)
         if d.weekday() != 0:
@@ -971,12 +990,16 @@ def fetch_newest_dctf_week_article() -> tuple[str, str, int | None]:
         st, article = http_get(url, timeout=30, headers=HTML_UA, force=True)
         if st != 200 or not article:
             continue
-        if "Page Not Found" in (article or "") and "CLASS 6A" not in (article or "").upper():
+        has_6a = bool(
+            re.search(r"CLASS\s*6A", article or "", re.I)
+            or re.search(r"<h1[^>]*>\s*6A\s*</h1>", article or "", re.I)
+        )
+        if "Page Not Found" in (article or "") and not has_6a:
             continue
         week = dctf_week_from_html(article)
         if week is None:
             continue
-        if "CLASS 6A" not in (article or "").upper() and len(parse_dctf_article_table(article)) < 20:
+        if not has_6a and len(parse_dctf_article_table(article)) < 20:
             continue
         return article, url, week
     return "", "", None
