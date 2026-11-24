@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-23T19:16:02",
+  "generated": "2026-11-24T07:08:50",
   "window": [
-    "2026-11-23",
-    "2027-06-23"
+    "2026-11-24",
+    "2027-06-24"
   ],
-  "count": 128,
+  "count": 129,
   "tournaments": [
     {
       "id": "flag50-zs27515",
@@ -50,7 +50,7 @@
       "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "7u to 17u",
-      "divisions": "Coed 8u Coed; Girl's 8u Girls; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls; Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
+      "divisions": "Coed 8u Coed; Girl's 8u Girls; Girl's 10u Girls; Coed 12u Coed; Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
       "entry_fee": "$350.00 USD per team",
       "registration_ends": "Nov 25, 2026 @ 9:00 PM",
       "organizer": "Lone Star Football Tournaments",
@@ -72,7 +72,6 @@
       "girls_divisions": [
         "Girl's 8u Girls",
         "Girl's 10u Girls",
-        "Girl's 12u Girls",
         "Girl's 14u Girls",
         "Girl's High School Girls"
       ],
@@ -668,7 +667,7 @@
       ]
     },
     {
-      "id": "zorts-28690",
+      "id": "zorts-28806",
       "category": "7v7",
       "state": "TX",
       "name": "Up The Score 7v7 Holiday Shootout",
@@ -677,29 +676,27 @@
       "city": "Fort Worth",
       "venue": "Fossil Ridge High School, Thompson Road, Fort Worth, TX, USA",
       "sport": "Boy's Football (7v7)",
-      "age_groups": "9u to 15u",
-      "divisions": "9u to 15u",
+      "age_groups": "8u to 18u",
+      "divisions": "",
       "entry_fee": "$500.00 USD per team",
-      "registration_ends": "Dec 19, 2026 @ 12:00 AM",
+      "registration_ends": "Dec 20, 2026 @ 12:00 AM",
       "organizer": "Up The Score",
       "contact_email": "Upthescorebusiness@gmail.com",
       "contact_phone": "214-872-0807",
-      "event_url": "https://www.zortssports.com/join/tournament/28690",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28690",
+      "event_url": "https://www.zortssports.com/join/tournament/28806",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28806",
       "source": "zorts",
       "sources": [
         "zorts"
       ],
       "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28690",
+      "zorts_url": "https://www.zortssports.com/join/tournament/28806",
       "flag50_url": "",
       "also_listed_as": [],
       "conflicts": "",
       "has_girls_divisions": false,
       "girls_divisions": [],
-      "open_divisions": [
-        "9u to 15u"
-      ]
+      "open_divisions": []
     },
     {
       "id": "zorts-27318",
@@ -2675,8 +2672,8 @@
       "city": "College Station",
       "venue": "College Station, TX, USA",
       "sport": "Football (5v5 Flag)",
-      "age_groups": "8u to 18u",
-      "divisions": "Coed 8u; Coed 10u; Coed 12u; Coed 14u; Girl's 8u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's HIGH SCHOOL GIRLS",
+      "age_groups": "6u to 18u",
+      "divisions": "Coed 6u; Coed 8u; Coed 10u; Coed 12u; Coed 14u; Girl's 8u; Girl's 10u; Girl's 12u; Girl's 14u; Girl's HIGH SCHOOL GIRLS",
       "entry_fee": "$375.00 USD per team",
       "registration_ends": "Feb 14, 2027 @ 12:00 AM",
       "organizer": "Mission5 Flag Tournament Series",
@@ -2702,6 +2699,7 @@
         "Girl's HIGH SCHOOL GIRLS"
       ],
       "open_divisions": [
+        "Coed 6u",
         "Coed 8u",
         "Coed 10u",
         "Coed 12u",
@@ -2838,6 +2836,50 @@
         "Boy's Football (7v7) 15u",
         "Boy's Football (7v7) 16u",
         "Boy's Football (7v7) 18u"
+      ]
+    },
+    {
+      "id": "zorts-28799",
+      "category": "flag",
+      "state": "TX",
+      "name": "Lone Star Winter Showdown",
+      "start_date": "2027-02-21",
+      "end_date": "2027-02-21",
+      "city": "New Braunfels",
+      "venue": "Zipp Family Sports Park, West Klein Road, New Braunfels, TX, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "6u to 18u",
+      "divisions": "Boy's Boy's 8U; Boy's Boy's 10U; Boy's Boy's 12U; Boy's Boy's 14U; Boy's Boy's HS; Girl's Girl's 8U; Girl's Girl's 10U; Girl's Girl's 12U; Girl's Girl's 14U; Girl's Girl's HS",
+      "entry_fee": "$275.00 USD per team",
+      "registration_ends": "Feb 8, 2027 @ 12:00 AM",
+      "organizer": "Texas Flag Football Association",
+      "contact_email": "jperez@mytffa.com",
+      "contact_phone": "2103306607",
+      "event_url": "https://www.zortssports.com/join/tournament/28799",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28799",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28799",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Girl's 8U",
+        "Girl's Girl's 10U",
+        "Girl's Girl's 12U",
+        "Girl's Girl's 14U",
+        "Girl's Girl's HS"
+      ],
+      "open_divisions": [
+        "Boy's Boy's 8U",
+        "Boy's Boy's 10U",
+        "Boy's Boy's 12U",
+        "Boy's Boy's 14U",
+        "Boy's Boy's HS"
       ]
     },
     {
