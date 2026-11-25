@@ -171,11 +171,11 @@ function checkAges() {
   };
   assert.equal(
     ageLine(byName("Black Friday Blitz 2026 Flag Football Tournament")),
-    "8U, 12U, 14U (girls: 8U, 10U, 14U, HS)",
+    "8U, 10U, 12U, 14U (girls: 8U, 10U, 14U, HS)",
   );
   assert.equal(
     ageLine(byName("Santa Bowl 2026")),
-    "8U, 10U, 11U, 12U, 13U, 14U, HS (girls: 10U, 12U, 14U, HS)",
+    "8U, 9U, 10U, 11U, 12U, 13U, 14U, HS (girls: 10U, 12U, 14U, HS)",
   );
   assert.equal(
     ageLine(byName("2027 Kickoff Classic Tournament")),
