@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-26T07:04:59",
+  "generated": "2026-11-26T07:13:20",
   "window": [
     "2026-11-26",
     "2027-06-26"
@@ -50,7 +50,7 @@
       "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "7u to 17u",
-      "divisions": "Coed 8u Coed; Girl's 8u Girls; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
+      "divisions": "Coed 8u Coed; Girl's 8u Girls; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls (Full); Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
       "entry_fee": "$350.00 USD per team",
       "registration_ends": "Nov 25, 2026 @ 9:00 PM",
       "organizer": "Lone Star Football Tournaments",
@@ -72,6 +72,7 @@
       "girls_divisions": [
         "Girl's 8u Girls",
         "Girl's 10u Girls",
+        "Girl's 12u Girls (Full)",
         "Girl's 14u Girls",
         "Girl's High School Girls"
       ],
@@ -171,7 +172,7 @@
       "venue": "Central High School, Ray White Road, Fort Worth, TX, USA",
       "sport": "Football (5v5 Flag)",
       "age_groups": "6u to 14u",
-      "divisions": "Boy's 6U; Boy's 8U; Boy's 13/14U",
+      "divisions": "Boy's 6U; Boy's 6U/7U (Full); Boy's 8U; Boy's 8U/9U (Full); Boy's 10U (Full); Boy's 11U (Full); Boy's 12U (Full); Boy's 13/14U; Girl's 10UG (Full); Girl's 12UG (Full)",
       "entry_fee": "$350.00 USD per team",
       "registration_ends": "Nov 29, 2026 @ 12:00 AM",
       "organizer": "FlagFootballX",
@@ -188,11 +189,19 @@
       "flag50_url": "",
       "also_listed_as": [],
       "conflicts": "",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 10UG (Full)",
+        "Girl's 12UG (Full)"
+      ],
       "open_divisions": [
         "Boy's 6U",
+        "Boy's 6U/7U (Full)",
         "Boy's 8U",
+        "Boy's 8U/9U (Full)",
+        "Boy's 10U (Full)",
+        "Boy's 11U (Full)",
+        "Boy's 12U (Full)",
         "Boy's 13/14U"
       ]
     },
