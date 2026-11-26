@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-25T07:05:46",
+  "generated": "2026-11-26T07:04:59",
   "window": [
-    "2026-11-25",
-    "2027-06-25"
+    "2026-11-26",
+    "2027-06-26"
   ],
-  "count": 129,
+  "count": 130,
   "tournaments": [
     {
       "id": "flag50-zs27515",
@@ -170,8 +170,8 @@
       "city": "Fort Worth",
       "venue": "Central High School, Ray White Road, Fort Worth, TX, USA",
       "sport": "Football (5v5 Flag)",
-      "age_groups": "6u to 18u",
-      "divisions": "Boy's 7U; Boy's 8U; Boy's 9U; Boy's 10U; Boy's 11U; Boy's 12U; Boy's 13/14U; Girl's 8UG; Girl's 10UG; Girl's 12UG; Girl's 14UG; Girl's HSG",
+      "age_groups": "6u to 14u",
+      "divisions": "Boy's 6U; Boy's 8U; Boy's 13/14U",
       "entry_fee": "$350.00 USD per team",
       "registration_ends": "Nov 29, 2026 @ 12:00 AM",
       "organizer": "FlagFootballX",
@@ -188,21 +188,11 @@
       "flag50_url": "",
       "also_listed_as": [],
       "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 8UG",
-        "Girl's 10UG",
-        "Girl's 12UG",
-        "Girl's 14UG",
-        "Girl's HSG"
-      ],
+      "has_girls_divisions": false,
+      "girls_divisions": [],
       "open_divisions": [
-        "Boy's 7U",
+        "Boy's 6U",
         "Boy's 8U",
-        "Boy's 9U",
-        "Boy's 10U",
-        "Boy's 11U",
-        "Boy's 12U",
         "Boy's 13/14U"
       ]
     },
@@ -5486,6 +5476,54 @@
         "14U",
         "15U",
         "18U"
+      ]
+    },
+    {
+      "id": "zorts-28682",
+      "category": "flag",
+      "state": "TX",
+      "name": "6th Annual National Flag Tournament",
+      "start_date": "2027-06-26",
+      "end_date": "2027-06-26",
+      "city": "McKinney",
+      "venue": "375 Collin McKinney Parkway, McKinney, TX 75070, USA",
+      "sport": "Football (5v5 Flag)",
+      "age_groups": "4u to 18u",
+      "divisions": "Coed 6u; Coed 8u; Coed 7u; Coed 9u; Coed 11u; Coed 10u; Coed 12u; Coed 13u; Coed 14u; Girl's 9u Girls; Girl's 10u Girls; Girl's 12u Girls; Girl's 14u Girls; Girl's HS Girls",
+      "entry_fee": "$400.00 USD per team",
+      "registration_ends": "Jun 24, 2027 @ 12:00 AM",
+      "organizer": "G-Series Tournaments",
+      "contact_email": "info@gseriesfb.com",
+      "contact_phone": "214-704-1465",
+      "event_url": "https://www.zortssports.com/join/tournament/28682",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28682",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28682",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's 9u Girls",
+        "Girl's 10u Girls",
+        "Girl's 12u Girls",
+        "Girl's 14u Girls",
+        "Girl's HS Girls"
+      ],
+      "open_divisions": [
+        "Coed 6u",
+        "Coed 8u",
+        "Coed 7u",
+        "Coed 9u",
+        "Coed 11u",
+        "Coed 10u",
+        "Coed 12u",
+        "Coed 13u",
+        "Coed 14u"
       ]
     }
   ]
