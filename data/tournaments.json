@@ -1,63 +1,30 @@
 {
-  "generated": "2026-11-26T07:13:20",
+  "generated": "2026-11-28T07:03:03",
   "window": [
-    "2026-11-26",
-    "2027-06-26"
+    "2026-11-28",
+    "2027-06-28"
   ],
-  "count": 130,
+  "count": 129,
   "tournaments": [
     {
-      "id": "flag50-zs27515",
-      "category": "flag",
-      "state": "TX",
-      "name": "\"TEXAS BATTLE WARS 10\" BOYS FLAG & TACKLE/GIRLS 5V5",
-      "start_date": "2026-11-27",
-      "end_date": "2026-11-29",
-      "city": "Arlington",
-      "venue": "Harold Patterson Sports Center, West Bardin Road, Arlington, TX",
-      "sport": "Boy's Football (5v5, tackle)",
-      "age_groups": "5u to 18u",
-      "divisions": "",
-      "entry_fee": "$250.00 USD per team",
-      "registration_ends": "",
-      "organizer": "TEXAS BATTLE WARS \"STATE CHAMPIONSHIP\" 10",
-      "contact_email": "",
-      "contact_phone": "",
-      "event_url": "https://flag50.com/tournaments/texas-battle-wars-10-boys-flag-tackle-girls-5v5-arlington-tx-zs27515",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse?tid=27515",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27515",
-      "flag50_url": "https://flag50.com/tournaments/texas-battle-wars-10-boys-flag-tackle-girls-5v5-arlington-tx-zs27515",
-      "also_listed_as": [],
-      "conflicts": "linked Zorts event 27515 is not in the Zorts feed; its page says: Football (5v5 Flag), Football (Tackle) Tournament - November 27 to November 29, 2026",
-      "has_girls_divisions": false,
-      "girls_divisions": [],
-      "open_divisions": []
-    },
-    {
-      "id": "zorts-25421",
+      "id": "flag50-25421",
       "category": "flag",
       "state": "TX",
       "name": "Black Friday Blitz 2026 Flag Football Tournament",
       "start_date": "2026-11-28",
       "end_date": "2026-11-28",
       "city": "Spring",
-      "venue": "19717 Stuebner Airline Road, Spring, TX, USA",
-      "sport": "Football (5v5 Flag)",
+      "venue": "19717 Stuebner Airline Road, 19717 STUEBNER AIRLINE RD, SPRING, TX, 77379, Spring, TX",
+      "sport": "Girl's, Coed Football (5v5)",
       "age_groups": "7u to 17u",
-      "divisions": "Coed 8u Coed; Girl's 8u Girls; Coed 10u Coed; Girl's 10u Girls; Coed 12u Coed; Girl's 12u Girls (Full); Coed 14u Coed; Girl's 14u Girls; Girl's High School Girls",
-      "entry_fee": "$350.00 USD per team",
-      "registration_ends": "Nov 25, 2026 @ 9:00 PM",
+      "divisions": "",
+      "entry_fee": "",
+      "registration_ends": "",
       "organizer": "Lone Star Football Tournaments",
-      "contact_email": "logan@thefarmleague.com",
-      "contact_phone": "7132993335",
-      "event_url": "https://www.zortssports.com/join/tournament/25421",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/25421",
+      "contact_email": "",
+      "contact_phone": "",
+      "event_url": "https://flag50.com/tournaments/black-friday-blitz-2026-flag-football-tournament-spring-tx-25421",
+      "clubhouse_url": "https://www.zortssports.com/join/league/25421",
       "source": "flag50+zorts",
       "sources": [
         "flag50",
@@ -67,99 +34,10 @@
       "zorts_url": "https://www.zortssports.com/join/tournament/25421",
       "flag50_url": "https://flag50.com/tournaments/black-friday-blitz-2026-flag-football-tournament-spring-tx-25421",
       "also_listed_as": [],
-      "conflicts": "",
+      "conflicts": "linked Zorts event 25421 is not in the Zorts feed; its page says: Football (5v5 Flag) Tournament - November 28, 2026",
       "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 8u Girls",
-        "Girl's 10u Girls",
-        "Girl's 12u Girls (Full)",
-        "Girl's 14u Girls",
-        "Girl's High School Girls"
-      ],
-      "open_divisions": [
-        "Coed 8u Coed",
-        "Coed 10u Coed",
-        "Coed 12u Coed",
-        "Coed 14u Coed"
-      ]
-    },
-    {
-      "id": "zorts-28309",
-      "category": "flag",
-      "state": "TX",
-      "name": "Days of Thunder",
-      "start_date": "2026-11-28",
-      "end_date": "2026-11-28",
-      "city": "Lubbock",
-      "venue": "Lubbock, TX, USA",
-      "sport": "Football (5v5 Flag)",
-      "age_groups": "7u to 16u",
-      "divisions": "Coed 9u; Coed 11u; Coed 13u; Coed 7u; Girl's 16u",
-      "entry_fee": "$220.00 USD per team",
-      "registration_ends": "Nov 26, 2026 @ 12:00 AM",
-      "organizer": "Sparta!",
-      "contact_email": "bgsono1@yahoo.com",
-      "contact_phone": "8064456997",
-      "event_url": "https://www.zortssports.com/join/tournament/28309",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28309",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28309",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's 16u"
-      ],
-      "open_divisions": [
-        "Coed 9u",
-        "Coed 11u",
-        "Coed 13u",
-        "Coed 7u"
-      ]
-    },
-    {
-      "id": "zorts-28104",
-      "category": "both",
-      "state": "TX",
-      "name": "Stuff the Turkey \u2013 Thanksgiving Football Tournament",
-      "start_date": "2026-11-28",
-      "end_date": "2026-11-28",
-      "city": "Lubbock",
-      "venue": "Lubbock, TX, USA",
-      "sport": "Football (7v7), Football (5v5 Flag)",
-      "age_groups": "6u to 15u",
-      "divisions": "Coed Football (5v5 Flag) 7U 5v5 Flag; Coed Football (5v5 Flag) 9U 5v5 Flag; Coed Football (5v5 Flag) 11U 5v5 Flag; Coed Football (5v5 Flag) 13U 5v5 Flag; Coed Football (5v5 Flag) 15U 5v5 Flag; Boy's Football (7v7) Boys 7v7",
-      "entry_fee": "$0.00 USD per team",
-      "registration_ends": "Nov 24, 2026 @ 12:00 AM",
-      "organizer": "Lubbock Premier 7v7 League",
-      "contact_email": "jordansix.fj@gmail.com",
-      "contact_phone": "8065591656",
-      "event_url": "https://www.zortssports.com/join/tournament/28104",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28104",
-      "source": "zorts",
-      "sources": [
-        "zorts"
-      ],
-      "verified": false,
-      "zorts_url": "https://www.zortssports.com/join/tournament/28104",
-      "flag50_url": "",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": false,
       "girls_divisions": [],
-      "open_divisions": [
-        "Coed Football (5v5 Flag) 7U 5v5 Flag",
-        "Coed Football (5v5 Flag) 9U 5v5 Flag",
-        "Coed Football (5v5 Flag) 11U 5v5 Flag",
-        "Coed Football (5v5 Flag) 13U 5v5 Flag",
-        "Coed Football (5v5 Flag) 15U 5v5 Flag",
-        "Boy's Football (7v7) Boys 7v7"
-      ]
+      "open_divisions": []
     },
     {
       "id": "zorts-26621",
@@ -623,6 +501,41 @@
       ]
     },
     {
+      "id": "zorts-28871",
+      "category": "7v7",
+      "state": "TX",
+      "name": "Winter 26",
+      "start_date": "2026-12-18",
+      "end_date": "2026-12-26",
+      "city": "Mesquite",
+      "venue": "Shands Elementary School, Shands Drive, Mesquite, TX, USA",
+      "sport": "Football (7v7)",
+      "age_groups": "4u to 7u",
+      "divisions": "Coed 4u to 7u; Boy's Jungle kings",
+      "entry_fee": "$0.00 USD per team",
+      "registration_ends": "Dec 26, 2026 @ 12:00 AM",
+      "organizer": "NTX Bengals Football Association",
+      "contact_email": "jameswoods20116921@gmail.com",
+      "contact_phone": "9453616406",
+      "event_url": "https://www.zortssports.com/join/tournament/28871",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28871",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28871",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "Coed 4u to 7u",
+        "Boy's Jungle kings"
+      ]
+    },
+    {
       "id": "zorts-27824",
       "category": "7v7",
       "state": "TX",
@@ -1036,6 +949,45 @@
         "Boy's 12U",
         "Boy's 13U",
         "Boy's 14U"
+      ]
+    },
+    {
+      "id": "zorts-28414",
+      "category": "7v7",
+      "state": "TX",
+      "name": "Texas Showdown",
+      "start_date": "2027-01-09",
+      "end_date": "2027-01-10",
+      "city": "Houston",
+      "venue": "C.E. King High School, East Sam Houston Parkway North, Houston, TX, USA",
+      "sport": "Boy's Football (7v7)",
+      "age_groups": "8u to 18u",
+      "divisions": "8u; 10u; 12u; 14u; 15u; 18u",
+      "entry_fee": "$700.00 USD per team",
+      "registration_ends": "Jan 6, 2027 @ 12:30 PM",
+      "organizer": "Championship 7v7",
+      "contact_email": "besgtx@gmail.com",
+      "contact_phone": "979-224-0035",
+      "event_url": "https://www.zortssports.com/join/tournament/28414",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/28414",
+      "source": "zorts",
+      "sources": [
+        "zorts"
+      ],
+      "verified": false,
+      "zorts_url": "https://www.zortssports.com/join/tournament/28414",
+      "flag50_url": "",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": false,
+      "girls_divisions": [],
+      "open_divisions": [
+        "8u",
+        "10u",
+        "12u",
+        "14u",
+        "15u",
+        "18u"
       ]
     },
     {
@@ -4474,50 +4426,6 @@
       ]
     },
     {
-      "id": "zorts-27451",
-      "category": "7v7",
-      "state": "TX",
-      "name": "FSG Tournament Series - Houston",
-      "start_date": "2027-04-10",
-      "end_date": "2027-04-11",
-      "city": "Houston",
-      "venue": "C.E. King High School, East Sam Houston Parkway North, Houston, TX, USA",
-      "sport": "Football (7v7), Football (5v5 Flag)",
-      "age_groups": "6u to 18u",
-      "divisions": "Boy's Football (7v7) Minor (8U); Boy's Football (7v7) Next Division (10U) National; Boy's Football (7v7) Stars Division (12U) National; Boy's Football (7v7) Future Division (13U) National; Boy's Football (7v7) Intermediate Division (14U) National; Boy's Football (7v7) Junior Division (15U) National; Boy's Football (7v7) Senior Division (18U) National; Girl's Football (5v5 Flag) High School; Girl's Football (5v5 Flag) Junior Division",
-      "entry_fee": "$500.00 USD per team",
-      "registration_ends": "Apr 7, 2027 @ 12:00 PM",
-      "organizer": "FSG National 7v7 Series",
-      "contact_email": "fsgsportsgroup@gmail.com",
-      "contact_phone": "404-461-3004",
-      "event_url": "https://www.zortssports.com/join/tournament/27451",
-      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27451",
-      "source": "flag50+zorts",
-      "sources": [
-        "flag50",
-        "zorts"
-      ],
-      "verified": true,
-      "zorts_url": "https://www.zortssports.com/join/tournament/27451",
-      "flag50_url": "https://flag50.com/tournaments/fsg-tournament-series-houston-houston-tx-zs27451",
-      "also_listed_as": [],
-      "conflicts": "",
-      "has_girls_divisions": true,
-      "girls_divisions": [
-        "Girl's Football (5v5 Flag) High School",
-        "Girl's Football (5v5 Flag) Junior Division"
-      ],
-      "open_divisions": [
-        "Boy's Football (7v7) Minor (8U)",
-        "Boy's Football (7v7) Next Division (10U) National",
-        "Boy's Football (7v7) Stars Division (12U) National",
-        "Boy's Football (7v7) Future Division (13U) National",
-        "Boy's Football (7v7) Intermediate Division (14U) National",
-        "Boy's Football (7v7) Junior Division (15U) National",
-        "Boy's Football (7v7) Senior Division (18U) National"
-      ]
-    },
-    {
       "id": "zorts-27655",
       "category": "7v7",
       "state": "TX",
@@ -4557,6 +4465,50 @@
         "14U",
         "15U",
         "18U"
+      ]
+    },
+    {
+      "id": "zorts-27451",
+      "category": "7v7",
+      "state": "TX",
+      "name": "PremierEvents USA - FSG (Houston)",
+      "start_date": "2027-04-10",
+      "end_date": "2027-04-11",
+      "city": "Houston",
+      "venue": "C.E. King High School, East Sam Houston Parkway North, Houston, TX, USA",
+      "sport": "Football (7v7), Football (5v5 Flag)",
+      "age_groups": "6u to 18u",
+      "divisions": "Boy's Football (7v7) Minor (8U); Boy's Football (7v7) Next Division (10U) National; Boy's Football (7v7) Stars Division (12U) National; Boy's Football (7v7) Future Division (13U) National; Boy's Football (7v7) Intermediate Division (14U) National; Boy's Football (7v7) Junior Division (15U) National; Boy's Football (7v7) Senior Division (18U) National; Girl's Football (5v5 Flag) High School; Girl's Football (5v5 Flag) Junior Division",
+      "entry_fee": "$500.00 USD per team",
+      "registration_ends": "Apr 7, 2027 @ 12:00 PM",
+      "organizer": "FSG National 7v7 Series",
+      "contact_email": "fsgsportsgroup@gmail.com",
+      "contact_phone": "404-461-3004",
+      "event_url": "https://www.zortssports.com/join/tournament/27451",
+      "clubhouse_url": "https://www.zortssports.com/post/clubHouse/27451",
+      "source": "flag50+zorts",
+      "sources": [
+        "flag50",
+        "zorts"
+      ],
+      "verified": true,
+      "zorts_url": "https://www.zortssports.com/join/tournament/27451",
+      "flag50_url": "https://flag50.com/tournaments/fsg-tournament-series-houston-houston-tx-zs27451",
+      "also_listed_as": [],
+      "conflicts": "",
+      "has_girls_divisions": true,
+      "girls_divisions": [
+        "Girl's Football (5v5 Flag) High School",
+        "Girl's Football (5v5 Flag) Junior Division"
+      ],
+      "open_divisions": [
+        "Boy's Football (7v7) Minor (8U)",
+        "Boy's Football (7v7) Next Division (10U) National",
+        "Boy's Football (7v7) Stars Division (12U) National",
+        "Boy's Football (7v7) Future Division (13U) National",
+        "Boy's Football (7v7) Intermediate Division (14U) National",
+        "Boy's Football (7v7) Junior Division (15U) National",
+        "Boy's Football (7v7) Senior Division (18U) National"
       ]
     },
     {
